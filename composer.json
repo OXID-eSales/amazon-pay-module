@@ -1,0 +1,31 @@
+{
+  "name": "oxid-professional-services/amazonpay",
+  "description": "AmazonPay module for OXID",
+  "type": "oxideshop-module",
+  "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],
+  "license": "proprietary",
+  "version": "0.0.2",
+  "require": {
+    "amzn/amazon-pay-api-sdk-php": "^2.0",
+    "ext-json": "*",
+    "viison/address-splitter": "^0.3.4",
+    "mockery/mockery": "^1.3"
+  },
+  "archive": {
+    "exclude": ["/resources"]
+  },
+  "extra": {
+    "oxideshop": {
+       "blacklist-filter": [
+          "resources/**/*",
+          "resources/**/*."
+       ],
+      "target-directory": "oxps/amazonpay"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "OxidProfessionalServices\\AmazonPay\\": "."
+    }
+  }
+}

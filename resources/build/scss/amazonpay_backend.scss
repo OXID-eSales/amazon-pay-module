@@ -1,0 +1,38 @@
+.amazonpay-config {
+    width:600px;
+    margin: 5em auto;
+    fieldset {
+        padding-left:10px;
+        border-left: 1px dotted #eee;
+    }
+
+    .expandable > legend:after {
+        padding-left: 10px;
+        content: "\25B6";
+        color: gray;
+    }
+
+    .expanded > legend:after {
+        padding-left: 10px;
+        content: "\25BC";
+        color: gray;
+    }
+
+    .helpbox {
+        margin-top:10px;
+        background-color: khaki;
+        color: gray;
+        padding: 5px 10px
+    }
+
+    .form-group {
+        textarea {
+            height:150px;
+            width:100%;
+        }
+    }
+
+    .bottom-space {
+        margin-bottom: 2.5rem;
+    }
+}

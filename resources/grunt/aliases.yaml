@@ -1,0 +1,9 @@
+production:
+  - "jshint:moduleproduction"
+  - "sass:moduleproduction"
+  - "postcss"
+  - "cssmin"
+  - "uglify:moduleproduction"
+
+default:
+  - "production"

@@ -27,5 +27,6 @@
     "psr-4": {
       "OxidProfessionalServices\\AmazonPay\\": "."
     }
-  }
+  },
+  "minimum-stability": "dev",
 }

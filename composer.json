@@ -28,5 +28,5 @@
       "OxidProfessionalServices\\AmazonPay\\": "."
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "dev"
 }

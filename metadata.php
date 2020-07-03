@@ -108,28 +108,62 @@ $aModule = [
             'file' => 'views/blocks/admin/admin_headitem_inccss.tpl'
         ],
         [
+            'template' => 'deliveryset_main.tpl',
+            'block'    => 'admin_deliveryset_main_form',
+            'file'     => 'views/blocks/admin/deliveryset_main.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'order_overview.tpl',
+            'block' => 'admin_order_overview_checkout',
+            'file' => 'views/blocks/admin/admin_order_overview_reset_form.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'order_overview.tpl',
+            'block' => 'admin_order_overview_send_form',
+            'file' => 'views/blocks/admin/admin_order_overview_send_form.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'article_main.tpl',
+            'block' => 'admin_article_main_extended',
+            'file' => 'views/blocks/admin/admin_article_main_extended.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'include/category_main_form.tpl',
+            'block' => 'admin_category_main_form',
+            'file' => 'views/blocks/admin/category_main_form.tpl',
+            'position' => '5'
+        ],
+        [
             'theme' => 'flow',
             'template' => 'layout/base.tpl',
             'block' => 'base_js',
-            'file' => 'views/blocks/flow/layout/base_js.tpl'
+            'file' => 'views/blocks/flow/layout/base_js.tpl',
+            'position' => '5'
         ],
         [
             'theme' => 'wave',
             'template' => 'layout/base.tpl',
             'block' => 'base_js',
-            'file' => 'views/blocks/wave/layout/base_js.tpl'
+            'file' => 'views/blocks/wave/layout/base_js.tpl',
+            'position' => '5'
         ],
         [
             'theme' => 'flow',
             'template' => 'layout/base.tpl',
             'block' => 'base_style',
-            'file' => 'views/blocks/flow/layout/base_style.tpl'
+            'file' => 'views/blocks/flow/layout/base_style.tpl',
+            'position' => '5'
         ],
         [
             'theme' => 'wave',
             'template' => 'layout/base.tpl',
             'block' => 'base_style',
-            'file' => 'views/blocks/wave/layout/base_style.tpl'
+            'file' => 'views/blocks/wave/layout/base_style.tpl',
+            'position' => '5'
         ],
         [
             'theme' => 'flow',
@@ -314,37 +348,7 @@ $aModule = [
             'block' => 'change_payment',
             'file' => '/views/blocks/wave/page/checkout/change_payment.tpl',
             'position' => '5'
-        ],
-        [
-            'template' => 'deliveryset_main.tpl',
-            'block'    => 'admin_deliveryset_main_form',
-            'file'     => 'views/admin/tpl/deliveryset_main.tpl',
-            'position' => '5'
-        ],
-        [
-            'template' => 'order_overview.tpl',
-            'block' => 'admin_order_overview_checkout',
-            'file' => 'views/admin/tpl/admin_order_overview_reset_form.tpl',
-            'position' => '5'
-        ],
-        [
-            'template' => 'order_overview.tpl',
-            'block' => 'admin_order_overview_send_form',
-            'file' => 'views/admin/tpl/admin_order_overview_send_form.tpl',
-            'position' => '5'
-        ],
-        [
-            'template' => 'article_main.tpl',
-            'block' => 'admin_article_main_extended',
-            'file' => 'views/admin/tpl/admin_article_main_extended.tpl',
-            'position' => '5'
-        ],
-        [
-            'template' => 'include/category_main_form.tpl',
-            'block' => 'admin_category_main_form',
-            'file' => 'views/admin/tpl/category_main_form.tpl',
-            'position' => '5'
-        ],
+        ]
     ],
     'settings' => [
         ['name' => 'blAmazonPaySandboxMode', 'type' => 'bool', 'value' => 'false', 'group' => null],

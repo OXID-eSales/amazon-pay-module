@@ -23,7 +23,9 @@
 namespace OxidProfessionalServices\AmazonPay\Core\Helper;
 
 use OxidEsales\EshopCommunity\Application\Model\Country;
+use OxidProfessionalServices\AmazonPay\Core\Logger;
 use VIISON\AddressSplitter\AddressSplitter;
+use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class Address
 {
@@ -59,6 +61,7 @@ class Address
                 $street = $addressLine1;
             } else {
                 //invalid address
+                // Handled by address splitter
             }
             if ($addressLine3 != '') {
                 $company = $company . ', ' . $addressLine3;
@@ -141,7 +144,14 @@ class Address
     {
         $parsedAddress = self::parseAddress($address);
         $addressLines = self::getAddressLines($address);
-        $addressData = AddressSplitter::splitAddress(implode(',', $addressLines));
+
+        try {
+            $addressData = AddressSplitter::splitAddress(implode(',', $addressLines));
+        } catch (SplittingException $e) {
+            $logger = new Logger();
+            $logger->error($e->getMessage(), ['status' => $e->getCode()]);
+        }
+
         $country = oxNew(Country::class);
         $countryCode = $country->getIdByCode($address['countryCode'] ?? '');
         $streetNr = $addressData['houseNumber'];
@@ -175,7 +185,12 @@ class Address
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {
             if (isset($address["addressLine$i"]) && $address["addressLine$i"]) {
-                $lines[] = $address["addressLine$i"];
+                $line = $address["addressLine$i"];
+                preg_match_all('!\d+!', $line, $matches2);
+                if(!empty($matches2[0])) {
+                    $line = str_replace(implode(' ', $matches2[0]), implode(',', $matches2[0]), $line);
+                }
+                $lines[] = $line;
             }
         }
 

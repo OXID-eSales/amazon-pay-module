@@ -1,4 +1,4 @@
-[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude()}]
+[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
     <div class="float-right">
         [{include file="amazonbutton.tpl" buttonId="AmazonPayButtonNextCart2" buttonclass="small"}]
     </div>

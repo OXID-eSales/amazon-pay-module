@@ -31,5 +31,6 @@ $aLang = [
                                                     <li>Fully benefit from Amazon\'s A-Z guarantee.</li>
                                                 </ul>',
     'AMAZON_PAY_PROCESSED'                    => 'Your payment will be processed by Amazon Pay. <a href="%s">[unlink]</a>',
+    'AMAZON_PAY_USEREXISTS'                   => 'An account already exists for email address <b>"%s"</b>. Please first log into your shop account using <b>"%s"</b> and then again start the Amazon Pay checkout by clicking the Amazon Pay button.'
 
 ];

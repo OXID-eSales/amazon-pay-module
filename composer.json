@@ -4,7 +4,7 @@
   "type": "oxideshop-module",
   "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],
   "license": "proprietary",
-  "version": "0.0.2",
+  "version": "1.0.3",
   "require": {
     "amzn/amazon-pay-api-sdk-php": "^2.0",
     "ext-json": "*",
@@ -27,6 +27,5 @@
     "psr-4": {
       "OxidProfessionalServices\\AmazonPay\\": "."
     }
-  },
-  "minimum-stability": "dev"
+  }
 }

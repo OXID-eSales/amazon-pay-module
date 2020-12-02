@@ -1,5 +1,5 @@
 [{$smarty.block.parent}]
-[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude()}]
+[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
     <div class="amazonpay-button-or pull-right">
         [{"OR"|oxmultilangassign|oxupper}]
     </div>

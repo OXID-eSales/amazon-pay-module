@@ -24,6 +24,7 @@ namespace OxidProfessionalServices\AmazonPay\Component;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
+use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Handles Amazon checkout sessions
@@ -41,12 +42,11 @@ class UserComponent extends UserComponent_Parent
         $this->setRequestParameter('userLoginName', $amazonSession['response']['buyer']['name']);
         $this->setRequestParameter('lgn_usr', $amazonSession['response']['buyer']['email']);
 
-        $password = $this->generateRandomPassword();
-
+        // Guest users have a blank password
+        $password = '';
         $this->setRequestParameter('lgn_pwd', $password);
         $this->setRequestParameter('lgn_pwd2', $password);
-        $this->setRequestParameter('passwordLength', $password);
-        $this->setRequestParameter('userPasswordConfirm', $password);
+        $this->setRequestParameter('lgn_pwd2', $password);
 
         $this->setRequestParameter('invadr', Address::mapAddressToDb($amazonSession['response']['billingAddress']));
         $this->setRequestParameter('deladr', Address::mapAddressToDb($amazonSession['response']['shippingAddress']));
@@ -54,7 +54,6 @@ class UserComponent extends UserComponent_Parent
         $registrationResult = $this->registerUser();
 
         if ($registrationResult) {
-            $this->login_noredirect();
             Registry::getSession()->getBasket()->setPayment('oxidamazon');
         } else {
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user', false, 302);
@@ -71,16 +70,18 @@ class UserComponent extends UserComponent_Parent
     }
 
     /**
-     * @return string
+     * Deletes user information from session:<br>
+     * "usr", "dynvalue", "paymentid"<br>
+     * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
+     * oxcmp_user::oUser, forces basket to recalculate.
+     *
+     * @return null
      */
-    private function generateRandomPassword(): string
+    public function logout()
     {
-        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-        $pass = array();
-        $alphaLength = strlen($alphabet) - 1;
-        for ($i = 0; $i < 8; $i++) {
-            $pass[] = $alphabet[rand(0, $alphaLength)];
-        }
-        return implode($pass);
+        // destroy Amazon Session
+        OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+
+        parent::logout();
     }
 }

@@ -22,6 +22,7 @@
 
 namespace OxidProfessionalServices\AmazonPay\Model;
 
+use Doctrine\DBAL\FetchMode;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
@@ -55,7 +56,7 @@ class Article extends Article_parent
         }
 
         $sql = 'SELECT OXPS_AMAZON_EXCLUDE FROM oxarticles WHERE OXID = ?';
-        $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($sql, [$sOXID]);
+        $result = DatabaseProvider::getDb(FetchMode::ASSOCIATIVE)->getOne($sql, [$sOXID]);
         $this->blAmazonExclude = (bool)$result;
 
         return true;

@@ -58,7 +58,6 @@ class Config
     public function checkHealth(): void
     {
         if (
-            !$this->getPublicKey() ||
             !$this->getPrivateKey() ||
             !$this->getPublicKeyId() ||
             !$this->getMerchantId() ||
@@ -90,14 +89,6 @@ class Config
     public function isTwoStepCapture(): bool
     {
         return Registry::getConfig()->getConfigParam('amazonPayCapType') === '2';
-    }
-
-    /**
-     * @return string
-     */
-    public function getPublicKey(): string
-    {
-        return Registry::getConfig()->getConfigParam('sAmazonPayPubKey');
     }
 
     /**

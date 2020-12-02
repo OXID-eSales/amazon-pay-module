@@ -4,7 +4,7 @@
     amazon.Pay.renderButton('#[{$buttonId}]', {
         merchantId: '[{$amazonConfig->getMerchantId()}]',
         createCheckoutSession: {
-            url: '[{$amazonConfig->getCreateCheckoutUrl()}]'
+            url: '[{$amazonConfig->getCreateCheckoutUrl()}][{if $oxArticlesId}]&anid=[{$oxArticlesId}][{/if}]'
         },
         sandbox: [{if $amazonConfig->isSandbox()}]true[{else}]false[{/if}],
         ledgerCurrency: '[{$amazonConfig->getledgerCurrency()}]',

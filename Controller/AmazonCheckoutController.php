@@ -39,6 +39,22 @@ class AmazonCheckoutController extends FrontendController
      */
     public function createCheckout(): void
     {
+        // if an article is given, we put it in the shopping cart
+        if ($sProductId = Registry::getRequest()->getRequestParameter('anid')) {
+            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+            $database->startTransaction();
+            try {
+                $basket = Registry::getSession()->getBasket();
+                $basket->addToBasket(
+                    $sProductId,
+                    1
+                );
+            } catch (\Exception $exception) {
+                $database->rollbackTransaction();
+                throw $exception;
+            }
+        }
+
         $result = OxidServiceProvider::getAmazonClient()->createCheckoutSession();
 
         if ($result['status'] !== 201) {

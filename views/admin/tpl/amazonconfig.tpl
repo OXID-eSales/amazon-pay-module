@@ -38,14 +38,6 @@
         </div>
 
         <div class="form-group">
-            <label for="pubkey">[{oxmultilang ident="OXPS_AMAZONPAY_PUBKEY" suffix="*"}]</label>
-            <div class="controls">
-                <textarea id="pubkey" name="conf[sAmazonPayPubKey]">[{$config->getPublicKey()}]</textarea>
-                <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_PUBKEY"}]</span>
-            </div>
-        </div>
-
-        <div class="form-group">
             <label for="privkeyid">[{oxmultilang ident="OXPS_AMAZONPAY_PUBKEYID" suffix="*"}]</label>
             <div class="controls">
                 <input type="text" class="form-control" name="conf[sAmazonPayPubKeyId]" value="[{$config->getPublicKeyId()}]" id="privkeyid">
@@ -109,7 +101,7 @@
                                 [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_TWO_STEP"}]
                             </option>
                         </select>
-                        <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_CAPTYPE"}]</span>
+                        <span class="help-block">One Step captures payment immediately. Two Step captures payment after shipping</span>
                     </div>
                 </div>
 

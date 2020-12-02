@@ -42,39 +42,20 @@ class OrderController extends OrderController_parent
         $exclude = $this->getViewConfig()->isAmazonExclude();
 
         if (!$exclude) {
-            // Create guest user if not logged in
-            if ($user === false) {
-                $userComponent = oxNew('oxcmp_user');
-                $userComponent->createGuestUser(OxidServiceProvider::getAmazonService()->getCheckoutSession());
-                $payment = $this->getBasket()->getPaymentId();
-                if (($payment !== 'oxidamazon')) {
-                    $this->getBasket()->setPayment('oxidamazon');
+            if (OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) {
+                // Create guest user if not logged in
+                if ($user === false) {
+                    $userComponent = oxNew('oxcmp_user');
+                    $userComponent->createGuestUser(OxidServiceProvider::getAmazonService()->getCheckoutSession());
+                    $this->setAmazonPayAsPaymentMethod();
+                    Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
+                } else {
+                    $this->setAmazonPayAsPaymentMethod();
                 }
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
             }
         }
 
         parent::init();
-
-        if (!$exclude) {
-            if ($this->getBasket()->getBruttoSum() !== null) {
-                if (OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) {
-                    $user->assign(OxidServiceProvider::getAmazonService()->getBillingAddress());
-                }
-
-                if ($this->getBasket()->getBruttoSum() !== null) {
-                    $payment = $this->getBasket()->getPaymentId();
-                    if (
-                        ($payment !== 'oxidamazon') &&
-                        OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
-                    ) {
-                        $this->getBasket()->setPayment('oxidamazon');
-                        Registry::getUtils()
-                            ->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
-                    }
-                }
-            }
-        }
     }
 
     public function execute()
@@ -111,5 +92,13 @@ class OrderController extends OrderController_parent
         $response = PhpHelper::jsonToArray($result['response']);
 
         Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
+    }
+
+    private function setAmazonPayAsPaymentMethod()
+    {
+        $payment = $this->getBasket()->getPaymentId();
+        if (($payment !== 'oxidamazon')) {
+            $this->getBasket()->setPayment('oxidamazon');
+        }
     }
 }

@@ -37,13 +37,6 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->isSandbox());
     }
 
-    public function testGetPublicKey(): void
-    {
-        $config = new Config();
-        $this->setConfigParam('sAmazonPayPubKey', 'someKey123');
-        $this->assertSame('someKey123', $config->getPublicKey());
-    }
-
     public function testGetPrivateKey(): void
     {
         $config = new Config();
@@ -100,7 +93,6 @@ class ConfigTest extends UnitTestCase
     {
         $this->setConfigParam('sAmazonPayPrivKey', '');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayPubKey', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
@@ -112,19 +104,6 @@ class ConfigTest extends UnitTestCase
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', '');
-        $this->setConfigParam('sAmazonPayPubKey', 'set');
-        $this->setConfigParam('sAmazonPayMerchantId', 'set');
-        $this->setConfigParam('sAmazonPayStoreId', 'set');
-        $config = new Config();
-        $this->expectException(StandardException::class);
-        $config->checkHealth();
-    }
-
-    public function testCheckHealthMissingPubKey(): void
-    {
-        $this->setConfigParam('sAmazonPayPrivKey', 'set');
-        $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayPubKey', '');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
@@ -136,7 +115,6 @@ class ConfigTest extends UnitTestCase
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayPubKey', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', '');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
@@ -148,7 +126,6 @@ class ConfigTest extends UnitTestCase
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayPubKey', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', '');
         $config = new Config();
@@ -160,7 +137,6 @@ class ConfigTest extends UnitTestCase
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayPubKey', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();

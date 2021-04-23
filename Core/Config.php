@@ -237,7 +237,7 @@ class Config
         $oxidCountryList = $this->getCountryList();
 
         foreach ($oxidCountryList as $oxidCountry) {
-            $oxidCountryIsoCode = strtoupper($oxidCountry->oxcountry__oxisoalpha2->value);
+            $oxidCountryIsoCode = $oxidCountry->oxcountry__oxisoalpha2->value;
             if (in_array($oxidCountryIsoCode, $this->amazonEUAddresses)) {
                 $result[$oxidCountryIsoCode] = (object) null;
             }
@@ -321,7 +321,7 @@ class Config
      *
      * @return oxcountrylist
      */
-    public function getCountryList(): array
+    public function getCountryList(): object
     {
         if ($this->countryList === null) {
             // passing country list

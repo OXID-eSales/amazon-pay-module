@@ -64,6 +64,7 @@ class AmazonClient extends Client
         }
 
         if (!$payload) {
+
             $payload = [
                 'webCheckoutDetails' => [
                     'checkoutReviewReturnUrl' => $this->moduleConfig->checkoutReviewUrl(),
@@ -73,9 +74,7 @@ class AmazonClient extends Client
                 'deliverySpecifications' => [
                     'addressRestrictions' => [
                         'type' => 'Allowed',
-                        'restrictions' => [
-                            'DE' => (object) null
-                        ]
+                        'restrictions' => $this->moduleConfig->getPossibleEUAddresses()
                     ]
                 ]
             ];

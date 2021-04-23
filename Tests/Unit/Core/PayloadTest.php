@@ -44,7 +44,8 @@ class PayloadTest extends UnitTestCase
         $payload->setSoftDescriptor('softDescriptor');
         $payload->setCanHandlePendingAuthorization(true);
         $payload->setCurrencyCode('EUR');
-        $payload->setPaymentIntent('Thank you for your order!');
+        $payload->setNoteToBuyer('Thank you for your order!');
+        $payload->setPaymentIntent('capture');
         $payload->setMerchantStoreName('Oxid Store Name');
         $payload->setNoteToBuyer('capture');
         $payload->setCheckoutChargeAmount('2345.67');
@@ -112,6 +113,7 @@ class PayloadTest extends UnitTestCase
     {
         $payload = new Payload();
         $payload->setCheckoutChargeAmount('2345.67');
+        $payload->setCurrencyCode('EUR');
         $data = $payload->getData();
         $this->assertSame('2345.67', $data['chargeAmount']['amount']);
         $this->assertSame('EUR', $data['chargeAmount']['currencyCode']);

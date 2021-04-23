@@ -44,7 +44,7 @@ $aLang = [
     'HELP_OXPS_AMAZONPAY_STOREID'       => 'Melden Sie sich mit der Amazon-Client-ID an. Verwenden Sie nicht die Anwendungs-ID.
         Rufen Sie diesen Wert ab von Login mit Amazon in Seller Central.',
     'OXPS_AMAZONPAY_PAYREGION'          => 'Zahlungsbereich',
-    'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'Die mit Ihrem Shop verknüpfte Währung. Im Moment ist EUR fest kodiert.',
+    'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'Die in Ihrem Shop erlaubten und bei Amazon Pay möglichen Währungen.',
     'OXPS_AMAZONPAY_SELLER'             => 'Verkäufer',
     'OXPS_AMAZONPAY_IPN'                => 'IPN-Endpunkt',
     'HELP_OXPS_AMAZONPAY_IPN'           => 'IPN-Nachrichten werden von Amazon Pay ohne Ihr Zutun gesendet und können zur Aktualisierung Ihres

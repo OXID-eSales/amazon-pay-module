@@ -43,7 +43,7 @@ $aLang = [
     'HELP_OXPS_AMAZONPAY_STOREID'       => 'Login with Amazon client ID. Do not use the application ID. Retrieve this value
         from Login with Amazon in Seller Central.',
     'OXPS_AMAZONPAY_PAYREGION'          => 'Payment Region',
-    'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'the currency associated with your store. At the moment, EUR is hard-coded.',
+    'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'The currencies allowed in your shop and possible on Amazon Pay.',
     'OXPS_AMAZONPAY_SELLER'             => 'Seller',
     'OXPS_AMAZONPAY_IPN'                => 'IPN Endpoint',
     'HELP_OXPS_AMAZONPAY_IPN'           => 'IPN messages are sent by Amazon Pay without any action required on your part and

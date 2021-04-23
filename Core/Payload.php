@@ -65,7 +65,7 @@ class Payload
     /**
      * @var string
      */
-    private $currencyCode = 'EUR';
+    private $currencyCode;
 
     /**
      * @var string
@@ -139,6 +139,14 @@ class Payload
     public function setNoteToBuyer($noteToBuyer): void
     {
         $this->noteToBuyer = $noteToBuyer;
+    }
+
+    /**
+     * @param string $currencyCode
+     */
+    public function setCurrencyCode($currencyCode): void
+    {
+        $this->currencyCode = $currencyCode;
     }
 
     /**

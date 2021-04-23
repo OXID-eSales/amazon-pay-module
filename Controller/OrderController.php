@@ -26,6 +26,7 @@ use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Payload;
+use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -80,6 +81,10 @@ class OrderController extends OrderController_parent
 
         $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
         $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+
+        $amazonConfig = oxNew(Config::class);
+
+        $payload->setCurrencyCode($amazonConfig->getLedgerCurrency());
 
         if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
             $payload->setPaymentIntent('AuthorizeWithCapture');

@@ -65,6 +65,12 @@ class ConfigTest extends UnitTestCase
         $this->assertSame('storeid', $config->getStoreId());
     }
 
+    public function testGetPossibleEUAddresses(): void
+    {
+        $config = new Config();
+        $this->assertArrayHasKey('DE', $config->getPossibleEUAddresses());
+    }
+
     public function testGetIPNUrl(): void
     {
         $config = new Config();

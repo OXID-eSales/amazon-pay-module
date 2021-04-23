@@ -52,7 +52,7 @@ class Config
 
     /**
     * all currencies supported by Amazonpay
-    * @link http://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
+    * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
     *
     * @var array
     */
@@ -77,6 +77,38 @@ class Config
     * @var string
     */
     protected $amazonDefaultCurrency = 'EUR';
+
+    /**
+    * all allowed Amazonpay EU Addresses
+    * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
+    * @var array
+    */
+    protected $amazonEUAddresses = [
+        'AT', 'BE', 'BG',
+        'HR', 'CY', 'CZ',
+        'DK', 'EE', 'FI',
+        'FR', 'DE', 'GR',
+        'HU', 'IE', 'IT',
+        'LV', 'LT', 'LU',
+        'MT', 'NL', 'PL',
+        'RO', 'SK', 'SI',
+        'ES', 'SE'
+    ];
+
+    /**
+    * Amazonpay default EU Address
+    *
+    * @var string
+    */
+    protected $amazonDefaultEUAddresses = 'DE';
+
+    /**
+     * returns Country.
+     *
+     * @var OXID CountryList
+     */
+    protected $countryList = null;
+
 
     /**
      * Checks if module configurations are valid
@@ -197,6 +229,26 @@ class Config
     }
 
     /**
+     * @return array
+     */
+    public function getPossibleEUAddresses(): array
+    {
+        $result = [];
+        $oxidCountryList = $this->getCountryList();
+
+        foreach ($oxidCountryList as $oxidCountry) {
+            $oxidCountryIsoCode = strtoupper($oxidCountry->oxcountry__oxisoalpha2->value);
+            if (in_array($oxidCountryIsoCode, $this->amazonEUAddresses)) {
+                $result[$oxidCountryIsoCode] = (object) null;
+            }
+        }
+        if (count($result) == 0) {
+            $result[$this->amazonDefaultEUAddresses] = (object) null;
+        }
+        return $result;
+    }
+
+    /**
      * @return string
      */
     public function getPaymentRegion(): string
@@ -262,5 +314,21 @@ class Config
     public function checkoutResultUrl(): string
     {
         return html_entity_decode(Registry::getConfig()->getShopHomeUrl() . 'cl=amazondispatch&action=result');
+    }
+
+    /**
+     * Return country list
+     *
+     * @return oxcountrylist
+     */
+    public function getCountryList(): array
+    {
+        if ($this->countryList === null) {
+            // passing country list
+            $this->countryList = oxNew(\OxidEsales\Eshop\Application\Model\CountryList::class);
+            $this->countryList->loadActiveCountries();
+        }
+
+        return $this->countryList;
     }
 }

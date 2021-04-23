@@ -40,12 +40,12 @@ class Payload
     /**
      * @var string
      */
-    private $merchantStoreName = 'Oxid Store Name';
+    private $merchantStoreName;
 
     /**
      * @var string
      */
-    private $noteToBuyer = 'Thank you for your order!';
+    private $noteToBuyer;
 
     /**
      * @var string
@@ -123,6 +123,22 @@ class Payload
     public function setPaymentIntent($paymentIntent): void
     {
         $this->paymentIntent = $paymentIntent;
+    }
+
+    /**
+     * @param string $merchantStoreName
+     */
+    public function setMerchantStoreName($merchantStoreName): void
+    {
+        $this->merchantStoreName = $merchantStoreName;
+    }
+
+    /**
+     * @param string $noteToBuyer
+     */
+    public function setNoteToBuyer($noteToBuyer): void
+    {
+        $this->noteToBuyer = $noteToBuyer;
     }
 
     /**

@@ -23,7 +23,9 @@
 namespace OxidProfessionalServices\AmazonPay\Core\Helper;
 
 use OxidEsales\EshopCommunity\Application\Model\Country;
+use OxidProfessionalServices\AmazonPay\Core\Logger;
 use VIISON\AddressSplitter\AddressSplitter;
+use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class Address
 {
@@ -59,6 +61,7 @@ class Address
                 $street = $addressLine1;
             } else {
                 //invalid address
+                // Handled by address splitter
             }
             if ($addressLine3 != '') {
                 $company = $company . ', ' . $addressLine3;

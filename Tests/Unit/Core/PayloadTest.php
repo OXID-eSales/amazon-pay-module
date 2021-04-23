@@ -43,7 +43,9 @@ class PayloadTest extends UnitTestCase
         $payload->setCaptureAmount('1234.56');
         $payload->setSoftDescriptor('softDescriptor');
         $payload->setCanHandlePendingAuthorization(true);
-        $payload->setPaymentIntent('capture');
+        $payload->setPaymentIntent('Thank you for your order!');
+        $payload->setMerchantStoreName('Oxid Store Name');
+        $payload->setNoteToBuyer('capture');
         $payload->setCheckoutChargeAmount('2345.67');
         $payload->setPaymentDetailsChargeAmount('3456.78');
 

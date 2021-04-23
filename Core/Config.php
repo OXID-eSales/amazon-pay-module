@@ -173,11 +173,27 @@ class Config
         $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
         $currencyAbbr = $shopCurrency->name;
 
-        if (isset($this->amazonCurrencies[$currencyAbbr])) {
+        if (in_array($currencyAbbr, $this->amazonCurrencies)) {
             return $currencyAbbr;
         } else {
             return $this->amazonDefaultCurrency;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPossibleLedgerCurrenciesAbbr(): array
+    {
+        $result = [];
+        $shopCurrencies = Registry::getConfig()->getCurrencyArray();
+        foreach ($shopCurrencies as $shopCurrency) {
+            $currencyAbbr = $shopCurrency->name;
+            if (in_array($currencyAbbr, $this->amazonCurrencies)) {
+                 $result[] = $currencyAbbr;
+            }
+        }
+        return $result;
     }
 
     /**

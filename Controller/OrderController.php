@@ -76,6 +76,11 @@ class OrderController extends OrderController_parent
 
         $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue($this->getBasket()->getBruttoSum()));
 
+        $activeShop = Registry::getConfig()->getActiveShop();
+
+        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
+        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+
         if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
             $payload->setPaymentIntent('AuthorizeWithCapture');
             $payload->setCanHandlePendingAuthorization(false);

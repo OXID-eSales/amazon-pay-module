@@ -22,7 +22,6 @@
 
 namespace OxidProfessionalServices\AmazonPay\Core;
 
-use Doctrine\DBAL\FetchMode;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
@@ -134,7 +133,7 @@ class ViewConfig extends ViewConfig_parent
          WHERE oa.OXID in ($parameters)
 SQL;
 
-        $results = DatabaseProvider::getDb(FetchMode::ASSOCIATIVE)->getAll($sql, $productIds);
+        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIds);
 
         foreach ($results as $result) {
             if ($result['excludeArticle'] === '1' || $result['excludeCategory'] === '1') {

@@ -48,9 +48,11 @@ class Events
 
     public static function addArticleColumn(): void
     {
-        $sql = 'SELECT COLUMN_NAME 
-                FROM information_schema.COLUMNS 
-                WHERE TABLE_NAME = \'' . getViewName('oxarticles') . '\'
+        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
+
+        $sql = 'SELECT COLUMN_NAME
+                FROM information_schema.COLUMNS
+                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxarticles') . '\'
                 AND COLUMN_NAME = \'OXPS_AMAZON_EXCLUDE\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
@@ -68,9 +70,11 @@ class Events
 
     public static function addCategoryColumn(): void
     {
-        $sql = 'SELECT COLUMN_NAME 
-                FROM information_schema.COLUMNS 
-                WHERE TABLE_NAME = \'' . getViewName('oxcategories') . '\'
+        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
+
+        $sql = 'SELECT COLUMN_NAME
+                FROM information_schema.COLUMNS
+                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxcategories') . '\'
                 AND COLUMN_NAME = \'OXPS_AMAZON_EXCLUDE\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
@@ -89,9 +93,11 @@ class Events
 
     protected static function alterDeliverySetTable(): void
     {
-        $sql = sprintf('SELECT COLUMN_NAME 
-                FROM information_schema.COLUMNS 
-                WHERE TABLE_NAME = \'' . getViewName('oxdeliveryset') . '\'
+        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
+
+        $sql = sprintf('SELECT COLUMN_NAME
+                FROM information_schema.COLUMNS
+                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxdeliveryset') . '\'
                 AND COLUMN_NAME = \'OXPS_AMAZON_CARRIER\'');
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
@@ -129,7 +135,7 @@ class Events
 
             $languages = Registry::getLang()->getLanguageIds();
             foreach ($paymentDescriptions as $languageAbbreviation => $description) {
-                $languageId = array_search($languageAbbreviation, $languages);
+                $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
                     $payment->setLanguage($languageId);
                     $payment->oxpayments__oxlongdesc = new Field($description);
@@ -176,66 +182,66 @@ class Events
     {
         $sql = sprintf(
             'CREATE TABLE IF NOT EXISTS %s (
-                        `OXPS_AMAZON_PAYLOGID` 
-                            char(32) 
-                            character set latin1 
-                            collate latin1_general_ci 
-                            NOT NULL 
+                        `OXPS_AMAZON_PAYLOGID`
+                            char(32)
+                            character set latin1
+                            collate latin1_general_ci
+                            NOT NULL
                             COMMENT \'Record id\',
-                        `OXPS_AMAZON_OXSHOPID` 
-                            char(32) 
-                            character set latin1 
-                            collate latin1_general_ci 
-                            NOT NULL 
+                        `OXPS_AMAZON_OXSHOPID`
+                            char(32)
+                            character set latin1
+                            collate latin1_general_ci
+                            NOT NULL
                             COMMENT \'Shop id (oxshops)\',
-                        `OXPS_AMAZON_OXUSERID` 
-                            char(32) 
-                            character set latin1 
-                            collate latin1_general_ci 
-                            NOT NULL 
+                        `OXPS_AMAZON_OXUSERID`
+                            char(32)
+                            character set latin1
+                            collate latin1_general_ci
+                            NOT NULL
                             COMMENT \'User id (oxuser)\',
-                        `OXPS_AMAZON_OXORDERID` 
-                            char(32) 
-                            character set latin1 
-                            collate latin1_general_ci 
-                            NOT NULL 
+                        `OXPS_AMAZON_OXORDERID`
+                            char(32)
+                            character set latin1
+                            collate latin1_general_ci
+                            NOT NULL
                             COMMENT \'Order id (oxorder)\',
-                        `OXPS_AMAZON_RESPONSE_MSG` 
-                            TEXT 
-                            NOT NULL 
+                        `OXPS_AMAZON_RESPONSE_MSG`
+                            TEXT
+                            NOT NULL
                             COMMENT \'Response from Amazon SDK\',
-                        `OXPS_AMAZON_STATUS_CODE` 
-                            VARCHAR(100) 
-                            NOT NULL 
+                        `OXPS_AMAZON_STATUS_CODE`
+                            VARCHAR(100)
+                            NOT NULL
                             COMMENT \'Status code from Amazon SDK\',
-                        `OXPS_AMAZON_REQUEST_TYPE` 
-                            VARCHAR(100) 
-                            NOT NULL 
-                            COMMENT \'Request type\',        
-                        `OXTIMESTAMP` 
-                            timestamp 
-                            NOT NULL 
-                            default CURRENT_TIMESTAMP 
-                            on update CURRENT_TIMESTAMP 
+                        `OXPS_AMAZON_REQUEST_TYPE`
+                            VARCHAR(100)
+                            NOT NULL
+                            COMMENT \'Request type\',
+                        `OXTIMESTAMP`
+                            timestamp
+                            NOT NULL
+                            default CURRENT_TIMESTAMP
+                            on update CURRENT_TIMESTAMP
                             COMMENT \'Timestamp\',
                         `OXPS_AMAZON_IDENTIFIER`
                             char(32)
                             character set latin1
                             collate latin1_general_ci
                             NOT NULL
-                            COMMENT \'Amazon index to search by\',    
+                            COMMENT \'Amazon index to search by\',
                         `OXPS_AMAZON_CHARGE_PERMISSION_ID`
                             char(32)
                             character set latin1
                             collate latin1_general_ci
                             NOT NULL
-                            COMMENT \'Amazon chargePermissionId\',        
+                            COMMENT \'Amazon chargePermissionId\',
                         `OXPS_AMAZON_CHARGE_ID`
                             char(32)
                             character set latin1
                             collate latin1_general_ci
                             NOT NULL
-                            COMMENT \'Amazon chargeId\',        
+                            COMMENT \'Amazon chargeId\',
                         `OXPS_AMAZON_OBJECT_TYPE`
                             char(32)
                             character set latin1
@@ -247,9 +253,9 @@ class Events
                             character set latin1
                             collate latin1_general_ci
                             NOT NULL
-                            COMMENT \'Amazon objectId\',                
-                        PRIMARY KEY (`OXPS_AMAZON_PAYLOGID`)) 
-                            ENGINE=InnoDB 
+                            COMMENT \'Amazon objectId\',
+                        PRIMARY KEY (`OXPS_AMAZON_PAYLOGID`))
+                            ENGINE=InnoDB
                             COMMENT \'Amazon Payment transaction log\'',
             LogRepository::TABLE_NAME
         );

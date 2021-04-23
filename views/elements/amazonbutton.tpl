@@ -7,7 +7,7 @@
             url: '[{$amazonConfig->getCreateCheckoutUrl()}][{if $oxArticlesId}]&anid=[{$oxArticlesId}][{/if}]'
         },
         sandbox: [{if $amazonConfig->isSandbox()}]true[{else}]false[{/if}],
-        ledgerCurrency: '[{$amazonConfig->getledgerCurrency()}]',
+        ledgerCurrency: '[{$amazonConfig->getLedgerCurrency()}]',
         checkoutLanguage: '[{$amazonConfig->getCheckoutLanguage()}]',
         productType: 'PayAndShip',
         placement: 'Cart'

@@ -51,6 +51,34 @@ class Config
     protected $amazonDefaultLanguage = 'de';
 
     /**
+    * all currencies supported by Amazonpay
+    * @link http://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
+    *
+    * @var array
+    */
+    protected $amazonCurrencies = [
+        'AUD',
+        'GBP',
+        'DKK',
+        'EUR',
+        'HKD',
+        'JPY',
+        'NZD',
+        'NOK',
+        'ZAR',
+        'SEK',
+        'CHF',
+        'USD'
+    ];
+
+    /**
+    * Amazonpay default currency
+    *
+    * @var string
+    */
+    protected $amazonDefaultCurrency = 'EUR';
+
+    /**
      * Checks if module configurations are valid
      *
      * @throws StandardException
@@ -140,9 +168,16 @@ class Config
     /**
      * @return string
      */
-    public function getledgerCurrency(): string
+    public function getLedgerCurrency(): string
     {
-        return 'EUR'; //todo editable like CheckoutLanguage
+        $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
+        $currencyAbbr = $shopCurrency->name;
+
+        if (isset($this->amazonCurrencies[$currencyAbbr])) {
+            return $currencyAbbr;
+        } else {
+            return $this->amazonDefaultCurrency;
+        }
     }
 
     /**

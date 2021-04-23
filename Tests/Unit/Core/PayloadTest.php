@@ -43,6 +43,7 @@ class PayloadTest extends UnitTestCase
         $payload->setCaptureAmount('1234.56');
         $payload->setSoftDescriptor('softDescriptor');
         $payload->setCanHandlePendingAuthorization(true);
+        $payload->setCurrencyCode('EUR');
         $payload->setPaymentIntent('Thank you for your order!');
         $payload->setMerchantStoreName('Oxid Store Name');
         $payload->setNoteToBuyer('capture');

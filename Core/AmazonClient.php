@@ -64,7 +64,6 @@ class AmazonClient extends Client
         }
 
         if (!$payload) {
-
             $payload = [
                 'webCheckoutDetails' => [
                     'checkoutReviewReturnUrl' => $this->moduleConfig->checkoutReviewUrl(),

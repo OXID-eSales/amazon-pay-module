@@ -29,6 +29,7 @@ use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Application\Model\Basket;
+use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -168,6 +169,16 @@ class AmazonService
     {
         $payload = new Payload();
         $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getBruttoSum()));
+
+        $activeShop = Registry::getConfig()->getActiveShop();
+
+        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
+        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+
+        $amazonConfig = oxNew(Config::class);
+
+        $payload->setCurrencyCode($amazonConfig->getLedgerCurrency());
+
         $data = $payload->removeMerchantMetadata($payload->getData());
 
         $result = OxidServiceProvider::getAmazonClient()->completeCheckoutSession(
@@ -203,6 +214,16 @@ class AmazonService
         $amount = PhpHelper::getMoneyValue($basket->getBruttoSum());
         $payload = new Payload();
         $payload->setCheckoutChargeAmount($amount);
+
+        $activeShop = Registry::getConfig()->getActiveShop();
+
+        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
+        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+
+        $amazonConfig = oxNew(Config::class);
+
+        $payload->setCurrencyCode($amazonConfig->getLedgerCurrency());
+
         $data = $payload->removeMerchantMetadata($payload->getData());
 
         $result = OxidServiceProvider::getAmazonClient()->completeCheckoutSession(
@@ -433,16 +454,23 @@ class AmazonService
     /**
      * @param $chargeId
      * @param $amount
+     * @param $currencyCode
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function capturePaymentForOrder($chargeId, $amount): void
+    public function capturePaymentForOrder($chargeId, $amount, $currencyCode): void
     {
         $logger = new Logger();
 
         $payload = new Payload();
         $payload->setSoftDescriptor('CC Account');
         $payload->setCaptureAmount(PhpHelper::getMoneyValue($amount));
+
+        $activeShop = Registry::getConfig()->getActiveShop();
+
+        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
+        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+        $payload->setCurrencyCode($currencyCode);
 
         $result = OxidServiceProvider::getAmazonClient()->captureCharge(
             $chargeId,

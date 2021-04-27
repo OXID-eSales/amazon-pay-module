@@ -90,6 +90,14 @@ class AmazonTestCase extends UnitTestCase
             ->andReturn('http://localhost');
 
         $this->mockModuleConfig
+            ->shouldReceive('getPossibleEUAddresses')
+            ->andReturn(
+                [
+                    'DE' => (object) null
+                ]
+            );
+
+        $this->mockModuleConfig
             ->shouldReceive('getStoreId')
             ->andReturn(Registry::getConfig()->getConfigParam('sAmazonPayStoreId'));
 

@@ -24,6 +24,7 @@ namespace OxidProfessionalServices\AmazonPay\Core;
 
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Model\ListModel;
 
 /**
  * Class Config
@@ -321,7 +322,7 @@ class Config
      *
      * @return oxcountrylist
      */
-    public function getCountryList(): object
+    public function getCountryList(): ListModel
     {
         if ($this->countryList === null) {
             // passing country list

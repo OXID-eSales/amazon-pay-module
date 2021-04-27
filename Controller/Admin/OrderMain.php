@@ -23,6 +23,7 @@
 namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
 
@@ -46,11 +47,15 @@ class OrderMain extends OrderMain_parent
                     return;
                 }
 
+                $amazonConfig = oxNew(Config::class);
+                $currencyCode = $order->oxorder__oxcurrency->rawValue ?? $amazonConfig->getLedgerCurrency();
+
                 if ($order->oxorder__oxtransstatus->rawValue !== 'PAID') {
                     OxidServiceProvider::getAmazonService()
                         ->capturePaymentForOrder(
                             $chargeId,
-                            $order->getFormattedTotalBrutSum()
+                            $order->getFormattedTotalBrutSum(),
+                            $currencyCode
                         );
                 }
 

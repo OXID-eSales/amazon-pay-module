@@ -64,7 +64,7 @@
         <div class="form-group">
             <label for="payRegion">[{oxmultilang ident="OXPS_AMAZONPAY_PAYREGION"}]</label>
             <div class="controls">
-                [{assign var="currenciesAbbr" value=$config->getPossibleLedgerCurrenciesAbbr()}]
+                [{assign var="currenciesAbbr" value=$config->getPossiblePresentmentCurrenciesAbbr()}]
                 <span id="payRegion">[{", "|implode:$currenciesAbbr}]</span>
                 <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_PAYREGION"}]</span>
             </div>

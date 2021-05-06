@@ -201,7 +201,7 @@ class Config
     /**
      * @return string
      */
-    public function getLedgerCurrency(): string
+    public function getPresentmentCurrency(): string
     {
         $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
         $currencyAbbr = $shopCurrency->name;
@@ -214,9 +214,17 @@ class Config
     }
 
     /**
+     * @return string
+     */
+    public function getLedgerCurrency(): string
+    {
+        return $this->amazonDefaultCurrency;
+    }
+
+    /**
      * @return array
      */
-    public function getPossibleLedgerCurrenciesAbbr(): array
+    public function getPossiblePresentmentCurrenciesAbbr(): array
     {
         $result = [];
         $shopCurrencies = Registry::getConfig()->getCurrencyArray();

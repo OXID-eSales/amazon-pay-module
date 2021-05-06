@@ -86,7 +86,6 @@ class AmazonService
         }
 
         $checkoutSession = $this->getCheckoutSession();
-
         return $checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN;
     }
 
@@ -177,7 +176,7 @@ class AmazonService
 
         $amazonConfig = oxNew(Config::class);
 
-        $payload->setCurrencyCode($amazonConfig->getLedgerCurrency());
+        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
 
@@ -222,7 +221,7 @@ class AmazonService
 
         $amazonConfig = oxNew(Config::class);
 
-        $payload->setCurrencyCode($amazonConfig->getLedgerCurrency());
+        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
 

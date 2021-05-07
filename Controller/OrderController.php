@@ -24,6 +24,7 @@ namespace OxidProfessionalServices\AmazonPay\Controller;
 
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Field;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Payload;
 use OxidProfessionalServices\AmazonPay\Core\Config;
@@ -35,6 +36,43 @@ use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class OrderController extends OrderController_parent
 {
+
+    /**
+     * Delivery address
+     *
+     * @var oxAddress|null
+     */
+    protected $_oFilteredDeliveryAddress = null;
+
+    /**
+     * Billing address
+     *
+     * @var oxAddress|null
+     */
+    protected $_oFilteredBillingAddress = null;
+
+    /**
+     * Billing address fields
+     *
+     * @var array
+     */
+    protected $_aBillingAddressFields = [
+        'oxuser__oxcompany',
+        'oxuser__oxusername',
+        'oxuser__oxfname',
+        'oxuser__oxlname',
+        'oxuser__oxstreet',
+        'oxuser__oxstreetnr',
+        'oxuser__oxaddinfo',
+        'oxuser__oxustid',
+        'oxuser__oxcity',
+        'oxuser__oxcountryid',
+        'oxuser__oxstateid',
+        'oxuser__oxzip',
+        'oxuser__oxfon',
+        'oxuser__oxfax'
+    ];
+
     public function init()
     {
         /** @var User $user */
@@ -104,11 +142,56 @@ class OrderController extends OrderController_parent
         Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
     }
 
+    public function getMissingRequiredBillingFields() {
+        $missingBillingFields = Registry::getSession()->getVariable('amazonMissingBillingFields');
+        return is_array($missingBillingFields) ? $missingBillingFields : [];
+    }
+
+    public function getMissingRequiredDeliveryFields() {
+        $missingDeliveryFields = Registry::getSession()->getVariable('amazonMissingDeliveryFields');
+        return is_array($missingDeliveryFields) ? $missingDeliveryFields : [];
+    }
+
+    public function getFilteredDeliveryAddress() {
+        if (is_null($this->_oFilteredDeliveryAddress)) {
+            $this->_oFilteredDeliveryAddress = false;
+            if ($deliveryAddress = $this->getDelAddress())
+            {
+                $this->_oFilteredDeliveryAddress = $this->filterAddress($deliveryAddress);
+            }
+        }
+        return $this->_oFilteredDeliveryAddress;
+    }
+
+    public function getFilteredBillingAddress() {
+        if (is_null($this->_oFilteredBillingAddress)) {
+            $this->_oFilteredBillingAddress = false;
+            $oUser = $this->getUser();
+            $billingAddress = new \stdClass;
+            foreach ($this->_aBillingAddressFields as $key) {
+                $billingAddress->{$key} = $oUser->{$key}->rawValue;
+            }
+            $this->_oFilteredBillingAddress = $this->filterAddress($billingAddress);
+        }
+        return $this->_oFilteredBillingAddress;
+    }
+
     private function setAmazonPayAsPaymentMethod()
     {
         $payment = $this->getBasket()->getPaymentId();
         if (($payment !== 'oxidamazon')) {
             $this->getBasket()->setPayment('oxidamazon');
         }
+    }
+
+    private function filterAddress($address)
+    {
+        $sessionId = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+        $filteredAddress = new \stdClass;
+        foreach ($address as $key => $value) {
+            $value = ($value !== $sessionId) ? $value : '';
+            $filteredAddress->{$key} = new Field($value, Field::T_RAW);
+        }
+        return $filteredAddress;
     }
 }

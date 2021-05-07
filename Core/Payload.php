@@ -70,6 +70,11 @@ class Payload
     /**
      * @var string
      */
+    private $presentmentCurrency;
+
+    /**
+     * @var string
+     */
     private $softDescriptor;
 
     /**
@@ -82,6 +87,11 @@ class Payload
         if (!empty($this->paymentIntent)) {
             $data['paymentDetails'] = $data['paymentDetails'] ?? [];
             $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
+        }
+
+        if (!empty($this->presentmentCurrency)) {
+            $data['paymentDetails'] = $data['paymentDetails'] ?? [];
+            $data['paymentDetails']['presentmentCurrency'] = $this->presentmentCurrency;
         }
 
         if (isset($this->canHandlePendingAuthorization)) {
@@ -147,6 +157,7 @@ class Payload
     public function setCurrencyCode($currencyCode): void
     {
         $this->currencyCode = $currencyCode;
+        $this->presentmentCurrency = $currencyCode;
     }
 
     /**

@@ -84,7 +84,7 @@ class OrderController extends OrderController_parent
 
         $amazonConfig = oxNew(Config::class);
 
-        $payload->setCurrencyCode($amazonConfig->getLedgerCurrency());
+        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
             $payload->setPaymentIntent('AuthorizeWithCapture');

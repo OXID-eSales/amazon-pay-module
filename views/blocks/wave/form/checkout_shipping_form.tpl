@@ -1,12 +1,8 @@
-[{if $oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude()}]
-    [{if $oxcmp_user}]
-        [{assign var="delivadr" value=$oxcmp_user->getSelectedAddress()}]
-    [{/if}]
-
-    <div class="col-lg-9 offset-lg-3" id="shippingAddress">
-        [{include file="widget/address/shipping_address.tpl" delivadr=$delivadr}]
+[{assign var="oDeliveryAddress" value=$oView->getFilteredDeliveryAddress()}]
+[{if $oViewConf->isAmazonActive() && $oViewConf->isAmazonSessionActive() && $oDeliveryAddress}]
+    <div id="shippingAddress" class="col-lg-9 offset-lg-3">
+        [{include file="widget/address/shipping_address.tpl" delivadr=$oDeliveryAddress}]
     </div>
-    <hr>
 [{else}]
     [{$smarty.block.parent}]
 [{/if}]

@@ -110,7 +110,7 @@ class AddressTest extends UnitTestCase
      */
     public function testMapShippingAddressToDb(array $address, $key, $value): void
     {
-        $result = Address::mapAddressToDb($address, 'oxadress__');
+        $result = Address::mapAddressToDb($address, 'oxaddress__');
         $this->assertSame($result[$key], $value);
     }
 

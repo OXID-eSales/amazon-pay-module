@@ -31,9 +31,13 @@
                     </div>
                     <div class="panel-body">
                         [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
-                        [{assign var="missingRequiredBillingFields" value=$oView->getMissingRequiredBillingFields()}]
-                        [{include file="flow_missing_billing_address.tpl" missingfields=$missingRequiredBillingFields}]
                     </div>
+                    [{assign var="missingRequiredBillingFields" value=$oView->getMissingRequiredBillingFields()}]
+                    [{if $missingRequiredBillingFields|@count}]
+                        <div class="panel-footer">
+                            [{include file="wave_missing_billing_address.tpl" missingfields=$missingRequiredBillingFields}]
+                        </div>
+                    [{/if}]
                 </div>
             </form>
         </div>
@@ -60,9 +64,13 @@
                         [{else}]
                             [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
                         [{/if}]
-                        [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]
-                        [{include file="flow_missing_delivery_address.tpl" missingfields=$missingRequiredDeliveryFields}]
                     </div>
+                    [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]
+                    [{if $missingRequiredDeliveryFields|@count}]
+                        <div class="panel-footer">
+                            [{include file="wave_missing_delivery_address.tpl" missingfields=$missingRequiredDeliveryFields}]
+                        </div>
+                    [{/if}]
                 </div>
             </form>
         </div>

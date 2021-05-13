@@ -36,43 +36,6 @@ use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class OrderController extends OrderController_parent
 {
-
-    /**
-     * Delivery address
-     *
-     * @var oxAddress|null
-     */
-    protected $_oFilteredDeliveryAddress = null;
-
-    /**
-     * Billing address
-     *
-     * @var oxAddress|null
-     */
-    protected $_oFilteredBillingAddress = null;
-
-    /**
-     * Billing address fields
-     *
-     * @var array
-     */
-    protected $_aBillingAddressFields = [
-        'oxuser__oxcompany',
-        'oxuser__oxusername',
-        'oxuser__oxfname',
-        'oxuser__oxlname',
-        'oxuser__oxstreet',
-        'oxuser__oxstreetnr',
-        'oxuser__oxaddinfo',
-        'oxuser__oxustid',
-        'oxuser__oxcity',
-        'oxuser__oxcountryid',
-        'oxuser__oxstateid',
-        'oxuser__oxzip',
-        'oxuser__oxfon',
-        'oxuser__oxfax'
-    ];
-
     public function init()
     {
         /** @var User $user */
@@ -99,6 +62,52 @@ class OrderController extends OrderController_parent
 
     public function execute()
     {
+        // check missing amazonfields
+        $oUser = $this->getUser();
+
+        $missingError = false;
+
+        if ($oUser) {
+            $oDelAdress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
+            $oDelAdress->load(\OxidEsales\Eshop\Core\Registry::getSession()->getVariable('deladrid'));
+
+            $changeMissingBillingFields = false;
+            $changeMissingDeliveryFields = false;
+            $oConfig = $this->getConfig();
+            $missingRequestBillingFields = $oConfig->getRequestParameter('missing_amazon_invadr');
+            $missingRequestDeliveryFields = $oConfig->getRequestParameter('missing_amazon_deladr');
+            foreach ($this->getMissingRequiredBillingFields() as $key => $value) {
+                if (isset($missingRequestBillingFields[$key])) {
+                    if ($missingRequestBillingFields[$key]) {
+                        $changeMissingBillingFields = true;
+                        $oUser->{$key} = new Field($missingRequestBillingFields[$key], Field::T_RAW);
+                    } else {
+                        $missingError = true;
+                    }
+                }
+            }
+
+            foreach ($this->getMissingRequiredDeliveryFields() as $key => $value) {
+                if (isset($missingRequestDeliveryFields[$key])) {
+                    if ($missingRequestDeliveryFields[$key]) {
+                        $changeMissingDeliveryFields = true;
+                        $oDelAdress->{$key} = new Field($missingRequestDeliveryFields[$key], Field::T_RAW);
+                    } else {
+                        $missingError = true;
+                    }
+                }
+            }
+            if ($changeMissingDeliveryFields) {
+                $oDelAdress->save();
+            }
+            if ($changeMissingBillingFields) {
+                $oUser->save();
+            }
+        }
+        if ($missingError) {
+            return;
+        }
+
         $ret = parent::execute();
 
         if (strpos($ret, 'thankyou') === false) {
@@ -142,38 +151,44 @@ class OrderController extends OrderController_parent
         Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
     }
 
-    public function getMissingRequiredBillingFields() {
-        $missingBillingFields = Registry::getSession()->getVariable('amazonMissingBillingFields');
-        return is_array($missingBillingFields) ? $missingBillingFields : [];
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return array
+     */
+    public function getMissingRequiredBillingFields(): array
+    {
+        return OxidServiceProvider::getAmazonService()->getMissingRequiredBillingFields();
     }
 
-    public function getMissingRequiredDeliveryFields() {
-        $missingDeliveryFields = Registry::getSession()->getVariable('amazonMissingDeliveryFields');
-        return is_array($missingDeliveryFields) ? $missingDeliveryFields : [];
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return array
+     */
+    public function getMissingRequiredDeliveryFields(): array
+    {
+        return OxidServiceProvider::getAmazonService()->getMissingRequiredDeliveryFields();
     }
 
-    public function getFilteredDeliveryAddress() {
-        if (is_null($this->_oFilteredDeliveryAddress)) {
-            $this->_oFilteredDeliveryAddress = false;
-            if ($deliveryAddress = $this->getDelAddress())
-            {
-                $this->_oFilteredDeliveryAddress = $this->filterAddress($deliveryAddress);
-            }
-        }
-        return $this->_oFilteredDeliveryAddress;
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return object
+     */
+    public function getFilteredDeliveryAddress()
+    {
+        return OxidServiceProvider::getAmazonService()->getFilteredDeliveryAddress();
     }
 
-    public function getFilteredBillingAddress() {
-        if (is_null($this->_oFilteredBillingAddress)) {
-            $this->_oFilteredBillingAddress = false;
-            $oUser = $this->getUser();
-            $billingAddress = new \stdClass;
-            foreach ($this->_aBillingAddressFields as $key) {
-                $billingAddress->{$key} = $oUser->{$key}->rawValue;
-            }
-            $this->_oFilteredBillingAddress = $this->filterAddress($billingAddress);
-        }
-        return $this->_oFilteredBillingAddress;
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return object
+     */
+    public function getFilteredBillingAddress()
+    {
+        return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 
     private function setAmazonPayAsPaymentMethod()
@@ -182,16 +197,5 @@ class OrderController extends OrderController_parent
         if (($payment !== 'oxidamazon')) {
             $this->getBasket()->setPayment('oxidamazon');
         }
-    }
-
-    private function filterAddress($address)
-    {
-        $sessionId = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
-        $filteredAddress = new \stdClass;
-        foreach ($address as $key => $value) {
-            $value = ($value !== $sessionId) ? $value : '';
-            $filteredAddress->{$key} = new Field($value, Field::T_RAW);
-        }
-        return $filteredAddress;
     }
 }

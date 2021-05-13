@@ -46,10 +46,20 @@ class UserController extends UserController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return array
+     * @return object
      */
-    public function getAmazonBillingAddress(): array
+    public function getFilteredDeliveryAddress()
     {
-        return OxidServiceProvider::getAmazonService()->getBillingAddress();
+        return OxidServiceProvider::getAmazonService()->getFilteredDeliveryAddress();
+    }
+
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return object
+     */
+    public function getFilteredBillingAddress()
+    {
+        return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 }

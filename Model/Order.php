@@ -22,7 +22,10 @@
 
 namespace OxidProfessionalServices\AmazonPay\Model;
 
+use OxidEsales\Eshop\Core\Field;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Address;
+use OxidEsales\Eshop\Application\Model\Basket;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
 
 /**
@@ -32,6 +35,65 @@ class Order extends Order_parent
 {
     /** @var AmazonService */
     private $amazonService;
+
+    /**
+     * Order checking, processing and saving method.
+     *
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
+     * @param object                                     $oUser                Current User object
+     * @param bool                                       $blRecalculatingOrder Order recalculation
+     *
+     * @return integer
+     */
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    {
+        $missingError = false;
+
+        $oDelAdress = oxNew(Address::class);
+        $oDelAdress->load(Registry::getSession()->getVariable('deladrid'));
+
+        $oConfig = $this->getConfig();
+
+        if ($missingRequestBillingFields = $oConfig->getRequestParameter('missing_amazon_invadr')) {
+            $changeMissingBillingFields = false;
+            foreach ($this->getAmazonService()->getMissingRequiredBillingFields() as $key => $value) {
+                if (isset($missingRequestBillingFields[$key])) {
+                    if ($missingRequestBillingFields[$key]) {
+                        $changeMissingBillingFields = true;
+                        $oUser->{$key} = new Field($missingRequestBillingFields[$key], Field::T_RAW);
+                    } else {
+                        $missingError = true;
+                    }
+                }
+            }
+            if ($changeMissingBillingFields) {
+                $oUser->save();
+            }
+        }
+
+        if ($missingRequestDeliveryFields = $oConfig->getRequestParameter('missing_amazon_deladr')) {
+            $changeMissingDeliveryFields = false;
+            foreach ($this->getAmazonService()->getMissingRequiredDeliveryFields() as $key => $value) {
+                if (isset($missingRequestDeliveryFields[$key])) {
+                    if ($missingRequestDeliveryFields[$key]) {
+                        $changeMissingDeliveryFields = true;
+                        $oDelAdress->{$key} = new Field($missingRequestDeliveryFields[$key], Field::T_RAW);
+                    } else {
+                        $missingError = true;
+                    }
+                }
+            }
+            if ($changeMissingDeliveryFields) {
+                $oDelAdress->save();
+            }
+        }
+
+        if ($missingError) {
+            return self::ORDER_STATE_INVALIDDELADDRESSCHANGED;
+        }
+
+        return parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
+    }
 
     /**
      * If Amazon Pay is active, it will return an address from Amazon

@@ -182,7 +182,7 @@ class AmazonService
         $checkoutSession = $this->getCheckoutSession();
         $address = $checkoutSession['response']['shippingAddress'] ?? [];
 
-        return Address::mapAddressToView($address);
+        return Address::mapAddressToView($address, 'oxaddress__');
     }
 
     /**
@@ -216,7 +216,7 @@ class AmazonService
         $buyer = $checkoutSession['response']['buyer'];
         $bill = ['oxusername' => $buyer['email']];
 
-        return array_merge($bill, Address::mapAddressToView($address));
+        return array_merge($bill, Address::mapAddressToView($address, 'oxuser__'));
     }
 
     /**

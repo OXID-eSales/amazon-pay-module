@@ -144,7 +144,7 @@ class AddressTest extends UnitTestCase
      */
     public function testMapAddressToView(array $address, $key, $value): void
     {
-        $result = Address::mapAddressToView($address);
+        $result = Address::mapAddressToView($address, 'oxaddress__');
         $this->assertSame($result[$key], $value);
     }
 

@@ -31,6 +31,22 @@ use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class Address
 {
+     /**
+     * possible DBTable Prefix
+     *
+     * @var array
+     */
+    protected static $possibleDBTablePrefix = [
+        'oxuser__' , 'oxaddress__'
+    ];
+
+     /**
+     * possible DBTable Prefix
+     *
+     * @var string
+     */
+    protected static $defaultDBTablePrefix = 'oxaddress__';
+
     /**
      * Copied verbatim from AmazonPay Demo v2
      * because amazon expects this exact result
@@ -148,7 +164,6 @@ class Address
                 $missingFields[$deliveryKey] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
             }
         }
-
         return $missingFields;
     }
 
@@ -159,6 +174,7 @@ class Address
      */
     public static function mapAddressToDb(array $address, $DBTablePrefix): array
     {
+        $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
         $addressLines = self::getAddressLines($address);
 
@@ -191,11 +207,13 @@ class Address
      * Maps Amazon address fields to oxid fields
      *
      * @param array $address
+     * @param string $DBTablePrefix
      *
      * @return array
      */
-    public static function mapAddressToView(array $address): array
+    public static function mapAddressToView(array $address, $DBTablePrefix): array
     {
+        $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
         $addressLines = self::getAddressLines($address);
 
@@ -227,11 +245,13 @@ class Address
         ];
 
         $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
-        $aRequiredBillingFields = $oRequiredAddressFields->getBillingFields();
-        $aRequiredDeliveryFields = $oRequiredAddressFields->getDeliveryFields();
 
-        foreach ($aRequiredBillingFields as $billingKey) {
-            $key = str_replace('oxuser__', '', $billingKey);
+        $aRequiredFields = $DBTablePrefix == 'oxuser__' ?
+            $oRequiredAddressFields->getBillingFields() :
+            $oRequiredAddressFields->getDeliveryFields();
+
+        foreach ($aRequiredFields as $key) {
+            $key = str_replace($DBTablePrefix, '', $key);
             if (
                 (
                     isset($result[$key]) &&
@@ -242,20 +262,6 @@ class Address
                 $result[$key] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
             }
         }
-
-        foreach ($aRequiredDeliveryFields as $deliveryKey) {
-            $key = str_replace('oxaddress__', '', $deliveryKey);
-            if (
-                (
-                    isset($result[$key]) &&
-                    !$result[$key]
-                ) ||
-                !isset($result[$key])
-            ) {
-                $result[$key] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
-            }
-        }
-
         return $result;
     }
 
@@ -281,5 +287,19 @@ class Address
         }
 
         return $lines;
+    }
+
+    /**
+     * validate the DBTablePrefix
+     *
+     * @param string $DBTablePrefix
+     *
+     * @return string
+     */
+    private static function validateDBTablePrefix($DBTablePrefix)
+    {
+        return in_array($DBTablePrefix, self::$possibleDBTablePrefix) ?
+            $DBTablePrefix :
+            self::$defaultDBTablePrefix;
     }
 }

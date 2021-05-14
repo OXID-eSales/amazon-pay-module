@@ -24,6 +24,8 @@ namespace OxidProfessionalServices\AmazonPay\Controller;
 
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Application\Component\UserComponent;
+use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Payload;
 use OxidProfessionalServices\AmazonPay\Core\Config;
@@ -39,19 +41,37 @@ class OrderController extends OrderController_parent
     {
         /** @var User $user */
         $user = $this->getUser();
+        $session = Registry::getSession();
 
         $exclude = $this->getViewConfig()->isAmazonExclude();
 
         if (!$exclude) {
             if (OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) {
+                $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
                 // Create guest user if not logged in
                 if ($user === false) {
-                    $userComponent = oxNew('oxcmp_user');
-                    $userComponent->createGuestUser(OxidServiceProvider::getAmazonService()->getCheckoutSession());
+                    $userComponent = oxNew(UserComponent::class);
+                    $userComponent->createGuestUser($amazonSession);
                     $this->setAmazonPayAsPaymentMethod();
                     Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
                 } else {
                     $this->setAmazonPayAsPaymentMethod();
+                    $mappedBillingFields = Address::mapAddressToDb(
+                        $amazonSession['response']['billingAddress'],
+                        'oxuser__'
+                    );
+                    $mappedDeliveryFields = Address::mapAddressToDb(
+                        $amazonSession['response']['shippingAddress'],
+                        'oxaddress__'
+                    );
+                    $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
+                    $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+                    if (count($missingBillingFields)) {
+                        $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
+                    }
+                    if (count($missingDeliveryFields)) {
+                        $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+                    }
                 }
             }
         }
@@ -102,6 +122,46 @@ class OrderController extends OrderController_parent
         $response = PhpHelper::jsonToArray($result['response']);
 
         Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
+    }
+
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return array
+     */
+    public function getMissingRequiredBillingFields(): array
+    {
+        return OxidServiceProvider::getAmazonService()->getMissingRequiredBillingFields();
+    }
+
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return array
+     */
+    public function getMissingRequiredDeliveryFields(): array
+    {
+        return OxidServiceProvider::getAmazonService()->getMissingRequiredDeliveryFields();
+    }
+
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return object
+     */
+    public function getFilteredDeliveryAddress()
+    {
+        return OxidServiceProvider::getAmazonService()->getFilteredDeliveryAddress();
+    }
+
+    /**
+     * Template getter for amazon bill address
+     *
+     * @return object
+     */
+    public function getFilteredBillingAddress()
+    {
+        return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 
     private function setAmazonPayAsPaymentMethod()

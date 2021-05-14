@@ -98,6 +98,10 @@ class AmazonTestCase extends UnitTestCase
             );
 
         $this->mockModuleConfig
+            ->shouldReceive('getPresentmentCurrency')
+            ->andReturn('EUR');
+
+        $this->mockModuleConfig
             ->shouldReceive('getStoreId')
             ->andReturn(Registry::getConfig()->getConfigParam('sAmazonPayStoreId'));
 

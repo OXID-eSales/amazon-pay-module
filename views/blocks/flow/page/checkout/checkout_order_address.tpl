@@ -8,6 +8,8 @@
             changeAction: 'changeAddress'
         });
     [{/capture}]
+    [{assign var="oDeliveryAddress" value=$oView->getFilteredDeliveryAddress()}]
+    [{assign var="oBillingAddress" value=$oView->getFilteredBillingAddress()}]
     [{oxscript add=$smarty.capture.amazonpay_script}]
     <div id="orderAddress" class="row">
         <div class="col-xs-12 col-md-6">
@@ -28,8 +30,14 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        [{include file="widget/address/billing_address.tpl"}]
+                        [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
                     </div>
+                    [{assign var="missingRequiredBillingFields" value=$oView->getMissingRequiredBillingFields()}]
+                    [{if $missingRequiredBillingFields|@count}]
+                        <div class="panel-footer">
+                            [{include file="wave_missing_billing_address.tpl" missingfields=$missingRequiredBillingFields}]
+                        </div>
+                    [{/if}]
                 </div>
             </form>
         </div>
@@ -51,13 +59,18 @@
                         </h3>
                     </div>
                     <div class="panel-body">
-                        [{assign var="oDelAdress" value=$oView->getDelAddress()}]
-                        [{if $oDelAdress}]
-                            [{include file="widget/address/shipping_address.tpl" delivadr=$oDelAdress}]
+                        [{if $oDeliveryAddress}]
+                            [{include file="widget/address/shipping_address.tpl" delivadr=$oDeliveryAddress}]
                         [{else}]
-                            [{include file="widget/address/billing_address.tpl"}]
+                            [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
                         [{/if}]
                     </div>
+                    [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]
+                    [{if $missingRequiredDeliveryFields|@count}]
+                        <div class="panel-footer">
+                            [{include file="wave_missing_delivery_address.tpl" missingfields=$missingRequiredDeliveryFields}]
+                        </div>
+                    [{/if}]
                 </div>
             </form>
         </div>

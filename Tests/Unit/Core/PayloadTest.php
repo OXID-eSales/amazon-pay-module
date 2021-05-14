@@ -77,14 +77,6 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('somethingRandom', $data['paymentDetails']['paymentIntent']);
     }
 
-    public function testSetCurrencyCode(): void
-    {
-        $payload = new Payload();
-        $payload->setCurrencyCode('EUR');
-        $data = $payload->getData();
-        $this->assertSame('EUR', $data['paymentDetails']['presentmentCurrency']);
-    }
-
     public function testSetCanHandlePendingAuthorization(): void
     {
         $payload = new Payload();
@@ -97,8 +89,10 @@ class PayloadTest extends UnitTestCase
     {
         $payload = new Payload();
         $payload->setPaymentDetailsChargeAmount('3456.78');
+        $payload->setCurrencyCode('EUR');
         $data = $payload->getData();
         $this->assertSame('3456.78', $data['paymentDetails']['chargeAmount']['amount']);
+        $this->assertSame('EUR', $data['paymentDetails']['chargeAmount']['currencyCode']);
     }
 
     public function testSetSoftDescriptor(): void

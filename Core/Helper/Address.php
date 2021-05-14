@@ -22,13 +22,31 @@
 
 namespace OxidProfessionalServices\AmazonPay\Core\Helper;
 
-use OxidEsales\EshopCommunity\Application\Model\Country;
+use OxidEsales\Eshop\Application\Model\Country;
+use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
+use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 use VIISON\AddressSplitter\AddressSplitter;
 use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class Address
 {
+     /**
+     * possible DBTable Prefix
+     *
+     * @var array
+     */
+    protected static $possibleDBTablePrefix = [
+        'oxuser__' , 'oxaddress__'
+    ];
+
+     /**
+     * possible DBTable Prefix
+     *
+     * @var string
+     */
+    protected static $defaultDBTablePrefix = 'oxaddress__';
+
     /**
      * Copied verbatim from AmazonPay Demo v2
      * because amazon expects this exact result
@@ -100,48 +118,63 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function mapAddressToDb(array $address): array
+    public static function collectMissingRequiredBillingFields(array $address): array
     {
-        $parsedAddress = self::parseAddress($address);
-        $addressLines = self::getAddressLines($address);
-        $addressData = AddressSplitter::splitAddress(implode(',', $addressLines));
-        $country = oxNew(Country::class);
-        $countryCode = $country->getIdByCode($address['countryCode'] ?? '');
+        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
+        $aRequiredBillingFields = $oRequiredAddressFields->getBillingFields();
 
-        $streetNr = $addressData['houseNumber'];
+        $missingFields = [];
 
-        $finalAddress = [
-            'oxcompany' => $parsedAddress['Company'],
-            'oxuser__oxfname' =>
-                $parsedAddress['Firstname'] == "" ? $parsedAddress['Lastname'] : $parsedAddress['Firstname'],
-            'oxuser__oxlname' => $parsedAddress['Lastname'],
-            'oxuser__oxstreet' => $addressData['streetName'],
-            'oxuser__oxcity' => $parsedAddress['City'],
-            'oxuser__oxstreetnr' => $streetNr,
-            'oxuser__oxcountryid' => $countryCode,
-            'oxuser__oxzip' => $parsedAddress['PostalCode'],
-            'oxaddress__oxfname' =>
-                $parsedAddress['Firstname'] == "" ? $parsedAddress['Lastname'] : $parsedAddress['Firstname'],
-            'oxaddress__oxlname' => $parsedAddress['Lastname'],
-            'oxaddress__oxstreet' => $addressData['streetName'],
-            'oxaddress__oxcity' => $parsedAddress['City'],
-            'oxaddress__oxstreetnr' => $streetNr,
-            'oxaddress__oxcountryid' => $countryCode,
-            'oxaddress__oxzip' => $parsedAddress['PostalCode'],
-        ];
+        foreach ($aRequiredBillingFields as $billingKey) {
+            if (
+                (
+                    isset($address[$billingKey]) &&
+                    !$address[$billingKey]
+                ) ||
+                !isset($address[$billingKey])
+            ) {
+                // we collect the missing fields and filled as dummy with the Amazon-SessionID
+                $missingFields[$billingKey] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+            }
+        }
 
-        return $finalAddress;
+        return $missingFields;
     }
 
     /**
-     * Maps Amazon address fields to oxid fields
-     *
      * @param array $address
-     *
      * @return array
      */
-    public static function mapAddressToView(array $address): array
+    public static function collectMissingRequiredDeliveryFields(array $address): array
     {
+        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
+        $aRequiredDeliveryFields = $oRequiredAddressFields->getDeliveryFields();
+
+        $missingFields = [];
+
+        foreach ($aRequiredDeliveryFields as $deliveryKey) {
+            if (
+                (
+                    isset($address[$deliveryKey]) &&
+                    !$address[$deliveryKey]
+                ) ||
+                !isset($address[$deliveryKey])
+            ) {
+                // we collect the missing fields and filled as dummy with the Amazon-SessionID
+                $missingFields[$deliveryKey] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+            }
+        }
+        return $missingFields;
+    }
+
+    /**
+     * @param array $address
+     * @param string $DBTablePrefix
+     * @return array
+     */
+    public static function mapAddressToDb(array $address, $DBTablePrefix): array
+    {
+        $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
         $addressLines = self::getAddressLines($address);
 
@@ -154,9 +187,48 @@ class Address
 
         $country = oxNew(Country::class);
         $countryCode = $country->getIdByCode($address['countryCode'] ?? '');
-        $streetNr = $addressData['houseNumber'];
+        $streetNr = $addressData['houseNumber'] ?? '';
 
         return [
+            $DBTablePrefix . 'oxcompany' => $parsedAddress['Company'],
+            $DBTablePrefix . 'oxfname' =>
+                $parsedAddress['Firstname'] == "" ? $parsedAddress['Lastname'] : $parsedAddress['Firstname'],
+            $DBTablePrefix . 'oxlname' => $parsedAddress['Lastname'],
+            $DBTablePrefix . 'oxstreet' => $addressData['streetName'],
+            $DBTablePrefix . 'oxcity' => $parsedAddress['City'],
+            $DBTablePrefix . 'oxstreetnr' => $streetNr,
+            $DBTablePrefix . 'oxcountryid' => $countryCode,
+            $DBTablePrefix . 'oxzip' => $parsedAddress['PostalCode'],
+            $DBTablePrefix . 'oxfon' => $address['phoneNumber'] ?? ''
+        ];
+    }
+
+    /**
+     * Maps Amazon address fields to oxid fields
+     *
+     * @param array $address
+     * @param string $DBTablePrefix
+     *
+     * @return array
+     */
+    public static function mapAddressToView(array $address, $DBTablePrefix): array
+    {
+        $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
+        $parsedAddress = self::parseAddress($address);
+        $addressLines = self::getAddressLines($address);
+
+        try {
+            $addressData = AddressSplitter::splitAddress(implode(',', $addressLines));
+        } catch (SplittingException $e) {
+            $logger = new Logger();
+            $logger->error($e->getMessage(), ['status' => $e->getCode()]);
+        }
+
+        $country = oxNew(Country::class);
+        $countryCode = $country->getIdByCode($address['countryCode'] ?? '');
+        $streetNr = $addressData['houseNumber'] ?? '';
+
+        $result = [
             'oxcompany' => $parsedAddress['Company'],
             'oxfname' => $parsedAddress['Firstname'],
             'oxlname' => $parsedAddress['Lastname'],
@@ -171,6 +243,26 @@ class Address
             'oxfax' => '',
             'oxsal' => '',
         ];
+
+        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
+
+        $aRequiredFields = $DBTablePrefix == 'oxuser__' ?
+            $oRequiredAddressFields->getBillingFields() :
+            $oRequiredAddressFields->getDeliveryFields();
+
+        foreach ($aRequiredFields as $key) {
+            $key = str_replace($DBTablePrefix, '', $key);
+            if (
+                (
+                    isset($result[$key]) &&
+                    !$result[$key]
+                ) ||
+                !isset($result[$key])
+            ) {
+                $result[$key] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+            }
+        }
+        return $result;
     }
 
     /**
@@ -195,5 +287,19 @@ class Address
         }
 
         return $lines;
+    }
+
+    /**
+     * validate the DBTablePrefix
+     *
+     * @param string $DBTablePrefix
+     *
+     * @return string
+     */
+    private static function validateDBTablePrefix($DBTablePrefix)
+    {
+        return in_array($DBTablePrefix, self::$possibleDBTablePrefix) ?
+            $DBTablePrefix :
+            self::$defaultDBTablePrefix;
     }
 }

@@ -56,12 +56,12 @@ class AddressTest extends UnitTestCase
         $this->assertSame($result[$key], $value);
     }
 
-    public function amazonDbMapAddressProvider(): array
+    public function amazonDbMapBillingAddressProvider(): array
     {
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxcompany', 'Some street 521, Some city'],
+            [$address, 'oxuser__oxcompany', 'Some street 521, Some city'],
             [$address, 'oxuser__oxfname', 'Some'],
             [$address, 'oxuser__oxlname', 'Name'],
             [$address, 'oxuser__oxstreet', 'Some street'],
@@ -69,6 +69,28 @@ class AddressTest extends UnitTestCase
             [$address, 'oxuser__oxstreetnr', '521'],
             [$address, 'oxuser__oxcountryid', 'a7c40f631fc920687.20179984'],
             [$address, 'oxuser__oxzip', '12345'],
+        ];
+    }
+
+    /**
+     * @dataProvider amazonDbMapBillingAddressProvider
+     * @covers \OxidProfessionalServices\AmazonPay\Core\Helper\Address::getAddressLines
+     * @param array $address
+     * @param string $key
+     * @param string $value
+     */
+    public function testMapBillingAddressToDb(array $address, $key, $value): void
+    {
+        $result = Address::mapAddressToDb($address, 'oxuser__');
+        $this->assertSame($result[$key], $value);
+    }
+
+    public function amazonDbMapShippingAddressProvider(): array
+    {
+        $address = $this->getAddressArray();
+
+        return [
+            [$address, 'oxaddress__oxcompany', 'Some street 521, Some city'],
             [$address, 'oxaddress__oxfname', 'Some'],
             [$address, 'oxaddress__oxlname', 'Name'],
             [$address, 'oxaddress__oxstreet', 'Some street'],
@@ -80,15 +102,15 @@ class AddressTest extends UnitTestCase
     }
 
     /**
-     * @dataProvider amazonDbMapAddressProvider
+     * @dataProvider amazonDbMapShippingAddressProvider
      * @covers \OxidProfessionalServices\AmazonPay\Core\Helper\Address::getAddressLines
      * @param array $address
      * @param string $key
      * @param string $value
      */
-    public function testMapAddressToDb(array $address, $key, $value): void
+    public function testMapShippingAddressToDb(array $address, $key, $value): void
     {
-        $result = Address::mapAddressToDb($address);
+        $result = Address::mapAddressToDb($address, 'oxaddress__');
         $this->assertSame($result[$key], $value);
     }
 
@@ -122,7 +144,7 @@ class AddressTest extends UnitTestCase
      */
     public function testMapAddressToView(array $address, $key, $value): void
     {
-        $result = Address::mapAddressToView($address);
+        $result = Address::mapAddressToView($address, 'oxaddress__');
         $this->assertSame($result[$key], $value);
     }
 

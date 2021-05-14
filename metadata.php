@@ -69,7 +69,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'out/img/amazon-pay-logo.png',
-    'version' => '1.0.5',
+    'version' => '1.0.6',
     'author' => 'Oxid Professional Services',
     'url' => '',
     'email' => '',
@@ -99,11 +99,16 @@ $aModule = [
         'amazonconfig.tpl' => 'oxps/amazonpay/views/admin/tpl/amazonconfig.tpl',
         'amazonbutton.tpl' => 'oxps/amazonpay/views/elements/amazonbutton.tpl',
         'amazonpay_payment_option.tpl' => 'oxps/amazonpay/views/elements/amazonpay_payment_option.tpl',
+        'filtered_billing_address.tpl' => 'oxps/amazonpay/views/elements/filtered_billing_address.tpl',
+        'wave_missing_billing_address.tpl' => 'oxps/amazonpay/views/elements/wave_missing_billing_address.tpl',
+        'wave_missing_delivery_address.tpl' => 'oxps/amazonpay/views/elements/wave_missing_delivery_address.tpl',
+        'flow_missing_billing_address.tpl' => 'oxps/amazonpay/views/elements/flow_missing_billing_address.tpl',
+        'flow_missing_delivery_address.tpl' => 'oxps/amazonpay/views/elements/flow_missing_delivery_address.tpl',
     ],
-    'events' => array(
+    'events' => [
         'onActivate' => '\OxidProfessionalServices\AmazonPay\Core\Events::onActivate',
         'onDeactivate' => '\OxidProfessionalServices\AmazonPay\Core\Events::onDeactivate'
-    ),
+    ],
     'blocks' => [
         [
             'template' => 'headitem.tpl',

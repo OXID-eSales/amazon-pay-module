@@ -37,6 +37,8 @@ class UserComponent extends UserComponent_Parent
      */
     public function createGuestUser(array $amazonSession): void
     {
+        $session = Registry::getSession();
+
         $this->setParent(oxNew('Register'));
 
         $this->setRequestParameter('userLoginName', $amazonSession['response']['buyer']['name']);
@@ -48,13 +50,29 @@ class UserComponent extends UserComponent_Parent
         $this->setRequestParameter('lgn_pwd2', $password);
         $this->setRequestParameter('lgn_pwd2', $password);
 
-        $this->setRequestParameter('invadr', Address::mapAddressToDb($amazonSession['response']['billingAddress']));
-        $this->setRequestParameter('deladr', Address::mapAddressToDb($amazonSession['response']['shippingAddress']));
+        $mappedBillingFields = Address::mapAddressToDb($amazonSession['response']['billingAddress'], 'oxuser__');
+        $mappedDeliveryFields = Address::mapAddressToDb($amazonSession['response']['shippingAddress'], 'oxaddress__');
+        $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
+        $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+
+        if (count($missingBillingFields)) {
+            $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
+        }
+
+        if (count($missingDeliveryFields)) {
+            $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+        }
+
+        $billingAddress = array_merge($mappedBillingFields, $missingBillingFields);
+        $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+
+        $this->setRequestParameter('invadr', $billingAddress);
+        $this->setRequestParameter('deladr', $deliveryAddress);
 
         $registrationResult = $this->registerUser();
 
         if ($registrationResult) {
-            Registry::getSession()->getBasket()->setPayment('oxidamazon');
+            $session->getBasket()->setPayment('oxidamazon');
         } else {
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user', false, 302);
         }
@@ -81,7 +99,10 @@ class UserComponent extends UserComponent_Parent
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-
+        // delete Session-Items
+        $session = Registry::getSession();
+        $session->deleteVariable('amazonMissingBillingFields');
+        $session->deleteVariable('amazonMissingDeliveryFields');
         parent::logout();
     }
 }

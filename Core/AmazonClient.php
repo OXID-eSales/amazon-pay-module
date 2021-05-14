@@ -75,6 +75,9 @@ class AmazonClient extends Client
                         'type' => 'Allowed',
                         'restrictions' => $this->moduleConfig->getPossibleEUAddresses()
                     ]
+                ],
+                'paymentDetails' => [
+                    'presentmentCurrency' => $this->moduleConfig->getPresentmentCurrency()
                 ]
             ];
         }

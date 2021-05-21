@@ -43,12 +43,12 @@ class LogRepository
 
         $sql = sprintf(
             'INSERT INTO %s (
-                `OXPS_AMAZON_PAYLOGID`, 
-                `OXPS_AMAZON_OXSHOPID`, 
-                `OXPS_AMAZON_OXUSERID`, 
-                `OXPS_AMAZON_OXORDERID`, 
-                `OXPS_AMAZON_RESPONSE_MSG`, 
-                `OXPS_AMAZON_STATUS_CODE`, 
+                `OXPS_AMAZON_PAYLOGID`,
+                `OXPS_AMAZON_OXSHOPID`,
+                `OXPS_AMAZON_OXUSERID`,
+                `OXPS_AMAZON_OXORDERID`,
+                `OXPS_AMAZON_RESPONSE_MSG`,
+                `OXPS_AMAZON_STATUS_CODE`,
                 `OXPS_AMAZON_REQUEST_TYPE`,
                 `OXPS_AMAZON_IDENTIFIER`,
                 `OXPS_AMAZON_CHARGE_ID`,
@@ -197,16 +197,18 @@ class LogRepository
     /**
      * @param $orderId
      * @param string $transStatus
+     * @param string $chargeId
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function updateOrderStatus($orderId, $transStatus = 'OK'): void
+    public function updateOrderStatus($orderId, $transStatus = 'OK', $chargeId = ''): void
     {
-        $sql = 'UPDATE oxorder SET OXTRANSSTATUS = ? WHERE OXID=?';
+        $sql = 'UPDATE oxorder SET OXTRANSSTATUS = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
             $sql,
             [
                 $transStatus,
+                $chargeId,
                 $orderId
             ]
         );

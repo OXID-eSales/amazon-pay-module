@@ -48,7 +48,7 @@ class Logger extends AbstractLogger
     public function __construct($logFileName = 'amazonpay.log')
     {
         $this->logFileName = $logFileName;
-        $this->repository = new LogRepository();
+        $this->repository = oxNew(LogRepository::class);
     }
 
     /**

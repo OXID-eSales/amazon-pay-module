@@ -73,7 +73,7 @@ class OrderMain extends OrderMain_parent
         $chargePermissionId = null;
 
         if ($oOrder->load($this->getEditObjectId())) {
-            $repository = new LogRepository();
+            $repository = oxNew(LogRepository::class);
             $logMessages = $repository->findLogMessageForOrderId($this->getEditObjectId());
             if (!empty($logMessages)) {
                 foreach ($logMessages as $logMessage) {
@@ -99,7 +99,7 @@ class OrderMain extends OrderMain_parent
         $chargeId = null;
 
         if ($oOrder->load($this->getEditObjectId())) {
-            $repository = new LogRepository();
+            $repository = oxNew(LogRepository::class);
             $logMessages = $repository->findLogMessageForOrderId($this->getEditObjectId());
             if (!empty($logMessages)) {
                 foreach ($logMessages as $logMessage) {

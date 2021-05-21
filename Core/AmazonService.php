@@ -311,7 +311,7 @@ class AmazonService
 
             $request = PhpHelper::jsonToArray($result['request']);
 
-            $repository = new LogRepository();
+            $repository = oxNew(LogRepository::class);
             $repository->markOrderPaid(
                 $basket->getOrderId(),
                 'AmazonPay: ' . $request['chargeAmount']['amount'],
@@ -352,7 +352,7 @@ class AmazonService
             $result['message'] = 'Auth error - please select a different payment method';
             $this->showErrorOnRedirect($logger, $result);
         } else {
-            $repository = new LogRepository();
+            $repository = oxNew(LogRepository::class);
             $repository->updateOrderStatus($basket->getOrderId(), 'PENDING');
             $logger->info($response['statusDetails']['state'], $result);
             Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
@@ -386,7 +386,7 @@ class AmazonService
             $response['statusDetails']['state'] = 'Refunded: ' . $refundedAmount . ' ' . $currency;
         }
 
-        $repository = new LogRepository();
+        $repository = oxNew(LogRepository::class);
         $orderId = $repository->findOrderIdByChargeId($response['chargeId']);
 
         if ($orderId === null) {
@@ -407,7 +407,7 @@ class AmazonService
      */
     public function checkOrderState($orderId): void
     {
-        $repository = new LogRepository();
+        $repository = oxNew(LogRepository::class);
         $logger = new Logger();
 
         $order = oxNew(Order::class);
@@ -497,7 +497,7 @@ class AmazonService
      */
     public function processCancel($orderId): void
     {
-        $repository = new LogRepository();
+        $repository = oxNew(LogRepository::class);
         $logger = new Logger();
 
         $order = oxNew(Order::class);
@@ -606,7 +606,7 @@ class AmazonService
             return;
         }
 
-        $repository = new LogRepository();
+        $repository = oxNew(LogRepository::class);
         $orderId = $repository->findOrderIdByChargeId($chargeId);
         $repository->markOrderPaid($orderId, 'AmazonPay: ' . $amount, 'PAID');
 
@@ -657,7 +657,7 @@ class AmazonService
     {
         $orderLogs = [];
 
-        $repository = new LogRepository();
+        $repository = oxNew(LogRepository::class);
         $logMessages = $repository->findLogMessageForOrderId($order->getId());
 
         if (empty($logMessages)) {

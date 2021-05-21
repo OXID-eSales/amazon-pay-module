@@ -140,9 +140,24 @@ class AmazonService
         $checkoutSession = $this->getCheckoutSession();
 
         return (
-            $checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN &&
-            is_array($checkoutSession['response']['shippingAddress'])
+            $checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN
         );
+    }
+
+    /**
+     * Checks if Amazon Pay is selected, active and a Address would found
+     *
+     * @return bool
+     */
+    public function isAmazonSessionActiveAndAddressFound(): bool
+    {
+        if (!$this->isAmazonSessionActive()) {
+            return false;
+        }
+
+        $checkoutSession = $this->getCheckoutSession();
+
+        return (is_array($checkoutSession['response']['shippingAddress']));
     }
 
     /**

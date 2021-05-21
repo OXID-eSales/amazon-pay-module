@@ -86,7 +86,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonSessionActive(): bool
     {
-        return oxNew(AmazonService::class)->isAmazonSessionActive();
+        return oxNew(AmazonService::class)->isAmazonSessionActiveAndAddressFound();
     }
 
     /**

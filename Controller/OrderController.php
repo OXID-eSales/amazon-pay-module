@@ -22,6 +22,7 @@
 
 namespace OxidProfessionalServices\AmazonPay\Controller;
 
+use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Component\UserComponent;
@@ -95,6 +96,11 @@ class OrderController extends OrderController_parent
 
         $payload = new Payload();
 
+        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $oOrder = oxNew(Order::class);
+        if ($oOrder->load($orderOxId)) {
+             $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
+        }
         $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue($this->getBasket()->getBruttoSum()));
 
         $activeShop = Registry::getConfig()->getActiveShop();

@@ -319,8 +319,10 @@ class AmazonService
             $repository->markOrderPaid(
                 $basket->getOrderId(),
                 'AmazonPay: ' . $request['chargeAmount']['amount'],
-                'PAID'
+                'PAID',
+                $response['chargeId']
             );
+
             $logger->info($response['statusDetails']['state'], $result);
             Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
@@ -357,7 +359,12 @@ class AmazonService
             $this->showErrorOnRedirect($logger, $result);
         } else {
             $repository = oxNew(LogRepository::class);
-            $repository->updateOrderStatus($basket->getOrderId(), 'PENDING');
+            $repository->updateOrderStatus(
+                $basket->getOrderId(),
+                'AMZ-Authorize-Open',
+                $response['chargeId']
+            );
+
             $logger->info($response['statusDetails']['state'], $result);
             Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
@@ -544,7 +551,11 @@ class AmazonService
             $response['statusDetails']['state'] = 'Canceled';
         }
 
-        $repository->updateOrderStatus($orderId, $response['statusDetails']['reasonCode']);
+        $repository->updateOrderStatus(
+            $orderId,
+            $response['statusDetails']['reasonCode'],
+            $response['chargeId']
+        );
 
         $result['identifier'] = $response['chargePermissionId'];
         $result['orderId'] = $orderId;

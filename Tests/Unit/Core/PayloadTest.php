@@ -50,6 +50,7 @@ class PayloadTest extends UnitTestCase
         $payload->setNoteToBuyer('capture');
         $payload->setCheckoutChargeAmount('2345.67');
         $payload->setPaymentDetailsChargeAmount('3456.78');
+        $payload->setMerchantReferenceId('12345');
 
         return $payload;
     }

@@ -138,7 +138,11 @@ class AmazonService
         }
 
         $checkoutSession = $this->getCheckoutSession();
-        return $checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN;
+
+        return (
+            $checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN &&
+            is_array($checkoutSession['response']['shippingAddress'])
+        );
     }
 
     /**

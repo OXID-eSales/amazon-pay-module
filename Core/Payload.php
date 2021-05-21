@@ -73,6 +73,11 @@ class Payload
     private $softDescriptor;
 
     /**
+     * @var string
+     */
+    private $merchantReferenceId;
+
+    /**
      * @return array
      */
     public function getData(): array
@@ -166,6 +171,14 @@ class Payload
     }
 
     /**
+     * @param string $merchantReferenceId
+     */
+    public function setMerchantReferenceId($merchantReferenceId): void
+    {
+        $this->merchantReferenceId = $merchantReferenceId;
+    }
+
+    /**
      * @param string $softDescriptor
      */
     public function setSoftDescriptor($softDescriptor): void
@@ -195,9 +208,8 @@ class Payload
      */
     protected function addMerchantMetaData(array $data): array
     {
-        $merchantReferenceId = Registry::getSession()->getVariable('sess_challenge') ?? 'orderId_ext';
         $data['merchantMetadata'] = [];
-        $data['merchantMetadata']['merchantReferenceId'] = $merchantReferenceId;
+        $data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
         $data['merchantMetadata']['merchantStoreName'] = $this->merchantStoreName;
         $data['merchantMetadata']['noteToBuyer'] = $this->noteToBuyer;
         return $data;

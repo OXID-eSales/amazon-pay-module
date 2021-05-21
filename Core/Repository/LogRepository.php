@@ -176,19 +176,21 @@ class LogRepository
     /**
      * @param $orderId
      * @param $remark
+     * @param string $chargeId
      * @param string $transStatus
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function markOrderPaid($orderId, $remark, $transStatus = 'OK'): void
+    public function markOrderPaid($orderId, $remark, $transStatus = 'OK', $chargeId = ''): void
     {
-        $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OXREMARK = ? WHERE OXID=?';
+        $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OXREMARK = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
             $sql,
             [
                 date('Y-m-d H:i:s'),
                 $transStatus,
                 $remark,
+                $chargeId,
                 $orderId
             ]
         );

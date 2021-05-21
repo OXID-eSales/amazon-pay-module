@@ -419,7 +419,12 @@ class AmazonService
             return;
         }
 
-        $repository->markOrderPaid($orderId, 'AmazonPay REFUND: ' . $refundedAmount, 'REFUNDED');
+        $repository->markOrderPaid(
+            $orderId,
+            'AmazonPay REFUND: ' . $refundedAmount,
+            'REFUNDED',
+            $response['chargeId']
+        );
 
         $result['identifier'] = $refundId;
         $result['orderId'] = $orderId;
@@ -490,7 +495,12 @@ class AmazonService
         }
 
         if (isset($response['statusDetails']['state']) === 'Captured' && $isCaptured === false) {
-            $repository->markOrderPaid($orderId, 'AmazonPay: ' . $response['statusDetails']['amount'], 'PAID');
+            $repository->markOrderPaid(
+                $orderId,
+                'AmazonPay: ' . $response['statusDetails']['amount'],
+                'PAID',
+                $response['chargeId']
+            );
             $result['identifier'] = $chargePermissionId;
             $result['orderId'] = $orderId;
             $logger->info($response['statusDetails']['state'], $result);
@@ -504,7 +514,8 @@ class AmazonService
             $repository->markOrderPaid(
                 $orderId,
                 'AmazonPay REFUND: ' . $response['refundedAmount']['amount'],
-                'REFUNDED'
+                'REFUNDED',
+                $response['chargeId']
             );
             $result['identifier'] = $chargePermissionId;
             $result['orderId'] = $orderId;
@@ -638,7 +649,12 @@ class AmazonService
 
         $repository = oxNew(LogRepository::class);
         $orderId = $repository->findOrderIdByChargeId($chargeId);
-        $repository->markOrderPaid($orderId, 'AmazonPay: ' . $amount, 'PAID');
+        $repository->markOrderPaid(
+            $orderId,
+            'AmazonPay: ' . $amount,
+            'PAID',
+            $response['chargeId']
+        );
 
         $logger->info($response['statusDetails']['state'], $result);
     }

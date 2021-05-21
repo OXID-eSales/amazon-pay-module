@@ -35,7 +35,7 @@ class LogRepositoryTest extends UnitTestCase
 
     protected function setUp()
     {
-        $this->logRepository = new LogRepository();
+        $this->logRepository = oxNew(LogRepository::class);
     }
 
     public function testSaveLogMessage(): void

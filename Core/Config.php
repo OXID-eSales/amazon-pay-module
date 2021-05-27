@@ -270,10 +270,7 @@ class Config
      */
     public function getIPNUrl(): string
     {
-        $url = Registry::getConfig()->getCurrentShopUrl(false);
-        $shopId = Registry::getConfig()->getShopId();
-
-        return $url . 'index.php?cl=amazondispatch&action=ipn&shp=' . $shopId;
+        return Registry::getConfig()->getShopSecureHomeURL() . 'index.php?cl=amazondispatch&action=ipn';
     }
 
     /**
@@ -283,10 +280,7 @@ class Config
      */
     public function getCreateCheckoutUrl(): string
     {
-        $url = Registry::getConfig()->getCurrentShopUrl(false);
-        $shopId = Registry::getConfig()->getShopId();
-
-        return html_entity_decode($url . 'index.php?cl=amazoncheckout&fnc=createCheckout&shp=' . $shopId);
+        return Registry::getConfig()->getShopSecureHomeURL() . 'index.php?cl=amazoncheckout&fnc=createCheckout';
     }
 
     /**

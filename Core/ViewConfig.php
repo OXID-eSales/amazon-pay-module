@@ -98,6 +98,16 @@ class ViewConfig extends ViewConfig_parent
     }
 
     /**
+     * Get webhook controller url
+     *
+     * @return string
+     */
+    public function getCancelAmazonPaymentUrl(): string
+    {
+        return $this->getSelfLink() . 'cl=amazoncheckout&fnc=cancelAmazonPayment';
+    }
+
+    /**
      * @param null $oxid
      * @return bool
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException

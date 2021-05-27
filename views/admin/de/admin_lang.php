@@ -62,6 +62,7 @@ $aLang = [
         <b>Modul inaktiv.</b>',
     'OXPS_AMAZONPAY_CONF_VALID'         => 'Konfigurationswerte OK.<br><b>Modul ist aktiv</b>',
     'OXPS_AMAZONPAY_CAPTYPE'            => 'Capture-Typ',
+    'HELP_OXPS_AMAZONPAY_CAPTYPE'       => 'Einstufig erfasst die Zahlung sofort. Zweistufig erfasst die Zahlung nach dem Versand.',
     'OXPS_AMAZONPAY_CAPTYPE_ONE_STEP'   => 'Einstufig',
     'OXPS_AMAZONPAY_CAPTYPE_TWO_STEP'   => 'Zweistufig',
     'OXPS_AMAZONPAY_EXCLUDED'           => 'AmazonPay ausschließen',

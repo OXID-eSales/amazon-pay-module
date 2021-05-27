@@ -3,7 +3,6 @@
         <b>[{oxmultilang ident="MIN_ORDER_PRICE"}] [{$oView->getMinOrderPrice()}] [{$currency->sign}]</b>
     </div>
 [{else}]
-    [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
     <div class="card bg-light cart-buttons">
         <div class="card-body">
             <div class="row">

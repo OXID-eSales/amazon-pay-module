@@ -39,7 +39,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getAmazonConfig()
     {
-        return oxNew(Config::class);
+        return Registry::get(\OxidProfessionalServices\AmazonPay\Core\Config::class);
     }
 
     /**
@@ -68,6 +68,14 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
+    public function useExclusion(): bool
+    {
+        return $this->getAmazonConfig()->useExclusion();
+    }
+
+    /**
+     * @return bool
+     */
     public function displayInMiniCart(): bool
     {
         return $this->getAmazonConfig()->displayInMiniCart();
@@ -86,7 +94,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonSessionActive(): bool
     {
-        return oxNew(AmazonService::class)->isAmazonSessionActiveAndAddressFound();
+        return oxNew(AmazonService::class)->isAmazonSessionActive();
     }
 
     /**
@@ -97,6 +105,10 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonExclude($oxid = null): bool
     {
+        if (!$this->useExclusion()) {
+            return false;
+        }
+
         $session = Registry::getSession();
 
         $basket = $session->getBasket();

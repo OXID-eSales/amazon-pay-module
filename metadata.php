@@ -326,31 +326,31 @@ $aModule = [
         [
             'template' => 'deliveryset_main.tpl',
             'block'    => 'admin_deliveryset_main_form',
-            'file'     => 'views/admin/tpl/deliveryset_main.tpl',
+            'file'     => 'views/blocks/admin/deliveryset_main.tpl',
             'position' => '5'
         ],
         [
             'template' => 'order_overview.tpl',
             'block' => 'admin_order_overview_checkout',
-            'file' => 'views/admin/tpl/admin_order_overview_reset_form.tpl',
+            'file' => 'views/blocks/admin/admin_order_overview_reset_form.tpl',
             'position' => '5'
         ],
         [
             'template' => 'order_overview.tpl',
             'block' => 'admin_order_overview_send_form',
-            'file' => 'views/admin/tpl/admin_order_overview_send_form.tpl',
+            'file' => 'views/blocks/admin/admin_order_overview_send_form.tpl',
             'position' => '5'
         ],
         [
             'template' => 'article_main.tpl',
             'block' => 'admin_article_main_extended',
-            'file' => 'views/admin/tpl/admin_article_main_extended.tpl',
+            'file' => 'views/blocks/admin/admin_article_main_extended.tpl',
             'position' => '5'
         ],
         [
             'template' => 'include/category_main_form.tpl',
             'block' => 'admin_category_main_form',
-            'file' => 'views/admin/tpl/category_main_form.tpl',
+            'file' => 'views/blocks/admin/category_main_form.tpl',
             'position' => '5'
         ],
     ],
@@ -362,5 +362,6 @@ $aModule = [
         ['name' => 'sAmazonPayStoreId', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'blAmazonPayPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
+        ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
     ]
 ];

@@ -91,6 +91,16 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="button-placement">[{oxmultilang ident="OXPS_AMAZONPAY_PERFORMANCE"}]</label>
+            <div class="controls">
+                <div>
+                    <div class="checkbox"><label><input id="useExclusion" type="checkbox" name="conf[blAmazonPayUseExclusion]" [{if $config->useExclusion()}]checked[{/if}] value="1">[{oxmultilang ident="OXPS_AMAZONPAY_EXCLUSION"}]</label></div>
+                </div>
+                <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_EXCLUSION"}]</span>
+            </div>
+        </div>
+
         <div class="form-group jsonform-error-captureType">
                     <label for="opmode">[{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE"}]</label>
                     <div class="controls">

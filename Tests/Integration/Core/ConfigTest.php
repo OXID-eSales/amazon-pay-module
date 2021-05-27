@@ -80,6 +80,15 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->displayInPDP());
     }
 
+    public function testUseExclusion(): void
+    {
+        $config = new Config();
+        $this->setConfigParam('blAmazonPayUseExclusion', true);
+        $this->assertTrue($config->useExclusion());
+        $this->setConfigParam('blAmazonPayUseExclusion', false);
+        $this->assertFalse($config->useExclusion());
+    }
+
     public function testDisplayInMinicartAndModal(): void
     {
         $config = new Config();

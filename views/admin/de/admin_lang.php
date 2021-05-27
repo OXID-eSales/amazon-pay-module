@@ -53,6 +53,9 @@ $aLang = [
     'HELP_OXPS_AMAZONPAY_PLACEMENT'     => 'Definieren Sie, wo die Amazon Pay-Schaltfläche in Ihrem Online-Shop angezeigt werden soll.',
     'OXPS_AMAZONPAY_PDP'                => 'Produktdetailseite',
     'OXPS_AMAZONPAY_MINICART_AND_MODAL' => 'Minicart + Modal',
+    'OXPS_AMAZONPAY_PERFORMANCE'        => 'Performance',
+    'OXPS_AMAZONPAY_EXCLUSION'          => '"AmazonPay ausschließen" nutzen',
+    'HELP_OXPS_AMAZONPAY_EXCLUSION'     => 'Es können Produkte und Kategorien von AmazonPay ausgeschlossen werden. Wenn Sie das nicht tun, können Sie das Feature aus Performancegründen generell deaktivieren',
     'OXPS_AMAZONPAY_SAVE'               => 'Speichern',
     'OXPS_AMAZONPAY_ERR_CONF_INVALID'   =>
         'Ein oder mehrere Konfigurationswerte sind entweder nicht festgelegt oder falsch. Bitte überprüfen Sie sie noch einmal.<br>

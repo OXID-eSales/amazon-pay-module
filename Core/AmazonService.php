@@ -140,7 +140,8 @@ class AmazonService
         $checkoutSession = $this->getCheckoutSession();
 
         return (
-            $checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN
+            ($checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN) &&
+            (is_array($checkoutSession['response']['shippingAddress']))
         );
     }
 
@@ -149,16 +150,6 @@ class AmazonService
      *
      * @return bool
      */
-    public function isAmazonSessionActiveAndAddressFound(): bool
-    {
-        if (!$this->isAmazonSessionActive()) {
-            return false;
-        }
-
-        $checkoutSession = $this->getCheckoutSession();
-
-        return (is_array($checkoutSession['response']['shippingAddress']));
-    }
 
     /**
      * Amazon checkout session id getter

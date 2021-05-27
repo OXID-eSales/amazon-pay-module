@@ -22,7 +22,7 @@
 
 $aLang = [
     'charset'                                 => 'UTF-8',
-    'AMAZON_PAY'                              => 'amazon pay',
+    'AMAZON_PAY'                              => 'Amazon Pay',
     'AMAZON_PAY_GUARANTEE'                    => 'Mit <strong>Amazon Pay</strong> können Sie schnell, sicher und bequem einkaufen. Sie können auf unserer Website bezahlen, ohne Ihre Zahlungs- und Adressdaten erneut eingeben zu müssen. Alle Amazon-Transaktionen sind durch die A-bis-Z-Garantie von Amazon geschützt',
     'AMAZON_PAY_ADVANTAGES'                   => '<ul>
                                                      <li>Sie müssen sich nicht registrieren, verwenden Sie Ihr Konto, um sich anzumelden. </li>
@@ -30,6 +30,7 @@ $aLang = [
                                                          die bereits in Ihrem Amazon-Konto gespeichert sind.</li>
                                                      <li> Profitieren Sie voll von der A-Z-Garantie von Amazon.</li>
                                                  </ul>',
-    'AMAZON_PAY_PROCESSED'                    => 'Ihre Zahlung wird von Amazon Pay verarbeitet. <a href="%s">[aufheben]</a>',
+    'AMAZON_PAY_PROCESSED'                    => 'Ihre Zahlung wird von Amazon Pay verarbeitet.',
+    'AMAZON_PAY_CANCEL'                       => 'aufheben',
     'AMAZON_PAY_USEREXISTS'                   => 'Es besteht bereits ein Konto unter folgender E-Mail Adresse: <b>"%s"</b>. Bitte melden Sie sich zunächst in ihrem bestehenden Shopkonto unter <b>"%s"</b> an und starten Sie den Amazon Pay Checkout durch einen erneuten Klick auf den Amazon Pay Button.'
 ];

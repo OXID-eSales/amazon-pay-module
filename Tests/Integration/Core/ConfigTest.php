@@ -68,7 +68,7 @@ class ConfigTest extends UnitTestCase
     public function testGetIPNUrl(): void
     {
         $config = new Config();
-        $this->assertContains('cl=amazondispatch&action=ipn&shp=', $config->getIPNUrl());
+        $this->assertContains('cl=amazondispatch&action=ipn', $config->getIPNUrl());
     }
 
     public function testDisplayInPDP(): void

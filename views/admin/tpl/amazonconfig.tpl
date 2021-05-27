@@ -112,7 +112,7 @@
                                 [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_TWO_STEP"}]
                             </option>
                         </select>
-                        <span class="help-block">One Step captures payment immediately. Two Step captures payment after shipping</span>
+                        <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_CAPTYPE"}]</span>
                     </div>
                 </div>
 

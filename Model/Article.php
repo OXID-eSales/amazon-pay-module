@@ -40,34 +40,6 @@ class Article extends Article_parent
      */
     public function isAmazonExclude(): bool
     {
-        return $this->blAmazonExclude;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function load($sOXID)
-    {
-        $load = parent::load($sOXID);
-
-        if (!$load) {
-            return false;
-        }
-
-        $sql = 'SELECT OXPS_AMAZON_EXCLUDE FROM oxarticles WHERE OXID = ?';
-        $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getOne($sql, [$sOXID]);
-        $this->blAmazonExclude = (bool)$result;
-
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function save()
-    {
-        $editVal = Registry::getRequest()->getRequestParameter('editval');
-        $this->oxarticles__oxps_amazon_exclude = new Field($editVal['oxarticles__oxps_amazon_exclude']);
-        return parent::save();
+        return (bool)$this->oxarticles__oxps_amazon_exclude->value;
     }
 }

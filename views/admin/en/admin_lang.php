@@ -52,6 +52,9 @@ $aLang = [
     'HELP_OXPS_AMAZONPAY_PLACEMENT'     => 'Define where to show the Amazon Pay button in your online store.',
     'OXPS_AMAZONPAY_PDP'                => 'Product Detail Page',
     'OXPS_AMAZONPAY_MINICART_AND_MODAL' => 'Minicart + Modal',
+    'OXPS_AMAZONPAY_PERFORMANCE'        => 'Performance',
+    'OXPS_AMAZONPAY_EXCLUSION'          => 'use "Exclude AmazonPay"',
+    'HELP_OXPS_AMAZONPAY_EXCLUSION'     => 'Products and categories can be excluded from AmazonPay. If you do not do this, you can generally deactivate the feature for performance reasons',
     'OXPS_AMAZONPAY_SAVE'               => 'Save',
     'OXPS_AMAZONPAY_ERR_CONF_INVALID'   =>
         'One or more configuration values are either not set or incorrect. Please double check them.<br>

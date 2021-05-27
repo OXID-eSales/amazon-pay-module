@@ -300,6 +300,14 @@ class Config
     /**
      * @return bool
      */
+    public function useExclusion(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayUseExclusion');
+    }
+
+    /**
+     * @return bool
+     */
     public function displayInMiniCart(): bool
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayMinicartAndModal');

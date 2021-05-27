@@ -48,6 +48,10 @@ class ConfigControllerTest extends UnitTestCase
             [['blAmazonPayPDP' => 1], true, 'getterMethod' => 'displayInPDP'],
             [['blAmazonPayPDP' => ''], false, 'getterMethod' => 'displayInPDP'],
             [['blAmazonPayPDP' => null], false, 'getterMethod' => 'displayInPDP'],
+            [['blAmazonPayUseExclusion' => 'on'], true, 'getterMethod' => 'useExclusion'],
+            [['blAmazonPayUseExclusion' => 1], true, 'getterMethod' => 'useExclusion'],
+            [['blAmazonPayUseExclusion' => ''], false, 'getterMethod' => 'useExclusion'],
+            [['blAmazonPayUseExclusion' => null], false, 'getterMethod' => 'useExclusion'],
             [['blAmazonPayMinicartAndModal' => 'on'], true, 'getterMethod' => 'displayInMinicart'],
             [['blAmazonPayMinicartAndModal' => ''], false, 'getterMethod' => 'displayInMinicart'],
         ];

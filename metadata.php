@@ -284,20 +284,6 @@ $aModule = [
         [
             'theme' => 'flow',
             'template' => 'page/checkout/payment.tpl',
-            'block' => 'checkout_payment_nextstep',
-            'file' => '/views/blocks/flow/page/checkout/checkout_payment_next_step.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/payment.tpl',
-            'block' => 'checkout_payment_nextstep',
-            'file' => '/views/blocks/wave/page/checkout/checkout_payment_next_step.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/payment.tpl',
             'block' => 'select_payment',
             'file' => '/views/blocks/flow/page/checkout/select_payment.tpl',
             'position' => '5'

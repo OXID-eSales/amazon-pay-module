@@ -270,7 +270,7 @@ class Config
      */
     public function getIPNUrl(): string
     {
-        return Registry::getConfig()->getShopSecureHomeURL() . 'index.php?cl=amazondispatch&action=ipn';
+        return Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=ipn';
     }
 
     /**
@@ -280,7 +280,7 @@ class Config
      */
     public function getCreateCheckoutUrl(): string
     {
-        return Registry::getConfig()->getShopSecureHomeURL() . 'index.php?cl=amazoncheckout&fnc=createCheckout';
+        return Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazoncheckout&fnc=createCheckout';
     }
 
     /**

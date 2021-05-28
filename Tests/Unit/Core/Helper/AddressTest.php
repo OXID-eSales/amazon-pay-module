@@ -125,13 +125,10 @@ class AddressTest extends UnitTestCase
             [$address, 'oxstreet', 'Some street'],
             [$address, 'oxcity', 'Freiburg'],
             [$address, 'oxstreetnr', '521'],
-            [$address, 'oxaddinfo', ''],
             [$address, 'oxcountryid', 'a7c40f631fc920687.20179984'],
             [$address, 'oxzip', '12345'],
             [$address, 'oxstateid', 'BW'],
             [$address, 'oxfon', '+44989383728'],
-            [$address, 'oxfax', ''],
-            [$address, 'oxsal', ''],
         ];
     }
 

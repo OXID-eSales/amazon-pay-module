@@ -69,7 +69,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'out/img/amazon-pay-logo.png',
-    'version' => '1.0.9',
+    'version' => '1.0.10',
     'author' => 'Oxid Professional Services',
     'url' => '',
     'email' => '',

@@ -22,6 +22,7 @@
 
 namespace OxidProfessionalServices\AmazonPay\Core\Helper;
 
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
@@ -186,7 +187,15 @@ class Address
         }
 
         $country = oxNew(Country::class);
-        $countryCode = $country->getIdByCode($address['countryCode'] ?? '');
+        $countryOxId = $country->getIdByCode($address['countryCode'] ?? '');
+        $country->loadInLang(
+            Registry::getLang()->getBaseLanguage(),
+            $countryOxId
+        );
+        $countryName = $country->oxcountry__oxtitle->value;
+
+
+
         $streetNr = $addressData['houseNumber'] ?? '';
 
         return [
@@ -197,7 +206,8 @@ class Address
             $DBTablePrefix . 'oxstreet' => $addressData['streetName'],
             $DBTablePrefix . 'oxcity' => $parsedAddress['City'],
             $DBTablePrefix . 'oxstreetnr' => $streetNr,
-            $DBTablePrefix . 'oxcountryid' => $countryCode,
+            $DBTablePrefix . 'oxcountryid' => $countryOxId,
+            $DBTablePrefix . 'oxcountry' => $countryName,
             $DBTablePrefix . 'oxzip' => $parsedAddress['PostalCode'],
             $DBTablePrefix . 'oxfon' => $address['phoneNumber'] ?? ''
         ];
@@ -225,7 +235,12 @@ class Address
         }
 
         $country = oxNew(Country::class);
-        $countryCode = $country->getIdByCode($address['countryCode'] ?? '');
+        $countryOxId = $country->getIdByCode($address['countryCode'] ?? '');
+        $country->loadInLang(
+            Registry::getLang()->getBaseLanguage(),
+            $countryOxId
+        );
+        $countryName = $country->oxcountry__oxtitle->value;
         $streetNr = $addressData['houseNumber'] ?? '';
 
         $result = [
@@ -235,14 +250,13 @@ class Address
             'oxstreet' => $addressData['streetName'],
             'oxcity' => $parsedAddress['City'],
             'oxstreetnr' => $streetNr,
-            'oxaddinfo' => '',
-            'oxcountryid' => $countryCode,
+            'oxcountryid' => $countryOxId,
+            'oxcountry' => $countryName,
             'oxstateid' => $address['stateOrRegion'],
             'oxzip' => $parsedAddress['PostalCode'],
             'oxfon' => $address['phoneNumber'] ?? '',
-            'oxfax' => '',
-            'oxsal' => '',
         ];
+        $result = array_filter($result);
 
         $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
 

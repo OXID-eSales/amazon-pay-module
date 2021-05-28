@@ -68,7 +68,7 @@
                     [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]
                     [{if $missingRequiredDeliveryFields|@count}]
                         <div class="panel-footer">
-                            [{include file="wave_missing_delivery_address.tpl" missingfields=$missingRequiredDeliveryFields}]
+                            [{include file="flow_missing_delivery_address.tpl" missingfields=$missingRequiredDeliveryFields}]
                         </div>
                     [{/if}]
                 </div>

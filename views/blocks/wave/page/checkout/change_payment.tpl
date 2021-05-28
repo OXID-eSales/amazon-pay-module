@@ -16,7 +16,7 @@
                             [{oxmultilang ident="AMAZON_PAY_PROCESSED"}]
                         </div>
                         <div class="col-12 col-md-6 text-right">
-                            <a class="btn btn-outline-dark" href="[{$oViewConf->getCancelAmazonPaymentUrl()}]">[{oxmultilang ident="AMAZON_PAY_CANCEL"}]</a>
+                            <a class="btn btn-outline-dark" href="[{$oViewConf->getCancelAmazonPaymentUrl()}]">[{oxmultilang ident="AMAZON_PAY_UNLINK"}]</a>
                         </div>
                     </div>
                 [{/if}]

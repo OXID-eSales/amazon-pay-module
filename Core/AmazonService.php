@@ -79,6 +79,7 @@ class AmazonService
         'oxuser__oxustid',
         'oxuser__oxcity',
         'oxuser__oxcountryid',
+        'oxuser__oxcountry',
         'oxuser__oxstateid',
         'oxuser__oxzip',
         'oxuser__oxfon',

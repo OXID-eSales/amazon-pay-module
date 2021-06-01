@@ -129,6 +129,9 @@ class AddressTest extends UnitTestCase
             [$address, 'oxzip', '12345'],
             [$address, 'oxstateid', 'BW'],
             [$address, 'oxfon', '+44989383728'],
+            [$address, 'oxaddinfo', ''],
+            [$address, 'oxfax', ''],
+            [$address, 'oxsal', ''],
         ];
     }
 

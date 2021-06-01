@@ -60,7 +60,7 @@
                     </div>
                     <div class="card-body">
                         [{if $oDeliveryAddress}]
-                            [{include file="widget/address/shipping_address.tpl" delivadr=$oDeliveryAddress}]
+                            [{include file="filtered_delivery_address.tpl" delivadr=$oDeliveryAddress}]
                         [{else}]
                             [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
                         [{/if}]

@@ -248,15 +248,17 @@ class Address
             'oxfname' => $parsedAddress['Firstname'],
             'oxlname' => $parsedAddress['Lastname'],
             'oxstreet' => $addressData['streetName'],
-            'oxcity' => $parsedAddress['City'],
             'oxstreetnr' => $streetNr,
+            'oxcity' => $parsedAddress['City'],
             'oxcountryid' => $countryOxId,
             'oxcountry' => $countryName,
             'oxstateid' => $address['stateOrRegion'],
             'oxzip' => $parsedAddress['PostalCode'],
             'oxfon' => $address['phoneNumber'] ?? '',
+            'oxaddinfo' => '',
+            'oxfax' => '',
+            'oxsal' => ''
         ];
-        $result = array_filter($result);
 
         $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
 

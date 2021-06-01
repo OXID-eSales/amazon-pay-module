@@ -99,6 +99,7 @@ $aModule = [
         'amazonconfig.tpl' => 'oxps/amazonpay/views/admin/tpl/amazonconfig.tpl',
         'amazonbutton.tpl' => 'oxps/amazonpay/views/elements/amazonbutton.tpl',
         'filtered_billing_address.tpl' => 'oxps/amazonpay/views/elements/filtered_billing_address.tpl',
+        'filtered_delivery_address.tpl' => 'oxps/amazonpay/views/elements/filtered_delivery_address.tpl',
         'wave_missing_billing_address.tpl' => 'oxps/amazonpay/views/elements/wave_missing_billing_address.tpl',
         'wave_missing_delivery_address.tpl' => 'oxps/amazonpay/views/elements/wave_missing_delivery_address.tpl',
         'flow_missing_billing_address.tpl' => 'oxps/amazonpay/views/elements/flow_missing_billing_address.tpl',

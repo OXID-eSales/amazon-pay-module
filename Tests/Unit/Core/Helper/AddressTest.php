@@ -37,7 +37,7 @@ class AddressTest extends UnitTestCase
             [$address, 'Firstname', 'Some'],
             [$address, 'Lastname', 'Name'],
             [$address, 'Country', 'DE'],
-            [$address, 'Street', 'Some street'],
+            [$address, 'Street', 'Some street 521'],
             [$address, 'PostalCode', '12345'],
             [$address, 'City', 'Freiburg'],
             [$address, 'PhoneNumber', '+44989383728'],
@@ -61,7 +61,7 @@ class AddressTest extends UnitTestCase
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxuser__oxcompany', 'Some street 521, Some city'],
+            [$address, 'oxuser__oxcompany', 'Company Name'],
             [$address, 'oxuser__oxfname', 'Some'],
             [$address, 'oxuser__oxlname', 'Name'],
             [$address, 'oxuser__oxstreet', 'Some street'],
@@ -90,7 +90,7 @@ class AddressTest extends UnitTestCase
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxaddress__oxcompany', 'Some street 521, Some city'],
+            [$address, 'oxaddress__oxcompany', 'Company Name'],
             [$address, 'oxaddress__oxfname', 'Some'],
             [$address, 'oxaddress__oxlname', 'Name'],
             [$address, 'oxaddress__oxstreet', 'Some street'],
@@ -119,7 +119,7 @@ class AddressTest extends UnitTestCase
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxcompany', 'Some street 521, Some city'],
+            [$address, 'oxcompany', 'Company Name'],
             [$address, 'oxfname', 'Some'],
             [$address, 'oxlname', 'Name'],
             [$address, 'oxstreet', 'Some street'],
@@ -156,13 +156,12 @@ class AddressTest extends UnitTestCase
         $address = [];
         $address['name'] = 'Some Name';
         $address['countryCode'] = 'DE';
-        $address['addressLine1'] = 'Some street 521';
-        $address['addressLine2'] = 'Some street';
-        $address['addressLine3'] = 'Some city';
+        $address['addressLine1'] = 'Company Name';
+        $address['addressLine2'] = 'Some street 521';
+        $address['addressLine3'] = '';
         $address['postalCode'] = '12345';
         $address['city'] = 'Freiburg';
         $address['phoneNumber'] = '+44989383728';
-        $address['company'] = 'Some street 521, Some city';
         $address['stateOrRegion'] = 'BW';
 
         return $address;

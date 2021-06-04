@@ -69,13 +69,8 @@ class Address
         $company = "";
         if ($country == 'DE' || $country == 'AT') {
             if ($addressLine2 != '') {
-                //if line 2 starts with number
-                if (preg_match('/\d+/m', $addressLine2)) {
-                    $street = $addressLine1 . ' ' . $addressLine2;
-                } else {
-                    $street = $addressLine2;
-                    $company = $addressLine1;
-                }
+                $street = $addressLine2;
+                $company = $addressLine1;
             } elseif ($addressLine1 != '') {
                 $street = $addressLine1;
             } else {
@@ -180,7 +175,8 @@ class Address
         $addressLines = self::getAddressLines($address);
 
         try {
-            $addressData = AddressSplitter::splitAddress(implode(',', $addressLines));
+            $street = $parsedAddress['Street'] ?? implode(', ', $addressLines);
+            $addressData = AddressSplitter::splitAddress($street);
         } catch (SplittingException $e) {
             $logger = new Logger();
             $logger->error($e->getMessage(), ['status' => $e->getCode()]);
@@ -193,8 +189,6 @@ class Address
             $countryOxId
         );
         $countryName = $country->oxcountry__oxtitle->value;
-
-
 
         $streetNr = $addressData['houseNumber'] ?? '';
 
@@ -226,9 +220,9 @@ class Address
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
         $addressLines = self::getAddressLines($address);
-
         try {
-            $addressData = AddressSplitter::splitAddress(implode(',', $addressLines));
+            $street = $parsedAddress['Street'] ?? implode(', ', $addressLines);
+            $addressData = AddressSplitter::splitAddress($street);
         } catch (SplittingException $e) {
             $logger = new Logger();
             $logger->error($e->getMessage(), ['status' => $e->getCode()]);

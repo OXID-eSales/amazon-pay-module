@@ -67,6 +67,8 @@ class OrderController extends OrderController_parent
                     );
                     $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
                     $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+                    $session->deleteVariable('amazonMissingBillingFields');
+                    $session->deleteVariable('amazonMissingDeliveryFields');
                     if (count($missingBillingFields)) {
                         $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
                     }
@@ -85,6 +87,12 @@ class OrderController extends OrderController_parent
         $ret = parent::execute();
 
         if (strpos($ret, 'thankyou') === false) {
+            return $ret;
+        }
+
+        $oBasket = $this->getSession()->getBasket();
+
+        if ($oBasket->getPaymentId() !== 'oxidamazon') {
             return $ret;
         }
 

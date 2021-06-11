@@ -117,10 +117,10 @@ class Events
      */
     public static function addPaymentMethod(): void
     {
-        $paymentDescriptions = array(
+        $paymentDescriptions = [
             'en' => '<div>AmazonPay</div>',
             'de' => '<div>AmazonPay</div>'
-        );
+        ];
 
         $payment = oxNew(Payment::class);
         if (!$payment->load('oxidamazon')) {

@@ -36,8 +36,12 @@ class AddressTest extends UnitTestCase
         return [
             [$address, 'Firstname', 'Some'],
             [$address, 'Lastname', 'Name'],
-            [$address, 'Country', 'DE'],
-            [$address, 'Street', 'Some street 521'],
+            [$address, 'CountryIso', 'DE'],
+            [$address, 'CountryId', 'a7c40f631fc920687.20179984'],
+            [$address, 'Country', 'Deutschland'],
+            [$address, 'Street', 'Bayreuther Straße'],
+            [$address, 'StreetNo', '108'],
+            [$address, 'Company', 'Wiesent center'],
             [$address, 'PostalCode', '12345'],
             [$address, 'City', 'Freiburg'],
             [$address, 'PhoneNumber', '+44989383728'],
@@ -61,12 +65,12 @@ class AddressTest extends UnitTestCase
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxuser__oxcompany', 'Company Name'],
+            [$address, 'oxuser__oxcompany', 'Wiesent center'],
             [$address, 'oxuser__oxfname', 'Some'],
             [$address, 'oxuser__oxlname', 'Name'],
-            [$address, 'oxuser__oxstreet', 'Some street'],
+            [$address, 'oxuser__oxstreet', 'Bayreuther Straße'],
             [$address, 'oxuser__oxcity', 'Freiburg'],
-            [$address, 'oxuser__oxstreetnr', '521'],
+            [$address, 'oxuser__oxstreetnr', '108'],
             [$address, 'oxuser__oxcountryid', 'a7c40f631fc920687.20179984'],
             [$address, 'oxuser__oxzip', '12345'],
         ];
@@ -90,12 +94,12 @@ class AddressTest extends UnitTestCase
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxaddress__oxcompany', 'Company Name'],
+            [$address, 'oxaddress__oxcompany', 'Wiesent center'],
             [$address, 'oxaddress__oxfname', 'Some'],
             [$address, 'oxaddress__oxlname', 'Name'],
-            [$address, 'oxaddress__oxstreet', 'Some street'],
+            [$address, 'oxaddress__oxstreet', 'Bayreuther Straße'],
             [$address, 'oxaddress__oxcity', 'Freiburg'],
-            [$address, 'oxaddress__oxstreetnr', '521'],
+            [$address, 'oxaddress__oxstreetnr', '108'],
             [$address, 'oxaddress__oxcountryid', 'a7c40f631fc920687.20179984'],
             [$address, 'oxaddress__oxzip', '12345'],
         ];
@@ -119,17 +123,17 @@ class AddressTest extends UnitTestCase
         $address = $this->getAddressArray();
 
         return [
-            [$address, 'oxcompany', 'Company Name'],
+            [$address, 'oxcompany', 'Wiesent center'],
             [$address, 'oxfname', 'Some'],
             [$address, 'oxlname', 'Name'],
-            [$address, 'oxstreet', 'Some street'],
+            [$address, 'oxstreet', 'Bayreuther Straße'],
             [$address, 'oxcity', 'Freiburg'],
-            [$address, 'oxstreetnr', '521'],
+            [$address, 'oxstreetnr', '108'],
             [$address, 'oxcountryid', 'a7c40f631fc920687.20179984'],
             [$address, 'oxzip', '12345'],
             [$address, 'oxstateid', 'BW'],
             [$address, 'oxfon', '+44989383728'],
-            [$address, 'oxaddinfo', ''],
+            [$address, 'oxaddinfo', '2. Stock'],
             [$address, 'oxfax', ''],
             [$address, 'oxsal', ''],
         ];
@@ -156,9 +160,9 @@ class AddressTest extends UnitTestCase
         $address = [];
         $address['name'] = 'Some Name';
         $address['countryCode'] = 'DE';
-        $address['addressLine1'] = 'Company Name';
-        $address['addressLine2'] = 'Some street 521';
-        $address['addressLine3'] = '';
+        $address['addressLine1'] = 'Wiesent center';
+        $address['addressLine2'] = 'Bayreuther Straße 108';
+        $address['addressLine3'] = '2. Stock';
         $address['postalCode'] = '12345';
         $address['city'] = 'Freiburg';
         $address['phoneNumber'] = '+44989383728';

@@ -55,7 +55,7 @@
                     </div>
                 </div>
             [{/if}]
-            [{if 'oxuser__oxstreet'|array_key_exists:$missingRequiredBillingFields || 'oxuser__oxstreetno'|array_key_exists:$missingRequiredBillingFields}]
+            [{if 'oxuser__oxstreet'|array_key_exists:$missingRequiredBillingFields || 'oxuser__oxstreetnr'|array_key_exists:$missingRequiredBillingFields}]
                 <div class="form-group row text-danger">
                     <label class="col-xs-12 req" for="missing_amazon_invadr_oxuser__oxstreet">[{oxmultilang ident="STREET_AND_STREETNO"}]</label>
                     <div class="col-xs-8">

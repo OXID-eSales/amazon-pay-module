@@ -47,51 +47,56 @@ class Order extends Order_parent
      */
     public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
-        $missingError = false;
+        if ($oBasket->getPaymentId() == 'oxidamazon') {
+            $missingError = false;
 
-        $oDelAdress = oxNew(Address::class);
-        $oDelAdress->load(Registry::getSession()->getVariable('deladrid'));
+            $session = Registry::getSession();
 
-        $oConfig = $this->getConfig();
+            $oDelAdress = oxNew(Address::class);
+            $oDelAdress->load(Registry::getSession()->getVariable('deladrid'));
 
-        if ($missingRequestBillingFields = $oConfig->getRequestParameter('missing_amazon_invadr')) {
-            $changeMissingBillingFields = false;
-            foreach ($this->getAmazonService()->getMissingRequiredBillingFields() as $key => $value) {
-                if (isset($missingRequestBillingFields[$key])) {
-                    if ($missingRequestBillingFields[$key]) {
-                        $changeMissingBillingFields = true;
-                        $oUser->{$key} = new Field($missingRequestBillingFields[$key], Field::T_RAW);
-                    } else {
-                        $missingError = true;
+            $oConfig = $this->getConfig();
+
+            if ($missingRequestBillingFields = $oConfig->getRequestParameter('missing_amazon_invadr')) {
+                $changeMissingBillingFields = false;
+                foreach ($this->getAmazonService()->getMissingRequiredBillingFields() as $key => $value) {
+                    if (isset($missingRequestBillingFields[$key])) {
+                        if ($missingRequestBillingFields[$key]) {
+                            $changeMissingBillingFields = true;
+                            $oUser->{$key} = new Field($missingRequestBillingFields[$key], Field::T_RAW);
+                        } else {
+                            $missingError = true;
+                        }
                     }
                 }
+                if ($changeMissingBillingFields) {
+                    $oUser->save();
+                }
+                $session->deleteVariable('amazonMissingBillingFields');
             }
-            if ($changeMissingBillingFields) {
-                $oUser->save();
-            }
-        }
 
-        if ($missingRequestDeliveryFields = $oConfig->getRequestParameter('missing_amazon_deladr')) {
-            $changeMissingDeliveryFields = false;
-            foreach ($this->getAmazonService()->getMissingRequiredDeliveryFields() as $key => $value) {
-                if (isset($missingRequestDeliveryFields[$key])) {
-                    if ($missingRequestDeliveryFields[$key]) {
-                        $changeMissingDeliveryFields = true;
-                        $oDelAdress->{$key} = new Field($missingRequestDeliveryFields[$key], Field::T_RAW);
-                    } else {
-                        $missingError = true;
+            if ($missingRequestDeliveryFields = $oConfig->getRequestParameter('missing_amazon_deladr')) {
+                $changeMissingDeliveryFields = false;
+                foreach ($this->getAmazonService()->getMissingRequiredDeliveryFields() as $key => $value) {
+                    if (isset($missingRequestDeliveryFields[$key])) {
+                        if ($missingRequestDeliveryFields[$key]) {
+                            $changeMissingDeliveryFields = true;
+                            $oDelAdress->{$key} = new Field($missingRequestDeliveryFields[$key], Field::T_RAW);
+                        } else {
+                            $missingError = true;
+                        }
                     }
                 }
+                if ($changeMissingDeliveryFields) {
+                    $oDelAdress->save();
+                }
+                $session->deleteVariable('amazonMissingDeliveryFields');
             }
-            if ($changeMissingDeliveryFields) {
-                $oDelAdress->save();
+
+            if ($missingError) {
+                return self::ORDER_STATE_INVALIDDELADDRESSCHANGED;
             }
         }
-
-        if ($missingError) {
-            return self::ORDER_STATE_INVALIDDELADDRESSCHANGED;
-        }
-
         return parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
     }
 

@@ -55,6 +55,8 @@ class UserComponent extends UserComponent_Parent
         $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
         $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
 
+        $this->deleteMissingSession();
+
         if (count($missingBillingFields)) {
             $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
         }
@@ -99,10 +101,20 @@ class UserComponent extends UserComponent_Parent
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+        $this->deleteMissingSession();
+        parent::logout();
+    }
+
+    /**
+     * Deletes Missing Session Items
+     *
+     * @return null
+     */
+    protected function deleteMissingSession()
+    {
         // delete Session-Items
         $session = Registry::getSession();
         $session->deleteVariable('amazonMissingBillingFields');
         $session->deleteVariable('amazonMissingDeliveryFields');
-        parent::logout();
     }
 }

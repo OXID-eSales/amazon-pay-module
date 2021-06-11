@@ -1,4 +1,4 @@
-[{if !$oViewConf->isAmazonExclude()}]
+[{if 'oxidamazon'|array_key_exists:$oView->getPaymentList() && !$oViewConf->isAmazonExclude()}]
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">[{oxmultilang ident="AMAZON_PAY"}]</h3>
@@ -23,7 +23,7 @@
 [{/if}]
 [{if !$oViewConf->isAmazonSessionActive() || $oViewConf->isAmazonExclude()}]
     [{$smarty.block.parent}]
-[{else}]
+[{elseif 'oxidamazon'|array_key_exists:$oView->getPaymentList()}]
     <form action="[{$oViewConf->getSslSelfLink()}]" class="form-horizontal js-oxValidate payment" id="payment" name="order" method="post" novalidate="novalidate">
         <div class="hidden">
             [{$oViewConf->getHiddenSid()}]

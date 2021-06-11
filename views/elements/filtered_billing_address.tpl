@@ -2,7 +2,9 @@
     [{if $billadr->oxuser__oxcompany->value != ''}] [{$billadr->oxuser__oxcompany->value}]<br />[{/if}]
     [{if $billadr->oxuser__oxaddinfo->value != ''}] [{$billadr->oxuser__oxaddinfo->value}]<br />[{/if}]
     [{if $billadr->oxuser__oxustid->value != ''}] [{oxmultilang ident="VAT_ID_NUMBER"}] [{$billadr->oxuser__oxustid->value}]<br /> [{/if}]
-    [{if $billadr->oxuser__oxsal->value != '' || $billadr->oxuser__oxfname->value != '' || $billadr->oxuser__oxlname->value != ''}][{$billadr->oxuser__oxsal->value|oxmultilangsal}]&nbsp;[{$billadr->oxuser__oxfname->value}]&nbsp;[{$billadr->oxuser__oxlname->value}]<br />[{/if}]
+    [{if $billadr->oxuser__oxfname->value != '' || $billadr->oxuser__oxlname->value != ''}]
+        [{if $billadr->oxuser__oxsal->value != ''}][{$billadr->oxuser__oxsal->value|oxmultilangsal}]&nbsp;[{/if}][{$billadr->oxuser__oxfname->value}] [{$billadr->oxuser__oxlname->value}]<br />
+    [{/if}]
     [{if $billadr->oxuser__oxstreet->value != '' || $billadr->oxuser__oxstreetnr->value != ''}][{$billadr->oxuser__oxstreet->value}]&nbsp;[{$billadr->oxuser__oxstreetnr->value}]<br />[{/if}]
     [{if $billadr->oxuser__oxstateid->value != ''}][{$billadr->oxuser__oxstateid->value != ''}]&nbsp;[{/if}]
     [{if $billadr->oxuser__oxzip->value || $billadr->oxuser__oxcity->value}][{$billadr->oxuser__oxzip->value}]&nbsp;[{$billadr->oxuser__oxcity->value}]<br />[{/if}]

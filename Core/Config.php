@@ -85,15 +85,16 @@ class Config
     * @var array
     */
     protected $amazonEUAddresses = [
-        'AT', 'BE', 'BG',
-        'HR', 'CY', 'CZ',
-        'DK', 'EE', 'FI',
-        'FR', 'DE', 'GR',
-        'HU', 'IE', 'IT',
-        'LV', 'LT', 'LU',
-        'MT', 'NL', 'PL',
-        'RO', 'SK', 'SI',
-        'ES', 'SE'
+        'BE', 'BG', 'DK', 'DE', 'EE',
+        'FI', 'FR', 'GR', 'IE', 'IT',
+        'HR', 'LV', 'LT', 'LU', 'MT',
+        'NL', 'AT', 'PL', 'PT', 'RO',
+        'SM', 'SE', 'SK', 'SI', 'ES',
+        'CZ', 'HU', 'GB', 'VA', 'FO',
+        'CY', 'AL', 'AD', 'BA', 'LI',
+        'MC', 'IS', 'YU', 'MK', 'MD',
+        'NO', 'CH', 'UA', 'BY', 'RU',
+        'TR', 'RS'
     ];
 
     /**

@@ -66,5 +66,14 @@ $aLang = [
     'OXPS_AMAZONPAY_CAPTYPE_ONE_STEP'   => 'Einstufig',
     'OXPS_AMAZONPAY_CAPTYPE_TWO_STEP'   => 'Zweistufig',
     'OXPS_AMAZONPAY_EXCLUDED'           => 'AmazonPay ausschließen',
-    'OXPS_AMAZONPAY_CARRIER_CODE'       => 'Amazon Carrier Code'
+    'OXPS_AMAZONPAY_CARRIER_CODE'       => 'Amazon Carrier Code',
+
+    'OXPS_AMAZONPAY_PAYMENT_WAS_SHIPPING'    => 'Amazon-Zahlung nach Lieferung erfolgt',
+    'OXPS_AMAZONPAY_PAYMENT_WHEN_SHIPPING'   => 'Amazon-Zahlung bei Lieferung erfolgt',
+    'OXPS_AMAZONPAY_PAYMENT_DURING_CHECKOUT' => 'Amazon-Zahlung während des Checkouts erfolgt',
+    'OXPS_AMAZONPAY_TRANSACTION_HISTORY'     => 'Transaktions-Historie',
+    'OXPS_AMAZONPAY_IPN_HISTORY'             => 'IPN-Historie',
+    'OXPS_AMAZONPAY_DATE'                    => 'Datum',
+    'OXPS_AMAZONPAY_REFERENCE'               => 'Referenz',
+    'OXPS_AMAZONPAY_RESULT'                  => 'Ergebnis'
 ];

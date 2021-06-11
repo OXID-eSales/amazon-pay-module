@@ -49,65 +49,92 @@ class Address
     protected static $defaultDBTablePrefix = 'oxaddress__';
 
     /**
-     * Copied verbatim from AmazonPay Demo v2
-     * because amazon expects this exact result
      * This is used as a prefilter for OXID functions below.
      * @param $addr
      * @return array
      */
-    public static function parseAddress(array $addr): array
+    public static function parseAddress(array $address): array
     {
-        $name = trim($addr['name']);
-        $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-        $first_name = trim(preg_replace('#' . $last_name . '#', '', $name));
+        $name = trim($address['name']);
+        $last_name = self::getLastName($name);
+        $first_name = self::getFirstName($name);
 
-        $country = $addr["countryCode"];
-        $addressLine1 = trim($addr["addressLine1"]);
-        $addressLine2 = trim($addr["addressLine2"]);
-        $addressLine3 = trim($addr["addressLine3"]);
-        $street = "";
-        $company = "";
-        if ($country == 'DE' || $country == 'AT') {
-            if ($addressLine2 != '') {
-                $street = $addressLine2;
-                $company = $addressLine1;
-            } elseif ($addressLine1 != '') {
-                $street = $addressLine1;
+        // Country
+        $countryIsoCode = $address["countryCode"];
+        $country = oxNew(Country::class);
+        $countryOxId = $country->getIdByCode($countryIsoCode ?? '');
+        $country->loadInLang(
+            Registry::getLang()->getBaseLanguage(),
+            $countryOxId
+        );
+        $countryName = $country->oxcountry__oxtitle->value;
+
+        $company = '';
+        $street = '';
+        $streetNo = '';
+        $additionalInfo = '';
+
+        $addressData = null;
+
+        $addressLines = self::getAddressLines($address);
+
+        if ($countryIsoCode == 'DE') {
+            if (isset($addressLines[1]) && $addressLines[1] != '') {
+                $streetTmp = $addressLines[1];
+                $company = $addressLines[0];
             } else {
-                //invalid address
-                // Handled by address splitter
+                $streetTmp = $addressLines[0];
             }
-            if ($addressLine3 != '') {
-                $company = $company . ', ' . $addressLine3;
+            if ($addressLines[2] != '') {
+                $additionalInfo = $addressLines[2];
+            }
+
+            try {
+                $addressData = AddressSplitter::splitAddress($streetTmp);
+            } catch (SplittingException $e) {
+                $logger = new Logger();
+                $logger->error($e->getMessage(), ['status' => $e->getCode()]);
+            }
+
+            if (!is_null($addressData)) {
+                $street = $addressData['streetName'] ?? '';
+                $streetNo = $addressData['houseNumber'] ?? '';
+            } else {
+                $street = $streetTmp;
             }
         } else {
-            if ($addressLine1 != "") {
-                $street = $addressLine1;
-                $company = "";
-                if ($addressLine2 != "") {
-                    $company = $addressLine2;
-                }
-                if ($addressLine3 != "") {
-                    $company = $company . ', ' . $addressLine3;
-                }
-            } elseif ($addressLine2 != '') {
-                $street = $addressLine2;
-                if ($addressLine3 != '') {
-                    $company = $addressLine3;
-                }
+            try {
+                $addressLinesAsString = implode(', ', $addressLines);
+                $addressData = AddressSplitter::splitAddress($addressLinesAsString);
+            } catch (SplittingException $e) {
+                $logger = new Logger();
+                $logger->error($e->getMessage(), ['status' => $e->getCode()]);
+            }
+
+            if (!is_null($addressData)) {
+                $company = $addressData['additionToAddress1'] ?? '';
+                $street = $addressData['streetName'] ?? '';
+                $streetNo = $addressData['houseNumber'] ?? '';
+                $additionalInfo = $addressData['additionToAddress2'] ?? '';
+            } else {
+                $street = $addressLinesAsString;
             }
         }
 
-        return array(
+        return [
             'Firstname' => $first_name,
             'Lastname' => $last_name,
-            'Country' => $country,
+            'CountryIso' => $countryIsoCode,
+            'CountryId' => $countryOxId,
+            'Country' => $countryName,
             'Street' => $street,
+            'StreetNo' => $streetNo,
+            'AddInfo' => $additionalInfo,
             'Company' => $company,
-            'PostalCode' => $addr['postalCode'],
-            'City' => $addr['city'],
-            'PhoneNumber' => $addr['phoneNumber']
-        );
+            'PostalCode' => $address['postalCode'],
+            'City' => $address['city'],
+            'PhoneNumber' => $address['phoneNumber']
+        ];
     }
 
     /**
@@ -172,38 +199,19 @@ class Address
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
-        $addressLines = self::getAddressLines($address);
-
-        try {
-            $street = $parsedAddress['Street'] ?? implode(', ', $addressLines);
-            $addressData = AddressSplitter::splitAddress($street);
-        } catch (SplittingException $e) {
-            $logger = new Logger();
-            $logger->error($e->getMessage(), ['status' => $e->getCode()]);
-        }
-
-        $country = oxNew(Country::class);
-        $countryOxId = $country->getIdByCode($address['countryCode'] ?? '');
-        $country->loadInLang(
-            Registry::getLang()->getBaseLanguage(),
-            $countryOxId
-        );
-        $countryName = $country->oxcountry__oxtitle->value;
-
-        $streetNr = $addressData['houseNumber'] ?? '';
 
         return [
             $DBTablePrefix . 'oxcompany' => $parsedAddress['Company'],
-            $DBTablePrefix . 'oxfname' =>
-                $parsedAddress['Firstname'] == "" ? $parsedAddress['Lastname'] : $parsedAddress['Firstname'],
+            $DBTablePrefix . 'oxfname' => $parsedAddress['Firstname'],
             $DBTablePrefix . 'oxlname' => $parsedAddress['Lastname'],
-            $DBTablePrefix . 'oxstreet' => $addressData['streetName'],
+            $DBTablePrefix . 'oxstreet' => $parsedAddress['Street'],
+            $DBTablePrefix . 'oxstreetnr' => $parsedAddress['StreetNo'],
             $DBTablePrefix . 'oxcity' => $parsedAddress['City'],
-            $DBTablePrefix . 'oxstreetnr' => $streetNr,
-            $DBTablePrefix . 'oxcountryid' => $countryOxId,
-            $DBTablePrefix . 'oxcountry' => $countryName,
+            $DBTablePrefix . 'oxcountryid' => $parsedAddress['CountryId'],
+            $DBTablePrefix . 'oxcountry' => $parsedAddress['Country'],
             $DBTablePrefix . 'oxzip' => $parsedAddress['PostalCode'],
-            $DBTablePrefix . 'oxfon' => $address['phoneNumber'] ?? ''
+            $DBTablePrefix . 'oxfon' => $parsedAddress['PhoneNumber'],
+            $DBTablePrefix . 'oxaddinfo' => $parsedAddress['AddInfo']
         ];
     }
 
@@ -218,38 +226,22 @@ class Address
     public static function mapAddressToView(array $address, $DBTablePrefix): array
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
-        $parsedAddress = self::parseAddress($address);
-        $addressLines = self::getAddressLines($address);
-        try {
-            $street = $parsedAddress['Street'] ?? implode(', ', $addressLines);
-            $addressData = AddressSplitter::splitAddress($street);
-        } catch (SplittingException $e) {
-            $logger = new Logger();
-            $logger->error($e->getMessage(), ['status' => $e->getCode()]);
-        }
 
-        $country = oxNew(Country::class);
-        $countryOxId = $country->getIdByCode($address['countryCode'] ?? '');
-        $country->loadInLang(
-            Registry::getLang()->getBaseLanguage(),
-            $countryOxId
-        );
-        $countryName = $country->oxcountry__oxtitle->value;
-        $streetNr = $addressData['houseNumber'] ?? '';
+        $parsedAddress = self::parseAddress($address);
 
         $result = [
             'oxcompany' => $parsedAddress['Company'],
             'oxfname' => $parsedAddress['Firstname'],
             'oxlname' => $parsedAddress['Lastname'],
-            'oxstreet' => $addressData['streetName'],
-            'oxstreetnr' => $streetNr,
+            'oxstreet' => $parsedAddress['Street'],
+            'oxstreetnr' => $parsedAddress['StreetNo'],
             'oxcity' => $parsedAddress['City'],
-            'oxcountryid' => $countryOxId,
-            'oxcountry' => $countryName,
+            'oxcountryid' => $parsedAddress['CountryId'],
+            'oxcountry' => $parsedAddress['Country'],
             'oxstateid' => $address['stateOrRegion'],
             'oxzip' => $parsedAddress['PostalCode'],
-            'oxfon' => $address['phoneNumber'] ?? '',
-            'oxaddinfo' => '',
+            'oxfon' => $parsedAddress['PhoneNumber'],
+            'oxaddinfo' => $parsedAddress['AddInfo'],
             'oxfax' => '',
             'oxsal' => ''
         ];
@@ -272,6 +264,7 @@ class Address
                 $result[$key] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
             }
         }
+
         return $result;
     }
 
@@ -297,6 +290,30 @@ class Address
         }
 
         return $lines;
+    }
+
+    /**
+     * Firstname of a Name
+     *
+     * @param string
+     *
+     * @return string
+     */
+    private static function getFirstName($name)
+    {
+        return implode(' ', array_slice(explode(' ', $name), 0, -1));
+    }
+
+    /**
+     * Lastname of a Name
+     *
+     * @param string
+     *
+     * @return string
+     */
+    private static function getLastName($name)
+    {
+        return array_slice(explode(' ', $name), -1)[0];
     }
 
     /**

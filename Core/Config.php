@@ -166,7 +166,7 @@ class Config
      */
     public function getFakePrivateKey(): string
     {
-        return str_repeat('*' , 10);
+        return str_repeat('*', 10);
     }
 
     /**

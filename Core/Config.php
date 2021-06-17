@@ -279,7 +279,9 @@ class Config
      */
     public function getIPNUrl(): string
     {
-        return html_entity_decode(Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=ipn');
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=ipn'
+        );
     }
 
     /**
@@ -289,7 +291,9 @@ class Config
      */
     public function getCreateCheckoutUrl(): string
     {
-        return html_entity_decode(Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazoncheckout&fnc=createCheckout');
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazoncheckout&fnc=createCheckout'
+        );
     }
 
     /**
@@ -323,7 +327,9 @@ class Config
      */
     public function checkoutReviewUrl(): string
     {
-        return html_entity_decode(Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=review');
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=review'
+        );
     }
 
     /**
@@ -333,7 +339,9 @@ class Config
      */
     public function checkoutResultUrl(): string
     {
-        return html_entity_decode(Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=result');
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=result'
+        );
     }
 
     /**
@@ -361,7 +369,7 @@ class Config
     {
         try {
             // throws Exception if it was not possible to gather sufficient entropy.
-            $uuid = vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex(random_bytes(16)), 4));
+            $uuid = bin2hex(random_bytes(16));
         } catch (\Exception $e) {
             $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5(mt_rand()), 0, 24);
         }

@@ -81,6 +81,12 @@ class AmazonTestCase extends UnitTestCase
      */
     protected function createTestCheckoutSession(): array
     {
+        $amazonConfig = new Config();
+
+        $this->mockModuleConfig
+            ->shouldReceive('getUuid')
+            ->andReturn($amazonConfig->getUuid());
+
         $this->mockModuleConfig
             ->shouldReceive('checkoutReviewUrl')
             ->andReturn('http://localhost');

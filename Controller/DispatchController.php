@@ -45,8 +45,7 @@ class DispatchController extends DispatchController_parent
 
         switch ($action) {
             case 'review':
-                $amazonSessionId = Registry::getRequest()
-                    ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+                $amazonSessionId = $this->getRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -54,8 +53,7 @@ class DispatchController extends DispatchController_parent
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', true, 302);
                 break;
             case 'result':
-                $amazonSessionId = Registry::getRequest()
-                    ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+                $amazonSessionId = $this->getRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -76,13 +74,11 @@ class DispatchController extends DispatchController_parent
 
                 break;
             case 'ipn':
-
                 $message = Message::fromRawPostData();
 
                 // Validate the message
                 $validator = new MessageValidator();
                 if ($validator->isValid($message)) {
-
                     $post = PhpHelper::getPost();
                     $message = PhpHelper::jsonToArray($post['Message']);
 
@@ -105,5 +101,19 @@ class DispatchController extends DispatchController_parent
 
                 break;
         }
+    }
+
+    /**
+     * get Amazon Session ID and validate it
+     *
+     * @return mixed
+     */
+    protected function getRequestAmazonSessionId()
+    {
+        $amazonSessionId = Registry::getRequest()
+            ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+        return ($amazonSessionId === OxidServiceProvider::getAmazonService()->getCheckoutSessionId()) ?
+            $amazonSessionId :
+            false;
     }
 }

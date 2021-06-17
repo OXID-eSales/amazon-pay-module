@@ -27,6 +27,8 @@ use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use Aws\Sns\Message;
+use Aws\Sns\MessageValidator;
 
 /**
  * Class OrderController
@@ -74,17 +76,26 @@ class DispatchController extends DispatchController_parent
 
                 break;
             case 'ipn':
-                $post = PhpHelper::getPost();
-                $message = PhpHelper::jsonToArray($post['Message']);
 
-                if ($message['ObjectType'] === 'REFUND') {
-                    OxidServiceProvider::getAmazonService()->processRefund(
-                        $message['ObjectId'],
-                        $logger
-                    );
+                $message = Message::fromRawPostData();
+
+                // Validate the message
+                $validator = new MessageValidator();
+                if ($validator->isValid($message)) {
+
+                    $post = PhpHelper::getPost();
+                    $message = PhpHelper::jsonToArray($post['Message']);
+
+                    if ($message['ObjectType'] === 'REFUND') {
+                        OxidServiceProvider::getAmazonService()->processRefund(
+                            $message['ObjectId'],
+                            $logger
+                        );
+                    }
+
+                    $logger->info($message['NotificationType'], $message);
                 }
 
-                $logger->info($message['NotificationType'], $message);
                 break;
 
             case 'poll':

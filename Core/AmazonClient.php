@@ -60,7 +60,7 @@ class AmazonClient extends Client
     public function createCheckoutSession($payload = null, $headers = null)
     {
         if (!$headers) {
-            $headers = ['x-amz-pay-Idempotency-Key' => uniqid()];
+            $headers = ['x-amz-pay-Idempotency-Key' => $this->moduleConfig->getUuid()];
         }
 
         if (!$payload) {

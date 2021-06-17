@@ -51,6 +51,9 @@ class ConfigController extends AdminController
         $config = new Config();
         $this->addTplParam('config', $config);
 
+        $displayPrivateKey = $config->getPrivateKey() ? $config->getFakePrivateKey() : '';
+        $this->addTplParam('displayPrivateKey', $displayPrivateKey);
+
         try {
             $config->checkHealth();
         } catch (StandardException $e) {
@@ -101,10 +104,20 @@ class ConfigController extends AdminController
      */
     protected function handleSpecialFields(array $conf): array
     {
+        $config = new Config();
+
         if ($conf['blAmazonPaySandboxMode'] === 'sandbox') {
             $conf['blAmazonPaySandboxMode'] = 1;
         } else {
             $conf['blAmazonPaySandboxMode'] = 0;
+        }
+
+        // remove FakePrivateKeys before save
+        if (
+            $conf['sAmazonPayPrivKey'] === '' ||
+            $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()
+        ) {
+            unset($conf['sAmazonPayPrivKey']);
         }
 
         if (!isset($conf['amazonPayCapType'])) {

@@ -292,15 +292,15 @@ class AmazonService
 
     public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
+        $amazonConfig = oxNew(Config::class);
+
         $payload = new Payload();
-        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getBruttoSum()));
+        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
 
         $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
         $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
-
-        $amazonConfig = oxNew(Config::class);
 
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
@@ -338,7 +338,9 @@ class AmazonService
 
     public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
-        $amount = PhpHelper::getMoneyValue($basket->getBruttoSum());
+        $amazonConfig = oxNew(Config::class);
+
+        $amount = PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice());
         $payload = new Payload();
         $payload->setCheckoutChargeAmount($amount);
 
@@ -346,8 +348,6 @@ class AmazonService
 
         $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
         $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
-
-        $amazonConfig = oxNew(Config::class);
 
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
@@ -386,9 +386,11 @@ class AmazonService
      */
     public function processRefund($refundId, LoggerInterface $logger): void
     {
+        $amazonConfig = oxNew(Config::class);
+
         $result = OxidServiceProvider::getAmazonClient()->getRefund(
             $refundId,
-            ['x-amz-pay-Idempotency-Key' => uniqid()]
+            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -430,6 +432,7 @@ class AmazonService
      */
     public function checkOrderState($orderId): void
     {
+        $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
         $logger = new Logger();
 
@@ -477,7 +480,7 @@ class AmazonService
 
         $result = OxidServiceProvider::getAmazonClient()->getCharge(
             $chargeId,
-            ['x-amz-pay-Idempotency-Key' => uniqid()]
+            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -526,6 +529,7 @@ class AmazonService
      */
     public function processCancel($orderId): void
     {
+        $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
         $logger = new Logger();
 
@@ -553,7 +557,7 @@ class AmazonService
         $result = OxidServiceProvider::getAmazonClient()->cancelCharge(
             $chargeId,
             ['cancellationReason' => 'OXID ADMIN'],
-            ['x-amz-pay-Idempotency-Key' => uniqid()]
+            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -607,6 +611,7 @@ class AmazonService
      */
     public function capturePaymentForOrder($chargeId, $amount, $currencyCode): void
     {
+        $amazonConfig = oxNew(Config::class);
         $logger = new Logger();
 
         $payload = new Payload();
@@ -622,7 +627,7 @@ class AmazonService
         $result = OxidServiceProvider::getAmazonClient()->captureCharge(
             $chargeId,
             $payload->getData(),
-            ['x-amz-pay-Idempotency-Key' => uniqid()]
+            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -653,6 +658,8 @@ class AmazonService
 
     public function sendAlexaNotification($chargePermissionId, $trackingCode = null, $deliveryType = null): void
     {
+        $amazonConfig = oxNew(Config::class);
+
         $payload = [];
         $payload['amazonOrderReferenceId'] = $chargePermissionId;
 
@@ -673,7 +680,7 @@ class AmazonService
 
         $result = OxidServiceProvider::getAmazonClient()->deliveryTrackers(
             $payload,
-            ['x-amz-pay-Idempotency-Key' => uniqid()]
+            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
         );
 
         $logger = OxidServiceProvider::getLogger();

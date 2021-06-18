@@ -78,7 +78,7 @@ class Address
 
         $addressLines = self::getAddressLines($address);
 
-        if ($countryIsoCode == 'DE') {
+        if ($countryIsoCode === 'DE') {
             if (isset($addressLines[1]) && $addressLines[1] != '') {
                 $streetTmp = $addressLines[1];
                 $company = $addressLines[0];
@@ -91,32 +91,29 @@ class Address
 
             try {
                 $addressData = AddressSplitter::splitAddress($streetTmp);
-            } catch (SplittingException $e) {
-                $logger = new Logger();
-                $logger->error($e->getMessage(), ['status' => $e->getCode()]);
-            }
-
-            if (!is_null($addressData)) {
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
-            } else {
+            } catch (SplittingException $e) {
+                // The Address could not be split
+                // we have an exception, bit we did not log the message because of sensible Address-Informations
+                // $logger = new Logger();
+                // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $streetTmp;
             }
         } else {
             try {
                 $addressLinesAsString = implode(', ', $addressLines);
                 $addressData = AddressSplitter::splitAddress($addressLinesAsString);
-            } catch (SplittingException $e) {
-                $logger = new Logger();
-                $logger->error($e->getMessage(), ['status' => $e->getCode()]);
-            }
 
-            if (!is_null($addressData)) {
                 $company = $addressData['additionToAddress1'] ?? '';
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
                 $additionalInfo = $addressData['additionToAddress2'] ?? '';
-            } else {
+            } catch (SplittingException $e) {
+                // The Address could not be split
+                // we have an exception, bit we did not log the message because of sensible Address-Informations
+                // $logger = new Logger();
+                // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $addressLinesAsString;
             }
         }
@@ -248,7 +245,7 @@ class Address
 
         $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
 
-        $aRequiredFields = $DBTablePrefix == 'oxuser__' ?
+        $aRequiredFields = $DBTablePrefix === 'oxuser__' ?
             $oRequiredAddressFields->getBillingFields() :
             $oRequiredAddressFields->getDeliveryFields();
 

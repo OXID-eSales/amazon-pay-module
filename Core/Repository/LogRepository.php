@@ -41,8 +41,7 @@ class LogRepository
     {
         $id = UtilsObject::getInstance()->generateUId();
 
-        $sql = sprintf(
-            'INSERT INTO %s (
+        $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (
                 `OXPS_AMAZON_PAYLOGID`,
                 `OXPS_AMAZON_OXSHOPID`,
                 `OXPS_AMAZON_OXUSERID`,
@@ -55,9 +54,7 @@ class LogRepository
                 `OXPS_AMAZON_CHARGE_PERMISSION_ID`,
                 `OXPS_AMAZON_OBJECT_ID`,
                 `OXPS_AMAZON_OBJECT_TYPE`
-                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
-            self::TABLE_NAME
-        );
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
 
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute($sql, [
             $id,
@@ -84,7 +81,7 @@ class LogRepository
     public function findLogMessageForUserId(string $userId): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            sprintf('SELECT * FROM %s WHERE OXPS_AMAZON_OXUSERID = ? ORDER BY OXTIMESTAMP', self::TABLE_NAME),
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_OXUSERID = ? ORDER BY OXTIMESTAMP',
             [$userId]
         );
     }
@@ -98,7 +95,7 @@ class LogRepository
     public function findLogMessageForIdentifier(string $identifier): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            sprintf('SELECT * FROM %s WHERE OXPS_AMAZON_IDENTIFIER = ? ORDER BY OXTIMESTAMP', self::TABLE_NAME),
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_IDENTIFIER = ? ORDER BY OXTIMESTAMP',
             [$identifier]
         );
     }
@@ -115,10 +112,7 @@ class LogRepository
         string $orderBy = 'OXTIMESTAMP'
     ): array {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            sprintf(
-                'SELECT * FROM %s WHERE OXPS_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
-                self::TABLE_NAME
-            ),
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]
         );
     }
@@ -132,7 +126,7 @@ class LogRepository
     public function findLogMessageForOrderId(string $orderId): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            sprintf('SELECT * FROM %s WHERE OXPS_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP', self::TABLE_NAME),
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP',
             [$orderId]
         );
     }
@@ -146,7 +140,7 @@ class LogRepository
     public function findLogMessageForChargeId(string $chargeId): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            sprintf('SELECT * FROM %s WHERE OXPS_AMAZON_CHARGE_ID = ? ORDER BY OXTIMESTAMP', self::TABLE_NAME),
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_CHARGE_ID = ? ORDER BY OXTIMESTAMP',
             [$chargeId]
         );
     }

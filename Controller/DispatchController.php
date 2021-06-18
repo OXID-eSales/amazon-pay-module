@@ -27,6 +27,8 @@ use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use Aws\Sns\Message;
+use Aws\Sns\MessageValidator;
 
 /**
  * Class OrderController
@@ -43,8 +45,7 @@ class DispatchController extends DispatchController_parent
 
         switch ($action) {
             case 'review':
-                $amazonSessionId = Registry::getRequest()
-                    ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+                $amazonSessionId = $this->getRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -52,8 +53,7 @@ class DispatchController extends DispatchController_parent
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', true, 302);
                 break;
             case 'result':
-                $amazonSessionId = Registry::getRequest()
-                    ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+                $amazonSessionId = $this->getRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -74,17 +74,24 @@ class DispatchController extends DispatchController_parent
 
                 break;
             case 'ipn':
-                $post = PhpHelper::getPost();
-                $message = PhpHelper::jsonToArray($post['Message']);
+                $message = Message::fromRawPostData();
 
-                if ($message['ObjectType'] === 'REFUND') {
-                    OxidServiceProvider::getAmazonService()->processRefund(
-                        $message['ObjectId'],
-                        $logger
-                    );
+                // Validate the message
+                $validator = new MessageValidator();
+                if ($validator->isValid($message)) {
+                    $post = PhpHelper::getPost();
+                    $message = PhpHelper::jsonToArray($post['Message']);
+
+                    if ($message['ObjectType'] === 'REFUND') {
+                        OxidServiceProvider::getAmazonService()->processRefund(
+                            $message['ObjectId'],
+                            $logger
+                        );
+                    }
+
+                    $logger->info($message['NotificationType'], $message);
                 }
 
-                $logger->info($message['NotificationType'], $message);
                 break;
 
             case 'poll':
@@ -94,5 +101,19 @@ class DispatchController extends DispatchController_parent
 
                 break;
         }
+    }
+
+    /**
+     * get Amazon Session ID and validate it
+     *
+     * @return mixed
+     */
+    protected function getRequestAmazonSessionId()
+    {
+        $amazonSessionId = Registry::getRequest()
+            ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+        return ($amazonSessionId === OxidServiceProvider::getAmazonService()->getCheckoutSessionId()) ?
+            $amazonSessionId :
+            false;
     }
 }

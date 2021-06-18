@@ -1,4 +1,5 @@
 [{include file="headitem.tpl" title="amazonpay"}]
+
 <div id="content" class="amazonpay-config">
     <h1>[{oxmultilang ident="amazonpay"}] [{oxmultilang ident="OXPS_AMAZONPAY_CONFIG"}]</h1>
     <div class="alert alert-[{if $Errors.amazonpay_error}]danger[{else}]success[{/if}]" role="alert">
@@ -9,7 +10,7 @@
         [{/if}]
     </div>
 
-    <form action="[{$oViewConf->getSelfLink()}]">
+    <form action="[{$oViewConf->getSelfLink()}]" method="post">
         [{$oViewConf->getHiddenSid()}]
         <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
         <input type="hidden" name="fnc" value="save">
@@ -32,7 +33,7 @@
         <div class="form-group">
             <label for="privkey">[{oxmultilang ident="OXPS_AMAZONPAY_PRIVKEY" suffix="*"}]</label>
             <div class="controls">
-                <textarea id="privkey" name="conf[sAmazonPayPrivKey]">[{$config->getPrivateKey()}]</textarea>
+                <textarea id="privkey" name="conf[sAmazonPayPrivKey]">[{$displayPrivateKey}]</textarea>
                 <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_PRIVKEY"}]</span>
             </div>
         </div>

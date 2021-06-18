@@ -4,12 +4,13 @@
   "type": "oxideshop-module",
   "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],
   "license": "proprietary",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "require": {
     "amzn/amazon-pay-api-sdk-php": "^2.0",
     "ext-json": "*",
     "viison/address-splitter": "^0.3.4",
-    "mockery/mockery": "^1.3"
+    "mockery/mockery": "^1.3",
+    "aws/aws-php-sns-message-validator": "^1.6"
   },
   "archive": {
     "exclude": ["/resources"]

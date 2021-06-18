@@ -109,7 +109,7 @@ class OrderController extends OrderController_parent
         if ($oOrder->load($orderOxId)) {
              $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
         }
-        $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue($this->getBasket()->getBruttoSum()));
+        $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue($this->getBasket()->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
 

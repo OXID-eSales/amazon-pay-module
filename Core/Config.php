@@ -164,6 +164,14 @@ class Config
     /**
      * @return string
      */
+    public function getFakePrivateKey(): string
+    {
+        return str_repeat('*', 10);
+    }
+
+    /**
+     * @return string
+     */
     public function getPublicKeyId(): string
     {
         return Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
@@ -271,7 +279,9 @@ class Config
      */
     public function getIPNUrl(): string
     {
-        return Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=ipn';
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=ipn'
+        );
     }
 
     /**
@@ -281,7 +291,9 @@ class Config
      */
     public function getCreateCheckoutUrl(): string
     {
-        return Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazoncheckout&fnc=createCheckout';
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazoncheckout&fnc=createCheckout'
+        );
     }
 
     /**
@@ -315,7 +327,9 @@ class Config
      */
     public function checkoutReviewUrl(): string
     {
-        return html_entity_decode(Registry::getConfig()->getShopHomeUrl() . 'cl=amazondispatch&action=review');
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=review'
+        );
     }
 
     /**
@@ -325,7 +339,9 @@ class Config
      */
     public function checkoutResultUrl(): string
     {
-        return html_entity_decode(Registry::getConfig()->getShopHomeUrl() . 'cl=amazondispatch&action=result');
+        return html_entity_decode(
+            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=result'
+        );
     }
 
     /**
@@ -342,5 +358,21 @@ class Config
         }
 
         return $this->countryList;
+    }
+
+    /**
+     * create a unique Id
+     *
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        try {
+            // throws Exception if it was not possible to gather sufficient entropy.
+            $uuid = bin2hex(random_bytes(16));
+        } catch (\Exception $e) {
+            $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5(mt_rand()), 0, 24);
+        }
+        return $uuid;
     }
 }

@@ -280,7 +280,7 @@ class Config
     public function getIPNUrl(): string
     {
         return html_entity_decode(
-            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=ipn'
+            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazondispatch&action=ipn'
         );
     }
 
@@ -292,7 +292,7 @@ class Config
     public function getCreateCheckoutUrl(): string
     {
         return html_entity_decode(
-            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazoncheckout&fnc=createCheckout'
+            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazoncheckout&fnc=createCheckout'
         );
     }
 
@@ -328,7 +328,7 @@ class Config
     public function checkoutReviewUrl(): string
     {
         return html_entity_decode(
-            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=review'
+            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazondispatch&action=review'
         );
     }
 
@@ -340,7 +340,7 @@ class Config
     public function checkoutResultUrl(): string
     {
         return html_entity_decode(
-            Registry::getConfig()->getShopSecureHomeURL() . 'cl=amazondispatch&action=result'
+            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazondispatch&action=result'
         );
     }
 

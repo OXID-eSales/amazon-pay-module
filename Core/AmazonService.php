@@ -295,7 +295,7 @@ class AmazonService
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
-        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getBruttoSum()));
+        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
 
@@ -340,7 +340,7 @@ class AmazonService
     {
         $amazonConfig = oxNew(Config::class);
 
-        $amount = PhpHelper::getMoneyValue($basket->getBruttoSum());
+        $amount = PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice());
         $payload = new Payload();
         $payload->setCheckoutChargeAmount($amount);
 

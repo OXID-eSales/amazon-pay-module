@@ -375,4 +375,16 @@ class Config
         }
         return $uuid;
     }
+
+    /**
+     * This Placeholder is public. The only function is to fill this string
+     * in the empty required fields during checkout. After checkout the fields would be cleaned from
+     * the database
+     *
+     * @return string
+     */
+    public function getPlaceholder(): string
+    {
+        return "328697F-879AC9229A9625_DB4F5E67C";
+    }
 }

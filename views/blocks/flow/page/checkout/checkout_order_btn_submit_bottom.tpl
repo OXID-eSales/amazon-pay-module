@@ -1,9 +1,35 @@
-[{$smarty.block.parent}]
-[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
-    <div class="amazonpay-button-or pull-right">
-        [{"OR"|oxmultilangassign|oxupper}]
-    </div>
-    <div class="amazonpay-button small pull-right">
-        [{include file="amazonbutton.tpl" buttonId="AmazonPayButtonNextCart2" buttonclass="small"}]
-    </div>
+[{if $oViewConf->isAmazonActive()}]
+    [{assign var="missingRequiredBillingFields" value=$oView->getMissingRequiredBillingFields()}]
+    [{if $missingRequiredBillingFields|@count}]
+        [{foreach from=$missingRequiredBillingFields item=missingFieldValue key=missingFieldName}]
+            <input type="hidden" name="missing_amazon_invadr[[{$missingFieldName}]]" value="" />
+        [{/foreach}]
+    [{/if}]
+    [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]
+    [{if $missingRequiredDeliveryFields|@count}]
+        [{foreach from=$missingRequiredDeliveryFields item=missingFieldValue key=missingFieldName}]
+            <input type="hidden" name="missing_amazon_deladr[[{$missingFieldName}]]" value="" />
+        [{/foreach}]
+    [{/if}]
+    [{capture name="amazonpay_missingfields_script"}]
+        $("#orderConfirmAgbBottom").submit(function(event) {
+            $('#missing_delivery_address [id^=missing_amazon_deladr]').each(function(index) {
+                $('#orderConfirmAgbBottom input[name="' + $(this).attr("name") + '"]').val($(this).val());
+            });
+            $('#missing_billing_address [id^=missing_amazon_invadr]').each(function(index) {
+                $('#orderConfirmAgbBottom input[name="' + $(this).attr("name") + '"]').val($(this).val());
+            });
+        });
+    [{/capture}]
+    [{oxscript add=$smarty.capture.amazonpay_missingfields_script}]
+
+    [{if !$oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude()}]
+        <div class="pull-right">
+            [{include file="amazonbutton.tpl" buttonId="AmazonPayButtonNextCart2"}]
+        </div>
+        <div class="pull-right amazonpay-button-or">
+            [{"OR"|oxmultilangassign|oxupper}]
+        </div>
+    [{/if}]
 [{/if}]
+[{$smarty.block.parent}]

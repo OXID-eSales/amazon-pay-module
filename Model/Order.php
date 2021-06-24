@@ -47,57 +47,37 @@ class Order extends Order_parent
      */
     public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
-        if ($oBasket->getPaymentId() == 'oxidamazon') {
-            $missingError = false;
+        $result = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
 
+        if ($oBasket->getPaymentId() == 'oxidamazon') {
             $session = Registry::getSession();
 
-            $oDelAdress = oxNew(Address::class);
-            $oDelAdress->load(Registry::getSession()->getVariable('deladrid'));
+            $oDelAdress = $this->getDelAddressInfo();
 
             $oConfig = $this->getConfig();
 
             if ($missingRequestBillingFields = $oConfig->getRequestParameter('missing_amazon_invadr')) {
-                $changeMissingBillingFields = false;
-                foreach ($this->getAmazonService()->getMissingRequiredBillingFields() as $key => $value) {
-                    if (isset($missingRequestBillingFields[$key])) {
-                        if ($missingRequestBillingFields[$key]) {
-                            $changeMissingBillingFields = true;
-                            $oUser->{$key} = new Field($missingRequestBillingFields[$key], Field::T_RAW);
-                        } else {
-                            $missingError = true;
-                        }
-                    }
+                foreach ($missingRequestBillingFields as $key => $value) {
+                    $billKeyName = str_replace('oxuser__ox', 'oxorder__oxbill', $key);
+                    $oUser->{$key} = new Field($value, Field::T_RAW);
+                    $this->{$billKeyName} = clone $oUser->{$key};
                 }
-                if ($changeMissingBillingFields) {
-                    $oUser->save();
-                }
+                $oUser->save();
                 $session->deleteVariable('amazonMissingBillingFields');
             }
 
             if ($missingRequestDeliveryFields = $oConfig->getRequestParameter('missing_amazon_deladr')) {
-                $changeMissingDeliveryFields = false;
-                foreach ($this->getAmazonService()->getMissingRequiredDeliveryFields() as $key => $value) {
-                    if (isset($missingRequestDeliveryFields[$key])) {
-                        if ($missingRequestDeliveryFields[$key]) {
-                            $changeMissingDeliveryFields = true;
-                            $oDelAdress->{$key} = new Field($missingRequestDeliveryFields[$key], Field::T_RAW);
-                        } else {
-                            $missingError = true;
-                        }
-                    }
+                foreach ($missingRequestDeliveryFields as $key => $value) {
+                    $delKeyName = str_replace('oxaddress__ox', 'oxorder__oxdel', $key);
+                    $oDelAdress->{$key} = new Field($value, Field::T_RAW);
+                    $this->{$delKeyName} = clone $oDelAdress->{$key};
                 }
-                if ($changeMissingDeliveryFields) {
-                    $oDelAdress->save();
-                }
+                $oDelAdress->save();
                 $session->deleteVariable('amazonMissingDeliveryFields');
             }
-
-            if ($missingError) {
-                return self::ORDER_STATE_INVALIDDELADDRESSCHANGED;
-            }
+            $this->save();
         }
-        return parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
+        return $result;
     }
 
     /**

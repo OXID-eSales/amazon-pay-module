@@ -26,7 +26,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidProfessionalServices\AmazonPay\Core\Config;
 use VIISON\AddressSplitter\AddressSplitter;
 use VIISON\AddressSplitter\Exceptions\SplittingException;
 
@@ -140,6 +140,8 @@ class Address
      */
     public static function collectMissingRequiredBillingFields(array $address): array
     {
+        $config = Registry::get(Config::class);
+
         $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
         $aRequiredBillingFields = $oRequiredAddressFields->getBillingFields();
 
@@ -153,8 +155,8 @@ class Address
                 ) ||
                 !isset($address[$billingKey])
             ) {
-                // we collect the missing fields and filled as dummy with the Amazon-SessionID
-                $missingFields[$billingKey] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+                // we collect the missing fields and filled as dummy with a Placeholder
+                $missingFields[$billingKey] = $config->getPlaceholder();
             }
         }
 
@@ -167,6 +169,8 @@ class Address
      */
     public static function collectMissingRequiredDeliveryFields(array $address): array
     {
+        $config = Registry::get(Config::class);
+
         $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
         $aRequiredDeliveryFields = $oRequiredAddressFields->getDeliveryFields();
 
@@ -180,8 +184,8 @@ class Address
                 ) ||
                 !isset($address[$deliveryKey])
             ) {
-                // we collect the missing fields and filled as dummy with the Amazon-SessionID
-                $missingFields[$deliveryKey] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+                // we collect the missing fields and filled as dummy with a Placeholder
+                $missingFields[$deliveryKey] = $config->getPlaceholder();
             }
         }
         return $missingFields;
@@ -222,6 +226,8 @@ class Address
      */
     public static function mapAddressToView(array $address, $DBTablePrefix): array
     {
+        $config = Registry::get(Config::class);
+
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
 
         $parsedAddress = self::parseAddress($address);
@@ -258,7 +264,8 @@ class Address
                 ) ||
                 !isset($result[$key])
             ) {
-                $result[$key] = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+                // we collect the missing fields and filled as dummy with a Placeholder
+                $result[$key] = $config->getPlaceholder();
             }
         }
 

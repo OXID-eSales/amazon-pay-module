@@ -22,9 +22,11 @@
 
 namespace OxidProfessionalServices\AmazonPay\Controller;
 
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Application\Model\PaymentList;
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Component\UserComponent;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
@@ -182,9 +184,32 @@ class OrderController extends OrderController_parent
 
     private function setAmazonPayAsPaymentMethod()
     {
-        $payment = $this->getBasket()->getPaymentId();
+        $basket = $this->getBasket();
+        $payment = $basket->getPaymentId();
         if (($payment !== 'oxidamazon')) {
-            $this->getBasket()->setPayment('oxidamazon');
+            $possibleDeliverySets = [];
+
+            $user = $this->getUser();
+            $deliverySetList = Registry::get(DeliverySetList::class)
+            ->getDeliverySetList(
+                $user,
+                $user->getActiveCountry()
+            );
+            foreach ($deliverySetList as $deliverySet) {
+                $paymentList = Registry::get(PaymentList::class)->getPaymentList(
+                    $deliverySet->getId(),
+                    $basket->getPrice()->getBruttoPrice(),
+                    $user
+                );
+                if (array_key_exists('oxidamazon', $paymentList)) {
+                    $possibleDeliverySets[] = $deliverySet->getId();
+                }
+            }
+
+            if (count($possibleDeliverySets)) {
+                $basket->setPayment('oxidamazon');
+                $basket->setShipping(reset($possibleDeliverySets));
+            }
         }
     }
 }

@@ -23,6 +23,8 @@
 namespace OxidProfessionalServices\AmazonPay\Component;
 
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Application\Model\PaymentList;
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -74,7 +76,29 @@ class UserComponent extends UserComponent_Parent
         $registrationResult = $this->registerUser();
 
         if ($registrationResult) {
-            $session->getBasket()->setPayment('oxidamazon');
+            $basket = $session->getBasket();
+
+            $user = $this->getUser();
+            $deliverySetList = Registry::get(DeliverySetList::class)
+            ->getDeliverySetList(
+                $user,
+                $user->getActiveCountry()
+            );
+            foreach ($deliverySetList as $deliverySet) {
+                $paymentList = Registry::get(PaymentList::class)->getPaymentList(
+                    $deliverySet->getId(),
+                    $basket->getPrice()->getBruttoPrice(),
+                    $user
+                );
+                if (array_key_exists('oxidamazon', $paymentList)) {
+                    $possibleDeliverySets[] = $deliverySet->getId();
+                }
+            }
+
+            if (count($possibleDeliverySets)) {
+                $basket->setPayment('oxidamazon');
+                $basket->setShipping(reset($possibleDeliverySets));
+            }
         } else {
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user', false, 302);
         }

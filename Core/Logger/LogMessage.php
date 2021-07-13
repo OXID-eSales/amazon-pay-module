@@ -136,10 +136,13 @@ class LogMessage
     }
 
     /**
-     * @param string $responseMessage
+     * @param string|null $responseMessage
      */
-    public function setResponseMessage(string $responseMessage): void
+    public function setResponseMessage(?string $responseMessage): void
     {
+        if (!$responseMessage) {
+            $responseMessage = '';
+        }
         $this->responseMessage = $responseMessage;
     }
 

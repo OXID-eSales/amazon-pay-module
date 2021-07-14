@@ -23,6 +23,7 @@
 namespace OxidProfessionalServices\AmazonPay\Controller;
 
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Application\Model\PaymentList;
@@ -51,14 +52,17 @@ class OrderController extends OrderController_parent
         if (!$exclude) {
             if (OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) {
                 $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
+                $country = oxNew(Country::class);
+                $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
                 // Create guest user if not logged in
                 if ($user === false) {
                     $userComponent = oxNew(UserComponent::class);
                     $userComponent->createGuestUser($amazonSession);
-                    $this->setAmazonPayAsPaymentMethod();
+
+                    $this->setAmazonPayAsPaymentMethod($countryOxId);
                     Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
                 } else {
-                    $this->setAmazonPayAsPaymentMethod();
+                    $this->setAmazonPayAsPaymentMethod($countryOxId);
                     $mappedBillingFields = Address::mapAddressToDb(
                         $amazonSession['response']['billingAddress'],
                         'oxuser__'
@@ -182,18 +186,20 @@ class OrderController extends OrderController_parent
         return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 
-    private function setAmazonPayAsPaymentMethod()
+    private function setAmazonPayAsPaymentMethod($countryOxId = null)
     {
         $basket = $this->getBasket();
+        $user = $this->getUser();
+        $countryOxId = $countryOxId ?? $user->getActiveCountry();
+
         $payment = $basket->getPaymentId();
         if (($payment !== 'oxidamazon')) {
             $possibleDeliverySets = [];
 
-            $user = $this->getUser();
             $deliverySetList = Registry::get(DeliverySetList::class)
             ->getDeliverySetList(
                 $user,
-                $user->getActiveCountry()
+                $countryOxId
             );
             foreach ($deliverySetList as $deliverySet) {
                 $paymentList = Registry::get(PaymentList::class)->getPaymentList(

@@ -77,12 +77,13 @@ class UserComponent extends UserComponent_Parent
 
         if ($registrationResult) {
             $basket = $session->getBasket();
-
             $user = $this->getUser();
+            $countryOxId = $mappedDeliveryFields['oxaddress__oxcountryid'] ?? $user->getActiveCountry();
+
             $deliverySetList = Registry::get(DeliverySetList::class)
             ->getDeliverySetList(
                 $user,
-                $user->getActiveCountry()
+                $countryOxId
             );
             foreach ($deliverySetList as $deliverySet) {
                 $paymentList = Registry::get(PaymentList::class)->getPaymentList(

@@ -190,32 +190,32 @@ class OrderController extends OrderController_parent
     {
         $basket = $this->getBasket();
         $user = $this->getUser();
+        $session = Registry::getSession();
         $countryOxId = $countryOxId ?? $user->getActiveCountry();
-
+        $session->setVariable('amazonCountryOxId', $countryOxId);
         $payment = $basket->getPaymentId();
-        if (($payment !== 'oxidamazon')) {
-            $possibleDeliverySets = [];
+        $possibleDeliverySets = [];
 
-            $deliverySetList = Registry::get(DeliverySetList::class)
-            ->getDeliverySetList(
-                $user,
-                $countryOxId
+        $deliverySetList = Registry::get(DeliverySetList::class)
+        ->getDeliverySetList(
+            $user,
+            $countryOxId
+        );
+        foreach ($deliverySetList as $deliverySet) {
+            $paymentList = Registry::get(PaymentList::class)->getPaymentList(
+                $deliverySet->getId(),
+                $basket->getPrice()->getBruttoPrice(),
+                $user
             );
-            foreach ($deliverySetList as $deliverySet) {
-                $paymentList = Registry::get(PaymentList::class)->getPaymentList(
-                    $deliverySet->getId(),
-                    $basket->getPrice()->getBruttoPrice(),
-                    $user
-                );
-                if (array_key_exists('oxidamazon', $paymentList)) {
-                    $possibleDeliverySets[] = $deliverySet->getId();
-                }
+            if (array_key_exists('oxidamazon', $paymentList)) {
+                $possibleDeliverySets[] = $deliverySet->getId();
             }
+        }
 
-            if (count($possibleDeliverySets)) {
-                $basket->setPayment('oxidamazon');
-                $basket->setShipping(reset($possibleDeliverySets));
-            }
+        if (count($possibleDeliverySets)) {
+            $basket->setPayment('oxidamazon');
+            $session->setVariable('paymentid', 'oxidamazon');
+            $basket->setShipping(reset($possibleDeliverySets));
         }
     }
 }

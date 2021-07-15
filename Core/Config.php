@@ -254,8 +254,7 @@ class Config
         $result = [];
         $oxidCountryList = $this->getCountryList();
 
-        foreach ($oxidCountryList as $oxidCountry) {
-            $oxidCountryIsoCode = $oxidCountry->oxcountry__oxisoalpha2->value;
+        foreach ($oxidCountryList as $oxidCountryIsoCode) {
             if (in_array($oxidCountryIsoCode, $this->amazonEUAddresses)) {
                 $result[$oxidCountryIsoCode] = (object) null;
             }
@@ -349,14 +348,18 @@ class Config
      *
      * @return oxcountrylist
      */
-    public function getCountryList(): ListModel
+    public function getCountryList(): array
     {
         if ($this->countryList === null) {
-            // passing country list
-            $this->countryList = oxNew(\OxidEsales\Eshop\Application\Model\CountryList::class);
-            $this->countryList->loadActiveCountries();
+            $this->countryList = [];
+            $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+            $payment->load('oxidamazon');
+            foreach ($payment->getCountries() as $countryOxId) {
+                $oxidCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+                $oxidCountry->load($countryOxId);
+                $this->countryList[] = $oxidCountry->oxcountry__oxisoalpha2->value;
+            }
         }
-
         return $this->countryList;
     }
 

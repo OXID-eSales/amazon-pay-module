@@ -30,6 +30,7 @@ use OxidEsales\Eshop\Application\Controller\FrontendController as CoreFrontendCo
 use OxidEsales\Eshop\Application\Controller\OrderController as CoreOrderController;
 use OxidEsales\Eshop\Application\Controller\UserController as CoreUserController;
 use OxidEsales\Eshop\Application\Model\Article as CoreArticleModel;
+use OxidEsales\Eshop\Application\Model\Basket as CoreBasketModel;
 use OxidEsales\Eshop\Application\Model\Category as CoreCategoryModel;
 use OxidEsales\Eshop\Application\Model\Order as CoreOrderModel;
 use OxidEsales\Eshop\Application\Model\User as CoreUserModel;
@@ -49,6 +50,7 @@ use OxidProfessionalServices\AmazonPay\Controller\UserController;
 use OxidProfessionalServices\AmazonPay\Core\ViewConfig;
 use OxidProfessionalServices\AmazonPay\Core\AmazonInputValidator;
 use OxidProfessionalServices\AmazonPay\Model\Article as ModuleArticle;
+use OxidProfessionalServices\AmazonPay\Model\Basket as ModuleBasket;
 use OxidProfessionalServices\AmazonPay\Model\Category as ModuleCategory;
 use OxidProfessionalServices\AmazonPay\Model\Order as ModuleOrder;
 use OxidProfessionalServices\AmazonPay\Model\User as ModuleUser;
@@ -69,7 +71,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'out/img/amazon-pay-logo.png',
-    'version' => '1.0.18',
+    'version' => '1.0.19',
     'author' => 'Oxid Professional Services',
     'url' => '',
     'email' => '',
@@ -85,6 +87,7 @@ $aModule = [
         CoreOrderModel::class => ModuleOrder::class,
         CoreUserModel::class => ModuleUser::class,
         CoreArticleModel::class => ModuleArticle::class,
+        CoreBasketModel::class => ModuleBasket::class,
         CoreCategoryModel::class => ModuleCategory::class,
         DeliverySetMain::class => AmazonDeliverySetMain::class,
         OrderMainController::class => AmazonOrderMain::class,

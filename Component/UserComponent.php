@@ -72,6 +72,7 @@ class UserComponent extends UserComponent_Parent
 
         $this->setRequestParameter('invadr', $billingAddress);
         $this->setRequestParameter('deladr', $deliveryAddress);
+        $session->setVariable('amazondeladr', $deliveryAddress);
 
         $registrationResult = $this->registerUser();
 
@@ -141,5 +142,26 @@ class UserComponent extends UserComponent_Parent
         $session = Registry::getSession();
         $session->deleteVariable('amazonMissingBillingFields');
         $session->deleteVariable('amazonMissingDeliveryFields');
+    }
+
+    /**
+     * Returns delivery address from request. Before returning array is checked if
+     * all needed data is there
+     *
+     * @return array
+     * @deprecated underscore prefix violates PSR12, will be renamed to "getDelAddressData" in next major
+     */
+    protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+    {
+        $session = Registry::getSession();
+        if ($session->getVariable('paymentid') !== 'oxidamazon') {
+            return parent::_getDelAddressData();
+        }
+        $aDelAdress = [];
+        $aDeladr = $session->getVariable('amazondeladr');
+        if (count($aDeladr)) {
+            $aDelAdress = $aDeladr;
+        }
+        return $aDelAdress;
     }
 }

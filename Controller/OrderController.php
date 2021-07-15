@@ -81,6 +81,8 @@ class OrderController extends OrderController_parent
                     if (count($missingDeliveryFields)) {
                         $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
                     }
+                    $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+                    $session->setVariable('amazondeladr', $deliveryAddress);
                 }
             }
         }

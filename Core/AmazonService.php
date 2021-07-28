@@ -313,16 +313,17 @@ class AmazonService
 
         $response = PhpHelper::jsonToArray($result['response']);
 
-        if ($result['status'] !== 200) {
-            $this->showErrorOnRedirect($logger, $result);
-        } else {
-            if ($response['statusDetails']['state'] === 'Completed') {
-                $response['statusDetails']['state'] = 'Completed & Captured';
-            }
+        if ($response['statusDetails']['state'] === 'Completed') {
+            $response['statusDetails']['state'] = 'Completed & Captured';
+        }
 
-            $request = PhpHelper::jsonToArray($result['request']);
+        $logger->info($response['statusDetails']['state'], $result);
 
-            $repository = oxNew(LogRepository::class);
+        Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
+        $request = PhpHelper::jsonToArray($result['request']);
+        $repository = oxNew(LogRepository::class);
+
+        if ($result['status'] === 200) {
             $repository->markOrderPaid(
                 $basket->getOrderId(),
                 'AmazonPay: ' . $request['chargeAmount']['amount'],
@@ -330,9 +331,23 @@ class AmazonService
                 $response['chargeId']
             );
 
-            $logger->info($response['statusDetails']['state'], $result);
-            Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+        } elseif ($result['status'] === 202) {
+            $repository->updateOrderStatus(
+                'AmazonPay: ' . $request['chargeAmount']['amount'],
+                'NOT_FINISHED',
+                $response['chargeId']
+            );
+
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+        } else {
+            $repository->updateOrderStatus(
+                $basket->getOrderId(),
+                'ERROR',
+                $response['chargeId']
+            );
+
+            $this->showErrorOnRedirect($logger, $result);
         }
     }
 
@@ -359,22 +374,33 @@ class AmazonService
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
+        $repository = oxNew(LogRepository::class);
+        $logger->info($response['statusDetails']['state'], $result);
+        Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
 
-        if ($result['status'] !== 200) {
-            Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
-            $result['message'] = 'Auth error - please select a different payment method';
-            $this->showErrorOnRedirect($logger, $result);
-        } else {
-            $repository = oxNew(LogRepository::class);
+        if ($result['status'] === 200) {
             $repository->updateOrderStatus(
                 $basket->getOrderId(),
                 'AMZ-Authorize-Open',
                 $response['chargeId']
             );
-
-            $logger->info($response['statusDetails']['state'], $result);
-            Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+        } elseif ($result['status'] === 202) {
+            $repository->updateOrderStatus(
+                $basket->getOrderId(),
+                'AMZ-Authorize-Pending',
+                $response['chargeId']
+            );
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+        } else {
+            $repository->updateOrderStatus(
+                $basket->getOrderId(),
+                'ERROR',
+                $response['chargeId']
+            );
+
+            $result['message'] = 'Auth error - please select a different payment method';
+            $this->showErrorOnRedirect($logger, $result);
         }
     }
 

@@ -31,5 +31,6 @@
             [{"OR"|oxmultilangassign|oxupper}]
         </div>
     [{/if}]
+[{else}]
+    [{$smarty.block.parent}]
 [{/if}]
-[{$smarty.block.parent}]

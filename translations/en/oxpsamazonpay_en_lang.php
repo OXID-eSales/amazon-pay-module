@@ -32,6 +32,9 @@ $aLang = [
                                                 </ul>',
     'AMAZON_PAY_PROCESSED'                    => 'Your payment will be processed by Amazon Pay.',
     'AMAZON_PAY_UNLINK'                       => 'unlink',
-    'AMAZON_PAY_USEREXISTS'                   => 'An account already exists for email address <b>"%s"</b>. Please first log into your shop account using <b>"%s"</b> and then again start the Amazon Pay checkout by clicking the Amazon Pay button.'
-
+    'AMAZON_PAY_USEREXISTS'                   => 'An account already exists for email address <b>"%s"</b>. Please first log into your shop account using <b>"%s"</b> and then again start the Amazon Pay checkout by clicking the Amazon Pay button.',
+    'AMAZON_PAY_CHECKOUT_ERROR_HEAD'          => 'Amazon payment error',
+    'AMAZON_PAY_CHECKOUT_ERROR'               => 'Unfortunately, delivery to your Amazon delivery address is not possible. Please choose a different address or a different payment method.',
+    'AMAZON_PAY_CHECKOUT_CHANGE_ADDRESS'      => 'change Address',
+    'AMAZON_PAY_PAYMENT_ERROR'                => 'Unfortunately, delivery to your Amazon delivery address is not possible. Please choose a different address or unlink the Amazon-Payment, to choose another payment afterwards.',
 ];

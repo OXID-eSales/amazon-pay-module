@@ -17,6 +17,14 @@
                 <div class="pull-right">
                     <a class="btn btn-default" href="[{$oViewConf->getCancelAmazonPaymentUrl()}]">[{oxmultilang ident="AMAZON_PAY_UNLINK"}]</a>
                 </div>
+                [{if !$oViewConf->isAmazonPaymentPossible()}]
+                    <p class="alert alert-danger">
+                        [{oxmultilang ident="AMAZON_PAY_PAYMENT_ERROR"}]
+                    </p>
+                    <a href="[{oxgetseourl ident=$oViewConf->getSelfLink()|cat:"cl=user"}]" class="btn btn-warning">
+                        [{oxmultilang ident="AMAZON_PAY_CHECKOUT_CHANGE_ADDRESS"}]
+                    </a>
+                [{/if}]
             [{/if}]
         </div>
     </div>

@@ -350,14 +350,27 @@ class Config
      */
     public function getCountryList(): array
     {
+        $activeUser = false;
+        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+        if ($user->loadActiveUser()) {
+            $activeUser = $user;
+        }
+        $oDelList = Registry::get(\OxidEsales\Eshop\Application\Model\DeliveryList::class);
+
+
         if ($this->countryList === null) {
             $this->countryList = [];
             $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
             $payment->load('oxidamazon');
             foreach ($payment->getCountries() as $countryOxId) {
-                $oxidCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
-                $oxidCountry->load($countryOxId);
-                $this->countryList[] = $oxidCountry->oxcountry__oxisoalpha2->value;
+                // check deliverysets
+                $deliverySetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
+                $deliverySetData = $deliverySetList->getDeliverySetList($activeUser, $countryOxId);
+                if (count($deliverySetData)) {
+                    $oxidCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+                    $oxidCountry->load($countryOxId);
+                    $this->countryList[$countryOxId] = $oxidCountry->oxcountry__oxisoalpha2->value;
+                }
             }
         }
         return $this->countryList;

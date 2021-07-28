@@ -28,6 +28,7 @@ use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Component\UserComponent;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
@@ -98,9 +99,9 @@ class OrderController extends OrderController_parent
             return $ret;
         }
 
-        $oBasket = $this->getSession()->getBasket();
+        $basket = $this->getSession()->getBasket();
 
-        if ($oBasket->getPaymentId() !== 'oxidamazon') {
+        if ($basket->getPaymentId() !== 'oxidamazon') {
             return $ret;
         }
 
@@ -195,29 +196,38 @@ class OrderController extends OrderController_parent
         $session = Registry::getSession();
         $countryOxId = $countryOxId ?? $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
-        $payment = $basket->getPaymentId();
-        $possibleDeliverySets = [];
 
-        $deliverySetList = Registry::get(DeliverySetList::class)
-        ->getDeliverySetList(
-            $user,
-            $countryOxId
-        );
-        foreach ($deliverySetList as $deliverySet) {
-            $paymentList = Registry::get(PaymentList::class)->getPaymentList(
-                $deliverySet->getId(),
-                $basket->getPrice()->getBruttoPrice(),
-                $user
-            );
-            if (array_key_exists('oxidamazon', $paymentList)) {
-                $possibleDeliverySets[] = $deliverySet->getId();
+        $actShipSet = null;
+
+        $deliverySetListObj = Registry::get(DeliverySetList::class);
+        $deliverySetList = $deliverySetListObj->getDeliverySetList($user, $countryOxId);
+        if ($deliverySetListObj->count()) {
+            $payListObj = Registry::get(PaymentList::class);
+            $delListObj = Registry::get(DeliveryList::class);
+            $currency = Registry::getConfig()->getActShopCurrencyObject();
+
+            $basketPrice = $basket->getPriceForPayment() / $currency->rate;
+
+            foreach ($deliverySetList as $shipSetId => $shipSet) {
+                $paymentList = $payListObj->getPaymentList($shipSetId, $basketPrice, $user);
+                if (
+                    isset($paymentList['oxidamazon']) &&
+                    $delListObj->hasDeliveries($basket, $user, $countryOxId, $shipSetId)
+                ) {
+                    $actShipSet = $shipSetId;
+                    break;
+                }
             }
         }
 
-        if (count($possibleDeliverySets)) {
+        if ($actShipSet) {
             $basket->setPayment('oxidamazon');
+            $basket->setShipping($actShipSet);
             $session->setVariable('paymentid', 'oxidamazon');
-            $basket->setShipping(reset($possibleDeliverySets));
+        } else {
+            $basket->setPayment('');
+            $basket->setShipping('');
+            $session->setVariable('paymentid', '');
         }
     }
 }

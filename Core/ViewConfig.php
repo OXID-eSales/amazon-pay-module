@@ -108,6 +108,19 @@ class ViewConfig extends ViewConfig_parent
     }
 
     /**
+     * Template getter isAmazonPaymentPossible
+     *
+     * @return boolean
+     */
+    public function isAmazonPaymentPossible(): bool
+    {
+        return (
+            Registry::getSession()->getVariable('sShipSet') &&
+            (Registry::getSession()->getVariable('paymentid') == 'oxidamazon')
+        );
+    }
+
+    /**
      * @param null $oxid
      * @return bool
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException

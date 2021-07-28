@@ -1,10 +1,4 @@
 [{$smarty.block.parent}]
-
 [{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
-    <div class="amazonpay-button-or pull-right">
-        [{"OR"|oxmultilangassign|oxupper}]
-    </div>
-    <div class="amazonpay-button small pull-right">
-        [{include file="amazonbutton.tpl" buttonId="AmazonPayButtonNextCart2" buttonclass="small"}]
-    </div>
+    [{include file="amazonpay/flow_basket_btn_next_bottom.tpl"}]
 [{/if}]

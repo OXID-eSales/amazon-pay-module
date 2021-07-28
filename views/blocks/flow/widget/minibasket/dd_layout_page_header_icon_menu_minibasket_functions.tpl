@@ -1,8 +1,4 @@
 [{$smarty.block.parent}]
-
 [{if $oViewConf->isAmazonActive() && $oViewConf->displayInMiniCart() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
-    <div class="pull-right">
-        <div class="text-center amazonpay-button-or small">[{"OR"|oxmultilangassign|oxupper}]</div>
-        [{include file="amazonbutton.tpl" buttonId="AmazonPayButtonMiniCart" buttonclass="small"}]
-    </div>
+    [{include file="amazonpay/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl"}]
 [{/if}]

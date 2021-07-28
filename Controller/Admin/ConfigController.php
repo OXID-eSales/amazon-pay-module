@@ -38,7 +38,7 @@ class ConfigController extends AdminController
     {
         parent::__construct();
 
-        $this->_sThisTemplate = 'amazonconfig.tpl';
+        $this->_sThisTemplate = 'amazonpay/amazonconfig.tpl';
     }
 
     /**

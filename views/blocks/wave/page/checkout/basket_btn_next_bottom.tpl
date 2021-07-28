@@ -1,9 +1,4 @@
 [{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
-    <div class="float-right">
-        [{include file="amazonbutton.tpl" buttonId="AmazonPayButtonNextCart2" buttonclass="small"}]
-    </div>
-    <div class="float-right amazonpay-button-or">
-        [{"OR"|oxmultilangassign|oxupper}]
-    </div>
+    [{include file="amazonpay/wave_basket_btn_next_bottom.tpl"}]
 [{/if}]
 [{$smarty.block.parent}]

@@ -66,6 +66,7 @@ $aLang = [
     'OXPS_AMAZONPAY_CAPTYPE_TWO_STEP'   => 'Two Step',
     'OXPS_AMAZONPAY_EXCLUDED'           => 'Exclude AmazonPay',
     'OXPS_AMAZONPAY_CARRIER_CODE'       => 'Amazon Carrier Code',
+    'OXPS_AMAZONPAY_PLEASE_CHOOSE'      => 'Please choose',
 
     'OXPS_AMAZONPAY_PAYMENT_WAS_SHIPPING'    => 'Amazon payment is made after shipping',
     'OXPS_AMAZONPAY_PAYMENT_WHEN_SHIPPING'   => 'Amazon payment is made on shipping',

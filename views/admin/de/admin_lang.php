@@ -67,6 +67,7 @@ $aLang = [
     'OXPS_AMAZONPAY_CAPTYPE_TWO_STEP'   => 'Zweistufig',
     'OXPS_AMAZONPAY_EXCLUDED'           => 'AmazonPay ausschließen',
     'OXPS_AMAZONPAY_CARRIER_CODE'       => 'Amazon Carrier Code',
+    'OXPS_AMAZONPAY_PLEASE_CHOOSE'      => 'Bitte wählen',
 
     'OXPS_AMAZONPAY_PAYMENT_WAS_SHIPPING'    => 'Amazon-Zahlung nach Lieferung erfolgt',
     'OXPS_AMAZONPAY_PAYMENT_WHEN_SHIPPING'   => 'Amazon-Zahlung bei Lieferung erfolgt',

@@ -105,7 +105,10 @@
         <div class="form-group jsonform-error-captureType">
                     <label for="opmode">[{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE"}]</label>
                     <div class="controls">
-                        <select name="conf[amazonPayCapType]" id="captype" class="form-control">
+                        <select name="conf[amazonPayCapType]" id="captype" class="form-control" required>
+                            <option value="">
+                                [{oxmultilang ident="OXPS_AMAZONPAY_PLEASE_CHOOSE"}]
+                            </option>
                             <option value="1" [{if $config->isOneStepCapture()}]selected[{/if}]>
                                 [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_ONE_STEP"}]
                             </option>

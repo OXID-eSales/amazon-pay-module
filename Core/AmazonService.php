@@ -326,7 +326,7 @@ class AmazonService
             $repository->markOrderPaid(
                 $basket->getOrderId(),
                 'AmazonPay: ' . $request['chargeAmount']['amount'],
-                'PAID',
+                'OK',
                 $response['chargeId']
             );
 
@@ -493,7 +493,7 @@ class AmazonService
             $repository->markOrderPaid(
                 $orderId,
                 'AmazonPay: ' . $response['statusDetails']['amount'],
-                'PAID',
+                'OK',
                 $response['chargeId']
             );
             $result['identifier'] = $chargePermissionId;
@@ -649,7 +649,7 @@ class AmazonService
         $repository->markOrderPaid(
             $orderId,
             'AmazonPay: ' . $amount,
-            'PAID',
+            'OK',
             $response['chargeId']
         );
 

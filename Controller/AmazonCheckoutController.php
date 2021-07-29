@@ -49,6 +49,7 @@ class AmazonCheckoutController extends FrontendController
                     $sProductId,
                     1
                 );
+                $basket->calculateBasket(true);
             } catch (\Exception $exception) {
                 $database->rollbackTransaction();
                 throw $exception;

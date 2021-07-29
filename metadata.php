@@ -107,29 +107,45 @@ $aModule = [
         'amazonpay/flow_change_payment_block.tpl' => 'oxps/amazonpay/views/elements/flow_change_payment_block.tpl',
         'amazonpay/flow_change_payment_form.tpl' => 'oxps/amazonpay/views/elements/flow_change_payment_form.tpl',
         'amazonpay/flow_checkout_order_address.tpl' => 'oxps/amazonpay/views/elements/flow_checkout_order_address.tpl',
-        'amazonpay/flow_checkout_order_btn_submit_bottom.tpl' => 'oxps/amazonpay/views/elements/flow_checkout_order_btn_submit_bottom.tpl',
+        'amazonpay/flow_checkout_order_btn_submit_bottom.tpl' =>
+            'oxps/amazonpay/views/elements/flow_checkout_order_btn_submit_bottom.tpl',
         'amazonpay/flow_checkout_user_main.tpl' => 'oxps/amazonpay/views/elements/flow_checkout_user_main.tpl',
-        'amazonpay/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl' => 'oxps/amazonpay/views/elements/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl',
-        'amazonpay/flow_details_productmain_tobasket.tpl' => 'oxps/amazonpay/views/elements/flow_details_productmain_tobasket.tpl',
-        'amazonpay/flow_filtered_billing_address.tpl' => 'oxps/amazonpay/views/elements/flow_filtered_billing_address.tpl',
-        'amazonpay/flow_filtered_delivery_address.tpl' => 'oxps/amazonpay/views/elements/flow_filtered_delivery_address.tpl',
-        'amazonpay/flow_missing_billing_address.tpl' => 'oxps/amazonpay/views/elements/flow_missing_billing_address.tpl',
-        'amazonpay/flow_missing_delivery_address.tpl' => 'oxps/amazonpay/views/elements/flow_missing_delivery_address.tpl',
-        'amazonpay/flow_user_checkout_shipping_head.tpl' => 'oxps/amazonpay/views/elements/flow_user_checkout_shipping_head.tpl',
+        'amazonpay/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl' =>
+            'oxps/amazonpay/views/elements/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl',
+        'amazonpay/flow_details_productmain_tobasket.tpl' =>
+            'oxps/amazonpay/views/elements/flow_details_productmain_tobasket.tpl',
+        'amazonpay/flow_filtered_billing_address.tpl' =>
+            'oxps/amazonpay/views/elements/flow_filtered_billing_address.tpl',
+        'amazonpay/flow_filtered_delivery_address.tpl' =>
+            'oxps/amazonpay/views/elements/flow_filtered_delivery_address.tpl',
+        'amazonpay/flow_missing_billing_address.tpl' =>
+            'oxps/amazonpay/views/elements/flow_missing_billing_address.tpl',
+        'amazonpay/flow_missing_delivery_address.tpl' =>
+            'oxps/amazonpay/views/elements/flow_missing_delivery_address.tpl',
+        'amazonpay/flow_user_checkout_shipping_head.tpl' =>
+            'oxps/amazonpay/views/elements/flow_user_checkout_shipping_head.tpl',
         'amazonpay/flow_shippingandpayment.tpl' => 'oxps/amazonpay/views/elements/flow_shippingandpayment.tpl',
         'amazonpay/wave_basket_btn_next_bottom.tpl' => 'oxps/amazonpay/views/elements/wave_basket_btn_next_bottom.tpl',
         'amazonpay/wave_change_payment_block.tpl' => 'oxps/amazonpay/views/elements/wave_change_payment_block.tpl',
         'amazonpay/wave_change_payment_form.tpl' => 'oxps/amazonpay/views/elements/wave_change_payment_form.tpl',
         'amazonpay/wave_checkout_order_address.tpl' => 'oxps/amazonpay/views/elements/wave_checkout_order_address.tpl',
-        'amazonpay/wave_checkout_order_btn_submit_bottom.tpl' => 'oxps/amazonpay/views/elements/wave_checkout_order_btn_submit_bottom.tpl',
+        'amazonpay/wave_checkout_order_btn_submit_bottom.tpl' =>
+            'oxps/amazonpay/views/elements/wave_checkout_order_btn_submit_bottom.tpl',
         'amazonpay/wave_checkout_user_main.tpl' => 'oxps/amazonpay/views/elements/wave_checkout_user_main.tpl',
-        'amazonpay/wave_dd_layout_page_header_icon_menu_minibasket_functions.tpl' => 'oxps/amazonpay/views/elements/wave_dd_layout_page_header_icon_menu_minibasket_functions.tpl',
-        'amazonpay/wave_details_productmain_tobasket.tpl' => 'oxps/amazonpay/views/elements/wave_details_productmain_tobasket.tpl',
-        'amazonpay/wave_filtered_billing_address.tpl' => 'oxps/amazonpay/views/elements/wave_filtered_billing_address.tpl',
-        'amazonpay/wave_filtered_delivery_address.tpl' => 'oxps/amazonpay/views/elements/wave_filtered_delivery_address.tpl',
-        'amazonpay/wave_missing_billing_address.tpl' => 'oxps/amazonpay/views/elements/wave_missing_billing_address.tpl',
-        'amazonpay/wave_missing_delivery_address.tpl' => 'oxps/amazonpay/views/elements/wave_missing_delivery_address.tpl',
-        'amazonpay/wave_user_checkout_shipping_head.tpl' => 'oxps/amazonpay/views/elements/wave_user_checkout_shipping_head.tpl',
+        'amazonpay/wave_dd_layout_page_header_icon_menu_minibasket_functions.tpl' =>
+            'oxps/amazonpay/views/elements/wave_dd_layout_page_header_icon_menu_minibasket_functions.tpl',
+        'amazonpay/wave_details_productmain_tobasket.tpl' =>
+            'oxps/amazonpay/views/elements/wave_details_productmain_tobasket.tpl',
+        'amazonpay/wave_filtered_billing_address.tpl' =>
+            'oxps/amazonpay/views/elements/wave_filtered_billing_address.tpl',
+        'amazonpay/wave_filtered_delivery_address.tpl' =>
+            'oxps/amazonpay/views/elements/wave_filtered_delivery_address.tpl',
+        'amazonpay/wave_missing_billing_address.tpl' =>
+            'oxps/amazonpay/views/elements/wave_missing_billing_address.tpl',
+        'amazonpay/wave_missing_delivery_address.tpl' =>
+            'oxps/amazonpay/views/elements/wave_missing_delivery_address.tpl',
+        'amazonpay/wave_user_checkout_shipping_head.tpl' =>
+            'oxps/amazonpay/views/elements/wave_user_checkout_shipping_head.tpl',
         'amazonpay/wave_shippingandpayment.tpl' => 'oxps/amazonpay/views/elements/wave_shippingandpayment.tpl',
     ],
     'events' => [

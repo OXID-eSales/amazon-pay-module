@@ -1,5 +1,4 @@
 [{if $oViewConf->isAmazonActive()}]
     [{include file="amazonpay/flow_checkout_order_btn_submit_bottom.tpl"}]
-[{else}]
-    [{$smarty.block.parent}]
 [{/if}]
+[{$smarty.block.parent}]

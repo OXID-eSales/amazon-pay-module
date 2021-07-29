@@ -29,7 +29,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
+                    [{include file="amazonpay/filtered_billing_address.tpl" billadr=$oBillingAddress}]
                 </div>
                 [{assign var="missingRequiredBillingFields" value=$oView->getMissingRequiredBillingFields()}]
                 [{if $missingRequiredBillingFields|@count}]
@@ -59,9 +59,9 @@
                 </div>
                 <div class="panel-body">
                     [{if $oDeliveryAddress}]
-                        [{include file="filtered_delivery_address.tpl" delivadr=$oDeliveryAddress}]
+                        [{include file="amazonpay/filtered_delivery_address.tpl" delivadr=$oDeliveryAddress}]
                     [{else}]
-                        [{include file="filtered_billing_address.tpl" billadr=$oBillingAddress}]
+                        [{include file="amazonpay/filtered_billing_address.tpl" billadr=$oBillingAddress}]
                     [{/if}]
                 </div>
                 [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]

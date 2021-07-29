@@ -12,12 +12,20 @@
 [{/if}]
 [{capture name="amazonpay_missingfields_script"}]
     $("#orderConfirmAgbBottom").submit(function(event) {
+        var dontStopSubmit = true;
         $('#missing_delivery_address [id^=missing_amazon_deladr]').each(function(index) {
+            if (!$(this).val()) {
+                dontStopSubmit = false;
+            }
             $('#orderConfirmAgbBottom input[name="' + $(this).attr("name") + '"]').val($(this).val());
         });
         $('#missing_billing_address [id^=missing_amazon_invadr]').each(function(index) {
+            if (!$(this).val()) {
+                dontStopSubmit = false;
+            }
             $('#orderConfirmAgbBottom input[name="' + $(this).attr("name") + '"]').val($(this).val());
         });
+        return dontStopSubmit;
     });
 [{/capture}]
 [{oxscript add=$smarty.capture.amazonpay_missingfields_script}]

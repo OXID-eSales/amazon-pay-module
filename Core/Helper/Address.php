@@ -160,6 +160,12 @@ class Address
             }
         }
 
+        // Fix street, streetno missing field
+        if (isset($missingFields['oxuser__oxstreet']) || isset($missingFields['oxuser__oxstreetnr'])) {
+            $missingFields['oxuser__oxstreet'] = $config->getPlaceholder();
+            $missingFields['oxuser__oxstreetnr'] = $config->getPlaceholder();
+        }
+
         return $missingFields;
     }
 
@@ -188,6 +194,13 @@ class Address
                 $missingFields[$deliveryKey] = $config->getPlaceholder();
             }
         }
+
+        // Fix street, streetno missing field
+        if (isset($missingFields['oxaddress__oxstreet']) || isset($missingFields['oxaddress__oxstreetnr'])) {
+            $missingFields['oxaddress__oxstreet'] = $config->getPlaceholder();
+            $missingFields['oxaddress__oxstreetnr'] = $config->getPlaceholder();
+        }
+
         return $missingFields;
     }
 

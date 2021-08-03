@@ -47,37 +47,17 @@ class Order extends Order_parent
      */
     public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
-        $result = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
-
+        // sanitized addresses for amazon-orders
         if ($oBasket->getPaymentId() == 'oxidamazon') {
-            $session = Registry::getSession();
-
-            $oDelAdress = $this->getDelAddressInfo();
-
-            $oConfig = $this->getConfig();
-
-            if ($missingRequestBillingFields = $oConfig->getRequestParameter('missing_amazon_invadr')) {
+            if ($missingRequestBillingFields = Registry::getConfig()->getRequestParameter('missing_amazon_invadr')) {
                 foreach ($missingRequestBillingFields as $key => $value) {
-                    $billKeyName = str_replace('oxuser__ox', 'oxorder__oxbill', $key);
                     $oUser->{$key} = new Field($value, Field::T_RAW);
-                    $this->{$billKeyName} = clone $oUser->{$key};
                 }
                 $oUser->save();
-                $session->deleteVariable('amazonMissingBillingFields');
+                Registry::getSession()->deleteVariable('amazonMissingBillingFields');
             }
-
-            if ($missingRequestDeliveryFields = $oConfig->getRequestParameter('missing_amazon_deladr')) {
-                foreach ($missingRequestDeliveryFields as $key => $value) {
-                    $delKeyName = str_replace('oxaddress__ox', 'oxorder__oxdel', $key);
-                    $oDelAdress->{$key} = new Field($value, Field::T_RAW);
-                    $this->{$delKeyName} = clone $oDelAdress->{$key};
-                }
-                $oDelAdress->save();
-                $session->deleteVariable('amazonMissingDeliveryFields');
-            }
-            $this->save();
         }
-        return $result;
+        return parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
     }
 
     /**
@@ -95,6 +75,13 @@ class Order extends Order_parent
         $address = oxNew(Address::class);
         $address->assign($this->getAmazonService()->getDeliveryAddress());
 
+        // sanitized addresses for amazon-orders
+        if ($missingRequestDeliveryFields = Registry::getConfig()->getRequestParameter('missing_amazon_deladr')) {
+            foreach ($missingRequestDeliveryFields as $key => $value) {
+                $address->{$key} = new Field($value, Field::T_RAW);
+            }
+            Registry::getSession()->deleteVariable('amazonMissingDeliveryFields');
+        }
         return $address;
     }
 

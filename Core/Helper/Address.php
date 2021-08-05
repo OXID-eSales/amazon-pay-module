@@ -82,9 +82,8 @@ class Address
             // special Amazon-Case: Street in first line, StreetNo in second line
             if (isset($addressLines[1]) && preg_match('/^\d.{0,8}$/', $addressLines[1])) {
                 $streetTmp = $addressLines[0] . ' ' . $addressLines[1];
-            }
             // Company-Case: Company in first line Street and StreetNo in second line
-            elseif (isset($addressLines[1]) && $addressLines[1] != '') {
+            } elseif (isset($addressLines[1]) && $addressLines[1] != '') {
                 $streetTmp = $addressLines[1];
                 $company = $addressLines[0];
             // Normal-Case: No Company, Street & StreetNo in first line

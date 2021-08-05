@@ -1,5 +1,5 @@
-[{if ($oViewConf->isAmazonActive() && $oViewConf->isAmazonPaymentPossible()) || !$oViewConf->isAmazonActive()}]
-    [{$smarty.block.parent}]
-[{else}]
+[{if $oViewConf->isAmazonActive() && $oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonPaymentPossible()}]
     [{include file="amazonpay/flow_shippingandpayment.tpl"}]
+[{else}]
+    [{$smarty.block.parent}]
 [{/if}]

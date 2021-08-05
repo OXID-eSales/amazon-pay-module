@@ -1,3 +1,3 @@
-[{if ($oViewConf->isAmazonActive() && $oViewConf->isAmazonPaymentPossible()) || !$oViewConf->isAmazonActive()}]
+[{if ($oViewConf->isAmazonActive() && $oViewConf->isAmazonSessionActive() && $oViewConf->isAmazonPaymentPossible()) || !$oViewConf->isAmazonActive() || !$oViewConf->isAmazonSessionActive()}]
     [{$smarty.block.parent}]
 [{/if}]

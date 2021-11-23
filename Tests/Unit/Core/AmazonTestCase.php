@@ -54,13 +54,18 @@ class AmazonTestCase extends UnitTestCase
     {
         parent::setUp();
 
-        $this->mockModuleConfig = Mockery::mock(Config::class);
+        $this->mockModuleConfig = Mockery::mock(Config::class)->makePartial();
+        $this->mockModuleConfig->shouldReceive('isSandbox')->andReturnTrue();
+        $this->mockModuleConfig->shouldReceive('getStoreId')->andReturn(STORE_ID);
+        $this->mockModuleConfig->shouldReceive('getMerchantId')->andReturn(MERCHANT_ID);
+        $this->mockModuleConfig->shouldReceive('getPublicKeyId')->andReturn(PUBLIC_KEY_ID);
+        $this->mockModuleConfig->shouldReceive('getPrivateKey')->andReturn(PRIVATE_KEY);
 
         $this->mockConfig = [
-            'public_key_id' => Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId'),
-            'private_key' => Registry::getConfig()->getConfigParam('sAmazonPayPrivKey'),
-            'region' => 'eu',
-            'sandbox' => true
+            'public_key_id' => $this->mockModuleConfig->getPublicKeyId(),
+            'private_key' => $this->mockModuleConfig->getPrivateKey(),
+            'region' => $this->mockModuleConfig->getPaymentRegion(),
+            'sandbox' => $this->mockModuleConfig->isSandbox(),
         ];
 
         $this->mockLogger = Mockery::mock(LoggerInterface::class);

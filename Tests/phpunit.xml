@@ -7,7 +7,6 @@
          convertNoticesToExceptions="false"
          convertWarningsToExceptions="false"
          forceCoversAnnotation="false"
-         mapTestClassNameToCoveredClassName="false"
          printerClass="PHPUnit\TextUI\ResultPrinter"
          processIsolation="false"
          stopOnError="false"
@@ -15,7 +14,6 @@
          stopOnIncomplete="false"
          stopOnSkipped="false"
          beStrictAboutTestsThatDoNotTestAnything="true"
-         strict="false"
          verbose="false">
 
     <filter>
@@ -27,7 +25,7 @@
                 <directory suffix=".php">../views/</directory>
                 <directory suffix=".php">../out/</directory>
                 <directory suffix=".php">../docs/</directory>
-                <file suffix=".php">../metadata.php</file>
+                <file>../metadata.php</file>
             </exclude>
         </whitelist>
     </filter>

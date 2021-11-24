@@ -34,7 +34,7 @@ class OrderTest extends AmazonTestCase
     /** @var Order */
     private $order;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->order = new Order();

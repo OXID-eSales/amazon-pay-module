@@ -32,7 +32,7 @@ class DeliverySetMainTest extends UnitTestCase
     /** @var DeliverySetMain */
     private $deliverySetMain;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deliverySetMain = oxNew(DeliverySetMain::class);
     }

@@ -32,7 +32,7 @@ class PayloadTest extends UnitTestCase
     /** @var Payload */
     private $payload;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->payload = new Payload();
     }

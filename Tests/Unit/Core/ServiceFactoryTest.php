@@ -34,7 +34,7 @@ class ServiceFactoryTest extends UnitTestCase
     /** @var ServiceFactory */
     private $serviceFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serviceFactory = new ServiceFactory();
     }

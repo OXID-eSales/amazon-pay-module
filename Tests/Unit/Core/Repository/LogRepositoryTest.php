@@ -33,7 +33,7 @@ class LogRepositoryTest extends UnitTestCase
     /** @var LogRepository */
     private $logRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logRepository = oxNew(LogRepository::class);
     }

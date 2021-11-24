@@ -33,7 +33,7 @@ class CategoryTest extends UnitTestCase
     /** @var Category */
     private $category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->category = oxNew(Category::class);
     }

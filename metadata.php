@@ -61,7 +61,7 @@ $sMetadataVersion = '2.1';
  * Module information
  */
 $aModule = [
-    'id' => 'oxps/amazonpay',
+    'id' => 'oxps_amazonpay',
     'title' => [
         'de' => 'OXPS :: Amazon Pay - Online-Bezahldienst',
         'en' => 'OXPS :: Amazon Pay - Online-Payment'

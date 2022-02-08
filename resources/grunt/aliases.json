@@ -1,0 +1,10 @@
+{
+    "production": [
+        "sass:moduleproduction",
+        "postcss",
+        "cssmin"
+    ],
+    "default": [
+        "production"
+    ]
+}

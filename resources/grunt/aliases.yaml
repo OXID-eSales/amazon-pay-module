@@ -1,6 +1,0 @@
-default:
-  - "production"
-production:
-  - "sass:moduleproduction"
-  - "postcss"
-  - "cssmin"

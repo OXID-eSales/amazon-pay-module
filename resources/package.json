@@ -8,14 +8,15 @@
     "keywords": [],
     "author": "Oxid Professional Services",
     "devDependencies": {
-        "autoprefixer": "^9.7.6",
-        "grunt": "^1.1.0",
-        "grunt-contrib-cssmin": "^3.0.0",
-        "grunt-contrib-sass": "^1.0.0",
-        "grunt-postcss": "^0.9.0",
+        "autoprefixer": "^10.4.2",
+        "grunt": "^1.4.1",
+        "grunt-contrib-cssmin": "^4.0.0",
+        "grunt-contrib-sass": "^2.0.0",
+        "@lodder/grunt-postcss": "^3.1.1",
+        "postcss": "^8.4.6",
         "grunt-sass": "^3.1.0",
-        "load-grunt-config": "^3.0.1",
-        "node-sass": "^4.14.1",
+        "load-grunt-config": "^4.0.1",
+        "node-sass": "^7.0.1",
         "time-grunt": "^2.0.0"
     }
 }

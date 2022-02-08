@@ -32,6 +32,31 @@ use OxidProfessionalServices\AmazonPay\Core\AmazonService;
  */
 class User extends User_parent
 {
+    private $amazonAddress = null;
+
+    /**
+     * Return the amazon address if set.
+     *
+     * @return Address|null
+     */
+    private function getAmazonAddress()
+    {
+        if ($this->amazonAddress === null) {
+            $service = oxNew(AmazonService::class);
+
+            if ($service->isAmazonSessionActive()
+                && Registry::getConfig()->getTopActiveView()->getIsOrderStep()
+            ) {
+                $address = oxNew(Address::class);
+                $address->assign($service->getDeliveryAddress());
+                $address->setId('amazonPaymentDeliveryAddress');
+                $this->amazonAddress = $address;
+            }
+        }
+
+        return $this->amazonAddress;
+    }
+
     /**
      * Use amazon address in checkout steps
      *
@@ -42,26 +67,31 @@ class User extends User_parent
      */
     public function getUserAddresses($sUserId = null)
     {
-        $service = oxNew(AmazonService::class);
-        if (!$service->isAmazonSessionActive()) {
+        $address = $this->getAmazonAddress();
+
+        if (!$address) {
             return parent::getUserAddresses($sUserId);
         }
 
-        if (!Registry::getConfig()->getTopActiveView()->getIsOrderStep()) {
-            return parent::getUserAddresses($sUserId); // only do this in checkout
-        }
-
-        $amznAddress = $service->getDeliveryAddress();
-
-        if (!$amznAddress) {
-            return parent::getUserAddresses($sUserId);
-        }
-
-        $address = oxNew(Address::class);
-        $address->assign($amznAddress);
         $list = oxNew(UserAddressList::class);
         $list->add($address);
 
         return $list;
+    }
+
+    /**
+     * Return the amazon address id if set.
+     *
+     * @return mixed
+     */
+    public function getSelectedAddressId()
+    {
+        $address = $this->getAmazonAddress();
+
+        if ($address) {
+            return $address->getId();
+        }
+
+        return parent::getSelectedAddressId();
     }
 }

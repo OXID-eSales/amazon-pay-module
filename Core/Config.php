@@ -24,7 +24,6 @@ namespace OxidProfessionalServices\AmazonPay\Core;
 
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Core\Model\ListModel;
 
 /**
  * Class Config

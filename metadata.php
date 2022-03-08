@@ -420,5 +420,6 @@ $aModule = [
         ['name' => 'blAmazonPayPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
+        ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
     ]
 ];

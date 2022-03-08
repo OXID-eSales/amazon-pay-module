@@ -32,7 +32,7 @@ use OxidProfessionalServices\AmazonPay\Core\Config;
  */
 class ConfigController extends AdminController
 {
-    public const MODULE_ID = 'module:oxps/amazonpay';
+    public const MODULE_ID = 'module:oxps_amazonpay';
 
     public function __construct()
     {

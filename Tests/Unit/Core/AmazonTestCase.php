@@ -50,7 +50,7 @@ class AmazonTestCase extends UnitTestCase
     /** @var LoggerInterface | MockInterface */
     protected $mockLogger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

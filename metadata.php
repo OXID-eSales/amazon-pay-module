@@ -61,7 +61,7 @@ $sMetadataVersion = '2.1';
  * Module information
  */
 $aModule = [
-    'id' => 'oxps/amazonpay',
+    'id' => 'oxps_amazonpay',
     'title' => [
         'de' => 'OXPS :: Amazon Pay - Online-Bezahldienst',
         'en' => 'OXPS :: Amazon Pay - Online-Payment'
@@ -420,5 +420,6 @@ $aModule = [
         ['name' => 'blAmazonPayPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
+        ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
     ]
 ];

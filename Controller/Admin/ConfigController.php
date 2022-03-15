@@ -26,14 +26,15 @@ use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Core\Config;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 
 /**
  * Controller for admin > Amazon Pay/Configuration page
  */
 class ConfigController extends AdminController
 {
-    public const MODULE_ID = 'module:oxps/amazonpay';
-
     public function __construct()
     {
         parent::__construct();
@@ -85,13 +86,22 @@ class ConfigController extends AdminController
      */
     protected function saveConfig(array $conf, int $shopId): void
     {
+        $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(ModuleConfigurationDaoBridgeInterface::class);
+        $oModuleConfiguration = $oModuleConfigurationDaoBridge->get(Constants::MODULE_ID);
+
         foreach ($conf as $confName => $value) {
             $value = trim($value);
-            if (strpos($confName, 'bl') === 0) {
-                Registry::getConfig()->saveShopConfVar('bool', $confName, $value, $shopId, self::MODULE_ID);
-            } else {
-                Registry::getConfig()->saveShopConfVar('str', $confName, $value, $shopId, self::MODULE_ID);
-            }
+            $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
+            $oModuleSetting->setValue($value);
+            $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
+
+            Registry::getConfig()->saveShopConfVar(
+                strpos($confName, 'bl') !== false ? 'bool' : 'str',
+                $confName,
+                $value,
+                $shopId,
+                'module:' . Constants::MODULE_ID
+            );
         }
     }
 

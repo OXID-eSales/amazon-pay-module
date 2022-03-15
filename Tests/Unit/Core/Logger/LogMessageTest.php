@@ -32,7 +32,7 @@ class LogMessageTest extends UnitTestCase
     /** @var LogMessage */
     private $logMessage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logMessage = new LogMessage();
 

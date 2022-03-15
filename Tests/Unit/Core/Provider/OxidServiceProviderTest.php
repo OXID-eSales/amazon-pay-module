@@ -36,7 +36,7 @@ class OxidServiceProviderTest extends UnitTestCase
     /** @var OxidServiceProvider */
     private $oxidServiceProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->oxidServiceProvider = OxidServiceProvider::getInstance();
     }

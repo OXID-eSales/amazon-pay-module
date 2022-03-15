@@ -152,23 +152,18 @@ class ViewConfig extends ViewConfig_parent
             return false;
         }
 
-        $parameters = '?';
-        for ($i = 1, $iMax = count($productIds); $i < $iMax; $i++) {
-            $parameters .= ',?';
-        }
+        $productIdSql = "'" . implode( "', '", $productIds) . "'";
 
-        $sql = <<<SQL
-        SELECT oa.OXPS_AMAZON_EXCLUDE as excludeArticle,
+        $sql = "SELECT oa.OXPS_AMAZON_EXCLUDE as excludeArticle,
                oc.OXPS_AMAZON_EXCLUDE as excludeCategory
           FROM oxarticles oa
           JOIN oxobject2category o2c
             ON (o2c.OXOBJECTID = oa.OXID)
           JOIN oxcategories oc
             ON (oc.OXID = o2c.OXCATNID)
-         WHERE oa.OXID in ($parameters)
-SQL;
+         WHERE oa.OXID in (?)";
 
-        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIds);
+        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIdSql);
 
         foreach ($results as $result) {
             if ($result['excludeArticle'] === '1' || $result['excludeCategory'] === '1') {

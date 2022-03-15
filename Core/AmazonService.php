@@ -514,8 +514,7 @@ class AmazonService
         if ($response['statusDetails']['state'] === 'Canceled' && $isCancelled === false) {
             $this->processCancel($orderId);
         }
-
-        if (isset($response['statusDetails']['state']) === 'Captured' && $isCaptured === false) {
+        elseif ($response['statusDetails']['state'] === 'Captured' && $isCaptured === false) {
             $repository->markOrderPaid(
                 $orderId,
                 'AmazonPay: ' . $response['statusDetails']['amount'],

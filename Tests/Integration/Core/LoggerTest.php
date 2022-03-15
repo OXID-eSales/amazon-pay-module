@@ -56,7 +56,7 @@ class LoggerTest extends UnitTestCase
             . '"shopId":"' . $id . '",'
             . '"requestType":"test request","statusCode":200}';
 
-        $this->assertContains($expectedLogFileRow, $logFileContents);
+        $this->assertStringContainsString($expectedLogFileRow, $logFileContents);
 
         unlink(Registry::getConfig()->getLogsDir() . self::TEST_LOG_NAME);
     }

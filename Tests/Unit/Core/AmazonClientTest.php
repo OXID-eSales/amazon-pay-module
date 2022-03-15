@@ -37,7 +37,7 @@ class AmazonClientTest extends AmazonTestCase
         $result = $this->createTestCheckoutSession();
 
         $response = json_decode($result['response'], true);
-        $this->assertInternalType('array', $response);
+        $this->assertIsArray($response);
 
         $checkoutSessionId = $response['checkoutSessionId'];
         $this->assertNotNull($checkoutSessionId);

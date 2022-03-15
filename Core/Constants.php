@@ -28,6 +28,10 @@ namespace OxidProfessionalServices\AmazonPay\Core;
 class Constants
 {
     /**
+     * @var string Module ID
+     */
+    public const MODULE_ID = 'oxps_amazonpay';
+    /**
      * @var string Amazon checkout session id param name
      */
     public const SESSION_CHECKOUT_ID = 'amzn-checkout-sess';

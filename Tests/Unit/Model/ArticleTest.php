@@ -32,7 +32,7 @@ class ArticleTest extends UnitTestCase
     /** @var Article */
     private $article;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->article = new Article();
     }

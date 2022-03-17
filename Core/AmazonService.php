@@ -616,7 +616,6 @@ class AmazonService
      */
     protected function showErrorOnRedirect(LoggerInterface $logger, array $result, $orderId = ''): void
     {
-        $config = Registry::getConfig();
         $response = PhpHelper::jsonToArray($result['response']);
 
         $logger->info(
@@ -625,9 +624,10 @@ class AmazonService
         );
 
         // Inform the ShopOwner about broken order
-        $mailer = oxNew(Email::class);
-        $shop = $config->getActiveShop();
+        $config = Registry::getConfig();
         $lang = Registry::getLang();
+        $shop = $config->getActiveShop();
+        $mailer = oxNew(Email::class);
         $order = oxNew(Order::class);
         $orderNr = '';
         if ($orderId && $order->load($orderId)) {

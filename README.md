@@ -8,7 +8,7 @@ Amazon Pay integration for OXID eShop 6.2 and above.
 
 ## Branch Compatibility
 
-* b-6.2.x module branch is compatible with OXID eShop compilation 6.2
+* b-6.2.x module branch is compatible with OXID eShop compilation 6.2, 6.3 and 6.4
 
 ## Install
 

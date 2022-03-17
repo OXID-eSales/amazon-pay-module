@@ -37,4 +37,6 @@ $aLang = [
     'AMAZON_PAY_CHECKOUT_ERROR'               => 'Unfortunately, delivery to your Amazon delivery address is not possible. Please choose a different address or a different payment method.',
     'AMAZON_PAY_CHECKOUT_CHANGE_ADDRESS'      => 'change Address',
     'AMAZON_PAY_PAYMENT_ERROR'                => 'Unfortunately, delivery to your Amazon delivery address is not possible. Please choose a different address or unlink the Amazon-Payment, to choose another payment afterwards.',
+    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT' => 'Error finalizing an Amazon order',
+    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE' => 'The attempt to finalize the order %s at Amazon failed. Please check the order and the information from your Amazon account.',
 ];

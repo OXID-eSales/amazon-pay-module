@@ -37,4 +37,6 @@ $aLang = [
     'AMAZON_PAY_CHECKOUT_ERROR'               => 'Leider ist eine Lieferung an Ihre Amazon-Lieferadresse nicht möglich. Bitte wählen Sie eine andere Adresse oder eine andere Zahlart aus.',
     'AMAZON_PAY_CHECKOUT_CHANGE_ADDRESS'      => 'Adresse ändern',
     'AMAZON_PAY_PAYMENT_ERROR'                => 'Leider ist eine Lieferung an Ihre Amazon-Lieferadresse nicht möglich. Bitte wählen Sie eine andere Adresse aus oder heben Sie das Amazon-Payment auf um anschließend eine alternative Zahlungsart auszuwählen.',
+    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT' => 'Fehler beim finalisieren einer Amazon-Order',
+    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE' => 'Der Versuch die Order %s bei Amazon zu finalisieren, schlug fehl. Bitte prüfe die Order und die Informationen aus Ihrem Amazon-Account.',
 ];

@@ -28,6 +28,7 @@ use OxidEsales\Eshop\Application\Model\DeliverySet;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\Exception\InputException;
+use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Field;
 use OxidProfessionalServices\AmazonPay\Core\Config;
@@ -347,7 +348,7 @@ class AmazonService
                 $response['chargeId']
             );
 
-            $this->showErrorOnRedirect($logger, $result);
+            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
         }
     }
 
@@ -400,7 +401,7 @@ class AmazonService
             );
 
             $result['message'] = 'Auth error - please select a different payment method';
-            $this->showErrorOnRedirect($logger, $result);
+            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
         }
     }
 
@@ -613,8 +614,9 @@ class AmazonService
      * @param LoggerInterface $logger
      * @param array $result
      */
-    protected function showErrorOnRedirect(LoggerInterface $logger, array $result): void
+    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, $orderId = ''): void
     {
+        $config = Registry::getConfig();
         $response = PhpHelper::jsonToArray($result['response']);
 
         $logger->info(
@@ -622,9 +624,28 @@ class AmazonService
             $result
         );
 
+        // Inform the ShopOwner about broken order
+        $mailer = oxNew(Email::class);
+        $shop = $config->getActiveShop();
+        $lang = Registry::getLang();
+        $order = oxNew(Order::class);
+        $orderNr = '';
+        if ($orderId && $order->load($orderId)) {
+            $orderNr = $order->oxorder__oxordernr->value;
+        }
+
+        $mailer->sendEmail(
+            $shop->oxshops__oxowneremail->value,
+            $lang->translateString("AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT"),
+            sprintf(
+                $lang->translateString("AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE"),
+                $orderNr
+            )
+        );
+
         $exception = oxNew(InputException::class, $response['message']);
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');
-        Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', true, 302);
+        Registry::getUtils()->redirect($config->getShopHomeUrl() . 'cl=payment', true, 302);
     }
 
     /**

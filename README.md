@@ -4,7 +4,8 @@ Amazon Pay integration for OXID eShop 6.2 and above.
 
 ## Documentation
 
-* official Amazon Pay checkout for OXID [Documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/).
+* official german Amazon Pay checkout for OXID [Documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/)
+* official english Amazon Pay checkout for OXID [Documentation](https://docs.oxid-esales.com/modules/amazon-pay/en/latest/)
 
 ## Branch Compatibility
 
@@ -35,7 +36,10 @@ $ ./vendor/bin/oe-console oe:module:activate oxps_Amazon Pay
 
 ## Limitations
 
-* tbd
+List of Limitations could be found in
+
+* german Documentation [Limitations](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/einfuehrung.html#wann-konnen-sie-amazon-pay-nicht-anbieten)
+* english Documentation [Limitations](https://docs.oxid-esales.com/modules/amazon-pay/en/latest/einfuehrung.html#wann-konnen-sie-amazon-pay-nicht-anbieten)
 
 ## Running tests
 

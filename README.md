@@ -16,7 +16,7 @@ Amazon Pay integration for OXID eShop 6.2 and above.
 ```bash
 
 # Install desired version of oxid-solution-catalysts/Amazon Pay module
-$ composer require oxid-professional-services/amazonpay
+$ composer require oxid-esales/amazon-pay-module
 # Run install
 $ composer install
 # Activate the module

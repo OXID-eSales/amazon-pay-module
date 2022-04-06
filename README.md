@@ -31,7 +31,7 @@ an OXID eShop edition metapackage (```./vendor/bin/oe-console```).
 After requiring the module, you need to activate it, either via OXID eShop admin or CLI.
 
 ```bash
-$ ./vendor/bin/oe-console oe:module:activate oxps_Amazon Pay
+$ ./vendor/bin/oe-console oe:module:activate oxps_amazonpay
 ```
 
 ## Limitations

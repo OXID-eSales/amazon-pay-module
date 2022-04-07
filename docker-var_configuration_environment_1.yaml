@@ -1,0 +1,30 @@
+modules:
+  oxps_amazonpay:
+    moduleSettings:
+      blAmazonPaySandboxMode:
+        type: bool
+        value: true
+      sAmazonPayPrivKey:
+        type: str
+        value: SAMAZONPAYPRIVKEY
+      sAmazonPayPubKeyId:
+        type: str
+        value: SAMAZONPAYPUBKEYID
+      sAmazonPayMerchantId:
+        type: str
+        value: SAMAZONPAYMERCHANTID
+      sAmazonPayStoreId:
+        type: str
+        value: SAMAZONPAYSTOREID
+      blAmazonPayPDP:
+        type: bool
+        value: true
+      blAmazonPayMinicartAndModal:
+        type: bool
+        value: true
+      blAmazonPayUseExclusion:
+        type: bool
+        value: false
+      amazonPayCapType:
+        type: str
+        value: '1'

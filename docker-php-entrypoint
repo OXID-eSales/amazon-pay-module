@@ -45,11 +45,13 @@ php /var/www/oxideshop/vendor/bin/oe-eshop-doctrine_migration migrations:migrate
 #/var/www/oxideshop/var/configuration/environment/1.yaml.default. that is why I copy this file for oxid,
 #so oxid admin still works when saving configuration but it will be overwritten on deployment
 mkdir -p /var/www/oxideshop/var/configuration/environment
-cp /var/www/oxideshop/project-modules/module-under-test/docker-var_configuration_environment_1.yaml /var/www/oxideshop/var/configuration/environment/1.yaml
-sed -ri 's!SAMAZONPAYPRIVKEY!'$SAMAZONPAYPRIVKEY'!g' /var/www/oxideshop/var/configuration/environment/1.yaml
-sed -ri 's!SAMAZONPAYPUBKEYID!'$SAMAZONPAYPUBKEYID'!g' /var/www/oxideshop/var/configuration/environment/1.yaml
-sed -ri 's!SAMAZONPAYMERCHANTID!'$SAMAZONPAYMERCHANTID'!g' /var/www/oxideshop/var/configuration/environment/1.yaml
-sed -ri 's!SAMAZONPAYSTOREID!'$SAMAZONPAYSTOREID'!g' /var/www/oxideshop/var/configuration/environment/1.yaml
+awk -v SAMAZONPAYPRIVKEY="$SAMAZONPAYPRIVKEY" -v SAMAZONPAYPUBKEYID="$SAMAZONPAYPUBKEYID" -v SAMAZONPAYMERCHANTID="$SAMAZONPAYMERCHANTID" -v FOO4="$SAMAZONPAYSTOREID" '{
+    sub(/SAMAZONPAYPRIVKEY/, SAMAZONPAYPRIVKEY);
+    sub(/SAMAZONPAYPUBKEYID/, SAMAZONPAYPUBKEYID);
+    sub(/SAMAZONPAYMERCHANTID/, SAMAZONPAYMERCHANTID);
+    sub(/SAMAZONPAYSTOREID/, SAMAZONPAYSTOREID);
+    print;
+}' /var/www/oxideshop/project-modules/module-under-test/docker-var_configuration_environment_1.yaml > /var/www/oxideshop/var/configuration/environment/1.yaml
 chown -R www-data:www-data /var/www/oxideshop/var/configuration/
 
 /var/www/oxideshop/vendor/bin/oe-console oe:module:install-configuration /var/www/oxideshop/source/modules/oxps/amazonpay

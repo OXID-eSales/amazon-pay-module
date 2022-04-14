@@ -45,7 +45,7 @@ php /var/www/oxideshop/vendor/bin/oe-eshop-doctrine_migration migrations:migrate
 #/var/www/oxideshop/var/configuration/environment/1.yaml.default. that is why I copy this file for oxid,
 #so oxid admin still works when saving configuration but it will be overwritten on deployment
 mkdir -p /var/www/oxideshop/var/configuration/environment
-awk -v SAMAZONPAYPRIVKEY="$SAMAZONPAYPRIVKEY" -v SAMAZONPAYPUBKEYID="$SAMAZONPAYPUBKEYID" -v SAMAZONPAYMERCHANTID="$SAMAZONPAYMERCHANTID" -v FOO4="$SAMAZONPAYSTOREID" '{
+awk -v SAMAZONPAYPRIVKEY="$SAMAZONPAYPRIVKEY" -v SAMAZONPAYPUBKEYID="$SAMAZONPAYPUBKEYID" -v SAMAZONPAYMERCHANTID="$SAMAZONPAYMERCHANTID" -v SAMAZONPAYSTOREID="$SAMAZONPAYSTOREID" '{
     sub(/SAMAZONPAYPRIVKEY/, SAMAZONPAYPRIVKEY);
     sub(/SAMAZONPAYPUBKEYID/, SAMAZONPAYPUBKEYID);
     sub(/SAMAZONPAYMERCHANTID/, SAMAZONPAYMERCHANTID);

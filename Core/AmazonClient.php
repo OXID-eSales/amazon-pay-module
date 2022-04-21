@@ -59,25 +59,30 @@ class AmazonClient extends Client
      */
     public function createCheckoutSession($payload = null, $headers = null)
     {
+        $config = $this->getModuleConfig();
+
         if (!$headers) {
-            $headers = ['x-amz-pay-Idempotency-Key' => $this->moduleConfig->getUuid()];
+            $headers = [
+                'x-amz-pay-Idempotency-Key' => $config->getUuid(),
+                'platformId' => $config->getPlatformId()
+            ];
         }
 
         if (!$payload) {
             $payload = [
                 'webCheckoutDetails' => [
-                    'checkoutReviewReturnUrl' => $this->moduleConfig->checkoutReviewUrl(),
-                    'checkoutResultReturnUrl' => $this->moduleConfig->checkoutResultUrl()
+                    'checkoutReviewReturnUrl' => $config->checkoutReviewUrl(),
+                    'checkoutResultReturnUrl' => $config->checkoutResultUrl()
                 ],
-                'storeId' => $this->moduleConfig->getStoreId(),
+                'storeId' => $config->getStoreId(),
                 'deliverySpecifications' => [
                     'addressRestrictions' => [
                         'type' => 'Allowed',
-                        'restrictions' => $this->moduleConfig->getPossibleEUAddresses()
+                        'restrictions' => $config->getPossibleEUAddresses()
                     ]
                 ],
                 'paymentDetails' => [
-                    'presentmentCurrency' => $this->moduleConfig->getPresentmentCurrency()
+                    'presentmentCurrency' => $config->getPresentmentCurrency()
                 ]
             ];
         }

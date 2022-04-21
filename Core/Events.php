@@ -132,12 +132,13 @@ class Events
             $payment->oxpayments__oxfromboni = new Field(0);
             $payment->oxpayments__oxfromamount = new Field(0);
             $payment->oxpayments__oxtoamount = new Field(10000);
+            $payment->save();
 
             $languages = Registry::getLang()->getLanguageIds();
             foreach ($paymentDescriptions as $languageAbbreviation => $description) {
                 $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
-                    $payment->setLanguage($languageId);
+                    $payment->loadInLang($languageId, 'oxidamazon');
                     $payment->oxpayments__oxlongdesc = new Field($description);
                     $payment->save();
                 }

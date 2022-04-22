@@ -13,6 +13,10 @@ services:
       - SHOP_URL=http://localhost
       - HTA_USER=user
       - HTA_PW=password
+      - SAMAZONPAYPRIVKEY=
+      - SAMAZONPAYPUBKEYID=
+      - SAMAZONPAYMERCHANTID=
+      - SAMAZONPAYSTOREID=
   db:
     image: mariadb
     ports:

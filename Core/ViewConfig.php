@@ -116,7 +116,7 @@ class ViewConfig extends ViewConfig_parent
     {
         return (
             Registry::getSession()->getVariable('sShipSet') &&
-            (Registry::getSession()->getVariable('paymentid') == 'oxidamazon')
+            (Registry::getSession()->getVariable('paymentid') === 'oxidamazon')
         );
     }
 

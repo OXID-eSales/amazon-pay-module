@@ -50,7 +50,7 @@ class Order extends Order_parent
     public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
         // sanitized addresses for amazon-orders
-        if ($oBasket->getPaymentId() == 'oxidamazon') {
+        if ($oBasket->getPaymentId() === 'oxidamazon') {
             $config = Registry::get(Config::class);
             $missingRequestBillingFields = Registry::getConfig()->getRequestParameter('missing_amazon_invadr');
             $oRequiredAddressFields = oxNew(RequiredAddressFields::class);

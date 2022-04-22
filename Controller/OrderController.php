@@ -198,6 +198,10 @@ class OrderController extends OrderController_parent
         $session->setVariable('amazonCountryOxId', $countryOxId);
 
         $actShipSet = null;
+        $fallbackShipSet = null;
+        if ($basket) {
+            $lastShipSet = $basket->getShippingId();
+        }
 
         $deliverySetListObj = Registry::get(DeliverySetList::class);
         $deliverySetList = $deliverySetListObj->getDeliverySetList($user, $countryOxId);
@@ -214,9 +218,20 @@ class OrderController extends OrderController_parent
                     isset($paymentList['oxidamazon']) &&
                     $delListObj->hasDeliveries($basket, $user, $countryOxId, $shipSetId)
                 ) {
-                    $actShipSet = $shipSetId;
-                    break;
+                    if (is_null($fallbackShipSet)) {
+                        $fallbackShipSet = $shipSetId;
+                    }
+                    if ($shipSetId == $lastShipSet) {
+                        $actShipSet = $lastShipSet;
+                    }
                 }
+            }
+            
+            if (!$actShipSet) {
+                if ($lastShipSet) {
+                    Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
+                }
+                $actShipSet = $fallbackShipSet;
             }
         }
 

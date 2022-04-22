@@ -66,21 +66,13 @@ class OrderController extends OrderController_parent
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
             } else {
                 $this->setAmazonPayAsPaymentMethod($countryOxId);
-                $mappedBillingFields = Address::mapAddressToDb(
-                    $amazonSession['response']['billingAddress'],
-                    'oxuser__'
-                );
+                // we check only the shippingAddress
                 $mappedDeliveryFields = Address::mapAddressToDb(
                     $amazonSession['response']['shippingAddress'],
                     'oxaddress__'
                 );
-                $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
                 $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-                $session->deleteVariable('amazonMissingBillingFields');
                 $session->deleteVariable('amazonMissingDeliveryFields');
-                if (count($missingBillingFields)) {
-                    $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
-                }
                 if (count($missingDeliveryFields)) {
                     $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
                 }
@@ -239,7 +231,7 @@ class OrderController extends OrderController_parent
                     }
                 }
             }
-            
+
             if (!$actShipSet) {
                 if ($lastShipSet) {
                     Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');

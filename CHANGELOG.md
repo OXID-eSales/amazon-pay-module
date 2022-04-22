@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.2] - Backward-Compatibility for OXID 6.1
+
+* Add Backward-Compatibility for OXID 6.1
+* Add Secure use of OrderController::execute
+
 ## [1.1.1] - Maintenance Release
 
 * change handling of required fields

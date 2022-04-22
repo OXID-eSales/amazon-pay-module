@@ -354,8 +354,6 @@ class Config
         if ($user->loadActiveUser()) {
             $activeUser = $user;
         }
-        $oDelList = Registry::get(\OxidEsales\Eshop\Application\Model\DeliveryList::class);
-
 
         if ($this->countryList === null) {
             $this->countryList = [];

@@ -10,6 +10,8 @@ on:
     - cron: '16 6 * * *'
   push:
     branches: [ b-6.2.x ]
+  repository_dispatch:
+    types: [docker-build]
 
 env:
   # Use docker.io for Docker Hub if empty

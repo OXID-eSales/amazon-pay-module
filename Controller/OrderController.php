@@ -229,7 +229,7 @@ class OrderController extends OrderController_parent
             
             if (!$actShipSet) {
                 if ($lastShipSet) {
-                    Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_DELIVERYNOTVALID');
+                    Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
                 }
                 $actShipSet = $fallbackShipSet;
             }

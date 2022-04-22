@@ -42,6 +42,20 @@ class Constants
     public const CHECKOUT_REQUEST_PARAMETER_ID = 'amazonCheckoutSessionId';
 
     /**
+     * @var string Amazon Plattform ID
+     */
+    public const PLATTFORM_ID = 'A1O8CIV1A24A6X';
+
+    /**
+     * This Placeholder is public. The only function is to fill this string
+     * in the empty required fields during checkout. After checkout the fields would be cleaned from
+     * the database
+     *
+     * @var string Amazon Plattform ID
+     */
+    public const CHECKOUT_PLACEHOLDER = '328697F-879AC9229A9625_DB4F5E67C';
+
+    /**
      * @var string Session Active
      */
     public const CHECKOUT_OPEN = 'Open';

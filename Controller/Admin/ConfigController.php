@@ -25,6 +25,7 @@ namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\ShopVersion;
 use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
@@ -86,14 +87,18 @@ class ConfigController extends AdminController
      */
     protected function saveConfig(array $conf, int $shopId): void
     {
-        $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(ModuleConfigurationDaoBridgeInterface::class);
-        $oModuleConfiguration = $oModuleConfigurationDaoBridge->get(Constants::MODULE_ID);
+        if ($this->useDaoBridge()) {
+            $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(ModuleConfigurationDaoBridgeInterface::class);
+            $oModuleConfiguration = $oModuleConfigurationDaoBridge->get(Constants::MODULE_ID);
+        }
 
         foreach ($conf as $confName => $value) {
             $value = trim($value);
-            $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
-            $oModuleSetting->setValue($value);
-            $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
+            if ($this->useDaoBridge()) {
+                $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
+                $oModuleSetting->setValue($value);
+                $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
+            }
 
             Registry::getConfig()->saveShopConfVar(
                 strpos($confName, 'bl') !== false ? 'bool' : 'str',
@@ -143,5 +148,15 @@ class ConfigController extends AdminController
         }
 
         return $conf;
+    }
+
+    /**
+    * check if using DaoBridge is possible
+    *
+    * @return boolean
+    */
+    protected function useDaoBridge()
+    {
+        return class_exists('\OxidEsales\EshopCommunity\Internal\Container\ContainerFactory');
     }
 }

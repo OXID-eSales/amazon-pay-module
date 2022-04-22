@@ -47,106 +47,111 @@ class OrderController extends OrderController_parent
         /** @var User $user */
         $user = $this->getUser();
         $session = Registry::getSession();
-
         $exclude = $this->getViewConfig()->isAmazonExclude();
+        $amazonService = OxidServiceProvider::getAmazonService();
 
-        if (!$exclude) {
-            if (OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) {
-                $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
-                $country = oxNew(Country::class);
-                $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
-                // Create guest user if not logged in
-                if ($user === false) {
-                    $userComponent = oxNew(UserComponent::class);
-                    $userComponent->createGuestUser($amazonSession);
+        if (
+            !$exclude &&
+            $amazonService->isAmazonSessionActive()
+        ) {
+            $amazonSession = $amazonService->getCheckoutSession();
+            $country = oxNew(Country::class);
+            $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
+            // Create guest user if not logged in
+            if (!$user) {
+                $userComponent = oxNew(UserComponent::class);
+                $userComponent->createGuestUser($amazonSession);
 
-                    $this->setAmazonPayAsPaymentMethod($countryOxId);
-                    Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
-                } else {
-                    $this->setAmazonPayAsPaymentMethod($countryOxId);
-                    $mappedBillingFields = Address::mapAddressToDb(
-                        $amazonSession['response']['billingAddress'],
-                        'oxuser__'
-                    );
-                    $mappedDeliveryFields = Address::mapAddressToDb(
-                        $amazonSession['response']['shippingAddress'],
-                        'oxaddress__'
-                    );
-                    $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
-                    $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-                    $session->deleteVariable('amazonMissingBillingFields');
-                    $session->deleteVariable('amazonMissingDeliveryFields');
-                    if (count($missingBillingFields)) {
-                        $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
-                    }
-                    if (count($missingDeliveryFields)) {
-                        $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
-                    }
-                    $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
-                    $session->setVariable('amazondeladr', $deliveryAddress);
+                $this->setAmazonPayAsPaymentMethod($countryOxId);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
+            } else {
+                $this->setAmazonPayAsPaymentMethod($countryOxId);
+                // we check only the shippingAddress
+                $mappedDeliveryFields = Address::mapAddressToDb(
+                    $amazonSession['response']['shippingAddress'],
+                    'oxaddress__'
+                );
+                $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+                $session->deleteVariable('amazonMissingDeliveryFields');
+                if (count($missingDeliveryFields)) {
+                    $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
                 }
+                $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+                $session->setVariable('amazondeladr', $deliveryAddress);
             }
         }
 
+        // security check, if we have Amazon as Payment-ID but no Amazon-Session, then something went wrong.
+        if (
+            $session->getVariable('paymentid') === 'oxidamazon' &&
+            !$amazonService->isAmazonSessionActive()
+        ) {
+            $amazonService->unsetPaymentMethod();
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
+        }
         parent::init();
     }
 
     public function execute()
     {
-        $ret = parent::execute();
-
-        if (strpos($ret, 'thankyou') === false) {
-            return $ret;
-        }
-
         $basket = $this->getSession()->getBasket();
-
-        if ($basket->getPaymentId() !== 'oxidamazon') {
-            return $ret;
-        }
-
         $exclude = $this->getViewConfig()->isAmazonExclude();
 
-        if ($exclude) {
-            return $ret;
+        if (
+            $basket->getPaymentId() === 'oxidamazon' &&
+            !$exclude &&
+            OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
+        ) {
+            $payload = new Payload();
+
+            $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+            $oOrder = oxNew(Order::class);
+            if ($oOrder->load($orderOxId)) {
+                $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
+            }
+            $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
+                $this->getBasket()->getPrice()->getBruttoPrice()
+            ));
+
+            $activeShop = Registry::getConfig()->getActiveShop();
+
+            $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
+            $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+
+            $amazonConfig = oxNew(Config::class);
+
+            $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
+
+            if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+                $payload->setPaymentIntent('AuthorizeWithCapture');
+                $payload->setCanHandlePendingAuthorization(false);
+            } else {
+                $payload->setPaymentIntent('Authorize');
+                $payload->setCanHandlePendingAuthorization(true);
+            }
+
+            $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(
+                OxidServiceProvider::getAmazonService()->getCheckoutSessionId(),
+                $payload->getData()
+            );
+
+            if (
+                isset($result['response']) &&
+                isset($result['status']) &&
+                $result['status'] === 200
+            ) {
+                $response = PhpHelper::jsonToArray($result['response']);
+                Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
+            } else {
+                OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+                if ($oOrder->isLoaded()) {
+                    $oOrder->delete();
+                }
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
+            }
         }
 
-        $payload = new Payload();
-
-        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
-        $oOrder = oxNew(Order::class);
-        if ($oOrder->load($orderOxId)) {
-             $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
-        }
-        $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
-            $this->getBasket()->getPrice()->getBruttoPrice()
-        ));
-
-        $activeShop = Registry::getConfig()->getActiveShop();
-
-        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
-
-        $amazonConfig = oxNew(Config::class);
-
-        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
-
-        if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
-            $payload->setPaymentIntent('AuthorizeWithCapture');
-            $payload->setCanHandlePendingAuthorization(false);
-        } else {
-            $payload->setPaymentIntent('Authorize');
-            $payload->setCanHandlePendingAuthorization(true);
-        }
-
-        $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(
-            OxidServiceProvider::getAmazonService()->getCheckoutSessionId(),
-            $payload->getData()
-        );
-
-        $response = PhpHelper::jsonToArray($result['response']);
-
-        Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
+        return parent::execute();
     }
 
     /**
@@ -189,7 +194,7 @@ class OrderController extends OrderController_parent
         return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 
-    private function setAmazonPayAsPaymentMethod($countryOxId = null)
+    protected function setAmazonPayAsPaymentMethod($countryOxId = null)
     {
         $basket = $this->getBasket();
         $user = $this->getUser();
@@ -226,7 +231,7 @@ class OrderController extends OrderController_parent
                     }
                 }
             }
-            
+
             if (!$actShipSet) {
                 if ($lastShipSet) {
                     Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
@@ -240,9 +245,7 @@ class OrderController extends OrderController_parent
             $basket->setShipping($actShipSet);
             $session->setVariable('paymentid', 'oxidamazon');
         } else {
-            $basket->setPayment('');
-            $basket->setShipping('');
-            $session->setVariable('paymentid', '');
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         }
     }
 }

@@ -25,6 +25,7 @@ namespace OxidProfessionalServices\AmazonPay\Component;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -40,6 +41,7 @@ class UserComponent extends UserComponent_Parent
     public function createGuestUser(array $amazonSession): void
     {
         $session = Registry::getSession();
+        $config = new Config();
 
         $this->setParent(oxNew('Register'));
 
@@ -52,8 +54,20 @@ class UserComponent extends UserComponent_Parent
         $this->setRequestParameter('lgn_pwd2', $password);
         $this->setRequestParameter('lgn_pwd2', $password);
 
-        $mappedBillingFields = Address::mapAddressToDb($amazonSession['response']['billingAddress'], 'oxuser__');
-        $mappedDeliveryFields = Address::mapAddressToDb($amazonSession['response']['shippingAddress'], 'oxaddress__');
+        $amazonBillingAddress = $amazonSession['response']['billingAddress'];
+        $amazonShippingAddress = $amazonSession['response']['shippingAddress'];
+
+        // Amazon has no way of restricting the country of the billing address to the countries of the OXID shop.
+        // This option is only available for the billing address. That's why we double-check the country of the
+        // billing address. If this does not fit, we will use the validated delivery address as the billing address
+        if (!array_key_exists($amazonBillingAddress['countryCode'], $config->getPossibleEUAddresses())) {
+            $amazonBillingAddress = $amazonShippingAddress;
+            Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_BILLINGCOUNTRY_MISMATCH', false, true);
+        }
+
+        $mappedBillingFields = Address::mapAddressToDb($amazonBillingAddress, 'oxuser__');
+        $mappedDeliveryFields = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
+
         $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
         $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
 

@@ -354,8 +354,6 @@ class Config
         if ($user->loadActiveUser()) {
             $activeUser = $user;
         }
-        $oDelList = Registry::get(\OxidEsales\Eshop\Application\Model\DeliveryList::class);
-
 
         if ($this->countryList === null) {
             $this->countryList = [];
@@ -400,6 +398,16 @@ class Config
      */
     public function getPlaceholder(): string
     {
-        return "328697F-879AC9229A9625_DB4F5E67C";
+        return Constants::CHECKOUT_PLACEHOLDER;
+    }
+
+    /**
+     * PlatformId to identify the Module-Integration
+     *
+     * @return string
+     */
+    public function getPlatformId(): string
+    {
+        return Constants::PLATTFORM_ID;
     }
 }

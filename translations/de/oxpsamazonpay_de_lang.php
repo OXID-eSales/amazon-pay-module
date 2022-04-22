@@ -39,5 +39,6 @@ $aLang = [
     'AMAZON_PAY_PAYMENT_ERROR'                => 'Leider ist eine Lieferung an Ihre Amazon-Lieferadresse nicht möglich. Bitte wählen Sie eine andere Adresse aus oder heben Sie das Amazon-Payment auf um anschließend eine alternative Zahlungsart auszuwählen.',
     'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT' => 'Fehler beim finalisieren einer Amazon-Order',
     'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE' => 'Der Versuch die Order %s bei Amazon zu finalisieren, schlug fehl. Bitte prüfe die Order und die Informationen aus Ihrem Amazon-Account.',
-    'AMAZON_PAY_LASTSHIPSETNOTVALID'          => 'Die von Ihnen gewählte Versandart ist bei Zahlung über Amazon Pay nicht möglich. Die Versandart wurde zurückgesetzt',
+    'AMAZON_PAY_LASTSHIPSETNOTVALID'          => 'Die von Ihnen gewählte Versandart ist bei Zahlung über Amazon Pay nicht möglich. Die Versandart wurde zurückgesetzt.',
+    'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH'      => 'Das Land der Amazon-Rechnungsadresse passt nicht zu den erlaubten Ländern des Shops. Daher wird die Amazon-Lieferadresse als Rechnungsadresse übernommen.'
 ];

@@ -417,7 +417,11 @@ class AmazonService
 
         $result = OxidServiceProvider::getAmazonClient()->getRefund(
             $refundId,
-            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+
+            ]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -507,7 +511,10 @@ class AmazonService
 
         $result = OxidServiceProvider::getAmazonClient()->getCharge(
             $chargeId,
-            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+            ]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -583,7 +590,10 @@ class AmazonService
         $result = OxidServiceProvider::getAmazonClient()->cancelCharge(
             $chargeId,
             ['cancellationReason' => 'OXID ADMIN'],
-            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+            ]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -673,7 +683,10 @@ class AmazonService
         $result = OxidServiceProvider::getAmazonClient()->captureCharge(
             $chargeId,
             $payload->getData(),
-            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+            ]
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
@@ -726,7 +739,10 @@ class AmazonService
 
         $result = OxidServiceProvider::getAmazonClient()->deliveryTrackers(
             $payload,
-            ['x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid()]
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+            ]
         );
 
         $logger = OxidServiceProvider::getLogger();

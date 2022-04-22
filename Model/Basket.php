@@ -37,7 +37,7 @@ class Basket extends Basket_parent
     protected function _findDelivCountry() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $deliveryCountryId = null;
-        if ($this->getPaymentId() == 'oxidamazon') {
+        if ($this->getPaymentId() === 'oxidamazon') {
             $deliveryCountryId = Registry::getSession()->getVariable('amazonCountryOxId');
         }
         if (is_null($deliveryCountryId)) {

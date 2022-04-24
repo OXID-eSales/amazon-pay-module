@@ -50,9 +50,9 @@ class OrderController extends OrderController_parent
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
 
-        if (
-            !$exclude &&
-            $amazonService->isAmazonSessionActive()
+        if (!$exclude &&
+            $amazonService->isAmazonSessionActive() &&
+            $session->getVariable('paymentid') === 'oxidamazon'
         ) {
             $amazonSession = $amazonService->getCheckoutSession();
             $country = oxNew(Country::class);
@@ -80,15 +80,7 @@ class OrderController extends OrderController_parent
                 $session->setVariable('amazondeladr', $deliveryAddress);
             }
         }
-
-        // security check, if we have Amazon as Payment-ID but no Amazon-Session, then something went wrong.
-        if (
-            $session->getVariable('paymentid') === 'oxidamazon' &&
-            !$amazonService->isAmazonSessionActive()
-        ) {
-            $amazonService->unsetPaymentMethod();
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
-        }
+        
         parent::init();
     }
 

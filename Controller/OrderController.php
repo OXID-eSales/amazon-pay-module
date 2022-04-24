@@ -57,6 +57,7 @@ class OrderController extends OrderController_parent
             $amazonSession = $amazonService->getCheckoutSession();
             $country = oxNew(Country::class);
             $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
+
             // Create guest user if not logged in
             if (!$user) {
                 $userComponent = oxNew(UserComponent::class);
@@ -65,19 +66,28 @@ class OrderController extends OrderController_parent
                 $this->setAmazonPayAsPaymentMethod($countryOxId);
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
             } else {
-                $this->setAmazonPayAsPaymentMethod($countryOxId);
-                // we check only the shippingAddress
-                $mappedDeliveryFields = Address::mapAddressToDb(
-                    $amazonSession['response']['shippingAddress'],
-                    'oxaddress__'
-                );
-                $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-                $session->deleteVariable('amazonMissingDeliveryFields');
-                if (count($missingDeliveryFields)) {
-                    $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+                // if Amazon provides a shipping address use it
+                if ($amazonSession['response']['shippingAddress']) {
+                    // we check only the shippingAddress
+                    $mappedDeliveryFields = Address::mapAddressToDb(
+                        $amazonSession['response']['shippingAddress'],
+                        'oxaddress__'
+                    );
+                    $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+                    $session->deleteVariable('amazonMissingDeliveryFields');
+                    if (count($missingDeliveryFields)) {
+                        $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+                    }
+                    $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+                    $session->setVariable('amazondeladr', $deliveryAddress);
+                    $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
+                    $this->setAmazonPayAsPaymentMethod($countryOxId);
                 }
-                $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
-                $session->setVariable('amazondeladr', $deliveryAddress);
+                // if amazon does not provide a shipping address and we already have an oxid user, use oxid-user-data
+                else {
+                    $this->setAmazonPayAsPaymentMethod();
+                    $session->deleteVariable('amazondeladr');
+                }
             }
         }
         

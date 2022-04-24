@@ -60,33 +60,36 @@ class UserComponent extends UserComponent_Parent
         // Amazon has no way of restricting the country of the billing address to the countries of the OXID shop.
         // This option is only available for the billing address. That's why we double-check the country of the
         // billing address. If this does not fit, we will use the validated delivery address as the billing address
-        if (!array_key_exists($amazonBillingAddress['countryCode'], $config->getPossibleEUAddresses())) {
+        if (
+            !array_key_exists($amazonBillingAddress['countryCode'], $config->getPossibleEUAddresses()) &&
+            $amazonShippingAddress
+        ) {
             $amazonBillingAddress = $amazonShippingAddress;
             Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_BILLINGCOUNTRY_MISMATCH', false, true);
         }
 
+        // handle billing address
         $mappedBillingFields = Address::mapAddressToDb($amazonBillingAddress, 'oxuser__');
-        $mappedDeliveryFields = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
-
         $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
-        $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-
-        $this->deleteMissingSession();
-
         if (count($missingBillingFields)) {
             $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
         }
+        $billingAddress = array_merge($mappedBillingFields, $missingBillingFields);
+        $this->setRequestParameter('invadr', $billingAddress);
 
-        if (count($missingDeliveryFields)) {
-            $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+        // handle shipping address (if provided by amazon)
+        if ($amazonShippingAddress){
+            $mappedDeliveryFields = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
+            $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+            if (count($missingDeliveryFields)) {
+                $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+            }
+            $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+            $this->setRequestParameter('deladr', $deliveryAddress);
+            $session->setVariable('amazondeladr', $deliveryAddress);
         }
 
-        $billingAddress = array_merge($mappedBillingFields, $missingBillingFields);
-        $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
-
-        $this->setRequestParameter('invadr', $billingAddress);
-        $this->setRequestParameter('deladr', $deliveryAddress);
-        $session->setVariable('amazondeladr', $deliveryAddress);
+        $this->deleteMissingSession();
 
         $registrationResult = $this->registerUser();
 
@@ -168,7 +171,9 @@ class UserComponent extends UserComponent_Parent
     protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $session = Registry::getSession();
-        if ($session->getVariable('paymentid') !== 'oxidamazon') {
+        if ($session->getVariable('paymentid') !== 'oxidamazon' ||
+            !$session->getVariable('amazondeladr')
+        ) {
             return parent::_getDelAddressData();
         }
         $aDelAdress = [];

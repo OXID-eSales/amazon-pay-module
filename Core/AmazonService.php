@@ -191,7 +191,13 @@ class AmazonService
         $checkoutSession = $this->getCheckoutSession();
         $address = $checkoutSession['response']['shippingAddress'] ?? [];
 
-        return Address::mapAddressToView($address, 'oxaddress__');
+        // map address fields only if amazon response have a shippingAddress
+        if (!empty($address)) {
+            return Address::mapAddressToView($address, 'oxaddress__');
+        }
+        else {
+            return [];
+        }
     }
 
     /**

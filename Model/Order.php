@@ -81,15 +81,17 @@ class Order extends Order_parent
      */
     public function getDelAddressInfo()
     {
+        $amazonService = $this->getAmazonService();
+        $amazonDelAddress = $amazonService->getDeliveryAddress();
         if (
-            !$this->getAmazonService()->isAmazonSessionActive() ||
-            !$this->getAmazonService()->getDeliveryAddress()
+            !$amazonService->isAmazonSessionActive() ||
+            !$amazonDelAddress
         ) {
             return parent::getDelAddressInfo();
         }
 
         $address = oxNew(Address::class);
-        $address->assign($this->getAmazonService()->getDeliveryAddress());
+        $address->assign($amazonDelAddress);
 
         // sanitized addresses for amazon-orders
         $config = Registry::get(Config::class);
@@ -136,9 +138,9 @@ class Order extends Order_parent
     public function getAmazonService(): AmazonService
     {
         if (empty($this->amazonService)) {
-            return oxNew(AmazonService::class);
+            $this->setAmazonService(oxNew(AmazonService::class));
+            return $this->amazonService;
         }
-
         return $this->amazonService;
     }
 

@@ -54,15 +54,12 @@ class OrderController extends OrderController_parent
             $amazonService->isAmazonSessionActive()
         ) {
             $amazonSession = $amazonService->getCheckoutSession();
-            $country = oxNew(Country::class);
-            $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
-
             // Create guest user if not logged in
             if (!$user) {
                 $userComponent = oxNew(UserComponent::class);
                 $userComponent->createGuestUser($amazonSession);
 
-                $this->setAmazonPayAsPaymentMethod($countryOxId);
+                $this->setAmazonPayAsPaymentMethod();
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
             } else {
                 // if Amazon provides a shipping address use it
@@ -79,8 +76,7 @@ class OrderController extends OrderController_parent
                     }
                     $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
                     $session->setVariable('amazondeladr', $deliveryAddress);
-                    $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
-                    $this->setAmazonPayAsPaymentMethod($countryOxId);
+                    $this->setAmazonPayAsPaymentMethod();
                 }
                 // if amazon does not provide a shipping address and we already have an oxid user, use oxid-user-data
                 else {

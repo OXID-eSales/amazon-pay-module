@@ -96,6 +96,14 @@ class OrderController extends OrderController_parent
 
         if (
             $basket->getPaymentId() === 'oxidamazon' &&
+            !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
+        ) {
+            Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+            return;
+        }
+        else if (
+            $basket->getPaymentId() === 'oxidamazon' &&
             !$exclude &&
             OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
         ) {

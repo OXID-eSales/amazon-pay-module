@@ -81,7 +81,10 @@ class Order extends Order_parent
      */
     public function getDelAddressInfo()
     {
-        if (!$this->getAmazonService()->isAmazonSessionActive()) {
+        if (
+            !$this->getAmazonService()->isAmazonSessionActive() ||
+            !$this->getAmazonService()->getDeliveryAddress()
+        ) {
             return parent::getDelAddressInfo();
         }
 

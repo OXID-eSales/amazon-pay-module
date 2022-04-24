@@ -51,8 +51,7 @@ class OrderController extends OrderController_parent
         $amazonService = OxidServiceProvider::getAmazonService();
 
         if (!$exclude &&
-            $amazonService->isAmazonSessionActive() &&
-            $session->getVariable('paymentid') === 'oxidamazon'
+            $amazonService->isAmazonSessionActive()
         ) {
             $amazonSession = $amazonService->getCheckoutSession();
             $country = oxNew(Country::class);

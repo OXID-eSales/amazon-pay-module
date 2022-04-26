@@ -79,7 +79,6 @@ $aModule = [
         CoreViewConfig::class => ViewConfig::class,
         CoreUserController::class => UserController::class,
         CoreOrderController::class => OrderController::class,
-        CoreFrontendController::class => DispatchController::class,
         CoreArticleDetailsController::class => ArticleDetailsController::class,
         CoreOrderOverviewmodel::class => ModuleOrderOverview::class,
         CoreOrderListController::class => OrderListController::class,

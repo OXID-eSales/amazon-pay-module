@@ -29,6 +29,7 @@ use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
+use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -156,7 +157,7 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    protected function updateAmazonPayOrderStatus($amazonPayStatus)
+    protected function updateAmazonPayOrderStatus($amazonPayStatus, $data = null)
     {
         switch ($amazonPayStatus) {
             case "AMZ_PAYMENT_PENDING":
@@ -166,15 +167,48 @@ class Order extends Order_parent
                 $this->oxorder__oxps_amazon_remark = new Field('AMZ_PAYMENT_PENDING', Field::T_RAW);
                 $this->save();
                 break;
+
             case "AMZ_AUTH_STILL_PENDING":
+                if (is_array($data)) {
+                    $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Authorisation still pending: ' . $data['chargeAmount'], Field::T_RAW);
+                }
+                $this->save();
                 break;
-            case "AMZ_AUTH_FAILED":
-                break;
-            case "AMZ_AUTH_OK":
-                break;
+
             case "AMZ_AUTH_AND_CAPT_FAILED":
+                if (is_array($data)) {
+                    $response = PhpHelper::jsonToArray($data['result']['response']);
+                    if ($data['chargeId']) {
+                        $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
+                    }
+                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay: ' . $response['reasonCode'], Field::T_RAW);
+                }
+                else {
+                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay: ERROR');
+                }
+                $this->save();
                 break;
+
             case "AMZ_AUTH_AND_CAPT_OK":
+                $this->oxorder__oxpaid =  new Field(\date('Y-m-d H:i:s'), Field::T_RAW);
+                $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
+                if (is_array($data)) {
+                    $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Captured: ' . $data['chargeAmount'], Field::T_RAW);
+                }
+                $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                $this->save();
+                break;
+
+            case "AMZ_2STEP_AUTH_OK":
+                $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
+                if (is_array($data)) {
+                    $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field('AMZ-Authorize-Open OK', Field::T_RAW);
+                }
+                $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                $this->save();
                 break;
         }
     }

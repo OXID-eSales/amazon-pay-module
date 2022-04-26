@@ -29,6 +29,7 @@ use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
+use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Order
@@ -103,8 +104,8 @@ class Order extends Order_parent
             $oBasket->getPaymentId() === 'oxidamazon'
         ) {
             $this->_setOrderStatus('NOT_FINISHED');
-            $this->oxorder__oxtransid = new oxField('PAYMENT_PENDING');
-            $this->oxorder__oxfolder = new oxField('ORDERFOLDER_PROBLEMS');
+            $this->oxorder__oxtransid = new Field('PAYMENT_PENDING');
+            $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS');
             $this->save();
         }
         return $ret;

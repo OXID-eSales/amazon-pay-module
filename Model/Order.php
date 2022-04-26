@@ -104,8 +104,9 @@ class Order extends Order_parent
             $oBasket->getPaymentId() === 'oxidamazon'
         ) {
             $this->_setOrderStatus('NOT_FINISHED');
-            $this->oxorder__oxtransid = new Field('PAYMENT_PENDING');
-            $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS');
+            $this->oxorder__oxtransid = new Field('PAYMENT_PENDING', Field::T_RAW);
+            $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
+            $this->oxorder__oxps_amazon_remark = new Field('PAYMENT PENDING', Field::T_RAW);
             $this->save();
         }
         return $ret;

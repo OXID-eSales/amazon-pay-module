@@ -39,17 +39,24 @@ class Order extends Order_parent
     private $amazonService;
 
     /**
-     * Order checking, processing and saving method.
+     * Security and Cleanup before finalize order
      *
      * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
      * @param object                                     $oUser                Current User object
-     * @param bool                                       $blRecalculatingOrder Order recalculation
      *
-     * @return integer
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    protected function prepareFinalizeOrder(Basket $oBasket, $oUser)
     {
-        // sanitized addresses for amazon-orders
+        // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
+        // stop finalize order
+        if (
+            $oBasket->getPaymentId() === 'oxidamazon' &&
+            !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
+        ) {
+            return self::ORDER_STATE_PAYMENTERROR; // means no authentication
+        }
+
+        // cleanup sanitized addresses for amazon-orders
         if (
             $oBasket->getPaymentId() === 'oxidamazon' &&
             ($missingRequestBillingFields = Registry::getConfig()->getRequestParameter(
@@ -70,7 +77,37 @@ class Order extends Order_parent
             $oUser->save();
             Registry::getSession()->deleteVariable('amazonMissingBillingFields');
         }
-        return parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
+    }
+
+    /**
+     * Order checking, processing and saving method.
+     *
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
+     * @param object                                     $oUser                Current User object
+     * @param bool                                       $blRecalculatingOrder Order recalculation
+     *
+     * @return integer
+     */
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    {
+        $ret = $this->prepareFinalizeOrder($oBasket, $oUser);
+
+        if ($ret !== self::ORDER_STATE_PAYMENTERROR) {
+            $ret = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
+        }
+
+        // Authorize and Capture via Amazon Pay will be done after finalizeOrder in OXID
+        // therefore we reset status to "not finished yet"
+        if ($ret < 2  &&
+            !$blRecalculatingOrder &&
+            $oBasket->getPaymentId() === 'oxidamazon'
+        ) {
+            $this->_setOrderStatus('NOT_FINISHED');
+            $this->oxorder__oxtransid = new oxField('PAYMENT_PENDING');
+            $this->oxorder__oxfolder = new oxField('ORDERFOLDER_PROBLEMS');
+            $this->save();
+        }
+        return $ret;
     }
 
     /**

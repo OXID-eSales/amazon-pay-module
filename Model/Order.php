@@ -103,11 +103,7 @@ class Order extends Order_parent
             !$blRecalculatingOrder &&
             $oBasket->getPaymentId() === 'oxidamazon'
         ) {
-            $this->_setOrderStatus('NOT_FINISHED');
-            $this->oxorder__oxtransid = new Field('PAYMENT_PENDING', Field::T_RAW);
-            $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
-            $this->oxorder__oxps_amazon_remark = new Field('PAYMENT PENDING', Field::T_RAW);
-            $this->save();
+            $this->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
         }
         return $ret;
     }
@@ -160,9 +156,27 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateStatus($status)
+    protected function updateAmazonPayOrderStatus($amazonPayStatus)
     {
-        $this->__set('OXTRANSTATUS', $status);
+        switch ($amazonPayStatus) {
+            case "AMZ_PAYMENT_PENDING":
+                $this->oxorder__oxtransstatus = new Field('NOT_FINISHED', Field::T_RAW);
+                $this->oxorder__oxtransid = new Field('AMZ_PAYMENT_PENDING', Field::T_RAW);
+                $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
+                $this->oxorder__oxps_amazon_remark = new Field('AMZ_PAYMENT_PENDING', Field::T_RAW);
+                $this->save();
+                break;
+            case "AMZ_AUTH_STILL_PENDING":
+                break;
+            case "AMZ_AUTH_FAILED":
+                break;
+            case "AMZ_AUTH_OK":
+                break;
+            case "AMZ_AUTH_AND_CAPT_FAILED":
+                break;
+            case "AMZ_AUTH_AND_CAPT_OK":
+                break;
+        }
     }
 
     /**

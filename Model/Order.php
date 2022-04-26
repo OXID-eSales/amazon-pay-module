@@ -202,10 +202,9 @@ class Order extends Order_parent
                 break;
 
             case "AMZ_2STEP_AUTH_OK":
-                $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field('AMZ-Authorize-Open OK', Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Authorized (not captured):' . $data['chargeAmount'], Field::T_RAW);
                 }
                 $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
                 $this->save();

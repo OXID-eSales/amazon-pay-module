@@ -177,7 +177,7 @@ class LogRepository
      */
     public function markOrderPaid($orderId, $remark, $transStatus = 'OK', $chargeId = ''): void
     {
-        $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OXREMARK = ?, OXTRANSID= ? WHERE OXID=?';
+        $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OXPS_AMAZON_REMARK = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
             $sql,
             [

@@ -126,7 +126,7 @@ class Events
 
         if (count($result) === 0) {
             $sql = 'ALTER TABLE `oxorder` ADD COLUMN `OXPS_AMAZON_REMARK`
-                                varchar(256) 
+                                varchar(255) 
                                 NOT NULL
                                 DEFAULT ""
                                 COMMENT \'Remark from amazonpay\'';

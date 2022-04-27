@@ -50,8 +50,7 @@ class OrderController extends OrderController_parent
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
 
-        if (
-            !$exclude &&
+        if (!$exclude &&
             $amazonService->isAmazonSessionActive()
         ) {
             $amazonSession = $amazonService->getCheckoutSession();
@@ -80,15 +79,7 @@ class OrderController extends OrderController_parent
                 $session->setVariable('amazondeladr', $deliveryAddress);
             }
         }
-
-        // security check, if we have Amazon as Payment-ID but no Amazon-Session, then something went wrong.
-        if (
-            $session->getVariable('paymentid') === 'oxidamazon' &&
-            !$amazonService->isAmazonSessionActive()
-        ) {
-            $amazonService->unsetPaymentMethod();
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
-        }
+        
         parent::init();
     }
 
@@ -97,61 +88,85 @@ class OrderController extends OrderController_parent
         $basket = $this->getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
 
+        // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
+        // or Amazon Pay is excluded stop executing order
         if (
-            $basket->getPaymentId() === 'oxidamazon' &&
-            !$exclude &&
-            OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
+            ($basket->getPaymentId() === 'oxidamazon' &&
+                !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) ||
+            $exclude
         ) {
-            $payload = new Payload();
+            Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+            return;
+        }
 
-            $orderOxId = Registry::getSession()->getVariable('sess_challenge');
-            $oOrder = oxNew(Order::class);
-            if ($oOrder->load($orderOxId)) {
-                $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
-            }
-            $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
-                $this->getBasket()->getPrice()->getBruttoPrice()
-            ));
-
-            $activeShop = Registry::getConfig()->getActiveShop();
-
-            $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-            $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
-
-            $amazonConfig = oxNew(Config::class);
-
-            $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
-
-            if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
-                $payload->setPaymentIntent('AuthorizeWithCapture');
-                $payload->setCanHandlePendingAuthorization(false);
-            } else {
-                $payload->setPaymentIntent('Authorize');
-                $payload->setCanHandlePendingAuthorization(true);
-            }
-
-            $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(
-                OxidServiceProvider::getAmazonService()->getCheckoutSessionId(),
-                $payload->getData()
-            );
-
-            if (
-                isset($result['response']) &&
-                isset($result['status']) &&
-                $result['status'] === 200
-            ) {
-                $response = PhpHelper::jsonToArray($result['response']);
-                Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
-            } else {
-                OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-                if ($oOrder->isLoaded()) {
-                    $oOrder->delete();
-                }
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
+        // if payment is 'oxidamazon' call parent::execute to validate and finalize order
+        // then try to complete order at Amazon Pay
+        else if ($basket->getPaymentId() === 'oxidamazon' ) {
+            $ret = parent::execute();
+            // if order is validated and finalized complete Amazon Pay
+            if ($ret === 'thankyou' ) {
+                $this->completeAmazonPayment();
             }
         }
 
-        return parent::execute();
+        // in all other cases return parent
+        if (!$ret) {
+            $ret = parent::execute();
+        }
+        return $ret;
+    }
+
+    protected function completeAmazonPayment()
+    {
+        $payload = new Payload();
+        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $oOrder = oxNew(Order::class);
+        if ($oOrder->load($orderOxId)) {
+            $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
+        }
+        $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
+            $this->getBasket()->getPrice()->getBruttoPrice()
+        ));
+
+        $activeShop = Registry::getConfig()->getActiveShop();
+        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
+        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+
+        $amazonConfig = oxNew(Config::class);
+        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
+
+        if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+            $payload->setPaymentIntent('AuthorizeWithCapture');
+            $payload->setCanHandlePendingAuthorization(false);
+        } else {
+            $payload->setPaymentIntent('Authorize');
+            $payload->setCanHandlePendingAuthorization(true);
+        }
+
+        $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(
+            OxidServiceProvider::getAmazonService()->getCheckoutSessionId(),
+            $payload->getData()
+        );
+
+        if (
+            isset($result['response']) &&
+            isset($result['status']) &&
+            $result['status'] === 200 &&
+            $oOrder->isLoaded() &&
+            !empty((PhpHelper::getArrayValue('amazonPayRedirectUrl', PhpHelper::jsonToArray($result['response']))))
+        ) {
+            $response = PhpHelper::jsonToArray($result['response']);
+            Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
+        } else {
+            Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+            if ($oOrder && $oOrder->isLoaded()) {
+                $oOrder->delete();
+            }
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
+        }
+
     }
 
     /**

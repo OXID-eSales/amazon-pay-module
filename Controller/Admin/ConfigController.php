@@ -147,6 +147,10 @@ class ConfigController extends AdminController
             $conf['blAmazonPayMinicartAndModal'] = 0;
         }
 
+        if (!isset($conf['amazonPayType'])) {
+            $conf['amazonPayType'] = 'PayAndShip';
+        }
+
         return $conf;
     }
 

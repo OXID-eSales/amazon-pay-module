@@ -121,24 +121,42 @@
         </div>
 
         <div class="form-group jsonform-error-captureType">
-                    <label for="opmode">[{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE"}]</label>
-                    <div class="controls">
-                        <select name="conf[amazonPayCapType]" id="captype" class="form-control" required>
-                            <option value="">
-                                [{oxmultilang ident="OXPS_AMAZONPAY_PLEASE_CHOOSE"}]
-                            </option>
-                            <option value="1" [{if $config->isOneStepCapture()}]selected[{/if}]>
-                                [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_ONE_STEP"}]
-                            </option>
-                            <option value="2" [{if $config->isTwoStepCapture()}]selected[{/if}]>
-                                [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_TWO_STEP"}]
-                            </option>
-                        </select>
-                        <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_CAPTYPE"}]</span>
-                    </div>
-                </div>
+            <label for="opmode">[{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE"}]</label>
+            <div class="controls">
+                <select name="conf[amazonPayCapType]" id="captype" class="form-control" required>
+                    <option value="">
+                        [{oxmultilang ident="OXPS_AMAZONPAY_PLEASE_CHOOSE"}]
+                    </option>
+                    <option value="1" [{if $config->isOneStepCapture()}]selected[{/if}]>
+                        [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_ONE_STEP"}]
+                    </option>
+                    <option value="2" [{if $config->isTwoStepCapture()}]selected[{/if}]>
+                        [{oxmultilang ident="OXPS_AMAZONPAY_CAPTYPE_TWO_STEP"}]
+                    </option>
+                </select>
+                <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_CAPTYPE"}]</span>
+            </div>
+        </div>
 
-                <div class="form-group">
+        <div class="form-group jsonform-error-payType">
+            <label for="opmode">[{oxmultilang ident="OXPS_AMAZONPAY_PAYTYPE"}]</label>
+            <div class="controls">
+                <select name="conf[amazonPayType]" id="paytype" class="form-control" required>
+                    <option value="">
+                        [{oxmultilang ident="OXPS_AMAZONPAY_PLEASE_CHOOSE"}]
+                    </option>
+                    <option value="PayAndShip" [{if $config->getPayType() == 'PayAndShip'}]selected[{/if}]>
+                        PayAndShip
+                    </option>
+                    <option value="PayOnly" [{if $config->getPayType() == 'PayOnly'}]selected[{/if}]>
+                        PayOnly
+                    </option>
+                </select>
+                <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_PAYTYPE"}]</span>
+            </div>
+        </div>
+
+        <div class="form-group">
             <button type="submit" class="btn btn-default bottom-space">[{oxmultilang ident="OXPS_AMAZONPAY_SAVE"}]</button>
         </div>
     </form>

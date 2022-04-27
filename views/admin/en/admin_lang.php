@@ -75,5 +75,6 @@ $aLang = [
     'OXPS_AMAZONPAY_IPN_HISTORY'             => 'IPN-History',
     'OXPS_AMAZONPAY_DATE'                    => 'Date',
     'OXPS_AMAZONPAY_REFERENCE'               => 'Reference',
-    'OXPS_AMAZONPAY_RESULT'                  => 'Result'
+    'OXPS_AMAZONPAY_RESULT'                  => 'Result',
+    'AMAZON_PAY_REMARK'                       => 'Amazon Pay notice:',
 ];

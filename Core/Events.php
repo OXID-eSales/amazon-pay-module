@@ -41,6 +41,7 @@ class Events
         self::enablePaymentMethod();
         self::addArticleColumn();
         self::addCategoryColumn();
+        self::addOrderColumn();
 
         $dbMetaDataHandler = oxNew(DbMetaDataHandler::class);
         $dbMetaDataHandler->updateViews();
@@ -107,6 +108,28 @@ class Events
                 'ALTER TABLE %s ADD COLUMN OXPS_AMAZON_CARRIER VARCHAR (100)',
                 'oxdeliveryset'
             );
+
+            DatabaseProvider::getDb()->execute($sql);
+        }
+    }
+
+    public static function addOrderColumn(): void
+    {
+        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
+
+        $sql = 'SELECT COLUMN_NAME
+                FROM information_schema.COLUMNS
+                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxorder') . '\'
+                AND COLUMN_NAME = \'OXPS_AMAZON_REMARK\'';
+
+        $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
+
+        if (count($result) === 0) {
+            $sql = 'ALTER TABLE `oxorder` ADD COLUMN `OXPS_AMAZON_REMARK`
+                                varchar(32) 
+                                NOT NULL
+                                DEFAULT ""
+                                COMMENT \'Remark from amazonpay\'';
 
             DatabaseProvider::getDb()->execute($sql);
         }

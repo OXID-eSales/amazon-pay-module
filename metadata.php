@@ -398,6 +398,12 @@ $aModule = [
             'position' => '5'
         ],
         [
+            'template' => 'order_overview.tpl',
+            'block' => 'admin_order_overview_checkout',
+            'file' => 'views/blocks/admin/admin_order_overview_checkout.tpl',
+            'position' => '5'
+        ],
+        [
             'template' => 'article_main.tpl',
             'block' => 'admin_article_main_extended',
             'file' => 'views/blocks/admin/admin_article_main_extended.tpl',

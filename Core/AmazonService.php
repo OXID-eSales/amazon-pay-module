@@ -141,10 +141,7 @@ class AmazonService
 
         $checkoutSession = $this->getCheckoutSession();
 
-        return (
-            ($checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN) &&
-            (is_array($checkoutSession['response']['shippingAddress']))
-        );
+        return ($checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN);
     }
 
     /**
@@ -194,7 +191,13 @@ class AmazonService
         $checkoutSession = $this->getCheckoutSession();
         $address = $checkoutSession['response']['shippingAddress'] ?? [];
 
-        return Address::mapAddressToView($address, 'oxaddress__');
+        // map address fields only if amazon response have a shippingAddress
+        if (!empty($address)) {
+            return Address::mapAddressToView($address, 'oxaddress__');
+        }
+        else {
+            return [];
+        }
     }
 
     /**

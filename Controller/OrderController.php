@@ -54,32 +54,37 @@ class OrderController extends OrderController_parent
             $amazonService->isAmazonSessionActive()
         ) {
             $amazonSession = $amazonService->getCheckoutSession();
-            $country = oxNew(Country::class);
-            $countryOxId = $country->getIdByCode($amazonSession['response']['shippingAddress']['countryCode']);
             // Create guest user if not logged in
             if (!$user) {
                 $userComponent = oxNew(UserComponent::class);
                 $userComponent->createGuestUser($amazonSession);
 
-                $this->setAmazonPayAsPaymentMethod($countryOxId);
+                $this->setAmazonPayAsPaymentMethod();
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
             } else {
-                $this->setAmazonPayAsPaymentMethod($countryOxId);
-                // we check only the shippingAddress
-                $mappedDeliveryFields = Address::mapAddressToDb(
-                    $amazonSession['response']['shippingAddress'],
-                    'oxaddress__'
-                );
-                $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-                $session->deleteVariable('amazonMissingDeliveryFields');
-                if (count($missingDeliveryFields)) {
-                    $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+                // if Amazon provides a shipping address use it
+                if ($amazonSession['response']['shippingAddress']) {
+                    // we check only the shippingAddress
+                    $mappedDeliveryFields = Address::mapAddressToDb(
+                        $amazonSession['response']['shippingAddress'],
+                        'oxaddress__'
+                    );
+                    $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
+                    $session->deleteVariable('amazonMissingDeliveryFields');
+                    if (count($missingDeliveryFields)) {
+                        $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
+                    }
+                    $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+                    $session->setVariable('amazondeladr', $deliveryAddress);
+                    $this->setAmazonPayAsPaymentMethod();
                 }
-                $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
-                $session->setVariable('amazondeladr', $deliveryAddress);
+                // if amazon does not provide a shipping address and we already have an oxid user, use oxid-user-data
+                else {
+                    $this->setAmazonPayAsPaymentMethod();
+                    $session->deleteVariable('amazondeladr');
+                }
             }
         }
-        
         parent::init();
     }
 
@@ -209,12 +214,12 @@ class OrderController extends OrderController_parent
         return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 
-    protected function setAmazonPayAsPaymentMethod($countryOxId = null)
+    protected function setAmazonPayAsPaymentMethod()
     {
         $basket = $this->getBasket();
         $user = $this->getUser();
         $session = Registry::getSession();
-        $countryOxId = $countryOxId ?? $user->getActiveCountry();
+        $countryOxId = $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
 
         $actShipSet = null;

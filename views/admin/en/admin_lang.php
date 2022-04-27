@@ -76,5 +76,5 @@ $aLang = [
     'OXPS_AMAZONPAY_DATE'                    => 'Date',
     'OXPS_AMAZONPAY_REFERENCE'               => 'Reference',
     'OXPS_AMAZONPAY_RESULT'                  => 'Result',
-    'AMAZON_PAY_REMARK'                       => 'Amazon Pay notice:',
+    'OXPS_AMAZONPAY_REMARK'                  => 'Amazon Pay notice',
 ];

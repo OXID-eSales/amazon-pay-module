@@ -40,5 +40,6 @@ $aLang = [
     'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT' => 'Error finalizing an Amazon order',
     'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE' => 'The attempt to finalize the order %s at Amazon failed. Please check the order and the information from your Amazon account.',
     'AMAZON_PAY_LASTSHIPSETNOTVALID'          => 'The shipping method you have selected is not possible when paying via Amazon Pay. The shipping method has been reset.',
-    'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH'      => 'The country of the Amazon billing address does not match the allowed countries of the shop. Therefore, the Amazon delivery address is used as the billing address.'
+    'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH'      => 'The country of the Amazon billing address does not match the allowed countries of the shop. Therefore, the Amazon delivery address is used as the billing address.',
+    'AMAZON_PAY_REMARK'                       => 'Amazon Pay notice:',
 ];

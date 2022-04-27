@@ -27,14 +27,15 @@ use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidEsales\Eshop\Application\Controller\FrontendController;
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
 
 /**
- * Class OrderController
- * @mixin \OxidEsales\Eshop\Application\Controller\FrontendController
+ * Class DispatchController
+ *
  */
-class DispatchController extends DispatchController_parent
+class DispatchController extends FrontendController
 {
     public function init()
     {

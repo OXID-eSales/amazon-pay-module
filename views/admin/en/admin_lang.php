@@ -76,7 +76,5 @@ $aLang = [
     'OXPS_AMAZONPAY_DATE'                    => 'Date',
     'OXPS_AMAZONPAY_REFERENCE'               => 'Reference',
     'OXPS_AMAZONPAY_RESULT'                  => 'Result',
-
-    'OXPS_AMAZONPAY_PAYTYPE'            => 'AmazonPay Checkout Type',
-    'HELP_OXPS_AMAZONPAY_PAYTYPE'       => 'Selection of delivery address via Amazon Pay (PayAndShip) or only payment via Amazon Pay (PayOnly)'
+    'AMAZON_PAY_REMARK'                       => 'Amazon Pay notice:',
 ];

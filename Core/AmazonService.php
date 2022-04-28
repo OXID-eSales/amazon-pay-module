@@ -294,7 +294,16 @@ class AmazonService
         $paymentCC->save();
     }
 
-    public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
+    /**
+     * Processing Amazon Pay
+     *
+     * @param $amazonSessionId
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
+     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param bool $bl2Step
+     *
+     */
+    protected function processPayment($amazonSessionId, Basket $basket, LoggerInterface $logger, $bl2Step = false): void
     {
         $amazonConfig = oxNew(Config::class);
 
@@ -305,11 +314,11 @@ class AmazonService
 
         $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
         $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
-
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
 
+        // call Amazon Pay
         $result = OxidServiceProvider::getAmazonClient()->completeCheckoutSession(
             $amazonSessionId,
             $data
@@ -317,7 +326,7 @@ class AmazonService
 
         $response = PhpHelper::jsonToArray($result['response']);
 
-        if ($response['statusDetails']['state'] === 'Completed') {
+        if ($response['statusDetails']['state'] === 'Completed' && !$bl2Step) {
             $response['statusDetails']['state'] = 'Completed & Captured';
         }
 
@@ -325,87 +334,64 @@ class AmazonService
 
         Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
         $request = PhpHelper::jsonToArray($result['request']);
-        $repository = oxNew(LogRepository::class);
 
-        if ($result['status'] === 200) {
-            $repository->markOrderPaid(
-                $basket->getOrderId(),
-                'AmazonPay: ' . $request['chargeAmount']['amount'],
-                'OK',
-                $response['chargeId']
-            );
-
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
-        } elseif ($result['status'] === 202) {
-            $repository->updateOrderStatus(
-                'AmazonPay: ' . $request['chargeAmount']['amount'],
-                'NOT_FINISHED',
-                $response['chargeId']
-            );
-
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
-        } else {
-            $repository->updateOrderStatus(
-                $basket->getOrderId(),
-                'ERROR',
-                $response['chargeId']
-            );
-
-            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+        $order = oxNew(Order::class);
+        if ($order->load($basket->getOrderId())) {
+            if ($result['status'] === 200) {
+                $data = array(
+                    "chargeAmount" => $request['chargeAmount']['amount'],
+                    "chargeId" => $response['chargeId']
+                );
+                if(!$bl2Step) {
+                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK', $data);
+                }
+                else{
+                    $order->updateAmazonPayOrderStatus('AMZ_2STEP_AUTH_OK', $data);
+                }
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+            } elseif ($result['status'] === 202) {
+                $data = array(
+                    "chargeAmount" => $request['chargeAmount']['amount'],
+                    "chargeId" => $response['chargeId']
+                );
+                $order->updateAmazonPayOrderStatus('AMZ_AUTH_STILL_PENDING', $data);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+            } else {
+                $data = array(
+                    "result" => $result,
+                    "chargeId" => $response['chargeId']
+                );
+                $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_FAILED', $data);
+                $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+            }
         }
+        $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
     }
 
+    /**
+     * Processing Amazon Pay Auth an Capt
+     *
+     * @param $amazonSessionId
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
+     * @param \Psr\Log\LoggerInterface $logger Logger
+     *
+     */
+    public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
+    {
+        $this->processPayment($amazonSessionId, $basket, $logger, false);
+    }
+
+    /**
+     * Processing Amazon Pay Auth
+     *
+     * @param $amazonSessionId
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
+     * @param \Psr\Log\LoggerInterface $logger Logger
+     *
+     */
     public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
-        $amazonConfig = oxNew(Config::class);
-
-        $amount = PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice());
-        $payload = new Payload();
-        $payload->setCheckoutChargeAmount($amount);
-
-        $activeShop = Registry::getConfig()->getActiveShop();
-
-        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
-
-        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
-
-        $data = $payload->removeMerchantMetadata($payload->getData());
-
-        $result = OxidServiceProvider::getAmazonClient()->completeCheckoutSession(
-            $amazonSessionId,
-            $data
-        );
-
-        $response = PhpHelper::jsonToArray($result['response']);
-        $repository = oxNew(LogRepository::class);
-        $logger->info($response['statusDetails']['state'], $result);
-        Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
-
-        if ($result['status'] === 200) {
-            $repository->updateOrderStatus(
-                $basket->getOrderId(),
-                'AMZ-Authorize-Open',
-                $response['chargeId']
-            );
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
-        } elseif ($result['status'] === 202) {
-            $repository->updateOrderStatus(
-                $basket->getOrderId(),
-                'AMZ-Authorize-Pending',
-                $response['chargeId']
-            );
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
-        } else {
-            $repository->updateOrderStatus(
-                $basket->getOrderId(),
-                'ERROR',
-                $response['chargeId']
-            );
-
-            $result['message'] = 'Auth error - please select a different payment method';
-            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
-        }
+        $this->processPayment($amazonSessionId, $basket, $logger,true);
     }
 
     /**

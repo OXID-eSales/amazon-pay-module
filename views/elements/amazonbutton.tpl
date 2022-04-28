@@ -9,7 +9,7 @@
         sandbox: [{if $amazonConfig->isSandbox()}]true[{else}]false[{/if}],
         ledgerCurrency: '[{$amazonConfig->getLedgerCurrency()}]',
         checkoutLanguage: '[{$amazonConfig->getCheckoutLanguage()}]',
-        productType: [{if $amazonConfig->getPayType()}]'[{$amazonConfig->getPayType()}]'[{else}]'PayAndShip'[{/if}],
+        productType: 'PayAndShip',
         placement: 'Cart'
     });
 [{/capture}]

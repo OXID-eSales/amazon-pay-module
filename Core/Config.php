@@ -410,13 +410,4 @@ class Config
     {
         return Constants::PLATTFORM_ID;
     }
-
-    /**
-     * @return string
-     */
-    public function getPayType(): string
-    {
-        return Registry::getConfig()->getConfigParam('amazonPayType') ? Registry::getConfig()->getConfigParam('amazonPayType'): "PayAndShip";
-    }
-
 }

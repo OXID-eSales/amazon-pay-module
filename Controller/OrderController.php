@@ -85,7 +85,6 @@ class OrderController extends OrderController_parent
                 }
             }
         }
-        
         parent::init();
     }
 
@@ -215,12 +214,12 @@ class OrderController extends OrderController_parent
         return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
     }
 
-    protected function setAmazonPayAsPaymentMethod($countryOxId = null)
+    protected function setAmazonPayAsPaymentMethod()
     {
         $basket = $this->getBasket();
         $user = $this->getUser();
         $session = Registry::getSession();
-        $countryOxId = $countryOxId ?? $user->getActiveCountry();
+        $countryOxId = $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
 
         $actShipSet = null;

@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 * Add Backward-Compatibility for OXID 6.1
 * Add Secure use of OrderController::execute
+* Fallback InvoiceAddress (With the Amazon button (without OXID login) we use the billing address
+  from Amazon. However, if this does not correspond to the shop countries, we fall back on the
+  Amazon delivery address as the billing address, since the delivery addresses have already been
+  restricted by country beforehand)
 
 ## [1.1.1] - Maintenance Release
 

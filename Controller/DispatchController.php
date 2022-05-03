@@ -88,6 +88,14 @@ class DispatchController extends FrontendController
                             $message['ObjectId'],
                             $logger
                         );
+                    } elseif (
+                        $message['ObjectType'] === 'CHARGE' &&
+                        $message['NotificationType'] === 'STATE_CHANGE'
+                    ) {
+                        OxidServiceProvider::getAmazonService()->processCharge(
+                            $message['ObjectId'],
+                            $logger
+                        );
                     }
 
                     $logger->info($message['NotificationType'], $message);

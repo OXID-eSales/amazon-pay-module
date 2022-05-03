@@ -46,6 +46,7 @@ class User extends User_parent
 
             if ($service->isAmazonSessionActive()
                 && Registry::getConfig()->getTopActiveView()->getIsOrderStep()
+                && $service->getDeliveryAddress()
             ) {
                 $address = oxNew(Address::class);
                 $address->assign($service->getDeliveryAddress());

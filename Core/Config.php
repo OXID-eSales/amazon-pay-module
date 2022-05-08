@@ -277,9 +277,12 @@ class Config
      */
     public function getIPNUrl(): string
     {
-        return html_entity_decode(
-            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazondispatch&action=ipn'
-        );
+        $config = Registry::getConfig();
+        return html_entity_decode(sprintf(
+            '%sindex.php?cl=amazondispatch&action=ipn&shp=%s',
+            $config->getCurrentShopUrl(false),
+            $config->getShopId()
+        ));
     }
 
     /**

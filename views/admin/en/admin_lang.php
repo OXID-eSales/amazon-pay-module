@@ -45,9 +45,10 @@ $aLang = [
     'OXPS_AMAZONPAY_PAYREGION'          => 'Payment Region',
     'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'The currencies allowed in your shop and possible on Amazon Pay.',
     'OXPS_AMAZONPAY_SELLER'             => 'Seller',
-    'OXPS_AMAZONPAY_IPN'                => 'IPN Endpoint',
+    'OXPS_AMAZONPAY_IPN'                => 'IPN Endpoint (please copy the URL and store it in the Amazon backend)',
     'HELP_OXPS_AMAZONPAY_IPN'           => 'IPN messages are sent by Amazon Pay without any action required on your part and
-         can be used to update your internal order management system and process orders',
+         can be used to update your internal order management system and process orders.<br>If your server/shop configuration consists of several URLs,
+         so exchange the suggested domain of the above URL for your suitable domain and make sure that the new URL is freely accessible through Amazon.',
     'OXPS_AMAZONPAY_PLACEMENT'          => 'Placement',
     'HELP_OXPS_AMAZONPAY_PLACEMENT'     => 'Define where to show the Amazon Pay button in your online store.',
     'OXPS_AMAZONPAY_PDP'                => 'Product Detail Page',

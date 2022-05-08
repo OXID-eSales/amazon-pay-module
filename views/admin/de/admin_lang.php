@@ -46,9 +46,10 @@ $aLang = [
     'OXPS_AMAZONPAY_PAYREGION'          => 'Zahlungsbereich',
     'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'Die in Ihrem Shop erlaubten und bei Amazon Pay möglichen Währungen.',
     'OXPS_AMAZONPAY_SELLER'             => 'Verkäufer',
-    'OXPS_AMAZONPAY_IPN'                => 'IPN-Endpunkt',
+    'OXPS_AMAZONPAY_IPN'                => 'IPN-Endpunkt (bitte URL kopieren und im Amazon-Backend hinterlegen)',
     'HELP_OXPS_AMAZONPAY_IPN'           => 'IPN-Nachrichten werden von Amazon Pay ohne Ihr Zutun gesendet und können zur Aktualisierung Ihres
-        internen Auftragsverwaltungssystems und zur Bearbeitung von Bestellungen verwendet werden',
+        internen Auftragsverwaltungssystems und zur Bearbeitung von Bestellungen verwendet werden.<br>Besteht Ihre Server-/Shopkonfiguration aus mehreren URLs,
+        so tauschen Sie die vorgeschlagene Domain der o.g. URL gegen Ihre passende Domain aus und achten darauf, das die neue URL frei durch Amazon zugänglich ist.',
     'OXPS_AMAZONPAY_PLACEMENT'          => 'Platzierung',
     'HELP_OXPS_AMAZONPAY_PLACEMENT'     => 'Definieren Sie, wo die Amazon Pay-Schaltfläche in Ihrem Online-Shop angezeigt werden soll.',
     'OXPS_AMAZONPAY_PDP'                => 'Produktdetailseite',

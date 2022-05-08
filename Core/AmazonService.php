@@ -409,7 +409,6 @@ class AmazonService
             [
                 'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
                 'platformId' => $amazonConfig->getPlatformId()
-
             ]
         );
 
@@ -441,6 +440,54 @@ class AmazonService
         );
 
         $result['identifier'] = $refundId;
+        $result['orderId'] = $orderId;
+        $logger->info($response['statusDetails']['state'], $result);
+    }
+
+    /**
+     * @param $chargeId
+     * @param $logger
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public function processCharge($chargeId, LoggerInterface $logger): void
+    {
+        $amazonConfig = oxNew(Config::class);
+
+        $result = OxidServiceProvider::getAmazonClient()->getCharge(
+            $chargeId,
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+            ]
+        );
+
+        $response = PhpHelper::jsonToArray($result['response']);
+
+        if ($result['status'] !== 200) {
+            return;
+        }
+
+        $repository = oxNew(LogRepository::class);
+        $orderId = $repository->findOrderIdByChargeId($response['chargeId']);
+
+        if ($orderId === null) {
+            return;
+        }
+
+        $order = oxNew(Order::class);
+        if ($order->load($orderId)) {
+            switch ($response['statusDetails']['state']) {
+                case "Pending":
+                    $order->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING', $result);
+                    break;
+                case "Captured":
+                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK', $result);
+                    break;
+            }
+        }
+
+        $result['identifier'] = $chargeId;
         $result['orderId'] = $orderId;
         $logger->info($response['statusDetails']['state'], $result);
     }

@@ -76,9 +76,9 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function displayInMiniCart(): bool
+    public function displayInMiniCartAndModal(): bool
     {
-        return $this->getAmazonConfig()->displayInMiniCart();
+        return $this->getAmazonConfig()->displayInMiniCartAndModal();
     }
 
     /**

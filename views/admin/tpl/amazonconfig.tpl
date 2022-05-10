@@ -95,7 +95,7 @@
                     <div class="checkbox">
                         <label>
                             <input type="hidden" name="conf[blAmazonPayMinicartAndModal]" value="0" />
-                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayMinicartAndModal]" [{if $config->displayInMinicart()}]checked[{/if}] value="1" />
+                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayMinicartAndModal]" [{if $config->displayInMiniCartAndModal()}]checked[{/if}] value="1" />
                             [{oxmultilang ident="OXPS_AMAZONPAY_MINICART_AND_MODAL"}]
                         </label>
                     </div>

@@ -316,7 +316,7 @@ class Config
     /**
      * @return bool
      */
-    public function displayInMiniCart(): bool
+    public function displayInMiniCartAndModal(): bool
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayMinicartAndModal');
     }

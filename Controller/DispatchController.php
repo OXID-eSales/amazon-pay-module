@@ -89,9 +89,11 @@ class DispatchController extends FrontendController
                             $logger
                         );
                     } elseif (
+                        OxidServiceProvider::getAmazonClient()->getModuleConfig()->isTwoStepCapture() &&
                         $message['ObjectType'] === 'CHARGE' &&
                         $message['NotificationType'] === 'STATE_CHANGE'
                     ) {
+                        // For TwoStepCapture we need the Information about the Charge-State
                         OxidServiceProvider::getAmazonService()->processCharge(
                             $message['ObjectId'],
                             $logger

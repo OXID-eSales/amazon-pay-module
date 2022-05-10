@@ -202,7 +202,11 @@ class Order extends Order_parent
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Captured: ' . $data['chargeAmount'], Field::T_RAW);
                 }
-                $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                // we move the order only if the oxtransstatus not OK before
+                if ($this->getFieldData('oxtransstatus') != 'OK') {
+                    $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
+                    $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                }
                 $this->save();
                 break;
 

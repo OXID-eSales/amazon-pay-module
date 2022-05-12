@@ -86,7 +86,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getAmazonSessionId(): string
     {
-        return oxNew(AmazonService::class)->getCheckoutSessionId();
+        return OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
     }
 
     /**
@@ -94,7 +94,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonSessionActive(): bool
     {
-        return oxNew(AmazonService::class)->isAmazonSessionActive();
+        return OxidServiceProvider::getAmazonService()->isAmazonSessionActive();
     }
 
     /**

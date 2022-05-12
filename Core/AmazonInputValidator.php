@@ -25,6 +25,7 @@ namespace OxidProfessionalServices\AmazonPay\Core;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Exception\UserException;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
+use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Class for validating input
@@ -49,7 +50,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
     {
         $sLogin = $aInvAddress['oxuser__oxusername'] ?? $sLogin;
 
-        $service = oxNew(AmazonService::class);
+        $service = OxidServiceProvider::getAmazonService();
 
         if ($service->isAmazonSessionActive() && $oUser->checkIfEmailExists($sLogin)) {
             //if exists then we do not allow to do that

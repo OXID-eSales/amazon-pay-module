@@ -247,17 +247,6 @@ class AmazonService
     public function unsetPaymentMethod(): void
     {
         Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
-        $payment = oxNew(Payment::class);
-
-        $payment->load('oxidamazon');
-        $payment->oxpayments__oxchecked = 0;
-        $payment->save();
-
-        $paymentCC = oxNew(Payment::class);
-
-        $paymentCC->load('oxidcreditcard');
-        $paymentCC->oxpayments__oxchecked = 1;
-        $paymentCC->save();
     }
 
     /**

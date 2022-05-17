@@ -26,6 +26,7 @@ use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\UserAddressList;
 use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
+use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\User
@@ -42,7 +43,7 @@ class User extends User_parent
     private function getAmazonAddress()
     {
         if ($this->amazonAddress === null) {
-            $service = oxNew(AmazonService::class);
+            $service = OxidServiceProvider::getAmazonService();
 
             if ($service->isAmazonSessionActive()
                 && Registry::getConfig()->getTopActiveView()->getIsOrderStep()

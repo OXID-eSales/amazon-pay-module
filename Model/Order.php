@@ -160,16 +160,15 @@ class Order extends Order_parent
                 break;
 
             case "AMZ_AUTH_AND_CAPT_OK":
+                // we move the order only if the oxtransstatus not OK before
+                if ($this->getFieldData('oxpaid') == '0000-00-00 00:00:00') {
+                    $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                }
                 $this->oxorder__oxpaid =  new Field(\date('Y-m-d H:i:s'), Field::T_RAW);
                 $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Captured: ' . $data['chargeAmount'], Field::T_RAW);
-                }
-                // we move the order only if the oxtransstatus not OK before
-                if ($this->getFieldData('oxtransstatus') != 'OK') {
-                    $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
-                    $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
                 }
                 $this->save();
                 break;

@@ -28,6 +28,10 @@ namespace OxidProfessionalServices\AmazonPay\Core;
 class Constants
 {
     /**
+     * @var string Payment ID
+     */
+    public const PAYMENT_ID = 'oxidamazon';
+    /**
      * @var string Module ID
      */
     public const MODULE_ID = 'oxps_amazonpay';

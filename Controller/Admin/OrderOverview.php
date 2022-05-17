@@ -23,6 +23,7 @@
 namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
 class OrderOverview extends OrderOverview_parent
@@ -37,7 +38,7 @@ class OrderOverview extends OrderOverview_parent
 
         $existingItems = [];
 
-        if ($oOrder->load($this->getEditObjectId()) && $oOrder->oxorder__oxpaymenttype->value === 'oxidamazon') {
+        if ($oOrder->load($this->getEditObjectId()) && $oOrder->oxorder__oxpaymenttype->value === Constants::PAYMENT_ID) {
             $orderLogs = OxidServiceProvider::getAmazonService()->getOrderLogs($oOrder);
 
             foreach ($orderLogs as $orderLog) {

@@ -1,4 +1,4 @@
-[{if $edit->oxorder__oxpaymenttype->value == 'oxidamazon'}]
+[{if $edit->oxorder__oxpaymenttype->value == $oViewConf->getAmazonPaymentId()}]
     <tr>
         [{if $isOneStepCapture === false}]
             [{if $isCaptured === true}]

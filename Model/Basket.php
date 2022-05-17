@@ -23,6 +23,7 @@
 namespace OxidProfessionalServices\AmazonPay\Model;
 
 use OxidEsales\Eshop\Core\Registry;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Basket
@@ -37,7 +38,7 @@ class Basket extends Basket_parent
     protected function _findDelivCountry() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $deliveryCountryId = null;
-        if ($this->getPaymentId() === 'oxidamazon') {
+        if ($this->getPaymentId() === Constants::PAYMENT_ID) {
             $deliveryCountryId = Registry::getSession()->getVariable('amazonCountryOxId');
         }
         if (is_null($deliveryCountryId)) {

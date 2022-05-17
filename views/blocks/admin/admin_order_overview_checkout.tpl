@@ -1,5 +1,5 @@
 [{$smarty.block.parent}]
-[{if $edit->oxorder__oxpaymenttype->value == 'oxidamazon'}]
+[{if $edit->oxorder__oxpaymenttype->value == $oViewConf->getAmazonPaymentId()}]
     <tr>
         <td class="edittext"><b>[{oxmultilang ident="OXPS_AMAZONPAY_REMARK" suffix="COLON"}]</b></td>
         <td class="edittext">[{$edit->oxorder__oxps_amazon_remark->value}]<br></td>

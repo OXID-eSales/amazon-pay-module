@@ -26,6 +26,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidProfessionalServices\AmazonPay\Core\Config;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -97,13 +98,13 @@ class UserComponent extends UserComponent_Parent
                     $basket->getPrice()->getBruttoPrice(),
                     $user
                 );
-                if (array_key_exists('oxidamazon', $paymentList)) {
+                if (array_key_exists(Constants::PAYMENT_ID, $paymentList)) {
                     $possibleDeliverySets[] = $deliverySet->getId();
                 }
             }
 
             if (count($possibleDeliverySets)) {
-                $basket->setPayment('oxidamazon');
+                $basket->setPayment(Constants::PAYMENT_ID);
                 $basket->setShipping(reset($possibleDeliverySets));
             }
         } else {
@@ -145,7 +146,7 @@ class UserComponent extends UserComponent_Parent
     protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $session = Registry::getSession();
-        if ($session->getVariable('paymentid') !== 'oxidamazon' ||
+        if ($session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
             !$session->getVariable('amazondeladr')
         ) {
             return parent::_getDelAddressData();

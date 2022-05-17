@@ -30,6 +30,7 @@ use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Component\UserComponent;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Payload;
@@ -89,7 +90,7 @@ class OrderController extends OrderController_parent
         // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
         // or Amazon Pay is excluded stop executing order
         if (
-            ($basket->getPaymentId() === 'oxidamazon' &&
+            ($basket->getPaymentId() === Constants::PAYMENT_ID &&
                 !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) ||
             $exclude
         ) {
@@ -100,7 +101,7 @@ class OrderController extends OrderController_parent
 
         // if payment is 'oxidamazon' call parent::execute to validate and finalize order
         // then try to complete order at Amazon Pay
-        else if ($basket->getPaymentId() === 'oxidamazon' ) {
+        else if ($basket->getPaymentId() === Constants::PAYMENT_ID) {
             $ret = parent::execute();
             // if order is validated and finalized complete Amazon Pay
             if ($ret === 'thankyou' ) {
@@ -213,7 +214,7 @@ class OrderController extends OrderController_parent
             foreach ($deliverySetList as $shipSetId => $shipSet) {
                 $paymentList = $payListObj->getPaymentList($shipSetId, $basketPrice, $user);
                 if (
-                    isset($paymentList['oxidamazon']) &&
+                    isset($paymentList[Constants::PAYMENT_ID]) &&
                     $delListObj->hasDeliveries($basket, $user, $countryOxId, $shipSetId)
                 ) {
                     if (is_null($fallbackShipSet)) {
@@ -234,9 +235,9 @@ class OrderController extends OrderController_parent
         }
 
         if ($actShipSet) {
-            $basket->setPayment('oxidamazon');
+            $basket->setPayment(Constants::PAYMENT_ID);
             $basket->setShipping($actShipSet);
-            $session->setVariable('paymentid', 'oxidamazon');
+            $session->setVariable('paymentid', Constants::PAYMENT_ID);
         } else {
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         }

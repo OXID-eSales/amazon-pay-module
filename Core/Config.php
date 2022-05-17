@@ -361,7 +361,7 @@ class Config
         if ($this->countryList === null) {
             $this->countryList = [];
             $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-            $payment->load('oxidamazon');
+            $payment->load(Constants::PAYMENT_ID);
             foreach ($payment->getCountries() as $countryOxId) {
                 // check deliverysets
                 $deliverySetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);

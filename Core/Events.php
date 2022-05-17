@@ -146,8 +146,8 @@ class Events
         ];
 
         $payment = oxNew(Payment::class);
-        if (!$payment->load('oxidamazon')) {
-            $payment->setId('oxidamazon');
+        if (!$payment->load(Constants::PAYMENT_ID)) {
+            $payment->setId(Constants::PAYMENT_ID);
             $payment->oxpayments__oxactive = new Field(1);
             $payment->oxpayments__oxdesc = new Field('AmazonPay');
             $payment->oxpayments__oxaddsum = new Field(0);
@@ -161,7 +161,7 @@ class Events
             foreach ($paymentDescriptions as $languageAbbreviation => $description) {
                 $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
-                    $payment->loadInLang($languageId, 'oxidamazon');
+                    $payment->loadInLang($languageId, Constants::PAYMENT_ID);
                     $payment->oxpayments__oxlongdesc = new Field($description);
                     $payment->save();
                 }
@@ -175,7 +175,7 @@ class Events
     public static function disablePaymentMethod(): void
     {
         $payment = oxNew(Payment::class);
-        if ($payment->load('oxidamazon')) {
+        if ($payment->load(Constants::PAYMENT_ID)) {
             $payment->oxpayments__oxactive = new Field(0);
             $payment->save();
         }
@@ -187,7 +187,7 @@ class Events
     public static function enablePaymentMethod(): void
     {
         $payment = oxNew(Payment::class);
-        $payment->load('oxidamazon');
+        $payment->load(Constants::PAYMENT_ID);
         $payment->oxpayments__oxactive = new Field(1);
         $payment->save();
     }

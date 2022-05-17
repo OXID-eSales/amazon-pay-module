@@ -116,10 +116,19 @@ class ViewConfig extends ViewConfig_parent
     {
         return (
             Registry::getSession()->getVariable('sShipSet') &&
-            (Registry::getSession()->getVariable('paymentid') === 'oxidamazon')
+            (Registry::getSession()->getVariable('paymentid') === Constants::PAYMENT_ID)
         );
     }
 
+    /**
+     * Template getter getAmazonPaymentId
+     *
+     * @return string
+     */
+    public function getAmazonPaymentId(): string
+    {
+        return Constants::PAYMENT_ID;
+    }
     /**
      * @param null $oxid
      * @return bool

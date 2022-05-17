@@ -29,6 +29,7 @@ use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -52,7 +53,7 @@ class Order extends Order_parent
         // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
         // stop finalize order
         if (
-            $oBasket->getPaymentId() === 'oxidamazon' &&
+            $oBasket->getPaymentId() === Constants::PAYMENT_ID &&
             !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
         ) {
             return self::ORDER_STATE_PAYMENTERROR; // means no authentication
@@ -80,7 +81,7 @@ class Order extends Order_parent
         // therefore we reset status to "not finished yet"
         if ($ret < 2  &&
             !$blRecalculatingOrder &&
-            $oBasket->getPaymentId() === 'oxidamazon'
+            $oBasket->getPaymentId() === Constants::PAYMENT_ID
         ) {
             $this->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
         }

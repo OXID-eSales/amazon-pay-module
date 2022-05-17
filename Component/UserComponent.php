@@ -77,7 +77,7 @@ class UserComponent extends UserComponent_Parent
         if ($amazonShippingAddress){
             $deliveryAddress = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
             $this->setRequestParameter('deladr', $deliveryAddress);
-            $session->setVariable('amazondeladr', $deliveryAddress);
+            $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
         }
 
         $registrationResult = $this->registerUser();
@@ -147,12 +147,12 @@ class UserComponent extends UserComponent_Parent
     {
         $session = Registry::getSession();
         if ($session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
-            !$session->getVariable('amazondeladr')
+            !$session->getVariable(Constants::SESSION_DELIVERY_ADDR)
         ) {
             return parent::_getDelAddressData();
         }
         $aDelAdress = [];
-        $aDeladr = $session->getVariable('amazondeladr');
+        $aDeladr = $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
         if (count($aDeladr)) {
             $aDelAdress = $aDeladr;
         }

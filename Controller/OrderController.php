@@ -69,13 +69,13 @@ class OrderController extends OrderController_parent
                         $amazonSession['response']['shippingAddress'],
                         'oxaddress__'
                     );
-                    $session->setVariable('amazondeladr', $deliveryAddress);
+                    $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
                     $this->setAmazonPayAsPaymentMethod();
                 }
                 // if amazon does not provide a shipping address and we already have an oxid user, use oxid-user-data
                 else {
                     $this->setAmazonPayAsPaymentMethod();
-                    $session->deleteVariable('amazondeladr');
+                    $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
                 }
             }
         }

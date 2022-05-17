@@ -31,14 +31,22 @@ class Constants
      * @var string Payment ID
      */
     public const PAYMENT_ID = 'oxidamazon';
+
     /**
      * @var string Module ID
      */
     public const MODULE_ID = 'oxps_amazonpay';
+
     /**
      * @var string Amazon checkout session id param name
      */
     public const SESSION_CHECKOUT_ID = 'amzn-checkout-sess';
+
+    /**
+     * @var string Amazon checkout session param name deliveryaddr
+     */
+    public const SESSION_DELIVERY_ADDR = 'amazondeladr';
+
 
     /**
      * @var string Amazon checkout id request param name

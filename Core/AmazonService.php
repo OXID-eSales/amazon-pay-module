@@ -54,14 +54,14 @@ class AmazonService
      *
      * @var oxAddress|null
      */
-    protected $filteredDeliveryAddress = null;
+    protected $deliveryAddress = null;
 
     /**
      * Billing address
      *
      * @var oxAddress|null
      */
-    protected $filteredBillingAddress = null;
+    protected $billingAddress = null;
 
     /**
      * Billing address fields
@@ -201,22 +201,22 @@ class AmazonService
     }
 
     /**
-     * Oxid formatted and filtered delivery address from Amazon
+     * Oxid formatted delivery address from Amazon
      *
-     * @return array
+     * @return object
      */
-    public function getFilteredDeliveryAddress()
+    public function getDeliveryAddressAsObj()
     {
-        if (is_null($this->filteredDeliveryAddress)) {
-            $this->filteredDeliveryAddress = false;
-            if ($deliveryAddress = $this->getDelAddress()) {
-                $this->filteredDeliveryAddress = $this->filterAddress(
-                    $deliveryAddress,
-                    $this->getMissingRequiredDeliveryFields()
+        if (is_null($this->deliveryAddress)) {
+            $this->deliveryAddress = false;
+            $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+            if ($deliveryAddress = $oOrder->getDelAddressInfo()) {
+                $this->deliveryAddress = $this->filterAddress(
+                    $deliveryAddress
                 );
             }
         }
-        return $this->filteredDeliveryAddress;
+        return $this->deliveryAddress;
     }
 
     /**
@@ -235,47 +235,24 @@ class AmazonService
     }
 
     /**
-     * Oxid formatted and filtered billing address from Amazon
+     * Oxid formatted billing address from Amazon
      *
      * @return object
      */
-    public function getFilteredBillingAddress()
+    public function getBillingAddressAsObj()
     {
-        if (is_null($this->filteredBillingAddress)) {
-            $this->filteredBillingAddress = false;
+        if (is_null($this->billingAddress)) {
+            $this->billingAddress = false;
             $oUser = $this->getUser();
             $billingAddress = new \stdClass();
             foreach ($this->billingAddressFields as $key) {
                 $billingAddress->{$key} = $oUser->{$key}->rawValue;
             }
-            $this->filteredBillingAddress = $this->filterAddress(
-                $billingAddress,
-                $this->getMissingRequiredBillingFields()
+            $this->billingAddress = $this->filterAddress(
+                $billingAddress
             );
         }
-        return $this->filteredBillingAddress;
-    }
-
-    /**
-     * Oxid missed billing address fields
-     *
-     * @return array
-     */
-    public function getMissingRequiredBillingFields(): array
-    {
-        $missingBillingFields = Registry::getSession()->getVariable('amazonMissingBillingFields');
-        return is_array($missingBillingFields) ? $missingBillingFields : [];
-    }
-
-    /**
-     * Oxid missed delivery address fields
-     *
-     * @return array
-     */
-    public function getMissingRequiredDeliveryFields(): array
-    {
-        $missingDeliveryFields = Registry::getSession()->getVariable('amazonMissingDeliveryFields');
-        return is_array($missingDeliveryFields) ? $missingDeliveryFields : [];
+        return $this->billingAddress;
     }
 
     public function unsetPaymentMethod(): void
@@ -866,13 +843,12 @@ class AmazonService
         return $this->delAddress;
     }
 
-    private function filterAddress($address, array $missingFields = [])
+    private function filterAddress($address)
     {
-        $filteredAddress = new \stdClass();
+        $addressObj = new \stdClass();
         foreach ($address as $key => $value) {
-            $value = (!isset($missingFields[$key])) ? $value : '';
-            $filteredAddress->{$key} = new Field($value, Field::T_RAW);
+            $addressObj->{$key} = new Field($value, Field::T_RAW);
         }
-        return $filteredAddress;
+        return $addressObj;
     }
 }

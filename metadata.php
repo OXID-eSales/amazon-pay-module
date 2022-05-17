@@ -117,10 +117,6 @@ $aModule = [
             'oxps/amazonpay/views/elements/flow_filtered_billing_address.tpl',
         'amazonpay/flow_filtered_delivery_address.tpl' =>
             'oxps/amazonpay/views/elements/flow_filtered_delivery_address.tpl',
-        'amazonpay/flow_missing_billing_address.tpl' =>
-            'oxps/amazonpay/views/elements/flow_missing_billing_address.tpl',
-        'amazonpay/flow_missing_delivery_address.tpl' =>
-            'oxps/amazonpay/views/elements/flow_missing_delivery_address.tpl',
         'amazonpay/flow_user_checkout_shipping_head.tpl' =>
             'oxps/amazonpay/views/elements/flow_user_checkout_shipping_head.tpl',
         'amazonpay/flow_shippingandpayment.tpl' => 'oxps/amazonpay/views/elements/flow_shippingandpayment.tpl',
@@ -139,10 +135,6 @@ $aModule = [
             'oxps/amazonpay/views/elements/wave_filtered_billing_address.tpl',
         'amazonpay/wave_filtered_delivery_address.tpl' =>
             'oxps/amazonpay/views/elements/wave_filtered_delivery_address.tpl',
-        'amazonpay/wave_missing_billing_address.tpl' =>
-            'oxps/amazonpay/views/elements/wave_missing_billing_address.tpl',
-        'amazonpay/wave_missing_delivery_address.tpl' =>
-            'oxps/amazonpay/views/elements/wave_missing_delivery_address.tpl',
         'amazonpay/wave_user_checkout_shipping_head.tpl' =>
             'oxps/amazonpay/views/elements/wave_user_checkout_shipping_head.tpl',
         'amazonpay/wave_shippingandpayment.tpl' => 'oxps/amazonpay/views/elements/wave_shippingandpayment.tpl',

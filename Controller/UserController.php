@@ -48,9 +48,9 @@ class UserController extends UserController_parent
      *
      * @return object
      */
-    public function getFilteredDeliveryAddress()
+    public function getDeliveryAddressAsObj()
     {
-        return OxidServiceProvider::getAmazonService()->getFilteredDeliveryAddress();
+        return OxidServiceProvider::getAmazonService()->getDeliveryAddressAsObj();
     }
 
     /**
@@ -58,8 +58,8 @@ class UserController extends UserController_parent
      *
      * @return object
      */
-    public function getFilteredBillingAddress()
+    public function getBillingAddressAsObj()
     {
-        return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
+        return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }
 }

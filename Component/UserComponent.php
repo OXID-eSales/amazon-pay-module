@@ -69,27 +69,15 @@ class UserComponent extends UserComponent_Parent
         }
 
         // handle billing address
-        $mappedBillingFields = Address::mapAddressToDb($amazonBillingAddress, 'oxuser__');
-        $missingBillingFields = Address::collectMissingRequiredBillingFields($mappedBillingFields);
-        if (count($missingBillingFields)) {
-            $session->setVariable('amazonMissingBillingFields', $missingBillingFields);
-        }
-        $billingAddress = array_merge($mappedBillingFields, $missingBillingFields);
+        $billingAddress = Address::mapAddressToDb($amazonBillingAddress, 'oxuser__');
         $this->setRequestParameter('invadr', $billingAddress);
 
         // handle shipping address (if provided by amazon)
         if ($amazonShippingAddress){
-            $mappedDeliveryFields = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
-            $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-            if (count($missingDeliveryFields)) {
-                $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
-            }
-            $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
+            $deliveryAddress = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
             $this->setRequestParameter('deladr', $deliveryAddress);
             $session->setVariable('amazondeladr', $deliveryAddress);
         }
-
-        $this->deleteMissingSession();
 
         $registrationResult = $this->registerUser();
 
@@ -144,21 +132,7 @@ class UserComponent extends UserComponent_Parent
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        $this->deleteMissingSession();
         parent::logout();
-    }
-
-    /**
-     * Deletes Missing Session Items
-     *
-     * @return null
-     */
-    protected function deleteMissingSession()
-    {
-        // delete Session-Items
-        $session = Registry::getSession();
-        $session->deleteVariable('amazonMissingBillingFields');
-        $session->deleteVariable('amazonMissingDeliveryFields');
     }
 
     /**

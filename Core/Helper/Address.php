@@ -24,7 +24,6 @@ namespace OxidProfessionalServices\AmazonPay\Core\Helper;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
-use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidProfessionalServices\AmazonPay\Core\Logger;
 use OxidProfessionalServices\AmazonPay\Core\Config;
 use VIISON\AddressSplitter\AddressSplitter;
@@ -141,62 +140,6 @@ class Address
 
     /**
      * @param array $address
-     * @return array
-     */
-    public static function collectMissingRequiredBillingFields(array $address): array
-    {
-        $config = Registry::get(Config::class);
-
-        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
-        $aRequiredBillingFields = $oRequiredAddressFields->getBillingFields();
-
-        $missingFields = [];
-
-        foreach ($aRequiredBillingFields as $billingKey) {
-            if (
-                (
-                    isset($address[$billingKey]) &&
-                    !$address[$billingKey]
-                ) ||
-                !isset($address[$billingKey])
-            ) {
-                // we collect the missing fields and filled as dummy with a Placeholder
-                $missingFields[$billingKey] = $config->getPlaceholder();
-            }
-        }
-        return $missingFields;
-    }
-
-    /**
-     * @param array $address
-     * @return array
-     */
-    public static function collectMissingRequiredDeliveryFields(array $address): array
-    {
-        $config = Registry::get(Config::class);
-
-        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
-        $aRequiredDeliveryFields = $oRequiredAddressFields->getDeliveryFields();
-
-        $missingFields = [];
-
-        foreach ($aRequiredDeliveryFields as $deliveryKey) {
-            if (
-                (
-                    isset($address[$deliveryKey]) &&
-                    !$address[$deliveryKey]
-                ) ||
-                !isset($address[$deliveryKey])
-            ) {
-                // we collect the missing fields and filled as dummy with a Placeholder
-                $missingFields[$deliveryKey] = $config->getPlaceholder();
-            }
-        }
-        return $missingFields;
-    }
-
-    /**
-     * @param array $address
      * @param string $DBTablePrefix
      * @return array
      */
@@ -236,7 +179,7 @@ class Address
 
         $parsedAddress = self::parseAddress($address);
 
-        $result = [
+        return [
             'oxcompany' => $parsedAddress['Company'],
             'oxfname' => $parsedAddress['Firstname'],
             'oxlname' => $parsedAddress['Lastname'],
@@ -252,28 +195,6 @@ class Address
             'oxfax' => '',
             'oxsal' => ''
         ];
-
-        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
-
-        $aRequiredFields = $DBTablePrefix === 'oxuser__' ?
-            $oRequiredAddressFields->getBillingFields() :
-            $oRequiredAddressFields->getDeliveryFields();
-
-        foreach ($aRequiredFields as $key) {
-            $key = str_replace($DBTablePrefix, '', $key);
-            if (
-                (
-                    isset($result[$key]) &&
-                    !$result[$key]
-                ) ||
-                !isset($result[$key])
-            ) {
-                // we collect the missing fields and filled as dummy with a Placeholder
-                $result[$key] = $config->getPlaceholder();
-            }
-        }
-
-        return $result;
     }
 
     /**

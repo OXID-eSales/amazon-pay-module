@@ -64,17 +64,10 @@ class OrderController extends OrderController_parent
             } else {
                 // if Amazon provides a shipping address use it
                 if ($amazonSession['response']['shippingAddress']) {
-                    // we check only the shippingAddress
-                    $mappedDeliveryFields = Address::mapAddressToDb(
+                    $deliveryAddress = Address::mapAddressToDb(
                         $amazonSession['response']['shippingAddress'],
                         'oxaddress__'
                     );
-                    $missingDeliveryFields = Address::collectMissingRequiredDeliveryFields($mappedDeliveryFields);
-                    $session->deleteVariable('amazonMissingDeliveryFields');
-                    if (count($missingDeliveryFields)) {
-                        $session->setVariable('amazonMissingDeliveryFields', $missingDeliveryFields);
-                    }
-                    $deliveryAddress = array_merge($mappedDeliveryFields, $missingDeliveryFields);
                     $session->setVariable('amazondeladr', $deliveryAddress);
                     $this->setAmazonPayAsPaymentMethod();
                 }
@@ -177,21 +170,11 @@ class OrderController extends OrderController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return array
+     * @return object
      */
-    public function getMissingRequiredBillingFields(): array
+    public function getDeliveryAddressAsObj()
     {
-        return OxidServiceProvider::getAmazonService()->getMissingRequiredBillingFields();
-    }
-
-    /**
-     * Template getter for amazon bill address
-     *
-     * @return array
-     */
-    public function getMissingRequiredDeliveryFields(): array
-    {
-        return OxidServiceProvider::getAmazonService()->getMissingRequiredDeliveryFields();
+        return OxidServiceProvider::getAmazonService()->getDeliveryAddressAsObj();
     }
 
     /**
@@ -199,19 +182,9 @@ class OrderController extends OrderController_parent
      *
      * @return object
      */
-    public function getFilteredDeliveryAddress()
+    public function getBillingAddressAsObj()
     {
-        return OxidServiceProvider::getAmazonService()->getFilteredDeliveryAddress();
-    }
-
-    /**
-     * Template getter for amazon bill address
-     *
-     * @return object
-     */
-    public function getFilteredBillingAddress()
-    {
-        return OxidServiceProvider::getAmazonService()->getFilteredBillingAddress();
+        return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }
 
     protected function setAmazonPayAsPaymentMethod()

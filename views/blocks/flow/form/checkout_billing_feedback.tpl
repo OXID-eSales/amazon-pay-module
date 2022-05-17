@@ -1,4 +1,4 @@
-[{assign var="oBillingAddress" value=$oView->getFilteredBillingAddress()}]
+[{assign var="oBillingAddress" value=$oView->getBillingAddressAsObj()}]
 [{if $oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude() && $oBillingAddress}]
     [{include file="amazonpay/flow_filtered_billing_address.tpl" billadr=$oBillingAddress}]
 [{else}]

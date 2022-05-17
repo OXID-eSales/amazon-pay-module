@@ -57,28 +57,6 @@ class Order extends Order_parent
         ) {
             return self::ORDER_STATE_PAYMENTERROR; // means no authentication
         }
-
-        // cleanup sanitized addresses for amazon-orders
-        if (
-            $oBasket->getPaymentId() === 'oxidamazon' &&
-            ($missingRequestBillingFields = Registry::getConfig()->getRequestParameter(
-                'missing_amazon_invadr'
-            ))
-        ) {
-            $config = Registry::get(Config::class);
-            $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
-
-            foreach ($oRequiredAddressFields->getBillingFields() as $billingKey) {
-                if (isset($missingRequestBillingFields[$billingKey])) {
-                    $oUser->{$billingKey} = new Field($missingRequestBillingFields[$billingKey], Field::T_RAW);
-                }
-                elseif (strpos($oUser->{$billingKey}->value, $config->getPlaceholder()) !== false) {
-                    $oUser->{$billingKey} = new Field('', Field::T_RAW);
-                }
-            }
-            $oUser->save();
-            Registry::getSession()->deleteVariable('amazonMissingBillingFields');
-        }
     }
 
     /**
@@ -128,20 +106,6 @@ class Order extends Order_parent
 
         $address = oxNew(Address::class);
         $address->assign($amazonDelAddress);
-
-        // sanitized addresses for amazon-orders
-        $config = Registry::get(Config::class);
-        $missingRequestDeliveryFields = Registry::getConfig()->getRequestParameter('missing_amazon_deladr');
-        $oRequiredAddressFields = oxNew(RequiredAddressFields::class);
-        foreach ($oRequiredAddressFields->getDeliveryFields() as $deliveryKey) {
-            if (isset($missingRequestDeliveryFields[$deliveryKey])) {
-                $address->{$deliveryKey} = new Field($missingRequestDeliveryFields[$deliveryKey], Field::T_RAW);
-            }
-            elseif (strpos($address->{$deliveryKey}->value, $config->getPlaceholder()) !== false) {
-                $address->{$deliveryKey} = new Field('', Field::T_RAW);
-            }
-        }
-        Registry::getSession()->deleteVariable('amazonMissingDeliveryFields');
 
         return $address;
     }

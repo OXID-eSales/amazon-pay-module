@@ -67,4 +67,20 @@ class AmazonInputValidator extends AmazonInputValidator_parent
 
         return parent::checkLogin($oUser, $sLogin, $aInvAddress);
     }
+
+    /**
+     * Disabling validation for Amazon addresses when Amazon Pay is active
+     *
+     * @param User  $user            Active user.
+     * @param array $billingAddress  Billing address.
+     * @param array $deliveryAddress Delivery address.
+     */
+    public function checkRequiredFields($user, $billingAddress, $deliveryAddress)
+    {
+        $service = OxidServiceProvider::getAmazonService();
+
+        if (!$service->isAmazonSessionActive()) {
+            return parent::checkRequiredFields($user, $billingAddress, $deliveryAddress);
+        }
+    }
 }

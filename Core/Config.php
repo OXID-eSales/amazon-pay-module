@@ -393,18 +393,6 @@ class Config
     }
 
     /**
-     * This Placeholder is public. The only function is to fill this string
-     * in the empty required fields during checkout. After checkout the fields would be cleaned from
-     * the database
-     *
-     * @return string
-     */
-    public function getPlaceholder(): string
-    {
-        return Constants::CHECKOUT_PLACEHOLDER;
-    }
-
-    /**
      * PlatformId to identify the Module-Integration
      *
      * @return string

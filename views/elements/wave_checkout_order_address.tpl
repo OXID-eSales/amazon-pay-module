@@ -7,8 +7,8 @@
         changeAction: 'changeAddress'
     });
 [{/capture}]
-[{assign var="oDeliveryAddress" value=$oView->getFilteredDeliveryAddress()}]
-[{assign var="oBillingAddress" value=$oView->getFilteredBillingAddress()}]
+[{assign var="oDeliveryAddress" value=$oView->getDeliveryAddressAsObj()}]
+[{assign var="oBillingAddress" value=$oView->getBillingAddressAsObj()}]
 [{oxscript add=$smarty.capture.amazonpay_script}]
 <div id="orderAddress" class="row">
     <div class="col-12 col-md-6">
@@ -31,12 +31,6 @@
                 <div class="card-body">
                     [{include file="amazonpay/filtered_billing_address.tpl" billadr=$oBillingAddress}]
                 </div>
-                [{assign var="missingRequiredBillingFields" value=$oView->getMissingRequiredBillingFields()}]
-                [{if $missingRequiredBillingFields|@count}]
-                    <div class="card-footer">
-                        [{include file="amazonpay/wave_missing_billing_address.tpl" missingfields=$missingRequiredBillingFields}]
-                    </div>
-                [{/if}]
             </div>
         </form>
     </div>
@@ -64,12 +58,6 @@
                         [{include file="amazonpay/filtered_billing_address.tpl" billadr=$oBillingAddress}]
                     [{/if}]
                 </div>
-                [{assign var="missingRequiredDeliveryFields" value=$oView->getMissingRequiredDeliveryFields()}]
-                [{if $missingRequiredDeliveryFields|@count}]
-                    <div class="card-footer">
-                        [{include file="amazonpay/wave_missing_delivery_address.tpl" missingfields=$missingRequiredDeliveryFields}]
-                    </div>
-                [{/if}]
             </div>
         </form>
     </div>

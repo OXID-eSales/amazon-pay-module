@@ -72,11 +72,12 @@ class Config
     ];
 
     /**
-    * Amazonpay default currency
+    * Amazonpay Ledger currency
+    * @link https://developer.amazon.com/de/docs/amazon-pay-checkout/multi-currency-integration.html
     *
     * @var string
     */
-    protected $amazonDefaultCurrency = 'EUR';
+    protected $amazonLedgerCurrency = 'EUR';
 
     /**
     * all allowed Amazonpay EU Addresses
@@ -97,13 +98,6 @@ class Config
     ];
 
     /**
-    * Amazonpay default EU Address
-    *
-    * @var string
-    */
-    protected $amazonDefaultEUAddresses = 'DE';
-
-    /**
      * returns Country.
      *
      * @var OXID CountryList
@@ -122,7 +116,8 @@ class Config
             !$this->getPrivateKey() ||
             !$this->getPublicKeyId() ||
             !$this->getMerchantId() ||
-            !$this->getStoreId()
+            !$this->getStoreId() ||
+            !$this->getPresentmentCurrency()
         ) {
             throw oxNew(StandardException::class);
         }
@@ -207,18 +202,18 @@ class Config
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getPresentmentCurrency(): string
+    public function getPresentmentCurrency(): ?string
     {
-        $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
-        $currencyAbbr = $shopCurrency->name;
+        $currencyAbbr = null;
 
-        if (in_array($currencyAbbr, $this->amazonCurrencies)) {
-            return $currencyAbbr;
-        } else {
-            return $this->amazonDefaultCurrency;
+        $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
+
+        if (in_array($shopCurrency->name, $this->amazonCurrencies)) {
+            $currencyAbbr = $shopCurrency->name;
         }
+        return $currencyAbbr;
     }
 
     /**
@@ -226,7 +221,7 @@ class Config
      */
     public function getLedgerCurrency(): string
     {
-        return $this->amazonDefaultCurrency;
+        return $this->amazonLedgerCurrency;
     }
 
     /**

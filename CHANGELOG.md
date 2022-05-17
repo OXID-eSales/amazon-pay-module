@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.3] - Maintenance Release
+
+* faster checkout
+* Currency restriction may prevent Amazon Payment
+* No Country restriction allows delivery in all Amazon Countries
+* remove Validation Hack
+* use central constante for paymentid and deladr
+
 ## [1.1.2] - Backward-Compatibility for OXID 6.1
 
 * Add Backward-Compatibility for OXID 6.1

@@ -44,6 +44,8 @@ $aLang = [
         from Login with Amazon in Seller Central.',
     'OXPS_AMAZONPAY_PAYREGION'          => 'Payment Region',
     'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'The currencies allowed in your shop and possible on Amazon Pay.',
+    'OXPS_AMAZONPAY_DELREGION'          => 'Delivery Region',
+    'HELP_OXPS_AMAZONPAY_DELREGION'     => 'The Deliverycountries allowed in your shop and possible on Amazon Pay.',
     'OXPS_AMAZONPAY_SELLER'             => 'Seller',
     'OXPS_AMAZONPAY_IPN'                => 'IPN Endpoint (please copy the URL and store it in the Amazon backend)',
     'HELP_OXPS_AMAZONPAY_IPN'           => 'IPN messages are sent by Amazon Pay without any action required on your part and

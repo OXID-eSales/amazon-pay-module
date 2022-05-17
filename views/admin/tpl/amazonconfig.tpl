@@ -71,6 +71,15 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="payRegion">[{oxmultilang ident="OXPS_AMAZONPAY_DELREGION"}]</label>
+            <div class="controls">
+                [{assign var="deliveryAbbr" value=$config->getPossibleEUAddressesAbbr()}]
+                <span id="delRegion">[{", "|implode:$deliveryAbbr}]</span>
+                <span class="help-block">[{oxmultilang ident="HELP_OXPS_AMAZONPAY_DELREGION"}]</span>
+            </div>
+        </div>
+
         <h3>[{oxmultilang ident="OXPS_AMAZONPAY_SELLER"}]</h3>
 
         <div class="form-group">

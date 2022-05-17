@@ -45,6 +45,8 @@ $aLang = [
         Rufen Sie diesen Wert ab von Login mit Amazon in Seller Central.',
     'OXPS_AMAZONPAY_PAYREGION'          => 'Zahlungsbereich',
     'HELP_OXPS_AMAZONPAY_PAYREGION'     => 'Die in Ihrem Shop erlaubten und bei Amazon Pay möglichen Währungen.',
+    'OXPS_AMAZONPAY_DELREGION'          => 'Lieferbereich',
+    'HELP_OXPS_AMAZONPAY_DELREGION'     => 'Die in Ihrem Shop erlaubten und bei Amazon Pay möglichen Lieferländer.',
     'OXPS_AMAZONPAY_SELLER'             => 'Verkäufer',
     'OXPS_AMAZONPAY_IPN'                => 'IPN-Endpunkt (bitte URL kopieren und im Amazon-Backend hinterlegen)',
     'HELP_OXPS_AMAZONPAY_IPN'           => 'IPN-Nachrichten werden von Amazon Pay ohne Ihr Zutun gesendet und können zur Aktualisierung Ihres

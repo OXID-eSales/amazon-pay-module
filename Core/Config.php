@@ -243,18 +243,23 @@ class Config
     /**
      * @return array
      */
+    public function getPossibleEUAddressesAbbr(): array
+    {
+        // if there are no specific countries, then all countries are allowed.
+        // Then the Countrylist corresponds to the amazonEUAddresses
+        return count($this->getCountryList()) ? $this->getCountryList(): $this->amazonEUAddresses;
+    }
+
+    /**
+     * @return array
+     */
     public function getPossibleEUAddresses(): array
     {
         $result = [];
-        $oxidCountryList = $this->getCountryList();
-
-        foreach ($oxidCountryList as $oxidCountryIsoCode) {
-            if (in_array($oxidCountryIsoCode, $this->amazonEUAddresses)) {
-                $result[$oxidCountryIsoCode] = (object) null;
+        foreach ($this->getPossibleEUAddressesAbbr() as $isoCode) {
+            if (in_array($isoCode, $this->amazonEUAddresses)) {
+                $result[$isoCode] = (object) null;
             }
-        }
-        if (count($result) == 0) {
-            $result[$this->amazonDefaultEUAddresses] = (object) null;
         }
         return $result;
     }

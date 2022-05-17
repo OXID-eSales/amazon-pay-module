@@ -95,13 +95,6 @@ class AmazonService
     protected $actUser = null;
 
     /**
-     * Delivery address
-     *
-     * @var oxAddress|null
-     */
-    protected $delAddress = null;
-
-    /**
      * AmazonService constructor.
      *
      * @param AmazonClient|null $client
@@ -208,12 +201,12 @@ class AmazonService
     public function getDeliveryAddressAsObj()
     {
         if (is_null($this->deliveryAddress)) {
-            $this->deliveryAddress = false;
+            $this->deliveryAddress = new \stdClass();
             $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             if ($deliveryAddress = $oOrder->getDelAddressInfo()) {
-                $this->deliveryAddress = $this->filterAddress(
-                    $deliveryAddress
-                );
+                foreach ($deliveryAddress as $key => $value) {
+                    $this->deliveryAddress->{$key} = new Field($value, Field::T_RAW);
+                }
             }
         }
         return $this->deliveryAddress;
@@ -242,15 +235,11 @@ class AmazonService
     public function getBillingAddressAsObj()
     {
         if (is_null($this->billingAddress)) {
-            $this->billingAddress = false;
             $oUser = $this->getUser();
-            $billingAddress = new \stdClass();
+            $this->billingAddress = new \stdClass();
             foreach ($this->billingAddressFields as $key) {
-                $billingAddress->{$key} = $oUser->{$key}->rawValue;
+                $this->billingAddress->{$key} = new Field($oUser->{$key}->rawValue, Field::T_RAW);
             }
-            $this->billingAddress = $this->filterAddress(
-                $billingAddress
-            );
         }
         return $this->billingAddress;
     }
@@ -825,30 +814,5 @@ class AmazonService
         }
 
         return $this->actUser;
-    }
-
-    /**
-     * Returns delivery address
-     *
-     * @return object
-     */
-    public function getDelAddress()
-    {
-        if ($this->delAddress === null) {
-            $this->delAddress = false;
-            $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
-            $this->delAddress = $oOrder->getDelAddressInfo();
-        }
-
-        return $this->delAddress;
-    }
-
-    private function filterAddress($address)
-    {
-        $addressObj = new \stdClass();
-        foreach ($address as $key => $value) {
-            $addressObj->{$key} = new Field($value, Field::T_RAW);
-        }
-        return $addressObj;
     }
 }

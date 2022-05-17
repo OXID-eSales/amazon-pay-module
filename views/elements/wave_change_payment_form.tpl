@@ -4,7 +4,7 @@
         [{$oViewConf->getNavFormParams()}]
         <input type="hidden" name="cl" value="[{$oViewConf->getActiveClassName()}]">
         <input type="hidden" name="fnc" value="validatepayment">
-        <input type="hidden" name="paymentid" value="oxidamazon">
+        <input type="hidden" name="paymentid" value="[{$oViewConf->getAmazonPaymentId()}]">
     </div>
     <div class="card bg-light cart-buttons">
         <div class="card-body">

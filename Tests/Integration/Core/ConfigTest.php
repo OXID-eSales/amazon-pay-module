@@ -93,9 +93,9 @@ class ConfigTest extends UnitTestCase
     {
         $config = new Config();
         $this->setConfigParam('blAmazonPayMinicartAndModal', true);
-        $this->assertTrue($config->displayInMiniCart());
+        $this->assertTrue($config->displayInMiniCartAndModal());
         $this->setConfigParam('blAmazonPayMinicartAndModal', false);
-        $this->assertFalse($config->displayInMiniCart());
+        $this->assertFalse($config->displayInMiniCartAndModal());
     }
 
     public function testCheckHealthMissingPrivKey(): void

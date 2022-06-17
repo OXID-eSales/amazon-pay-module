@@ -24,20 +24,20 @@ declare(strict_types=1);
 
 namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Model;
 
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Model\Order;
 use Mockery;
+use OxidEsales\Eshop\Application\Model\Order as EshopOrderModel;
+use OxidProfessionalServices\AmazonPay\Core\AmazonService;
 use OxidProfessionalServices\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 
 class OrderTest extends AmazonTestCase
 {
-    /** @var Order */
+    /** @var EshopOrderModel */
     private $order;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->order = new Order();
+        $this->order = oxNew(EshopOrderModel::class);
     }
 
     public function testGetDelAddressInfo(): void
@@ -72,12 +72,11 @@ class OrderTest extends AmazonTestCase
         $this->assertSame(0, $this->order->validateDeliveryAddress(null));
     }
 
-    public function testUpdateStatus(): void
+    public function testUpdateAmazonPayOrderStatus(): void
     {
-        $this->order->updateStatus('test1');
-        $this->assertSame('test1', $this->order->OXTRANSTATUS);
-        $this->order->updateStatus('test2');
-        $this->assertNotSame('test1', $this->order->OXTRANSTATUS);
-        $this->assertSame('test2', $this->order->OXTRANSTATUS);
+        $this->order->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
+        $this->assertSame('NOT_FINISHED', $this->order->getFieldData('oxtransstatus'));
+        $this->order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK');
+        $this->assertSame('OK', $this->order->getFieldData('oxtransstatus'));
     }
 }

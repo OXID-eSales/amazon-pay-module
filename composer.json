@@ -4,6 +4,12 @@
   "type": "oxideshop-module",
   "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],
   "license": "proprietary",
+  "support": {
+    "source": "https://github.com/OXID-eSales/amazon-pay-module",
+    "issues": "https://bugs.oxid-esales.com",
+    "forum": "https://forum.oxid-esales.com",
+    "docs": "https://docs.oxid-esales.com/modules/amazon-pay/en/latest"
+  },
   "require": {
     "amzn/amazon-pay-api-sdk-php": "^2.0",
     "ext-json": "*",

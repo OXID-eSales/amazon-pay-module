@@ -34,6 +34,8 @@ class AmazonCheckoutController extends FrontendController
                     $sProductId,
                     1
                 );
+                // Remove flag of "new item added" to not show "Item added" popup when returning to checkout
+                $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
             } catch (\Exception $exception) {
                 $database->rollbackTransaction();

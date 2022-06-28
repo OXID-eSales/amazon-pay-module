@@ -1,1 +1,4 @@
 /resources/node_modules/
+/source/
+/vendor/
+/var/

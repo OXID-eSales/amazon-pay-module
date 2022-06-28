@@ -1,37 +1,59 @@
 {
-  "name": "oxid-esales/amazon-pay-module",
-  "description": "AmazonPay module for OXID",
-  "type": "oxideshop-module",
-  "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],
-  "license": "proprietary",
-  "support": {
-    "source": "https://github.com/OXID-eSales/amazon-pay-module",
-    "issues": "https://bugs.oxid-esales.com",
-    "forum": "https://forum.oxid-esales.com",
-    "docs": "https://docs.oxid-esales.com/modules/amazon-pay/en/latest"
-  },
-  "require": {
-    "amzn/amazon-pay-api-sdk-php": "^2.0",
-    "ext-json": "*",
-    "viison/address-splitter": "^0.3.4",
-    "mockery/mockery": "^1.3",
-    "aws/aws-php-sns-message-validator": "^1.6"
-  },
-  "archive": {
-    "exclude": ["/resources"]
-  },
-  "extra": {
-    "oxideshop": {
-       "blacklist-filter": [
-          "resources/**/*",
-          "resources/**/*."
-       ],
-      "target-directory": "oxps/amazonpay"
+    "name": "oxid-esales/amazon-pay-module",
+    "description": "AmazonPay module for OXID",
+    "type": "oxideshop-module",
+    "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],
+    "license": "proprietary",
+    "support": {
+        "source": "https://github.com/OXID-eSales/amazon-pay-module",
+        "issues": "https://bugs.oxid-esales.com",
+        "forum": "https://forum.oxid-esales.com",
+        "docs": "https://docs.oxid-esales.com/modules/amazon-pay/en/latest"
+    },
+    "require": {
+        "amzn/amazon-pay-api-sdk-php": "^2.0",
+        "ext-json": "*",
+        "viison/address-splitter": "^0.3.4",
+        "mockery/mockery": "^1.3",
+        "aws/aws-php-sns-message-validator": "^1.6"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*",
+        "oxid-esales/oxideshop-ce": "^v6.8.0",
+        "vimeo/psalm": "^4.13",
+        "symfony/dotenv": "^5.1",
+        "codeception/module-rest": "1.4.2",
+        "codeception/module-phpbrowser": "^1.0.2"
+    },
+    "archive": {
+        "exclude": ["/resources"]
+    },
+    "extra": {
+        "oxideshop": {
+            "blacklist-filter": [
+                "resources/**/*",
+                "resources/**/*."
+            ],
+            "target-directory": "oxps/amazonpay"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "OxidProfessionalServices\\AmazonPay\\": "src"
+        }
+    },
+    "scripts": {
+        "psalm": "psalm --show-info=true --no-cache",
+        "psalm-report": "psalm --show-info=true --no-cache --report=logs/psalm.sonarqube.json",
+        "psalm-errors": "psalm --no-cache",
+        "psalm-automatic": "psalm --alter --issues=MissingReturnType,MissingParamType",
+        "phpcs": "phpcs --standard=Tests/phpcs.xml",
+        "phpcbf": "phpcbf --standard=Tests/phpcs.xml"
+    },
+    "config": {
+        "allow-plugins": {
+            "oxid-esales/oxideshop-unified-namespace-generator": true,
+            "oxid-esales/oxideshop-composer-plugin": true
+        }
     }
-  },
-  "autoload": {
-    "psr-4": {
-      "OxidProfessionalServices\\AmazonPay\\": "."
-    }
-  }
 }

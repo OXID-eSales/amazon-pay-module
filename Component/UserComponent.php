@@ -77,6 +77,7 @@ class UserComponent extends UserComponent_Parent
                 $user,
                 $countryOxId
             );
+            $possibleDeliverySets = [];
             foreach ($deliverySetList as $deliverySet) {
                 $paymentList = Registry::get(PaymentList::class)->getPaymentList(
                     $deliverySet->getId(),

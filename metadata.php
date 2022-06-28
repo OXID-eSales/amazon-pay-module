@@ -115,8 +115,8 @@ $aModule = [
         'amazonpay/checkout_order_address_flow.tpl' => 'oxps/amazonpay/views/elements/checkout_order_address_flow.tpl',
         'amazonpay/checkout_order_address_wave.tpl' => 'oxps/amazonpay/views/elements/checkout_order_address_wave.tpl',
         'amazonpay/checkout_order_btn_submit_bottom_flow.tpl' =>
-            'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_wave.tpl',
-        'amazonpay/checkout_order_btn_submit_bottom_flow.tpl' =>
+            'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_flow.tpl',
+        'amazonpay/checkout_order_btn_submit_bottom_wave.tpl' =>
             'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_wave.tpl',
         'amazonpay/checkout_user_main_flow.tpl' => 'oxps/amazonpay/views/elements/checkout_user_main_flow.tpl',
         'amazonpay/checkout_user_main_wave.tpl' => 'oxps/amazonpay/views/elements/checkout_user_main_wave.tpl',
@@ -183,19 +183,7 @@ $aModule = [
         [
             'template' => 'layout/base.tpl',
             'block' => 'base_style',
-            'file' => 'views/blocks/flow/layout/base_style.tpl'
-        ],
-        [
-            'template' => 'page/checkout/basket.tpl',
-            'block' => 'basket_btn_next_bottom',
-            'file' => '/views/blocks/page/checkout/basket_btn_next_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'checkout_order_address',
-            'file' => '/views/blocks/page/checkout/checkout_order_address.tpl',
-            'position' => '5'
+            'file' => 'views/blocks/layout/base_style.tpl'
         ],
         [
             'template' => 'form/user_checkout_change.tpl',
@@ -225,6 +213,18 @@ $aModule = [
             'template' => 'page/details/inc/productmain.tpl',
             'block' => 'details_productmain_tobasket',
             'file' => '/views/blocks/page/details/inc/details_productmain_tobasket.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/basket.tpl',
+            'block' => 'basket_btn_next_bottom',
+            'file' => '/views/blocks/page/checkout/basket_btn_next_bottom.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/order.tpl',
+            'block' => 'checkout_order_address',
+            'file' => '/views/blocks/page/checkout/checkout_order_address.tpl',
             'position' => '5'
         ],
         [

@@ -1,5 +1,0 @@
-[{if $oViewConf->isAmazonActive() && $oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude()}]
-    [{include file="amazonpay/flow_user_checkout_shipping_head.tpl"}]
-[{else}]
-    [{$smarty.block.parent}]
-[{/if}]

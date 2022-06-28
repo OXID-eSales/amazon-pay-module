@@ -102,42 +102,32 @@ $aModule = [
         'amazonpay/amazonbutton.tpl' => 'oxps/amazonpay/views/elements/amazonbutton.tpl',
         'amazonpay/filtered_billing_address.tpl' => 'oxps/amazonpay/views/elements/filtered_billing_address.tpl',
         'amazonpay/filtered_delivery_address.tpl' => 'oxps/amazonpay/views/elements/filtered_delivery_address.tpl',
-        'amazonpay/flow_basket_btn_next_bottom.tpl' => 'oxps/amazonpay/views/elements/flow_basket_btn_next_bottom.tpl',
-        'amazonpay/flow_change_payment_block.tpl' => 'oxps/amazonpay/views/elements/flow_change_payment_block.tpl',
-        'amazonpay/flow_change_payment_form.tpl' => 'oxps/amazonpay/views/elements/flow_change_payment_form.tpl',
-        'amazonpay/flow_checkout_order_address.tpl' => 'oxps/amazonpay/views/elements/flow_checkout_order_address.tpl',
-        'amazonpay/flow_checkout_order_btn_submit_bottom.tpl' =>
-            'oxps/amazonpay/views/elements/flow_checkout_order_btn_submit_bottom.tpl',
-        'amazonpay/flow_checkout_user_main.tpl' => 'oxps/amazonpay/views/elements/flow_checkout_user_main.tpl',
-        'amazonpay/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl' =>
-            'oxps/amazonpay/views/elements/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl',
-        'amazonpay/flow_details_productmain_tobasket.tpl' =>
-            'oxps/amazonpay/views/elements/flow_details_productmain_tobasket.tpl',
-        'amazonpay/flow_filtered_billing_address.tpl' =>
-            'oxps/amazonpay/views/elements/flow_filtered_billing_address.tpl',
-        'amazonpay/flow_filtered_delivery_address.tpl' =>
-            'oxps/amazonpay/views/elements/flow_filtered_delivery_address.tpl',
-        'amazonpay/flow_user_checkout_shipping_head.tpl' =>
-            'oxps/amazonpay/views/elements/flow_user_checkout_shipping_head.tpl',
-        'amazonpay/flow_shippingandpayment.tpl' => 'oxps/amazonpay/views/elements/flow_shippingandpayment.tpl',
-        'amazonpay/wave_basket_btn_next_bottom.tpl' => 'oxps/amazonpay/views/elements/wave_basket_btn_next_bottom.tpl',
-        'amazonpay/wave_change_payment_block.tpl' => 'oxps/amazonpay/views/elements/wave_change_payment_block.tpl',
-        'amazonpay/wave_change_payment_form.tpl' => 'oxps/amazonpay/views/elements/wave_change_payment_form.tpl',
-        'amazonpay/wave_checkout_order_address.tpl' => 'oxps/amazonpay/views/elements/wave_checkout_order_address.tpl',
-        'amazonpay/wave_checkout_order_btn_submit_bottom.tpl' =>
-            'oxps/amazonpay/views/elements/wave_checkout_order_btn_submit_bottom.tpl',
-        'amazonpay/wave_checkout_user_main.tpl' => 'oxps/amazonpay/views/elements/wave_checkout_user_main.tpl',
-        'amazonpay/wave_dd_layout_page_header_icon_menu_minibasket_functions.tpl' =>
-            'oxps/amazonpay/views/elements/wave_dd_layout_page_header_icon_menu_minibasket_functions.tpl',
-        'amazonpay/wave_details_productmain_tobasket.tpl' =>
-            'oxps/amazonpay/views/elements/wave_details_productmain_tobasket.tpl',
-        'amazonpay/wave_filtered_billing_address.tpl' =>
-            'oxps/amazonpay/views/elements/wave_filtered_billing_address.tpl',
-        'amazonpay/wave_filtered_delivery_address.tpl' =>
-            'oxps/amazonpay/views/elements/wave_filtered_delivery_address.tpl',
-        'amazonpay/wave_user_checkout_shipping_head.tpl' =>
-            'oxps/amazonpay/views/elements/wave_user_checkout_shipping_head.tpl',
-        'amazonpay/wave_shippingandpayment.tpl' => 'oxps/amazonpay/views/elements/wave_shippingandpayment.tpl',
+        'amazonpay/user_checkout_shipping_head_flow.tpl' =>
+            'oxps/amazonpay/views/elements/user_checkout_shipping_head_flow.tpl',
+        'amazonpay/user_checkout_shipping_head_wave.tpl' =>
+            'oxps/amazonpay/views/elements/user_checkout_shipping_head_wave.tpl',
+        'amazonpay/basket_btn_next_bottom_flow.tpl' => 'oxps/amazonpay/views/elements/basket_btn_next_bottom_flow.tpl',
+        'amazonpay/basket_btn_next_bottom_wave.tpl' => 'oxps/amazonpay/views/elements/basket_btn_next_bottom_wave.tpl',
+        'amazonpay/change_payment_block_flow.tpl' => 'oxps/amazonpay/views/elements/change_payment_block_flow.tpl',
+        'amazonpay/change_payment_block_wave.tpl' => 'oxps/amazonpay/views/elements/change_payment_block_wave.tpl',
+        'amazonpay/change_payment_form_flow.tpl' => 'oxps/amazonpay/views/elements/change_payment_form_flow.tpl',
+        'amazonpay/change_payment_form_wave.tpl' => 'oxps/amazonpay/views/elements/change_payment_form_wave.tpl',
+        'amazonpay/checkout_order_address_flow.tpl' => 'oxps/amazonpay/views/elements/checkout_order_address_flow.tpl',
+        'amazonpay/checkout_order_address_wave.tpl' => 'oxps/amazonpay/views/elements/checkout_order_address_wave.tpl',
+        'amazonpay/checkout_order_btn_submit_bottom_flow.tpl' =>
+            'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_wave.tpl',
+        'amazonpay/checkout_order_btn_submit_bottom_flow.tpl' =>
+            'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_wave.tpl',
+        'amazonpay/checkout_user_main_flow.tpl' => 'oxps/amazonpay/views/elements/checkout_user_main_flow.tpl',
+        'amazonpay/checkout_user_main_wave.tpl' => 'oxps/amazonpay/views/elements/checkout_user_main_wave.tpl',
+        'amazonpay/shippingandpayment_flow.tpl' => 'oxps/amazonpay/views/elements/shippingandpayment_flow.tpl',
+        'amazonpay/shippingandpayment_wave.tpl' => 'oxps/amazonpay/views/elements/shippingandpayment_wave.tpl',
+        'amazonpay/details_productmain_tobasket.tpl' =>
+            'oxps/amazonpay/views/elements/details_productmain_tobasket.tpl',
+        'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl' =>
+            'oxps/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl',
+       'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
+            'oxps/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl',
     ],
     'events' => [
         'onActivate' => '\OxidProfessionalServices\AmazonPay\Core\Events::onActivate',
@@ -148,228 +138,6 @@ $aModule = [
             'template' => 'headitem.tpl',
             'block' => 'admin_headitem_inccss',
             'file' => 'views/blocks/admin/admin_headitem_inccss.tpl'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'layout/base.tpl',
-            'block' => 'base_js',
-            'file' => 'views/blocks/flow/layout/base_js.tpl'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'layout/base.tpl',
-            'block' => 'base_js',
-            'file' => 'views/blocks/wave/layout/base_js.tpl'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'layout/base.tpl',
-            'block' => 'base_style',
-            'file' => 'views/blocks/flow/layout/base_style.tpl'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'layout/base.tpl',
-            'block' => 'base_style',
-            'file' => 'views/blocks/wave/layout/base_style.tpl'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/basket.tpl',
-            'block' => 'basket_btn_next_bottom',
-            'file' => '/views/blocks/flow/page/checkout/basket_btn_next_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/basket.tpl',
-            'block' => 'basket_btn_next_bottom',
-            'file' => '/views/blocks/wave/page/checkout/basket_btn_next_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'checkout_order_address',
-            'file' => '/views/blocks/flow/page/checkout/checkout_order_address.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'checkout_order_address',
-            'file' => '/views/blocks/wave/page/checkout/checkout_order_address.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_shipping_form',
-            'file' => '/views/blocks/flow/form/checkout_shipping_form.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_shipping_form',
-            'file' => '/views/blocks/wave/form/checkout_shipping_form.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_shipping_change',
-            'file' => '/views/blocks/flow/form/checkout_shipping_change.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_shipping_change',
-            'file' => '/views/blocks/wave/form/checkout_shipping_change.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_shipping_head',
-            'file' => '/views/blocks/flow/form/user_checkout_shipping_head.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_shipping_head',
-            'file' => '/views/blocks/wave/form/user_checkout_shipping_head.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_billing_feedback',
-            'file' => '/views/blocks/flow/form/checkout_billing_feedback.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'form/user_checkout_change.tpl',
-            'block' => 'user_checkout_billing_feedback',
-            'file' => '/views/blocks/wave/form/checkout_billing_feedback.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/details/inc/productmain.tpl',
-            'block' => 'details_productmain_tobasket',
-            'file' => '/views/blocks/flow/page/details/inc/details_productmain_tobasket.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/details/inc/productmain.tpl',
-            'block' => 'details_productmain_tobasket',
-            'file' => '/views/blocks/wave/page/details/inc/details_productmain_tobasket.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'checkout_order_btn_submit_bottom',
-            'file' => '/views/blocks/flow/page/checkout/checkout_order_btn_submit_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'checkout_order_btn_submit_bottom',
-            'file'     => '/views/blocks/wave/page/checkout/checkout_order_btn_submit_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'checkout_order_btn_confirm_bottom',
-            'file' => '/views/blocks/flow/page/checkout/checkout_order_btn_confirm_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'checkout_order_btn_confirm_bottom',
-            'file'     => '/views/blocks/wave/page/checkout/checkout_order_btn_confirm_bottom.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'shippingAndPayment',
-            'file' => '/views/blocks/flow/page/checkout/shippingandpayment.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/order.tpl',
-            'block'    => 'shippingAndPayment',
-            'file'     => '/views/blocks/wave/page/checkout/shippingandpayment.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/user.tpl',
-            'block' => 'checkout_user_main',
-            'file' => '/views/blocks/flow/page/checkout/checkout_user_main.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/user.tpl',
-            'block' => 'checkout_user_main',
-            'file' => '/views/blocks/wave/page/checkout/checkout_user_main.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'widget/minibasket/minibasket.tpl',
-            'block' => 'dd_layout_page_header_icon_menu_minibasket_functions',
-            'file' =>
-                '/views/blocks/flow/widget/minibasket/dd_layout_page_header_icon_menu_minibasket_functions.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'widget/minibasket/minibasket.tpl',
-            'block' => 'dd_layout_page_header_icon_menu_minibasket_functions',
-            'file' =>
-                '/views/blocks/wave/widget/minibasket/dd_layout_page_header_icon_menu_minibasket_functions.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/payment.tpl',
-            'block' => 'select_payment',
-            'file' => '/views/blocks/flow/page/checkout/select_payment.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/payment.tpl',
-            'block' => 'select_payment',
-            'file' => '/views/blocks/wave/page/checkout/select_payment.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'flow',
-            'template' => 'page/checkout/payment.tpl',
-            'block' => 'change_payment',
-            'file' => '/views/blocks/flow/page/checkout/change_payment.tpl',
-            'position' => '5'
-        ],
-        [
-            'theme' => 'wave',
-            'template' => 'page/checkout/payment.tpl',
-            'block' => 'change_payment',
-            'file' => '/views/blocks/wave/page/checkout/change_payment.tpl',
-            'position' => '5'
         ],
         [
             'template' => 'deliveryset_main.tpl',
@@ -405,6 +173,101 @@ $aModule = [
             'template' => 'include/category_main_form.tpl',
             'block' => 'admin_category_main_form',
             'file' => 'views/blocks/admin/category_main_form.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'layout/base.tpl',
+            'block' => 'base_js',
+            'file' => 'views/blocks/layout/base_js.tpl'
+        ],
+        [
+            'template' => 'layout/base.tpl',
+            'block' => 'base_style',
+            'file' => 'views/blocks/flow/layout/base_style.tpl'
+        ],
+        [
+            'template' => 'page/checkout/basket.tpl',
+            'block' => 'basket_btn_next_bottom',
+            'file' => '/views/blocks/page/checkout/basket_btn_next_bottom.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/order.tpl',
+            'block' => 'checkout_order_address',
+            'file' => '/views/blocks/page/checkout/checkout_order_address.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'form/user_checkout_change.tpl',
+            'block' => 'user_checkout_shipping_form',
+            'file' => '/views/blocks/form/checkout_shipping_form.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'form/user_checkout_change.tpl',
+            'block' => 'user_checkout_shipping_change',
+            'file' => '/views/blocks/form/checkout_shipping_change.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'form/user_checkout_change.tpl',
+            'block' => 'user_checkout_shipping_head',
+            'file' => '/views/blocks/form/user_checkout_shipping_head.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'form/user_checkout_change.tpl',
+            'block' => 'user_checkout_billing_feedback',
+            'file' => '/views/blocks/form/checkout_billing_feedback.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/details/inc/productmain.tpl',
+            'block' => 'details_productmain_tobasket',
+            'file' => '/views/blocks/page/details/inc/details_productmain_tobasket.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/order.tpl',
+            'block' => 'checkout_order_btn_submit_bottom',
+            'file' => '/views/blocks/page/checkout/checkout_order_btn_submit_bottom.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/order.tpl',
+            'block' => 'checkout_order_btn_confirm_bottom',
+            'file' => '/views/blocks/page/checkout/checkout_order_btn_confirm_bottom.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/order.tpl',
+            'block' => 'shippingAndPayment',
+            'file' => '/views/blocks/page/checkout/shippingandpayment.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/user.tpl',
+            'block' => 'checkout_user_main',
+            'file' => '/views/blocks/page/checkout/checkout_user_main.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'widget/minibasket/minibasket.tpl',
+            'block' => 'dd_layout_page_header_icon_menu_minibasket_functions',
+            'file' =>
+                '/views/blocks/widget/minibasket/dd_layout_page_header_icon_menu_minibasket_functions.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/payment.tpl',
+            'block' => 'select_payment',
+            'file' => '/views/blocks/page/checkout/select_payment.tpl',
+            'position' => '5'
+        ],
+        [
+            'template' => 'page/checkout/payment.tpl',
+            'block' => 'change_payment',
+            'file' => '/views/blocks/page/checkout/change_payment.tpl',
             'position' => '5'
         ],
     ],

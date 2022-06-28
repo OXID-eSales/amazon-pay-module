@@ -35,6 +35,18 @@ use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 class ViewConfig extends ViewConfig_parent
 {
     /**
+     * is this a "Flow"-Theme Compatible Theme?
+     * @param boolean
+     */
+    protected $isFlowCompatibleTheme = null;
+
+    /**
+     * is this a "Wave"-Theme Compatible Theme?
+     * @param boolean
+     */
+    protected $isWaveCompatibleTheme = null;
+
+    /**
      * @return object|Config
      */
     public function getAmazonConfig()
@@ -182,5 +194,53 @@ class ViewConfig extends ViewConfig_parent
         }
 
         return false;
+    }
+    /**
+     * Template variable getter. Check if is a Flow Theme Compatible Theme
+     *
+     * @return boolean
+     */
+    public function isFlowCompatibleTheme()
+    {
+        if (is_null($this->isFlowCompatibleTheme)) {
+            $this->isFlowCompatibleTheme = $this->isCompatibleTheme('flow');
+        }
+        return $this->isFlowCompatibleTheme;
+    }
+
+    /**
+     * Template variable getter. Check if is a Wave Theme Compatible Theme
+     *
+     * @return boolean
+     */
+    public function isWaveCompatibleTheme()
+    {
+        if (is_null($this->isWaveCompatibleTheme)) {
+            $this->isWaveCompatibleTheme = $this->isCompatibleTheme('wave');
+        }
+        return $this->isWaveCompatibleTheme;
+    }
+
+    /**
+     * Template variable getter. Check if is a ??? Theme Compatible Theme
+     *
+     * @return boolean
+     * @psalm-suppress InternalMethod
+     */
+    public function isCompatibleTheme($themeId = null)
+    {
+        $result = false;
+        if ($themeId) {
+            $theme = oxNew(\OxidEsales\Eshop\Core\Theme::class);
+            $theme->load($theme->getActiveThemeId());
+            // check active theme or parent theme
+            if (
+                $theme->getActiveThemeId() == $themeId ||
+                $theme->getInfo('parentTheme') == $themeId
+            ) {
+                $result = true;
+            }
+        }
+        return $result;
     }
 }

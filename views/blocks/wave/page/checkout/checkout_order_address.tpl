@@ -1,5 +1,0 @@
-[{if $oViewConf->isAmazonActive() && $oViewConf->isAmazonSessionActive() && !$oViewConf->isAmazonExclude()}]
-    [{include file="amazonpay/wave_checkout_order_address.tpl"}]
-[{else}]
-    [{$smarty.block.parent}]
-[{/if}]

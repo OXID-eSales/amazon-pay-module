@@ -309,8 +309,11 @@ class Config
      */
     public function checkoutReviewUrl(): string
     {
+
         return html_entity_decode(
-            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazondispatch&action=review'
+            Registry::getConfig()->getCurrentShopUrl(false)
+                . 'index.php?cl=amazondispatch&action=review&stoken='
+                . Registry::getSession()->getSessionChallengeToken()
         );
     }
 
@@ -322,7 +325,9 @@ class Config
     public function checkoutResultUrl(): string
     {
         return html_entity_decode(
-            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazondispatch&action=result'
+            Registry::getConfig()->getCurrentShopUrl(false)
+                . 'index.php?cl=amazondispatch&action=result&stoken='
+                . Registry::getSession()->getSessionChallengeToken()
         );
     }
 

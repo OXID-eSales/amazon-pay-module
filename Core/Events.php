@@ -17,6 +17,18 @@ use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
 class Events
 {
     /**
+     * Force session start for details-controller, so Amazon-Buttons works everytime
+     *
+     * @var array
+     */
+    protected static $requireSessionWithParams = [
+        'cl' => [
+            'details'        => true,
+            'amazondispatch' => true
+        ]
+    ];
+
+    /**
      * Execute action on activate event
      */
     public static function onActivate()
@@ -27,6 +39,7 @@ class Events
         self::addArticleColumn();
         self::addCategoryColumn();
         self::addOrderColumn();
+        self::addRequireSession();
 
         $dbMetaDataHandler = oxNew(DbMetaDataHandler::class);
         $dbMetaDataHandler->updateViews();
@@ -111,7 +124,7 @@ class Events
 
         if (count($result) === 0) {
             $sql = 'ALTER TABLE `oxorder` ADD COLUMN `OXPS_AMAZON_REMARK`
-                                varchar(255) 
+                                varchar(255)
                                 NOT NULL
                                 DEFAULT ""
                                 COMMENT \'Remark from amazonpay\'';
@@ -185,6 +198,18 @@ class Events
     public static function onDeactivate(): void
     {
         self::disablePaymentMethod();
+    }
+
+    /**
+     * add details controller to requireSession
+     */
+    public static function addRequireSession(): void
+    {
+        $config = Registry::getConfig();
+        $cfg = $config->getConfigParam('aRequireSessionWithParams');
+        $cfg = is_array($cfg) ? $cfg : [];
+        $cfg = array_merge_recursive($cfg, self::$requireSessionWithParams);
+        $config->saveShopConfVar('arr', 'aRequireSessionWithParams', $cfg, (string)$config->getShopId());
     }
 
     protected static function createLogTable(): void

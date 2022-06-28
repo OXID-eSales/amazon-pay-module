@@ -36,7 +36,12 @@ class DispatchController extends FrontendController
                     return;
                 }
 
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', true, 302);
+                Registry::getUtils()->redirect(
+                    Registry::getConfig()->getShopHomeUrl() . 'cl=order&stoken='
+                        . Registry::getSession()->getSessionChallengeToken(),
+                    true,
+                    302
+                );
                 break;
             case 'result':
                 $amazonSessionId = $this->getRequestAmazonSessionId();

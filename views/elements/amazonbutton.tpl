@@ -1,10 +1,11 @@
 [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
+[{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
 <div class="amazonpay-button [{$buttonclass}]" id="[{$buttonId}]"></div>
 [{capture name="amazonpay_script"}]
     amazon.Pay.renderButton('#[{$buttonId}]', {
         merchantId: '[{$amazonConfig->getMerchantId()}]',
         createCheckoutSession: {
-            url: '[{$amazonConfig->getCreateCheckoutUrl()}][{if $oxArticlesId}]&anid=[{$oxArticlesId}][{/if}]'
+            url: '[{$amazonConfig->getCreateCheckoutUrl()}][{if $oxArticlesId}]&anid=[{$oxArticlesId}][{/if}]&stoken=[{$sToken}]'
         },
         sandbox: [{if $amazonConfig->isSandbox()}]true[{else}]false[{/if}],
         ledgerCurrency: '[{$amazonConfig->getLedgerCurrency()}]',

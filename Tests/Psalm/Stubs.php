@@ -1,0 +1,69 @@
+<?php //phpcs:ignoreFile
+
+/**
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
+ */
+
+namespace  OxidProfessionalServices\AmazonPay\Component;
+
+class UserComponent_parent extends \OxidEsales\Eshop\Application\Component\UserComponent
+{
+}
+
+namespace  OxidProfessionalServices\AmazonPay\Core;
+
+
+class ViewConfig_parent extends \OxidEsales\Eshop\Core\ViewConfig
+{
+}
+
+namespace  OxidProfessionalServices\AmazonPay\Model;
+
+class Basket_parent extends \OxidEsales\Eshop\Application\Model\Basket
+{
+}
+
+class User_parent extends \OxidEsales\Eshop\Application\Model\User
+{
+}
+
+class Order_parent extends \OxidEsales\Eshop\Application\Model\Order
+{
+}
+
+class Article_parent extends \OxidEsales\Eshop\Application\Model\Article
+{
+}
+
+class Category_parent extends \OxidEsales\Eshop\Application\Model\Category
+{
+}
+
+namespace  OxidProfessionalServices\AmazonPay\Controller;
+
+class OrderController_parent extends \OxidEsales\Eshop\Application\Controller\OrderController
+{
+}
+
+class UserController_parent extends \OxidEsales\Eshop\Application\Controller\UserController
+{
+}
+
+namespace  OxidProfessionalServices\AmazonPay\Controller\Admin;
+
+class OrderMain_parent extends \OxidEsales\Eshop\Application\Controller\Admin\OrderMain
+{
+}
+
+class OrderOverview_parent extends \OxidEsales\Eshop\Application\Controller\Admin\OrderOverview
+{
+}
+
+class OrderList_parent extends \OxidEsales\Eshop\Application\Controller\Admin\OrderList
+{
+}
+
+class DeliverySet_parent extends \OxidEsales\Eshop\Application\Controller\Admin\DeliverySet
+{
+}

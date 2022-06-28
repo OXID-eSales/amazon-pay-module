@@ -64,7 +64,8 @@ class Order extends Order_parent
 
         // Authorize and Capture via Amazon Pay will be done after finalizeOrder in OXID
         // therefore we reset status to "not finished yet"
-        if ($ret < 2  &&
+        if (
+            $ret < 2  &&
             !$blRecalculatingOrder &&
             $oBasket->getPaymentId() === Constants::PAYMENT_ID
         ) {
@@ -119,14 +120,20 @@ class Order extends Order_parent
                 $this->oxorder__oxtransstatus = new Field('NOT_FINISHED', Field::T_RAW);
                 $this->oxorder__oxtransid = new Field('AMZ_PAYMENT_PENDING', Field::T_RAW);
                 $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
-                $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Authorisation pending', Field::T_RAW);
+                $this->oxorder__oxps_amazon_remark = new Field(
+                    'AmazonPay Authorisation pending',
+                    Field::T_RAW
+                );
                 $this->save();
                 break;
 
             case "AMZ_AUTH_STILL_PENDING":
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Authorisation still pending: ' . $data['chargeAmount'], Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field(
+                        'AmazonPay Authorisation still pending: ' . $data['chargeAmount'],
+                        Field::T_RAW
+                    );
                 }
                 $this->save();
                 break;
@@ -137,9 +144,11 @@ class Order extends Order_parent
                     if ($data['chargeId']) {
                         $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     }
-                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay ERROR: ' . $response['reasonCode'], Field::T_RAW);
-                }
-                else {
+                    $this->oxorder__oxps_amazon_remark = new Field(
+                        'AmazonPay ERROR: ' . $response['reasonCode'],
+                        Field::T_RAW
+                    );
+                } else {
                     $this->oxorder__oxps_amazon_remark = new Field('AmazonPay: ERROR');
                 }
                 $this->save();
@@ -150,11 +159,14 @@ class Order extends Order_parent
                 if ($this->getFieldData('oxpaid') == '0000-00-00 00:00:00') {
                     $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
                 }
-                $this->oxorder__oxpaid =  new Field(\date('Y-m-d H:i:s'), Field::T_RAW);
+                $this->oxorder__oxpaid = new Field(\date('Y-m-d H:i:s'), Field::T_RAW);
                 $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Captured: ' . $data['chargeAmount'], Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field(
+                        'AmazonPay Captured: ' . $data['chargeAmount'],
+                        Field::T_RAW
+                    );
                 }
                 $this->save();
                 break;
@@ -162,7 +174,10 @@ class Order extends Order_parent
             case "AMZ_2STEP_AUTH_OK":
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay Authorized (not Captured):' . $data['chargeAmount'], Field::T_RAW);
+                    $this->oxorder__oxps_amazon_remark = new Field(
+                        'AmazonPay Authorized (not Captured):' . $data['chargeAmount'],
+                        Field::T_RAW
+                    );
                 }
                 $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
                 $this->save();

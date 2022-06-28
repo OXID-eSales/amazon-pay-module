@@ -59,7 +59,7 @@ class UserComponent extends UserComponent_Parent
         $this->setRequestParameter('invadr', $billingAddress);
 
         // handle shipping address (if provided by amazon)
-        if ($amazonShippingAddress){
+        if ($amazonShippingAddress) {
             $deliveryAddress = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
             $this->setRequestParameter('deladr', $deliveryAddress);
             $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
@@ -132,7 +132,8 @@ class UserComponent extends UserComponent_Parent
     protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $session = Registry::getSession();
-        if ($session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
+        if (
+            $session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
             !$session->getVariable(Constants::SESSION_DELIVERY_ADDR)
         ) {
             return parent::_getDelAddressData();

@@ -228,7 +228,7 @@ class Config
     {
         // if there are no specific countries, then all countries are allowed.
         // Then the Countrylist corresponds to the amazonEUAddresses
-        return count($this->getCountryList()) ? $this->getCountryList(): $this->amazonEUAddresses;
+        return count($this->getCountryList()) ? $this->getCountryList() : $this->amazonEUAddresses;
     }
 
     /**

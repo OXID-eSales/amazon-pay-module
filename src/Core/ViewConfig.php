@@ -158,7 +158,7 @@ class ViewConfig extends ViewConfig_parent
             return false;
         }
 
-        $productIdSql = "'" . implode( "', '", $productIds) . "'";
+        $productIdSql = "'" . implode("', '", $productIds) . "'";
 
         $sql = "SELECT oa.OXPS_AMAZON_EXCLUDE as excludeArticle,
                oc.OXPS_AMAZON_EXCLUDE as excludeCategory

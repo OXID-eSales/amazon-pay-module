@@ -36,7 +36,8 @@ class OrderController extends OrderController_parent
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
 
-        if (!$exclude &&
+        if (
+            !$exclude &&
             $amazonService->isAmazonSessionActive()
         ) {
             $amazonSession = $amazonService->getCheckoutSession();
@@ -56,9 +57,9 @@ class OrderController extends OrderController_parent
                     );
                     $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
                     $this->setAmazonPayAsPaymentMethod();
-                }
-                // if amazon does not provide a shipping address and we already have an oxid user, use oxid-user-data
-                else {
+                } else {
+                    // if amazon does not provide a shipping address and we already have an oxid user,
+                    // use oxid-user-data
                     $this->setAmazonPayAsPaymentMethod();
                     $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
                 }
@@ -82,14 +83,12 @@ class OrderController extends OrderController_parent
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return;
-        }
-
-        // if payment is 'oxidamazon' call parent::execute to validate and finalize order
-        // then try to complete order at Amazon Pay
-        else if ($basket->getPaymentId() === Constants::PAYMENT_ID) {
+        } elseif ($basket->getPaymentId() === Constants::PAYMENT_ID) {
+            // if payment is 'oxidamazon' call parent::execute to validate and finalize order
+            // then try to complete order at Amazon Pay
             $ret = parent::execute();
             // if order is validated and finalized complete Amazon Pay
-            if ($ret === 'thankyou' ) {
+            if ($ret === 'thankyou') {
                 $this->completeAmazonPayment();
             }
         }
@@ -150,7 +149,6 @@ class OrderController extends OrderController_parent
             }
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
         }
-
     }
 
     /**

@@ -72,7 +72,9 @@ class ConfigController extends AdminController
     protected function saveConfig(array $conf, int $shopId): void
     {
         if ($this->useDaoBridge()) {
-            $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(ModuleConfigurationDaoBridgeInterface::class);
+            $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(
+                ModuleConfigurationDaoBridgeInterface::class
+            );
             $oModuleConfiguration = $oModuleConfigurationDaoBridge->get(Constants::MODULE_ID);
         }
 
@@ -141,6 +143,8 @@ class ConfigController extends AdminController
     */
     protected function useDaoBridge()
     {
-        return class_exists('\OxidEsales\EshopCommunity\Internal\Container\ContainerFactory');
+        return class_exists(
+            '\OxidEsales\EshopCommunity\Internal\Container\ContainerFactory'
+        );
     }
 }

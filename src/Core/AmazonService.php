@@ -172,8 +172,7 @@ class AmazonService
         // map address fields only if amazon response have a shippingAddress
         if (!empty($address)) {
             return Address::mapAddressToView($address, 'oxaddress__');
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -278,29 +277,28 @@ class AmazonService
         $order = oxNew(Order::class);
         if ($order->load($basket->getOrderId())) {
             if ($result['status'] === 200) {
-                $data = array(
+                $data = [
                     "chargeAmount" => $request['chargeAmount']['amount'],
                     "chargeId" => $response['chargeId']
-                );
-                if(!$bl2Step) {
+                ];
+                if (!$bl2Step) {
                     $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK', $data);
-                }
-                else{
+                } else {
                     $order->updateAmazonPayOrderStatus('AMZ_2STEP_AUTH_OK', $data);
                 }
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
             } elseif ($result['status'] === 202) {
-                $data = array(
+                $data = [
                     "chargeAmount" => $request['chargeAmount']['amount'],
                     "chargeId" => $response['chargeId']
-                );
+                ];
                 $order->updateAmazonPayOrderStatus('AMZ_AUTH_STILL_PENDING', $data);
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
             } else {
-                $data = array(
+                $data = [
                     "result" => $result,
                     "chargeId" => $response['chargeId']
-                );
+                ];
                 $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_FAILED', $data);
                 $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
             }
@@ -331,7 +329,7 @@ class AmazonService
      */
     public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
-        $this->processPayment($amazonSessionId, $basket, $logger,true);
+        $this->processPayment($amazonSessionId, $basket, $logger, true);
     }
 
     /**
@@ -497,8 +495,7 @@ class AmazonService
 
         if ($response['statusDetails']['state'] === 'Canceled' && $isCancelled === false) {
             $this->processCancel($orderId);
-        }
-        elseif ($response['statusDetails']['state'] === 'Captured' && $isCaptured === false) {
+        } elseif ($response['statusDetails']['state'] === 'Captured' && $isCaptured === false) {
             $repository->markOrderPaid(
                 $orderId,
                 'AmazonPay: ' . $response['statusDetails']['amount'],

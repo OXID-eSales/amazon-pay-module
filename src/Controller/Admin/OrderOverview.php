@@ -23,7 +23,10 @@ class OrderOverview extends OrderOverview_parent
 
         $existingItems = [];
 
-        if ($oOrder->load($this->getEditObjectId()) && $oOrder->oxorder__oxpaymenttype->value === Constants::PAYMENT_ID) {
+        if (
+            $oOrder->load($this->getEditObjectId()) &&
+            $oOrder->oxorder__oxpaymenttype->value === Constants::PAYMENT_ID
+        ) {
             $orderLogs = OxidServiceProvider::getAmazonService()->getOrderLogs($oOrder);
 
             foreach ($orderLogs as $orderLog) {

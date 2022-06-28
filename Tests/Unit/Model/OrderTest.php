@@ -65,7 +65,7 @@ class OrderTest extends AmazonTestCase
 
     public function testValidateDeliveryAddress(): void
     {
-        $amazonServiceMock =  $this->mockLogger = Mockery::mock(AmazonService::class);
+        $amazonServiceMock = $this->mockLogger = Mockery::mock(AmazonService::class);
         $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
         $this->order->setAmazonService($amazonServiceMock);
 

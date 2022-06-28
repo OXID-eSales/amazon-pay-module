@@ -30,7 +30,8 @@ class User extends User_parent
         if ($this->amazonAddress === null) {
             $service = OxidServiceProvider::getAmazonService();
 
-            if ($service->isAmazonSessionActive()
+            if (
+                $service->isAmazonSessionActive()
                 && Registry::getConfig()->getTopActiveView()->getIsOrderStep()
                 && $service->getDeliveryAddress()
             ) {

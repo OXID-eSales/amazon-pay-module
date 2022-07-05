@@ -8,11 +8,8 @@
 namespace OxidProfessionalServices\AmazonPay\Model;
 
 use OxidEsales\Eshop\Core\Field;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Address;
-use OxidEsales\Eshop\Application\Model\RequiredAddressFields;
 use OxidEsales\Eshop\Application\Model\Basket;
-use OxidProfessionalServices\AmazonPay\Core\Config;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
 use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;

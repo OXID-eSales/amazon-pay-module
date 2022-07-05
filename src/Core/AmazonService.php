@@ -114,6 +114,10 @@ class AmazonService
     public function isAmazonSessionActive(): bool
     {
         if (!$this->getCheckoutSessionId()) {
+            $session = Registry::getSession();
+            if ($session->getVariable('paymentid') === Constants::PAYMENT_ID) {
+                $session->deleteVariable('paymentid');
+            }
             return false;
         }
 
@@ -230,7 +234,9 @@ class AmazonService
 
     public function unsetPaymentMethod(): void
     {
-        Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
+        $session = Registry::getSession();
+        $session->deleteVariable(Constants::SESSION_CHECKOUT_ID);
+        Registry::getSession()->deleteVariable('paymentid');
     }
 
     /**

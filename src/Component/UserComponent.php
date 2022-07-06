@@ -61,7 +61,6 @@ class UserComponent extends UserComponent_Parent
         // handle shipping address (if provided by amazon)
         if ($amazonShippingAddress) {
             $deliveryAddress = Address::mapAddressToDb($amazonShippingAddress, 'oxaddress__');
-            $this->setRequestParameter('deladr', $deliveryAddress);
             $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
         }
 

@@ -10,6 +10,7 @@ namespace OxidProfessionalServices\AmazonPay\Model;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\UserAddressList;
 use OxidEsales\Eshop\Core\Registry;
+use OxidProfessionalServices\AmazonPay\Core\Constants;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
 use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -19,6 +20,23 @@ use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
 class User extends User_parent
 {
     private $amazonAddress = null;
+
+    /**
+     * @inherit doc
+     *
+     * @param array $aDelAddress address data array
+     */
+    protected function _assignAddress($aDelAddress)
+    {
+        $session = Registry::getSession();
+        if (
+            $session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
+            !$session->getVariable(Constants::SESSION_DELIVERY_ADDR)
+        ) {
+            return parent::_assignAddress($aDelAddress);
+        }
+        Registry::getSession()->setVariable('deladrid', null);
+    }
 
     /**
      * Return the amazon address if set.

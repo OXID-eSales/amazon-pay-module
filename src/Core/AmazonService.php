@@ -116,14 +116,20 @@ class AmazonService
         if (!$this->getCheckoutSessionId()) {
             $session = Registry::getSession();
             if ($session->getVariable('paymentid') === Constants::PAYMENT_ID) {
-                $session->deleteVariable('paymentid');
+                self::unsetPaymentMethod();
             }
             return false;
         }
 
         $checkoutSession = $this->getCheckoutSession();
-
-        return ($checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN);
+        $sessionActive = (
+            ($checkoutSession['response']['statusDetails']['state'] === Constants::CHECKOUT_OPEN) &&
+            !is_null($checkoutSession['response']['buyer'])
+        );
+        if (!$sessionActive) {
+            self::unsetPaymentMethod();
+        }
+        return $sessionActive;
     }
 
     /**

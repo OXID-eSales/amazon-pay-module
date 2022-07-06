@@ -138,29 +138,30 @@ class Events
      */
     public static function addPaymentMethod(): void
     {
-        $paymentDescriptions = [
-            'en' => '<div>AmazonPay</div>',
-            'de' => '<div>AmazonPay</div>'
-        ];
-
         $payment = oxNew(Payment::class);
         if (!$payment->load(Constants::PAYMENT_ID)) {
             $payment->setId(Constants::PAYMENT_ID);
-            $payment->oxpayments__oxactive = new Field(1);
-            $payment->oxpayments__oxdesc = new Field('AmazonPay');
-            $payment->oxpayments__oxaddsum = new Field(0);
-            $payment->oxpayments__oxaddsumtype = new Field('abs');
-            $payment->oxpayments__oxfromboni = new Field(0);
-            $payment->oxpayments__oxfromamount = new Field(0);
-            $payment->oxpayments__oxtoamount = new Field(10000);
+            $params = [
+                'oxpayments__oxactive' => true,
+                'oxpayments__oxaddsum' => 0,
+                'oxpayments__oxaddsumtype' => 'abs',
+                'oxpayments__oxfromboni' => 0,
+                'oxpayments__oxfromamount' => 0,
+                'oxpayments__oxtoamount' => 10000
+            ];
+            $payment->assign($params);
             $payment->save();
 
             $languages = Registry::getLang()->getLanguageIds();
-            foreach ($paymentDescriptions as $languageAbbreviation => $description) {
+            foreach (Constants::PAYMENT_DESCRIPTIONS as $languageAbbreviation => $values) {
                 $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
                     $payment->loadInLang($languageId, Constants::PAYMENT_ID);
-                    $payment->oxpayments__oxlongdesc = new Field($description);
+                    $params = [
+                        'oxpayments__oxdesc' => $values['title'],
+                        'oxpayments__oxlongdesc' => $values['desc']
+                    ];
+                    $payment->assign($params);
                     $payment->save();
                 }
             }

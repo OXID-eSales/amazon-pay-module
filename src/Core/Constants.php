@@ -63,4 +63,18 @@ class Constants
         'TransactionTimedOut',
         'ProcessingFailure',
     ];
+
+    /**
+     * @var default Payment-Descriptions
+     */
+    public const PAYMENT_DESCRIPTIONS = [
+        'en' => [
+            'title' => 'AmazonPay',
+            'desc'  => '<div>AmazonPay</div>'
+        ],
+        'de' => [
+            'title' => 'AmazonPay',
+            'desc'  => '<div>AmazonPay</div>'
+        ]
+    ];
 }

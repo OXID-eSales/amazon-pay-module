@@ -609,7 +609,7 @@ class AmazonService
      * @param LoggerInterface $logger
      * @param array $result
      */
-    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, $orderId = ''): void
+    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId = ''): void
     {
         $response = PhpHelper::jsonToArray($result['response']);
 
@@ -650,7 +650,7 @@ class AmazonService
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function capturePaymentForOrder($chargeId, $amount, $currencyCode): void
+    public function capturePaymentForOrder($chargeId, string $amount, $currencyCode): void
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();
@@ -783,10 +783,8 @@ class AmazonService
 
     /**
      * Active user getter
-     *
-     * @return \OxidEsales\Eshop\Application\Model\User
      */
-    private function getUser()
+    private function getUser(): \OxidEsales\Eshop\Application\Model\User|false
     {
         if ($this->actUser === null) {
             $this->actUser = false;

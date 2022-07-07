@@ -31,7 +31,7 @@ class Events
     /**
      * Execute action on activate event
      */
-    public static function onActivate()
+    public static function onActivate(): void
     {
         self::createLogTable();
         self::addPaymentMethod();

@@ -29,6 +29,9 @@ class Order extends Order_parent
      * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
      * @param object                                     $oUser                Current User object
      *
+     * @return int|null
+     *
+     * @psalm-return 2|null
      */
     protected function prepareFinalizeOrder(Basket $oBasket, $oUser)
     {
@@ -74,10 +77,9 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
-     * @return Address
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      */
-    public function getDelAddressInfo()
+    public function getDelAddressInfo(): Address|null
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();
@@ -110,7 +112,7 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus($amazonPayStatus, $data = null)
+    public function updateAmazonPayOrderStatus(string $amazonPayStatus, $data = null): void
     {
         switch ($amazonPayStatus) {
             case "AMZ_PAYMENT_PENDING":

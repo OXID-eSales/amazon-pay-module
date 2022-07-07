@@ -221,9 +221,6 @@ class Config
         return $result;
     }
 
-    /**
-     * @return array
-     */
     public function getPossibleEUAddressesAbbr(): array
     {
         // if there are no specific countries, then all countries are allowed.
@@ -334,7 +331,7 @@ class Config
     /**
      * Return country list
      *
-     * @return oxcountrylist
+     * @return array
      */
     public function getCountryList(): array
     {

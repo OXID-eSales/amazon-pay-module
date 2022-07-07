@@ -22,6 +22,9 @@ use Aws\Sns\MessageValidator;
  */
 class DispatchController extends FrontendController
 {
+    /**
+     * @return void
+     */
     public function init()
     {
         parent::init();

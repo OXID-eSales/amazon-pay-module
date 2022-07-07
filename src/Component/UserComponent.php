@@ -112,7 +112,7 @@ class UserComponent extends UserComponent_Parent
      * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
      * oxcmp_user::oUser, forces basket to recalculate.
      *
-     * @return null
+     * @return void
      */
     public function logout()
     {

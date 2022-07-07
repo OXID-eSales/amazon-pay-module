@@ -42,7 +42,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage($message, array $context = []): void
+    public function logMessage(string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
 
@@ -71,7 +71,7 @@ class Logger extends AbstractLogger
      * @param $result
      * @return array
      */
-    public function resolveLogContent($result): array
+    public function resolveLogContent(array $result): array
     {
         $context = [];
         $response = null;

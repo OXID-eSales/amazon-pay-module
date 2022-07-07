@@ -46,7 +46,7 @@
         "psalm": "psalm --show-info=true --no-cache",
         "psalm-report": "psalm --show-info=true --no-cache --report=logs/psalm.sonarqube.json",
         "psalm-errors": "psalm --no-cache",
-        "psalm-automatic": "psalm --alter --issues=MissingReturnType,MissingParamType",
+        "psalm-automatic": "psalm --alter --issues=MissingReturnType,InvalidFalsableReturnType,InvalidReturnType,InvalidNullableReturnType,MissingParamType",
         "phpcs": "phpcs --standard=Tests/phpcs.xml",
         "phpcbf": "phpcbf --standard=Tests/phpcs.xml"
     },

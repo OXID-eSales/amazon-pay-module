@@ -210,9 +210,14 @@ class ViewConfig extends ViewConfig_parent
      * Template variable getter. Check if is a ??? Theme Compatible Theme
      *
      * @return boolean
+     *
      * @psalm-suppress InternalMethod
+     *
+     * @param null|string $themeId
+     *
+     * @psalm-param 'flow'|'wave'|null $themeId
      */
-    public function isCompatibleTheme($themeId = null)
+    public function isCompatibleTheme(string|null $themeId = null)
     {
         $result = false;
         if ($themeId) {

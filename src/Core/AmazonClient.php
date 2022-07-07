@@ -77,6 +77,8 @@ class AmazonClient extends Client
 
     /**
      * @inheritDoc
+     *
+     * @return array
      */
     public function getCheckoutSession($checkoutSessionId, $headers = null)
     {

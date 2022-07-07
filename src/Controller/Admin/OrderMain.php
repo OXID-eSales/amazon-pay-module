@@ -18,6 +18,9 @@ use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
  */
 class OrderMain extends OrderMain_parent
 {
+    /**
+     * @return void
+     */
     protected function onOrderSend()
     {
         parent::onOrderSend();

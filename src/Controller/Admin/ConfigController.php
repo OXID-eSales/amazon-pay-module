@@ -51,6 +51,8 @@ class ConfigController extends AdminController
 
     /**
      * Saves configuration values
+     *
+     * @return void
      */
     public function save()
     {

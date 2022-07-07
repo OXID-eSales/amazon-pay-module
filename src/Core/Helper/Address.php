@@ -213,7 +213,7 @@ class Address
      *
      * @return string
      */
-    private static function getFirstName($name)
+    private static function getFirstName(string $name)
     {
         return implode(' ', array_slice(explode(' ', $name), 0, -1));
     }
@@ -225,7 +225,7 @@ class Address
      *
      * @return string
      */
-    private static function getLastName($name)
+    private static function getLastName(string $name)
     {
         return array_slice(explode(' ', $name), -1)[0];
     }

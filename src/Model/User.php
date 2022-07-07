@@ -68,10 +68,11 @@ class User extends User_parent
      *
      * @param null $sUserId
      *
-     * @return object|UserAddressList
+     * @return UserAddressList|array
+     *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      */
-    public function getUserAddresses($sUserId = null)
+    public function getUserAddresses($sUserId = null): array|UserAddressList
     {
         $address = $this->getAmazonAddress();
 

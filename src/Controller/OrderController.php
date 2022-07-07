@@ -28,6 +28,9 @@ use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class OrderController extends OrderController_parent
 {
+    /**
+     * @return void
+     */
     public function init()
     {
         /** @var User $user */
@@ -100,7 +103,7 @@ class OrderController extends OrderController_parent
         return $ret;
     }
 
-    protected function completeAmazonPayment()
+    protected function completeAmazonPayment(): void
     {
         $payload = new Payload();
         $orderOxId = Registry::getSession()->getVariable('sess_challenge');
@@ -171,7 +174,7 @@ class OrderController extends OrderController_parent
         return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }
 
-    protected function setAmazonPayAsPaymentMethod()
+    protected function setAmazonPayAsPaymentMethod(): void
     {
         $basket = $this->getBasket();
         $user = $this->getUser();

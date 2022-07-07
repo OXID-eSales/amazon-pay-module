@@ -13,7 +13,7 @@ use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
  * Class OrderListController
  * @mixin \OxidEsales\EshopCommunity\Application\Controller\Admin\OrderList
  */
-class OrderListController extends OrderListController_parent
+class OrderList extends OrderList_parent
 {
     public function cancelOrder()
     {

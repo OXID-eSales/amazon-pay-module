@@ -78,8 +78,10 @@ class Order extends Order_parent
      * If Amazon Pay is active, it will return an address from Amazon
      *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     *
+     * @return \OxidEsales\Eshop\Application\Model\Address|null
      */
-    public function getDelAddressInfo(): Address|null
+    public function getDelAddressInfo()
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();

@@ -10,7 +10,7 @@ namespace OxidProfessionalServices\AmazonPay\Core\Repository;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\Eshop\Core\UtilsObject;
+use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Core\Logger\LogMessage;
 
 class LogRepository
@@ -21,10 +21,11 @@ class LogRepository
      * @param LogMessage $logMessage
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
+     * @psalm-suppress InternalMethod
      */
     public function saveLogMessage(LogMessage $logMessage): void
     {
-        $id = UtilsObject::getInstance()->generateUId();
+        $id = Registry::getUtilsObject()->generateUID();
 
         $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (
                 `OXPS_AMAZON_PAYLOGID`,

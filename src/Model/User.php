@@ -66,7 +66,7 @@ class User extends User_parent
     /**
      * Use amazon address in checkout steps
      *
-     * @param null $sUserId
+     * @param string|null $sUserId
      *
      * @return UserAddressList|array
      *

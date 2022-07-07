@@ -48,7 +48,7 @@ class Address
         $country = oxNew(Country::class);
         $countryOxId = $country->getIdByCode($countryIsoCode ?? '');
         $country->loadInLang(
-            Registry::getLang()->getBaseLanguage(),
+            (int)Registry::getLang()->getBaseLanguage(),
             $countryOxId
         );
         $countryName = $country->oxcountry__oxtitle->value;
@@ -209,11 +209,8 @@ class Address
     /**
      * Firstname of a Name
      *
-     * @param string
-     *
-     * @return string
      */
-    private static function getFirstName(string $name)
+    private static function getFirstName(string $name): string
     {
         return implode(' ', array_slice(explode(' ', $name), 0, -1));
     }
@@ -221,11 +218,8 @@ class Address
     /**
      * Lastname of a Name
      *
-     * @param string
-     *
-     * @return string
      */
-    private static function getLastName(string $name)
+    private static function getLastName(string $name): string
     {
         return array_slice(explode(' ', $name), -1)[0];
     }

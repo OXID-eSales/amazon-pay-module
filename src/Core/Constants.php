@@ -65,7 +65,7 @@ class Constants
     ];
 
     /**
-     * @var default Payment-Descriptions
+     * @var array default Payment-Descriptions
      */
     public const PAYMENT_DESCRIPTIONS = [
         'en' => [

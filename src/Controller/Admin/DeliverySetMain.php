@@ -41,10 +41,12 @@ class DeliverySetMain extends DeliverySetMain_parent
 
     /**
      * Saves deliveryset information changes.
+     *
+     * @return mixed
      */
     public function save()
     {
-        parent::save();
+        $result = parent::save();
 
         $aParams = Registry::getRequest()->getRequestParameter('editval');
         $aParams['oxdeliveryset__oxps_amazon_carrier'] = Registry::getRequest()
@@ -55,5 +57,7 @@ class DeliverySetMain extends DeliverySetMain_parent
 
         // set oxid if inserted
         $this->setEditObjectId($oDelSet->getId());
+
+        return $result;
     }
 }

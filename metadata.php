@@ -6,8 +6,8 @@
  */
 
 use OxidEsales\Eshop\Application\Component\UserComponent as CoreUserComponent;
-use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain;
-use OxidEsales\Eshop\Application\Controller\Admin\OrderList as CoreOrderListController;
+use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain as DeliverySetMainController;
+use OxidEsales\Eshop\Application\Controller\Admin\OrderList as OrderListController;
 use OxidEsales\Eshop\Application\Controller\Admin\OrderMain as OrderMainController;
 use OxidEsales\Eshop\Application\Controller\Admin\OrderOverview as CoreOrderOverviewmodel;
 use OxidEsales\Eshop\Application\Controller\ArticleDetailsController as CoreArticleDetailsController;
@@ -24,7 +24,7 @@ use OxidEsales\Eshop\Core\InputValidator as CoreInputValidator;
 use OxidProfessionalServices\AmazonPay\Component\UserComponent;
 use OxidProfessionalServices\AmazonPay\Controller\Admin\ConfigController;
 use OxidProfessionalServices\AmazonPay\Controller\Admin\DeliverySetMain as AmazonDeliverySetMain;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderListController;
+use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderList as AmazonOrderList;
 use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderMain as AmazonOrderMain;
 use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderOverview as ModuleOrderOverview;
 use OxidProfessionalServices\AmazonPay\Controller\AmazonCheckoutController;
@@ -66,15 +66,15 @@ $aModule = [
         CoreOrderController::class => OrderController::class,
         CoreArticleDetailsController::class => ArticleDetailsController::class,
         CoreOrderOverviewmodel::class => ModuleOrderOverview::class,
-        CoreOrderListController::class => OrderListController::class,
         CoreUserComponent::class => UserComponent::class,
         CoreOrderModel::class => ModuleOrder::class,
         CoreUserModel::class => ModuleUser::class,
         CoreArticleModel::class => ModuleArticle::class,
         CoreBasketModel::class => ModuleBasket::class,
         CoreCategoryModel::class => ModuleCategory::class,
-        DeliverySetMain::class => AmazonDeliverySetMain::class,
+        DeliverySetMainController::class => AmazonDeliverySetMain::class,
         OrderMainController::class => AmazonOrderMain::class,
+        OrderListController::class => AmazonOrderList::class,
         CoreInputValidator::class => AmazonInputValidator::class,
     ],
     'controllers' => [

@@ -69,18 +69,14 @@ class Payload
     {
         $data = [];
 
+        $data['paymentDetails'] = [];
+        $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
+
         if (!empty($this->paymentIntent)) {
-            $data['paymentDetails'] = $data['paymentDetails'] ?? [];
             $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
         }
 
-        if (isset($this->canHandlePendingAuthorization)) {
-            $data['paymentDetails'] = $data['paymentDetails'] ?? [];
-            $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
-        }
-
         if (!empty($this->paymentDetailsChargeAmount)) {
-            $data['paymentDetails'] = $data['paymentDetails'] ?? [];
             $data['paymentDetails']['chargeAmount'] = [];
             $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
             $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
@@ -152,7 +148,7 @@ class Payload
      */
     public function setPaymentDetailsChargeAmount($paymentDetailsChargeAmount): void
     {
-        $this->paymentDetailsChargeAmount = PhpHelper::getMoneyValue($paymentDetailsChargeAmount);
+        $this->paymentDetailsChargeAmount = PhpHelper::getMoneyValue((float)$paymentDetailsChargeAmount);
     }
 
     /**
@@ -176,7 +172,7 @@ class Payload
      */
     public function setCaptureAmount($captureAmount): void
     {
-        $this->captureAmount = PhpHelper::getMoneyValue($captureAmount);
+        $this->captureAmount = PhpHelper::getMoneyValue((float)$captureAmount);
     }
 
     /**

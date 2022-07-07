@@ -29,7 +29,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
      * @param string                                   $sLogin      user preferred login name
      * @param array                                    $aInvAddress user information
      *
-     * @return string login name
+     * @return \OxidEsales\Eshop\Core\Exception\StandardException|string login name
      */
     public function checkLogin($oUser, $sLogin, $aInvAddress)
     {
@@ -56,7 +56,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
     /**
      * Disabling validation for Amazon addresses when Amazon Pay is active
      *
-     * @param User  $user            Active user.
+     * @param \OxidEsales\Eshop\Application\Model\User  $user Active user.
      * @param array $billingAddress  Billing address.
      * @param array $deliveryAddress Delivery address.
      */

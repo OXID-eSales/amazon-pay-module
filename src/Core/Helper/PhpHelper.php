@@ -41,11 +41,7 @@ class PhpHelper
         return false;
     }
 
-    /**
-     * @param float $num
-     * @return string
-     */
-    public static function getMoneyValue($num): string
+    public static function getMoneyValue(float $num): string
     {
         return number_format($num, 2, '.', '');
     }

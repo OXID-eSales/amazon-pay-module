@@ -81,7 +81,7 @@ class Config
     /**
      * returns Country.
      *
-     * @var OXID CountryList
+     * @var array
      */
     protected $countryList = null;
 
@@ -370,7 +370,7 @@ class Config
             // throws Exception if it was not possible to gather sufficient entropy.
             $uuid = bin2hex(random_bytes(16));
         } catch (\Exception $e) {
-            $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5(mt_rand()), 0, 24);
+            $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5((string)mt_rand()), 0, 24);
         }
         return $uuid;
     }

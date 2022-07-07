@@ -112,7 +112,7 @@ class OrderController extends OrderController_parent
             $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
         }
         $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
-            $this->getBasket()->getPrice()->getBruttoPrice()
+            (float)$this->getBasket()->getPrice()->getBruttoPrice()
         ));
 
         $activeShop = Registry::getConfig()->getActiveShop();
@@ -124,10 +124,10 @@ class OrderController extends OrderController_parent
 
         if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
             $payload->setPaymentIntent('AuthorizeWithCapture');
-            $payload->setCanHandlePendingAuthorization(false);
+            $payload->setCanHandlePendingAuthorization('false');
         } else {
             $payload->setPaymentIntent('Authorize');
-            $payload->setCanHandlePendingAuthorization(true);
+            $payload->setCanHandlePendingAuthorization('true');
         }
 
         $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(
@@ -143,11 +143,14 @@ class OrderController extends OrderController_parent
             !empty((PhpHelper::getArrayValue('amazonPayRedirectUrl', PhpHelper::jsonToArray($result['response']))))
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
-            Registry::getUtils()->redirect(PhpHelper::getArrayValue('amazonPayRedirectUrl', $response), false, 301);
+            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
+            if ($redirectUrl !== false) {
+                Registry::getUtils()->redirect($redirectUrl, false, 301);
+            }
         } else {
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-            if ($oOrder && $oOrder->isLoaded()) {
+            if ($oOrder->isLoaded()) {
                 $oOrder->delete();
             }
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);

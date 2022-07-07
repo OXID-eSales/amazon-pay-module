@@ -169,7 +169,7 @@ class ViewConfig extends ViewConfig_parent
             ON (oc.OXID = o2c.OXCATNID)
          WHERE oa.OXID in (?)";
 
-        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIdSql);
+        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, [$productIdSql]);
 
         foreach ($results as $result) {
             if ($result['excludeArticle'] === '1' || $result['excludeCategory'] === '1') {
@@ -213,11 +213,11 @@ class ViewConfig extends ViewConfig_parent
      *
      * @psalm-suppress InternalMethod
      *
-     * @param null|string $themeId
+     * @param string $themeId
      *
-     * @psalm-param 'flow'|'wave'|null $themeId
+     * @psalm-param 'flow'|'wave' $themeId
      */
-    public function isCompatibleTheme(string|null $themeId = null)
+    public function isCompatibleTheme(string $themeId)
     {
         $result = false;
         if ($themeId) {

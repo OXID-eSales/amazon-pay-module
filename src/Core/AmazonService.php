@@ -37,14 +37,14 @@ class AmazonService
     /**
      * Delivery address
      *
-     * @var oxAddress|null
+     * @var \stdClass
      */
     protected $deliveryAddress = null;
 
     /**
      * Billing address
      *
-     * @var oxAddress|null
+     * @var \stdClass
      */
     protected $billingAddress = null;
 
@@ -259,7 +259,7 @@ class AmazonService
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
-        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
+        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue((float)$basket->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
 
@@ -657,7 +657,7 @@ class AmazonService
 
         $payload = new Payload();
         $payload->setSoftDescriptor('CC Account');
-        $payload->setCaptureAmount(PhpHelper::getMoneyValue($amount));
+        $payload->setCaptureAmount(PhpHelper::getMoneyValue((float)$amount));
 
         $activeShop = Registry::getConfig()->getActiveShop();
 
@@ -784,16 +784,12 @@ class AmazonService
     /**
      * Active user getter
      */
-    private function getUser(): \OxidEsales\Eshop\Application\Model\User|false
+    private function getUser(): \OxidEsales\Eshop\Application\Model\User
     {
         if ($this->actUser === null) {
-            $this->actUser = false;
-            $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-            if ($user->loadActiveUser()) {
-                $this->actUser = $user;
-            }
+            $this->actUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+            $this->actUser->loadActiveUser();
         }
-
         return $this->actUser;
     }
 }

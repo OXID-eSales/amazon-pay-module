@@ -14,9 +14,14 @@ class UserComponent_parent extends \OxidEsales\Eshop\Application\Component\UserC
 namespace  OxidProfessionalServices\AmazonPay\Core;
 
 
+class AmazonInputValidator_parent extends \OxidEsales\Eshop\Core\InputValidator
+{
+}
+
 class ViewConfig_parent extends \OxidEsales\Eshop\Core\ViewConfig
 {
 }
+
 
 namespace  OxidProfessionalServices\AmazonPay\Model;
 
@@ -42,6 +47,10 @@ class Category_parent extends \OxidEsales\Eshop\Application\Model\Category
 
 namespace  OxidProfessionalServices\AmazonPay\Controller;
 
+class ArticleDetailsController_parent extends \OxidEsales\Eshop\Application\Controller\ArticleDetailsController
+{
+}
+
 class OrderController_parent extends \OxidEsales\Eshop\Application\Controller\OrderController
 {
 }
@@ -64,6 +73,6 @@ class OrderList_parent extends \OxidEsales\Eshop\Application\Controller\Admin\Or
 {
 }
 
-class DeliverySet_parent extends \OxidEsales\Eshop\Application\Controller\Admin\DeliverySet
+class DeliverySetMain_parent extends \OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain
 {
 }

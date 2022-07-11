@@ -13,6 +13,7 @@ use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
 use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Tests\Codeception\AcceptanceTester;
+use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AcceptSSLCertificate;
 
 abstract class BaseCest
 {
@@ -32,15 +33,42 @@ abstract class BaseCest
      */
     protected function _initializeTest()
     {
+        $this->I->openShop();
+
+        $acceptCertificatePage = new AcceptSSLCertificate($this->I);
+        $acceptCertificatePage->acceptCertificate();
+
         $basketItem = Fixtures::get('product');
         $basketSteps = new BasketSteps($this->I);
         $basketSteps->addProductToBasket($basketItem['id'], $this->amount);
+    }
 
+    /**
+     * @return void
+     */
+    protected function _loginOxid()
+    {
         $homePage = $this->I->openShop();
         $clientData = Fixtures::get('client');
         $homePage->loginUser($clientData['username'], $clientData['password']);
+    }
 
-        $this->paymentSelection = $homePage->openMiniBasket()->openCheckout();
+    /**
+     * @return void
+     */
+    protected function _openCheckout()
+    {
+        $homePage = $this->I->openShop();
+        $homePage->openMiniBasket()->openCheckout();
+    }
+
+    /**
+     * @return void
+     */
+    protected function _openBasketDisplay()
+    {
+        $homePage = $this->I->openShop();
+        $homePage->openMiniBasket()->openBasketDisplay();
     }
 
     /**

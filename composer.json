@@ -40,7 +40,7 @@
     "autoload": {
         "psr-4": {
             "OxidProfessionalServices\\AmazonPay\\": "src",
-            "OxidProfessionalServices\\AmazonPay\\Tests": "Tests"
+            "OxidProfessionalServices\\AmazonPay\\Tests\\": "Tests"
         }
     },
     "scripts": {

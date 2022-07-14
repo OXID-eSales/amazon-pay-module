@@ -69,17 +69,25 @@ class Payload
     {
         $data = [];
 
-        $data['paymentDetails'] = [];
-        $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
+        if (
+            !empty($this->canHandlePendingAuthorization) ||
+            !empty($this->paymentIntent) ||
+            !empty($this->paymentDetailsChargeAmount)
+        ) {
+            $data['paymentDetails'] = [];
+            if (!empty($this->canHandlePendingAuthorization)) {
+                $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
+            }
 
-        if (!empty($this->paymentIntent)) {
-            $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
-        }
+            if (!empty($this->paymentIntent)) {
+                $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
+            }
 
-        if (!empty($this->paymentDetailsChargeAmount)) {
-            $data['paymentDetails']['chargeAmount'] = [];
-            $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
-            $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
+            if (!empty($this->paymentDetailsChargeAmount)) {
+                $data['paymentDetails']['chargeAmount'] = [];
+                $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
+                $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
+            }
         }
 
         if (!empty($this->captureAmount)) {
@@ -136,11 +144,11 @@ class Payload
     }
 
     /**
-     * @param string $canHandlePendingAuthorization
+     * @param bool $canHandlePendingAuthorization
      */
     public function setCanHandlePendingAuthorization($canHandlePendingAuthorization): void
     {
-        $this->canHandlePendingAuthorization = (bool)$canHandlePendingAuthorization;
+        $this->canHandlePendingAuthorization = $canHandlePendingAuthorization;
     }
 
     /**

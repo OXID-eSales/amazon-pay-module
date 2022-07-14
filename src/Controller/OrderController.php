@@ -124,10 +124,10 @@ class OrderController extends OrderController_parent
 
         if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
             $payload->setPaymentIntent('AuthorizeWithCapture');
-            $payload->setCanHandlePendingAuthorization('false');
+            $payload->setCanHandlePendingAuthorization(false);
         } else {
             $payload->setPaymentIntent('Authorize');
-            $payload->setCanHandlePendingAuthorization('true');
+            $payload->setCanHandlePendingAuthorization(true);
         }
 
         $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(

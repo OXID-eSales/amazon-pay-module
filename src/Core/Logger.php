@@ -37,12 +37,12 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * @param $message
+     * @param string|null $message
      * @param array $context
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage(string $message, array $context = []): void
+    public function logMessage(?string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
 

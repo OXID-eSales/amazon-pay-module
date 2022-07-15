@@ -72,7 +72,7 @@ class User extends User_parent
      *
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      */
-    public function getUserAddresses($sUserId = null): array|UserAddressList
+    public function getUserAddresses($sUserId = null)
     {
         $address = $this->getAmazonAddress();
 

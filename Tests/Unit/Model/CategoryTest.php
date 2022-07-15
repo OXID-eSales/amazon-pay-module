@@ -24,18 +24,19 @@ declare(strict_types=1);
 
 namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Model;
 
+use OxidEsales\Eshop\Application\Model\Category as EshopCategoryModel;
 use OxidEsales\Eshop\Core\Field;
-use OxidProfessionalServices\AmazonPay\Model\Category;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class CategoryTest extends UnitTestCase
 {
-    /** @var Category */
+    /** @var EshopCategoryModel */
     private $category;
 
     protected function setUp(): void
     {
-        $this->category = oxNew(Category::class);
+        parent::setUp();
+        $this->category = oxNew(EshopCategoryModel::class);
     }
 
     public function testSave(): void

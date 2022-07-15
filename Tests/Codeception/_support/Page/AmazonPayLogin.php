@@ -16,19 +16,19 @@ class AmazonPayLogin extends Page
     private $amazonpayEmailInput = "//input[@id='ap_email']";
     private $amazonpayPasswordInput = "//input[@id='ap_password']";
     private $signInSubmitInput = "//input[@id='signInSubmit']";
+    private $amazonpayLogin = '';
+    private $amazonpayPassword = '';
 
     /**
-     * @param string $username
-     * @param string $password
      * @return void
      */
-    public function login(string $username, string $password)
+    public function login()
     {
         $I = $this->user;
 
         $I->waitForElement($this->amazonpayEmailInput);
-        $I->fillField($this->amazonpayEmailInput, $username);
-        $I->fillField($this->amazonpayPasswordInput, $password);
+        $I->fillField($this->amazonpayEmailInput, $this->amazonpayLogin);
+        $I->fillField($this->amazonpayPasswordInput, $this->amazonpayPassword);
         $I->click($this->signInSubmitInput);
     }
 }

@@ -18,4 +18,9 @@ return [
         'currency' => '€'
     ],
 
+    // User for testing
+    'client' => [
+        "username" => "amazonpayuser@oxid-esales.dev",
+        "password" => "useruser",
+    ],
 ];

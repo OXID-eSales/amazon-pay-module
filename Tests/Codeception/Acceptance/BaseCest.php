@@ -10,10 +10,13 @@ declare(strict_types=1);
 namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
+use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
 use OxidEsales\Eshop\Core\Registry;
 use OxidProfessionalServices\AmazonPay\Tests\Codeception\AcceptanceTester;
 use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AcceptSSLCertificate;
+use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
+use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
 abstract class BaseCest
 {
@@ -22,6 +25,7 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I): void
     {
+        $this->I = $I;
     }
 
     public function _after(AcceptanceTester $I): void
@@ -70,6 +74,39 @@ abstract class BaseCest
     {
         $homePage = $this->I->openShop();
         $homePage->openMiniBasket()->openBasketDisplay();
+    }
+
+    /**
+     * @return void
+     */
+    protected function _loginAmazonPayment()
+    {
+        $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
+
+        $this->I->waitForElement($amazonpayDiv);
+        $this->I->click($amazonpayDiv);
+        $amazonpayLoginPage = new AmazonPayLogin($this->I);
+        $amazonpayLoginPage->login();
+
+        $amazonpayInformationPage = new AmazonPayInformation($this->I);
+        $amazonpayInformationPage->submitPayment();
+    }
+
+    /**
+     * @return void
+     */
+    protected function _submitOrder()
+    {
+        $this->I->waitForText(Translator::translate('SUBMIT_ORDER'));
+        $this->I->click(Translator::translate('SUBMIT_ORDER'));
+    }
+
+    /**
+     * @return void
+     */
+    protected function _checkSuccessfulPayment()
+    {
+        $this->I->waitForText(Translator::translate('THANK_YOU'));
     }
 
     /**

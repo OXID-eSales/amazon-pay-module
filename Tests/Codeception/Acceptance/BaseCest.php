@@ -54,8 +54,7 @@ abstract class BaseCest
     protected function _loginOxid()
     {
         $homePage = $this->I->openShop();
-        $clientData = Fixtures::get('client');
-        $homePage->loginUser($clientData['username'], $clientData['password']);
+        $homePage->loginUser(Fixtures::get(['amazonClientUsername']), Fixtures::get(['amazonClientPassword']));
     }
 
     /**

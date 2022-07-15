@@ -17,10 +17,4 @@ return [
         'shipping_cost' => '3.90',
         'currency' => '€'
     ],
-
-    // User for testing
-    'client' => [
-        "username" => "amazonpayuser@oxid-esales.dev",
-        "password" => "useruser",
-    ],
 ];

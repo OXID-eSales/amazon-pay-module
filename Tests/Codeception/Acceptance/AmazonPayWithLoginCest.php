@@ -11,18 +11,19 @@ namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Acceptance;
 
 use OxidProfessionalServices\AmazonPay\Tests\Codeception\AcceptanceTester;
 
-class AmazonPayWithoutLoginCest extends BaseCest
+final class AmazonPayWithLoginCest extends BaseCest
 {
     /**
      * @param AcceptanceTester $I
      * @return void
-     * @group AmazonPayWithoutLoginPaymentTest
+     * @group AmazonPayWithLoginPaymentTest
      */
     public function checkPaymentFromBasketWorks(AcceptanceTester $I)
     {
-        $I->wantToTest('Test AmazonPay via Basket without login payment works');
+        $I->wantToTest('Test AmazonPay via Basket with login payment works');
 
         $this->_initializeTest();
+        $this->_loginOxid();
         $this->_openBasketDisplay();
         $this->_loginAmazonPayment();
         $this->_submitOrder();
@@ -32,13 +33,14 @@ class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
-     * @group AmazonPayWithoutLoginPaymentTest
+     * @group AmazonPayWithLoginPaymentTest
      */
     public function checkPaymentFromAddressPageWorks(AcceptanceTester $I)
     {
-        $I->wantToTest('Test AmazonPay via Address Page without login payment works');
+        $I->wantToTest('Test AmazonPay via Address Page with login payment works');
 
         $this->_initializeTest();
+        $this->_loginOxid();
         $this->_openCheckout();
         $this->_loginAmazonPayment();
         $this->_submitOrder();

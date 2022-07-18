@@ -65,5 +65,6 @@ $aLang = [
     'OXPS_AMAZONPAY_DATE'                    => 'Datum',
     'OXPS_AMAZONPAY_REFERENCE'               => 'Referenz',
     'OXPS_AMAZONPAY_RESULT'                  => 'Ergebnis',
-    'OXPS_AMAZONPAY_REMARK'                  => 'Amazon Pay Mitteilung'
+    'OXPS_AMAZONPAY_REMARK'                  => 'Amazon Pay Mitteilung',
+    'GENERAL_ARTICLE_OXPS_AMAZON_EXCLUDE'    => 'AmazonPay ausschließen',
 ];

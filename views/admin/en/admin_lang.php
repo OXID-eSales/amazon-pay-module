@@ -65,4 +65,5 @@ $aLang = [
     'OXPS_AMAZONPAY_REFERENCE'               => 'Reference',
     'OXPS_AMAZONPAY_RESULT'                  => 'Result',
     'OXPS_AMAZONPAY_REMARK'                  => 'Amazon Pay notice',
+    'GENERAL_ARTICLE_OXPS_AMAZON_EXCLUDE'    => 'Exclude AmazonPay',
 ];

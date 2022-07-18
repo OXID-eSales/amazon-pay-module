@@ -11,7 +11,7 @@ namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Acceptance;
 
 use OxidProfessionalServices\AmazonPay\Tests\Codeception\AcceptanceTester;
 
-class AmazonPayWithoutLoginCest extends BaseCest
+final class AmazonPayWithoutLoginCest extends BaseCest
 {
     /**
      * @param AcceptanceTester $I
@@ -24,7 +24,9 @@ class AmazonPayWithoutLoginCest extends BaseCest
 
         $this->_initializeTest();
         $this->_openBasketDisplay();
+        $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
+        $this->_submitPaymentMethod();
         $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }
@@ -40,7 +42,49 @@ class AmazonPayWithoutLoginCest extends BaseCest
 
         $this->_initializeTest();
         $this->_openCheckout();
+        $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
+        $this->_submitPaymentMethod();
+        $this->_submitOrder();
+        $this->_checkSuccessfulPayment();
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @return void
+     * @group AmazonPayWithoutLoginPaymentTest
+     */
+    public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I)
+    {
+        $I->wantToTest('Test AmazonPay via Basket without login with return payment works');
+
+        $this->_initializeTest();
+        $this->_openBasketDisplay();
+        $this->_openAmazonPayPage();
+        $this->_loginAmazonPayment();
+        $this->_cancelPeyment();
+        $this->_openAmazonPayPage();
+        $this->_submitPaymentMethod();
+        $this->_submitOrder();
+        $this->_checkSuccessfulPayment();
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @return void
+     * @group AmazonPayWithoutLoginPaymentTest
+     */
+    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
+    {
+        $I->wantToTest('Test AmazonPay via Address Page without login with return payment works');
+
+        $this->_initializeTest();
+        $this->_openCheckout();
+        $this->_openAmazonPayPage();
+        $this->_loginAmazonPayment();
+        $this->_cancelPeyment();
+        $this->_openAmazonPayPage();
+        $this->_submitPaymentMethod();
         $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }

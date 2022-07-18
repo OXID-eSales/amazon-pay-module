@@ -25,7 +25,9 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_initializeTest();
         $this->_loginOxid();
         $this->_openBasketDisplay();
+        $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
+        $this->_submitPaymentMethod();
         $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }
@@ -42,7 +44,51 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_initializeTest();
         $this->_loginOxid();
         $this->_openCheckout();
+        $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
+        $this->_submitPaymentMethod();
+        $this->_submitOrder();
+        $this->_checkSuccessfulPayment();
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @return void
+     * @group AmazonPayWithLoginPaymentTest
+     */
+    public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I)
+    {
+        $I->wantToTest('Test AmazonPay via Basket with login and return payment works');
+
+        $this->_initializeTest();
+        $this->_loginOxid();
+        $this->_openBasketDisplay();
+        $this->_openAmazonPayPage();
+        $this->_loginAmazonPayment();
+        $this->_cancelPeyment();
+        $this->_openAmazonPayPage();
+        $this->_submitPaymentMethod();
+        $this->_submitOrder();
+        $this->_checkSuccessfulPayment();
+    }
+
+    /**
+     * @param AcceptanceTester $I
+     * @return void
+     * @group AmazonPayWithLoginPaymentTest
+     */
+    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
+    {
+        $I->wantToTest('Test AmazonPay via Address Page with login and return payment works');
+
+        $this->_initializeTest();
+        $this->_loginOxid();
+        $this->_openCheckout();
+        $this->_openAmazonPayPage();
+        $this->_loginAmazonPayment();
+        $this->_cancelPeyment();
+        $this->_openAmazonPayPage();
+        $this->_submitPaymentMethod();
         $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }

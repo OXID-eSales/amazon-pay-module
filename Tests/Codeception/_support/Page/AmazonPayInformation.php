@@ -14,6 +14,7 @@ use OxidEsales\Codeception\Page\Page;
 class AmazonPayInformation extends Page
 {
     private $continueToCheckout = "//input[@class='a-button-input']";
+    private $cancelCheckout = "//a[@id='return_back_to_merchant_link']";
 
     /**
      * @return void
@@ -25,5 +26,14 @@ class AmazonPayInformation extends Page
         $I->waitForElement($this->continueToCheckout);
         $I->wait(1);
         $I->click($this->continueToCheckout);
+    }
+
+    public function cancelPayment()
+    {
+        $I = $this->user;
+
+        $I->waitForElement($this->cancelCheckout);
+        $I->wait(1);
+        $I->click($this->cancelCheckout);
     }
 }

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Page;
 
+use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Page\Page;
 
 class AmazonPayLogin extends Page
@@ -16,8 +17,6 @@ class AmazonPayLogin extends Page
     private $amazonpayEmailInput = "//input[@id='ap_email']";
     private $amazonpayPasswordInput = "//input[@id='ap_password']";
     private $signInSubmitInput = "//input[@id='signInSubmit']";
-    private $amazonpayLogin = '';
-    private $amazonpayPassword = '';
 
     /**
      * @return void
@@ -26,9 +25,10 @@ class AmazonPayLogin extends Page
     {
         $I = $this->user;
 
+        $I->waitForPageLoad();
         $I->waitForElement($this->amazonpayEmailInput);
-        $I->fillField($this->amazonpayEmailInput, $this->amazonpayLogin);
-        $I->fillField($this->amazonpayPasswordInput, $this->amazonpayPassword);
+        $I->fillField($this->amazonpayEmailInput, Fixtures::get(['amazonClientUsername']));
+        $I->fillField($this->amazonpayPasswordInput, Fixtures::get(['amazonClientPassword']));
         $I->click($this->signInSubmitInput);
     }
 }

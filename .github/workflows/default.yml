@@ -204,6 +204,7 @@ jobs:
           path: ./logs/
 
       - name: Fix paths in unit logs
+        continue-on-error: true
         run: |
           sed -i 's+/var/www/test-module/++' logs/coverage.xml
           sed -i 's+/var/www/test-module/++' logs/phpunit.xml

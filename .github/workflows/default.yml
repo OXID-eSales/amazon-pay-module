@@ -217,12 +217,12 @@ jobs:
           args: >
             -Dsonar.organization=oxid-esales
             -Dsonar.projectKey=OXID-eSales_amazon-pay-module
-            -Dsonar.projectVersion=0.1.0
             -Dsonar.sources=src
             -Dsonar.tests=Tests
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.php.coverage.reportPaths=logs/coverage.xml
-            -Dsonar.cpd.php.minimumTokens=30
-            -Dsonar.cpd.php.minimumLines=6
+            -Dsonar.cpd.php.minimumTokens=25
+            -Dsonar.cpd.php.minimumLines=5
             -Dsonar.php.tests.reportPath=logs/phpunit.xml
             -Dsonar.php.psalm.reportPaths=logs/psalm.sonarqube.json
+            -Dsonar.php.phpstan.reportPaths=styles/phpstan.report.json

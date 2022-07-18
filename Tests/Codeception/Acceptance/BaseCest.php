@@ -25,11 +25,23 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I): void
     {
+        $I->updateInDatabase(
+            'oxobject2payment',
+            ['OXPAYMENTID' => 'oxidamazon'],
+            ['OXPAYMENTID' => 'oxidinvoice', 'OXOBJECTID' => 'oxidstandard']
+        );
+
         $this->I = $I;
     }
 
     public function _after(AcceptanceTester $I): void
     {
+        $I->updateInDatabase(
+            'oxobject2payment',
+            ['OXPAYMENTID' => 'oxidinvoice'],
+            ['OXPAYMENTID' => 'oxidamazon', 'OXOBJECTID' => 'oxidstandard']
+        );
+
         $I->clearShopCache();
     }
 
@@ -54,7 +66,8 @@ abstract class BaseCest
     protected function _loginOxid()
     {
         $homePage = $this->I->openShop();
-        $homePage->loginUser(Fixtures::get(['amazonClientUsername']), Fixtures::get(['amazonClientPassword']));
+        $clientData = Fixtures::get('client');
+        $homePage->loginUser($clientData['username'], $clientData['password']);
     }
 
     /**
@@ -78,17 +91,39 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _loginAmazonPayment()
+    protected function _openAmazonPayPage()
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
         $this->I->waitForElement($amazonpayDiv);
         $this->I->click($amazonpayDiv);
+    }
+
+    /**
+     * @return void
+     */
+    protected function _loginAmazonPayment()
+    {
         $amazonpayLoginPage = new AmazonPayLogin($this->I);
         $amazonpayLoginPage->login();
+    }
 
+    /**
+     * @return void
+     */
+    protected function _submitPaymentMethod()
+    {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->submitPayment();
+    }
+
+    /**
+     * @return void
+     */
+    protected function _cancelPeyment()
+    {
+        $amazonpayInformationPage = new AmazonPayInformation($this->I);
+        $amazonpayInformationPage->cancelPayment();
     }
 
     /**

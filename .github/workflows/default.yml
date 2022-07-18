@@ -65,7 +65,7 @@ jobs:
         run: |
           docker-compose exec -T \
             php composer config repositories.oxid-esales/amazon-pay-module \
-            --json '{"type":"path", "url":"./source/modules/oxps/amazonpay", "options": {"symlink": true}}
+            --json '{"type":"path", "url":"./source/modules/oxps/amazonpay", "options": {"symlink": true}}'
           docker-compose exec -T php composer require oxid-esales/amazon-pay-module:* --no-update
       - name: Reset shop
         run: docker-compose exec -T php vendor/bin/reset-shop

@@ -70,12 +70,12 @@ class Payload
         $data = [];
 
         if (
-            !isset($this->canHandlePendingAuthorization) ||
+            is_bool($this->canHandlePendingAuthorization) ||
             !empty($this->paymentIntent) ||
             !empty($this->paymentDetailsChargeAmount)
         ) {
             $data['paymentDetails'] = [];
-            if (!isset($this->canHandlePendingAuthorization)) {
+            if (is_bool($this->canHandlePendingAuthorization)) {
                 $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
             }
 

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.0] - Technical Release
+
+* simplify the template structure (remove theme param from metadata, add switch within the templates)
+* change folder structure of module fir better testing
+* refresh default-amazon-countries
+* dont destroy session basket if you failed by clicking the amazon button with an existing user-account
+* some session tweaks for better consumer experience during checkout
+* us github Actions for testing the module
+
 ## [1.1.3] - Maintenance Release
 
 * faster checkout

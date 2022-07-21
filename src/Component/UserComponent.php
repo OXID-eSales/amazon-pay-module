@@ -120,6 +120,24 @@ class UserComponent extends UserComponent_Parent
     }
 
     /**
+     * Creates new oxid user
+     *
+     * @return string partial parameter string or null
+     */
+    public function registerUser()
+    {
+        $amazonService = OxidServiceProvider::getAmazonService();
+        if (
+            $amazonService->isAmazonSessionActive() &&
+            $this->createUser() === false &&
+            !$this->_blIsNewUser
+        ) {
+            return null;
+        }
+        return parent::registerUser();
+    }
+
+    /**
      * Returns delivery address from request. Before returning array is checked if
      * all needed data is there
      *

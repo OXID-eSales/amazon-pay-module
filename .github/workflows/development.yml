@@ -160,39 +160,39 @@ jobs:
             source/coverage.xml
             source/phpunit.xml
 
-#  sonarcloud:
-#    needs: [ unit_tests ]
-#    if: always()
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout current module
-#        uses: actions/checkout@v3
-#
-#      - name: Download phpunit artifacts
-#        continue-on-error: true
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: TestsLog-7.4
-#          path: ./Tests/
-#
-#      - name: Fix paths in unit logs
-#        continue-on-error: true
-#        run: |
-#          sed -i 's+/var/www/test-module/++' Tests/coverage.xml
-#          sed -i 's+/var/www/test-module/++' Tests/phpunit.xml
-#
-#      - name: SonarCloud Scan
-#        uses: sonarsource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#        with:
-#          args: >
-#            -Dsonar.organization=${{ env.SONARCLOUD_ORGANIZATION }}
-#            -Dsonar.projectKey=${{ env.SONARCLOUD_PROJECT_KEY }}
-#            -Dsonar.sources=src
-#            -Dsonar.tests=Tests
-#            -Dsonar.sourceEncoding=UTF-8
-#            -Dsonar.php.coverage.reportPaths=Tests/coverage.xml
-#            -Dsonar.cpd.php.minimumTokens=25
-#            -Dsonar.cpd.php.minimumLines=5
+  sonarcloud:
+    needs: [ unit_tests ]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current module
+        uses: actions/checkout@v3
+
+      - name: Download phpunit artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v3
+        with:
+          name: TestsLog-7.4
+          path: ./Tests/
+
+      - name: Fix paths in unit logs
+        continue-on-error: true
+        run: |
+          sed -i 's+/var/www/test-module/++' Tests/coverage.xml
+          sed -i 's+/var/www/test-module/++' Tests/phpunit.xml
+
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ env.SONARCLOUD_ORGANIZATION }}
+            -Dsonar.projectKey=${{ env.SONARCLOUD_PROJECT_KEY }}
+            -Dsonar.sources=src
+            -Dsonar.tests=Tests
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.php.coverage.reportPaths=Tests/coverage.xml
+            -Dsonar.cpd.php.minimumTokens=25
+            -Dsonar.cpd.php.minimumLines=5

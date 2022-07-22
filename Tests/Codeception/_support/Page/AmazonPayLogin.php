@@ -27,8 +27,8 @@ class AmazonPayLogin extends Page
 
         $I->waitForPageLoad();
         $I->waitForElement($this->amazonpayEmailInput);
-        $I->fillField($this->amazonpayEmailInput, Fixtures::get(['amazonClientUsername']));
-        $I->fillField($this->amazonpayPasswordInput, Fixtures::get(['amazonClientPassword']));
+        $I->fillField($this->amazonpayEmailInput, Fixtures::get('amazonClientUsername'));
+        $I->fillField($this->amazonpayPasswordInput, Fixtures::get('amazonClientPassword'));
         $I->click($this->signInSubmitInput);
     }
 }

@@ -1,23 +1,8 @@
 <?php
 
 /**
- * This file is part of OXID eSales AmazonPay module.
- *
- * OXID eSales AmazonPay module is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OXID eSales AmazonPay module is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OXID eSales AmazonPay module.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @link      http://www.oxid-esales.com
- * @copyright (C) OXID eSales AG 2003-2020
+ * Copyright © OXID eSales AG. All rights reserved.
+ * See LICENSE file for license details.
  */
 
 declare(strict_types=1);
@@ -26,7 +11,6 @@ namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core;
 
 use Mockery;
 use Mockery\MockInterface;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidProfessionalServices\AmazonPay\Core\AmazonClient;
 use OxidProfessionalServices\AmazonPay\Core\AmazonService;
@@ -41,11 +25,8 @@ class AmazonTestCase extends UnitTestCase
     /** @var AmazonClient */
     protected $amazonClient;
 
-    /** @var array */
-    protected $mockConfig;
-
-    /** @var Config | MockInterface */
-    protected $mockModuleConfig;
+    /** @var Config */
+    protected $moduleConfig;
 
     /** @var LoggerInterface | MockInterface */
     protected $mockLogger;
@@ -54,25 +35,20 @@ class AmazonTestCase extends UnitTestCase
     {
         parent::setUp();
 
-        $this->mockModuleConfig = Mockery::mock(Config::class)->makePartial();
-        $this->mockModuleConfig->shouldReceive('isSandbox')->andReturnTrue();
-        $this->mockModuleConfig->shouldReceive('getStoreId')->andReturn(STORE_ID);
-        $this->mockModuleConfig->shouldReceive('getMerchantId')->andReturn(MERCHANT_ID);
-        $this->mockModuleConfig->shouldReceive('getPublicKeyId')->andReturn(PUBLIC_KEY_ID);
-        $this->mockModuleConfig->shouldReceive('getPrivateKey')->andReturn(PRIVATE_KEY);
+        $this->moduleConfig = oxNew(Config::class);
 
-        $this->mockConfig = [
-            'public_key_id' => $this->mockModuleConfig->getPublicKeyId(),
-            'private_key' => $this->mockModuleConfig->getPrivateKey(),
-            'region' => $this->mockModuleConfig->getPaymentRegion(),
-            'sandbox' => $this->mockModuleConfig->isSandbox(),
+        $configurations = [
+            'public_key_id' => $this->moduleConfig->getPublicKeyId(),
+            'private_key' => $this->moduleConfig->getPrivateKey(),
+            'region' => $this->moduleConfig->getPaymentRegion(),
+            'sandbox' => true
         ];
 
         $this->mockLogger = Mockery::mock(LoggerInterface::class);
 
         $this->amazonClient = new AmazonClient(
-            $this->mockConfig,
-            $this->mockModuleConfig,
+            $configurations,
+            $this->moduleConfig,
             $this->mockLogger
         );
 
@@ -86,36 +62,6 @@ class AmazonTestCase extends UnitTestCase
      */
     protected function createTestCheckoutSession(): array
     {
-        $amazonConfig = new Config();
-
-        $this->mockModuleConfig
-            ->shouldReceive('getUuid')
-            ->andReturn($amazonConfig->getUuid());
-
-        $this->mockModuleConfig
-            ->shouldReceive('checkoutReviewUrl')
-            ->andReturn('http://localhost');
-
-        $this->mockModuleConfig
-            ->shouldReceive('checkoutResultUrl')
-            ->andReturn('http://localhost');
-
-        $this->mockModuleConfig
-            ->shouldReceive('getPossibleEUAddresses')
-            ->andReturn(
-                [
-                    'DE' => (object) null
-                ]
-            );
-
-        $this->mockModuleConfig
-            ->shouldReceive('getPresentmentCurrency')
-            ->andReturn('EUR');
-
-        $this->mockModuleConfig
-            ->shouldReceive('getStoreId')
-            ->andReturn(Registry::getConfig()->getConfigParam('sAmazonPayStoreId'));
-
         return $this->amazonClient->createCheckoutSession();
     }
 

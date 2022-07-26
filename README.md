@@ -4,35 +4,16 @@ Amazon Pay integration for OXID eShop 6.1 and above.
 
 ## Documentation
 
-* official german Amazon Pay checkout for OXID [Documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/)
-* official english Amazon Pay checkout for OXID [Documentation](https://docs.oxid-esales.com/modules/amazon-pay/en/latest/)
+* Official German Amazon Pay for OXID [documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/)
+* Official English Amazon Pay for OXID [documentation](https://docs.oxid-esales.com/modules/amazon-pay/en/latest/)
 
 ## Branch Compatibility
 
-* b-6.2.x module branch is compatible with OXID eShop compilation 6.1, 6.2, 6.3 and 6.4
+* b-6.2.x module branch is compatible with OXID eShop compilation 6.1, 6.2, 6.3, 6.4, 6.5
 
-## Install
+## Install for OXID
 
-```bash
-
-# Install desired version of oxid-solution-catalysts/Amazon Pay module
-$ composer require oxid-esales/amazon-pay-module
-# Run install
-$ composer install
-# Activate the module
-$ ./vendor/bin/oe-console oe:module:install-configuration source/modules/oxps/amazonpay
-$ ./vendor/bin/oe-console oe:module:apply-configuration
-```
-
-**NOTE:** The location of the oe-console script depends on whether your root package
-is the oxideshop_ce (```./bin/oe-console```) or if the shop was installed from
-an OXID eShop edition metapackage (```./vendor/bin/oe-console```).
-
-After requiring the module, you need to activate it, either via OXID eShop admin or CLI.
-
-```bash
-$ ./vendor/bin/oe-console oe:module:activate oxps_amazonpay
-```
+* see Official documentation
 
 ## Limitations
 

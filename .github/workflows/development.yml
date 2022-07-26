@@ -159,6 +159,7 @@ jobs:
           path: |
             source/coverage.xml
             source/phpunit.xml
+
   codeception_tests:
     strategy:
       matrix:
@@ -167,22 +168,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Load current installation from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ./*
           key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
           restore-keys: |
             development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+
       - name: Start containers
         run: |
           make up
           sleep 2
+
       - name: Install codeception dependencies
         run: |
           docker-compose exec -T php composer require codeception/module-rest:^1.4.2 --dev --no-update
           docker-compose exec -T php composer require codeception/module-phpbrowser:^1.0.2 --dev --no-update
           docker-compose exec -T php composer update
+
+      - name: Prepare login credentials
+        run: |
+          sed -i -e 's/<AmazonPay Client Username>/${{ secrets.AMAZON_USERNAME }}/'\
+                 -e 's/<AmazonPay Client Password>/${{ secrets.AMAZON_PASSWORD }}/'\
+              source/vendor/oxid-esales/amazon-pay-module/Tests/Codeception/_data/amazonpayData.php
+
       - name: Run tests
         run: |
           docker-compose exec -T \
@@ -192,11 +202,13 @@ jobs:
             -e RUN_TESTS_FOR_MODULES=0 \
             -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
             php php vendor/bin/runtests-codeception
+
       - name: Stop containers
         if: always()
         run: |
           docker-compose down
           sleep 2
+
   sonarcloud:
     needs: [ unit_tests ]
     if: always()

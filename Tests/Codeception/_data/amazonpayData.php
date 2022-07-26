@@ -12,10 +12,6 @@ declare(strict_types=1);
  */
 
 return [
-    'merchantId'  => '<AmazonPay MerchantId>',
-    'storeId'     => '<AmazonPay StoreId>',
-    'publicKeyId' => '<AmazonPay PublicKeyId>',
-    'privateKey'  => '<AmazonPay PrivateKey>',
     'amazonClientUsername' => '<AmazonPay Client Username>',
     'amazonClientPassword' => '<AmazonPay Client Password>',
 ];

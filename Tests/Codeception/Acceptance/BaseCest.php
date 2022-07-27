@@ -25,10 +25,13 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I): void
     {
-        $I->updateInDatabase(
+        $I->haveInDatabase(
             'oxobject2payment',
-            ['OXPAYMENTID' => 'oxidamazon'],
-            ['OXPAYMENTID' => 'oxidinvoice', 'OXOBJECTID' => 'oxidstandard']
+            ['OXID' => 'testAmazonPay',
+                'OXOBJECTID' => 'a7c40f631fc920687.20179984',
+                'OXPAYMENTID' => 'oxidamazon',
+                'OXTYPE' => 'oxcountry'
+            ]
         );
 
         $this->I = $I;
@@ -36,12 +39,6 @@ abstract class BaseCest
 
     public function _after(AcceptanceTester $I): void
     {
-        $I->updateInDatabase(
-            'oxobject2payment',
-            ['OXPAYMENTID' => 'oxidinvoice'],
-            ['OXPAYMENTID' => 'oxidamazon', 'OXOBJECTID' => 'oxidstandard']
-        );
-
         $I->clearShopCache();
     }
 

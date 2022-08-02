@@ -289,7 +289,7 @@ class Events
      *
      * @return void
      */
-    protected static function onDeactivate(): void
+    public static function onDeactivate(): void
     {
         self::disablePaymentMethod();
     }

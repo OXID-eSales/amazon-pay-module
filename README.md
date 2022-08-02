@@ -29,7 +29,7 @@ Warning: Running tests will reset the shop.
 #### Requirements:
 * Ensure test_config.yml is configured:
     * ```
-    partial_module_paths: oxps/amazonpay
+    partial_module_paths: osc/amazonpay
     ```
     * ```
     activate_all_modules: true

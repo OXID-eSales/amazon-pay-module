@@ -21,24 +21,24 @@ use OxidEsales\Eshop\Application\Model\Order as CoreOrderModel;
 use OxidEsales\Eshop\Application\Model\User as CoreUserModel;
 use OxidEsales\Eshop\Core\ViewConfig as CoreViewConfig;
 use OxidEsales\Eshop\Core\InputValidator as CoreInputValidator;
-use OxidProfessionalServices\AmazonPay\Component\UserComponent;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\ConfigController;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\DeliverySetMain as AmazonDeliverySetMain;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderList as AmazonOrderList;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderMain as AmazonOrderMain;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\OrderOverview as ModuleOrderOverview;
-use OxidProfessionalServices\AmazonPay\Controller\AmazonCheckoutController;
-use OxidProfessionalServices\AmazonPay\Controller\ArticleDetailsController;
-use OxidProfessionalServices\AmazonPay\Controller\DispatchController;
-use OxidProfessionalServices\AmazonPay\Controller\OrderController;
-use OxidProfessionalServices\AmazonPay\Controller\UserController;
-use OxidProfessionalServices\AmazonPay\Core\ViewConfig;
-use OxidProfessionalServices\AmazonPay\Core\AmazonInputValidator;
-use OxidProfessionalServices\AmazonPay\Model\Article as ModuleArticle;
-use OxidProfessionalServices\AmazonPay\Model\Basket as ModuleBasket;
-use OxidProfessionalServices\AmazonPay\Model\Category as ModuleCategory;
-use OxidProfessionalServices\AmazonPay\Model\Order as ModuleOrder;
-use OxidProfessionalServices\AmazonPay\Model\User as ModuleUser;
+use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain as AmazonDeliverySetMain;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderList as AmazonOrderList;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderMain as AmazonOrderMain;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderOverview as ModuleOrderOverview;
+use OxidSolutionCatalysts\AmazonPay\Controller\AmazonCheckoutController;
+use OxidSolutionCatalysts\AmazonPay\Controller\ArticleDetailsController;
+use OxidSolutionCatalysts\AmazonPay\Controller\DispatchController;
+use OxidSolutionCatalysts\AmazonPay\Controller\OrderController;
+use OxidSolutionCatalysts\AmazonPay\Controller\UserController;
+use OxidSolutionCatalysts\AmazonPay\Core\ViewConfig;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonInputValidator;
+use OxidSolutionCatalysts\AmazonPay\Model\Article as ModuleArticle;
+use OxidSolutionCatalysts\AmazonPay\Model\Basket as ModuleBasket;
+use OxidSolutionCatalysts\AmazonPay\Model\Category as ModuleCategory;
+use OxidSolutionCatalysts\AmazonPay\Model\Order as ModuleOrder;
+use OxidSolutionCatalysts\AmazonPay\Model\User as ModuleUser;
 
 $sMetadataVersion = '2.1';
 
@@ -46,10 +46,10 @@ $sMetadataVersion = '2.1';
  * Module information
  */
 $aModule = [
-    'id' => 'oxps_amazonpay',
+    'id' => 'osc_amazonpay',
     'title' => [
-        'de' => 'OXPS :: Amazon Pay - Online-Bezahldienst',
-        'en' => 'OXPS :: Amazon Pay - Online-Payment'
+        'de' => 'Amazon Pay - Online-Bezahldienst',
+        'en' => 'Amazon Pay - Online-Payment'
     ],
     'description' => [
         'de' => 'Nutzung des Online-Bezahldienstes von amazon.de',
@@ -57,9 +57,9 @@ $aModule = [
     ],
     'thumbnail' => 'out/img/amazon-pay-logo.png',
     'version' => '1.2',
-    'author' => 'Oxid Professional Services',
-    'url' => '',
-    'email' => '',
+    'author' => 'OXID eSales AG',
+    'url' => 'https://www.oxid-esales.com',
+    'email' => 'info@oxid-esales.com',
     'extend' => [
         CoreViewConfig::class => ViewConfig::class,
         CoreUserController::class => UserController::class,
@@ -83,40 +83,40 @@ $aModule = [
         'amazondispatch' => DispatchController::class
     ],
     'templates' => [
-        'amazonpay/amazonconfig.tpl' => 'oxps/amazonpay/views/admin/tpl/amazonconfig.tpl',
-        'amazonpay/amazonbutton.tpl' => 'oxps/amazonpay/views/elements/amazonbutton.tpl',
-        'amazonpay/filtered_billing_address.tpl' => 'oxps/amazonpay/views/elements/filtered_billing_address.tpl',
-        'amazonpay/filtered_delivery_address.tpl' => 'oxps/amazonpay/views/elements/filtered_delivery_address.tpl',
+        'amazonpay/amazonconfig.tpl' => 'osc/amazonpay/views/admin/tpl/amazonconfig.tpl',
+        'amazonpay/amazonbutton.tpl' => 'osc/amazonpay/views/elements/amazonbutton.tpl',
+        'amazonpay/filtered_billing_address.tpl' => 'osc/amazonpay/views/elements/filtered_billing_address.tpl',
+        'amazonpay/filtered_delivery_address.tpl' => 'osc/amazonpay/views/elements/filtered_delivery_address.tpl',
         'amazonpay/user_checkout_shipping_head_flow.tpl' =>
-            'oxps/amazonpay/views/elements/user_checkout_shipping_head_flow.tpl',
+            'osc/amazonpay/views/elements/user_checkout_shipping_head_flow.tpl',
         'amazonpay/user_checkout_shipping_head_wave.tpl' =>
-            'oxps/amazonpay/views/elements/user_checkout_shipping_head_wave.tpl',
-        'amazonpay/basket_btn_next_bottom_flow.tpl' => 'oxps/amazonpay/views/elements/basket_btn_next_bottom_flow.tpl',
-        'amazonpay/basket_btn_next_bottom_wave.tpl' => 'oxps/amazonpay/views/elements/basket_btn_next_bottom_wave.tpl',
-        'amazonpay/change_payment_block_flow.tpl' => 'oxps/amazonpay/views/elements/change_payment_block_flow.tpl',
-        'amazonpay/change_payment_block_wave.tpl' => 'oxps/amazonpay/views/elements/change_payment_block_wave.tpl',
-        'amazonpay/change_payment_form_flow.tpl' => 'oxps/amazonpay/views/elements/change_payment_form_flow.tpl',
-        'amazonpay/change_payment_form_wave.tpl' => 'oxps/amazonpay/views/elements/change_payment_form_wave.tpl',
-        'amazonpay/checkout_order_address_flow.tpl' => 'oxps/amazonpay/views/elements/checkout_order_address_flow.tpl',
-        'amazonpay/checkout_order_address_wave.tpl' => 'oxps/amazonpay/views/elements/checkout_order_address_wave.tpl',
+            'osc/amazonpay/views/elements/user_checkout_shipping_head_wave.tpl',
+        'amazonpay/basket_btn_next_bottom_flow.tpl' => 'osc/amazonpay/views/elements/basket_btn_next_bottom_flow.tpl',
+        'amazonpay/basket_btn_next_bottom_wave.tpl' => 'osc/amazonpay/views/elements/basket_btn_next_bottom_wave.tpl',
+        'amazonpay/change_payment_block_flow.tpl' => 'osc/amazonpay/views/elements/change_payment_block_flow.tpl',
+        'amazonpay/change_payment_block_wave.tpl' => 'osc/amazonpay/views/elements/change_payment_block_wave.tpl',
+        'amazonpay/change_payment_form_flow.tpl' => 'osc/amazonpay/views/elements/change_payment_form_flow.tpl',
+        'amazonpay/change_payment_form_wave.tpl' => 'osc/amazonpay/views/elements/change_payment_form_wave.tpl',
+        'amazonpay/checkout_order_address_flow.tpl' => 'osc/amazonpay/views/elements/checkout_order_address_flow.tpl',
+        'amazonpay/checkout_order_address_wave.tpl' => 'osc/amazonpay/views/elements/checkout_order_address_wave.tpl',
         'amazonpay/checkout_order_btn_submit_bottom_flow.tpl' =>
-            'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_flow.tpl',
+            'osc/amazonpay/views/elements/checkout_order_btn_submit_bottom_flow.tpl',
         'amazonpay/checkout_order_btn_submit_bottom_wave.tpl' =>
-            'oxps/amazonpay/views/elements/checkout_order_btn_submit_bottom_wave.tpl',
-        'amazonpay/checkout_user_main_flow.tpl' => 'oxps/amazonpay/views/elements/checkout_user_main_flow.tpl',
-        'amazonpay/checkout_user_main_wave.tpl' => 'oxps/amazonpay/views/elements/checkout_user_main_wave.tpl',
-        'amazonpay/shippingandpayment_flow.tpl' => 'oxps/amazonpay/views/elements/shippingandpayment_flow.tpl',
-        'amazonpay/shippingandpayment_wave.tpl' => 'oxps/amazonpay/views/elements/shippingandpayment_wave.tpl',
+            'osc/amazonpay/views/elements/checkout_order_btn_submit_bottom_wave.tpl',
+        'amazonpay/checkout_user_main_flow.tpl' => 'osc/amazonpay/views/elements/checkout_user_main_flow.tpl',
+        'amazonpay/checkout_user_main_wave.tpl' => 'osc/amazonpay/views/elements/checkout_user_main_wave.tpl',
+        'amazonpay/shippingandpayment_flow.tpl' => 'osc/amazonpay/views/elements/shippingandpayment_flow.tpl',
+        'amazonpay/shippingandpayment_wave.tpl' => 'osc/amazonpay/views/elements/shippingandpayment_wave.tpl',
         'amazonpay/details_productmain_tobasket.tpl' =>
-            'oxps/amazonpay/views/elements/details_productmain_tobasket.tpl',
+            'osc/amazonpay/views/elements/details_productmain_tobasket.tpl',
         'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl' =>
-            'oxps/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl',
+            'osc/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl',
        'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
-            'oxps/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl',
+            'osc/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl',
     ],
     'events' => [
-        'onActivate' => '\OxidProfessionalServices\AmazonPay\Core\Events::onActivate',
-        'onDeactivate' => '\OxidProfessionalServices\AmazonPay\Core\Events::onDeactivate'
+        'onActivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onActivate',
+        'onDeactivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onDeactivate'
     ],
     'blocks' => [
         [

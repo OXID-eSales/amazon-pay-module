@@ -5,9 +5,9 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Class OrderListController

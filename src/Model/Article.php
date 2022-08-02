@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Model;
+namespace OxidSolutionCatalysts\AmazonPay\Model;
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Field;
@@ -25,6 +25,6 @@ class Article extends Article_parent
      */
     public function isAmazonExclude(): bool
     {
-        return (bool)$this->oxarticles__oxps_amazon_exclude->value;
+        return (bool)$this->oxarticles__osc_amazon_exclude->value;
     }
 }

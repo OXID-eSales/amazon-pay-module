@@ -5,11 +5,11 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use Amazon\Pay\API\Client;
 use Exception;
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use Psr\Log\LoggerInterface;
 
 class AmazonClient extends Client

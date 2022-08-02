@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller;
+namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Controller\ArticleDetailsController

@@ -5,10 +5,10 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 
 class Payload
 {

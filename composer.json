@@ -34,13 +34,13 @@
                 "resources/**/*",
                 "resources/**/*."
             ],
-            "target-directory": "oxps/amazonpay"
+            "target-directory": "osc/amazonpay"
         }
     },
     "autoload": {
         "psr-4": {
-            "OxidProfessionalServices\\AmazonPay\\": "src",
-            "OxidProfessionalServices\\AmazonPay\\Tests\\": "Tests"
+            "OxidSolutionCatalysts\\AmazonPay\\": "src",
+            "OxidSolutionCatalysts\\AmazonPay\\Tests\\": "Tests"
         }
     },
     "scripts": {

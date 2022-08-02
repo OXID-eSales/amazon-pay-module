@@ -5,12 +5,12 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Exception\UserException;
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Class for validating input

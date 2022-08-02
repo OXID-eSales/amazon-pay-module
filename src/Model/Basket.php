@@ -5,10 +5,10 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Model;
+namespace OxidSolutionCatalysts\AmazonPay\Model;
 
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Basket

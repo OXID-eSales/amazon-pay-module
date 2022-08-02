@@ -5,13 +5,13 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core\Repository;
+namespace OxidSolutionCatalysts\AmazonPay\Core\Repository;
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Logger\LogMessage;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 
 class LogRepository
 {
@@ -28,18 +28,18 @@ class LogRepository
         $id = Registry::getUtilsObject()->generateUID();
 
         $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (
-                `OXPS_AMAZON_PAYLOGID`,
-                `OXPS_AMAZON_OXSHOPID`,
-                `OXPS_AMAZON_OXUSERID`,
-                `OXPS_AMAZON_OXORDERID`,
-                `OXPS_AMAZON_RESPONSE_MSG`,
-                `OXPS_AMAZON_STATUS_CODE`,
-                `OXPS_AMAZON_REQUEST_TYPE`,
-                `OXPS_AMAZON_IDENTIFIER`,
-                `OXPS_AMAZON_CHARGE_ID`,
-                `OXPS_AMAZON_CHARGE_PERMISSION_ID`,
-                `OXPS_AMAZON_OBJECT_ID`,
-                `OXPS_AMAZON_OBJECT_TYPE`
+                `OSC_AMAZON_PAYLOGID`,
+                `OSC_AMAZON_OXSHOPID`,
+                `OSC_AMAZON_OXUSERID`,
+                `OSC_AMAZON_OXORDERID`,
+                `OSC_AMAZON_RESPONSE_MSG`,
+                `OSC_AMAZON_STATUS_CODE`,
+                `OSC_AMAZON_REQUEST_TYPE`,
+                `OSC_AMAZON_IDENTIFIER`,
+                `OSC_AMAZON_CHARGE_ID`,
+                `OSC_AMAZON_CHARGE_PERMISSION_ID`,
+                `OSC_AMAZON_OBJECT_ID`,
+                `OSC_AMAZON_OBJECT_TYPE`
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
 
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute($sql, [
@@ -67,7 +67,7 @@ class LogRepository
     public function findLogMessageForUserId(string $userId): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_OXUSERID = ? ORDER BY OXTIMESTAMP',
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXUSERID = ? ORDER BY OXTIMESTAMP',
             [$userId]
         );
     }
@@ -81,7 +81,7 @@ class LogRepository
     public function findLogMessageForIdentifier(string $identifier): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_IDENTIFIER = ? ORDER BY OXTIMESTAMP',
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_IDENTIFIER = ? ORDER BY OXTIMESTAMP',
             [$identifier]
         );
     }
@@ -98,7 +98,7 @@ class LogRepository
         string $orderBy = 'OXTIMESTAMP'
     ): array {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]
         );
     }
@@ -112,7 +112,7 @@ class LogRepository
     public function findLogMessageForOrderId(string $orderId): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP',
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP',
             [$orderId]
         );
     }
@@ -126,7 +126,7 @@ class LogRepository
     public function findLogMessageForChargeId(string $chargeId): array
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OXPS_AMAZON_CHARGE_ID = ? ORDER BY OXTIMESTAMP',
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_ID = ? ORDER BY OXTIMESTAMP',
             [$chargeId]
         );
     }
@@ -144,8 +144,8 @@ class LogRepository
         $logMessages = $this->findLogMessageForChargeId($chargeId);
 
         foreach ($logMessages as $logMessage) {
-            if (isset($logMessage['OXPS_AMAZON_OXORDERID']) && $logMessage['OXPS_AMAZON_OXORDERID'] !== 'no basket') {
-                $orderId = $logMessage['OXPS_AMAZON_OXORDERID'];
+            if (isset($logMessage['OSC_AMAZON_OXORDERID']) && $logMessage['OSC_AMAZON_OXORDERID'] !== 'no basket') {
+                $orderId = $logMessage['OSC_AMAZON_OXORDERID'];
                 break;
             }
         }
@@ -163,7 +163,7 @@ class LogRepository
      */
     public function markOrderPaid($orderId, string $remark, $transStatus = 'OK', $chargeId = ''): void
     {
-        $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OXPS_AMAZON_REMARK = ?, OXTRANSID= ? WHERE OXID=?';
+        $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OSC_AMAZON_REMARK = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
             $sql,
             [

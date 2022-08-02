@@ -1,7 +1,7 @@
 [{$smarty.block.parent}]
 <tr>
     <td class="edittext">
-        [{oxmultilang ident="OXPS_AMAZONPAY_CARRIER_CODE"}]
+        [{oxmultilang ident="OSC_AMAZONPAY_CARRIER_CODE"}]
     </td>
     <td class="edittext">
         <select name="editAmazonCarrier" id="editAmazonCarrier" [{$custreadonly}]>

@@ -5,12 +5,12 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core\Helper;
+namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
-use OxidProfessionalServices\AmazonPay\Core\Logger;
-use OxidProfessionalServices\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use VIISON\AddressSplitter\AddressSplitter;
 use VIISON\AddressSplitter\Exceptions\SplittingException;
 

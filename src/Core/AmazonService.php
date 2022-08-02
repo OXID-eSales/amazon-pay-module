@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use Exception;
 use OxidEsales\Eshop\Application\Model\Basket;
@@ -16,11 +16,11 @@ use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Field;
-use OxidProfessionalServices\AmazonPay\Core\Config;
-use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 use Psr\Log\LoggerInterface;
 
 class AmazonService
@@ -468,26 +468,26 @@ class AmazonService
         $isCaptured = false;
 
         foreach ($logs as $log) {
-            if ($log['OXPS_AMAZON_RESPONSE_MSG'] === 'Canceled') {
+            if ($log['OSC_AMAZON_RESPONSE_MSG'] === 'Canceled') {
                 $isCancelled = true;
             }
-            if ($log['OXPS_AMAZON_RESPONSE_MSG'] === 'Refunded') {
+            if ($log['OSC_AMAZON_RESPONSE_MSG'] === 'Refunded') {
                 $isRefunded = true;
             }
             if (
-                $log['OXPS_AMAZON_RESPONSE_MSG'] === 'Captured'
-                || $log['OXPS_AMAZON_RESPONSE_MSG'] === 'Completed & Captured'
+                $log['OSC_AMAZON_RESPONSE_MSG'] === 'Captured'
+                || $log['OSC_AMAZON_RESPONSE_MSG'] === 'Completed & Captured'
             ) {
                 $isCaptured = true;
             }
-            if (!empty($log['OXPS_AMAZON_CHARGE_ID']) && $log['OXPS_AMAZON_CHARGE_ID'] !== 'null') {
-                $chargeId = $log['OXPS_AMAZON_CHARGE_ID'];
+            if (!empty($log['OSC_AMAZON_CHARGE_ID']) && $log['OSC_AMAZON_CHARGE_ID'] !== 'null') {
+                $chargeId = $log['OSC_AMAZON_CHARGE_ID'];
             }
             if (
-                !empty($log['OXPS_AMAZON_CHARGE_PERMISSION_ID'])
-                && $log['OXPS_AMAZON_CHARGE_PERMISSION_ID'] !== 'null'
+                !empty($log['OSC_AMAZON_CHARGE_PERMISSION_ID'])
+                && $log['OSC_AMAZON_CHARGE_PERMISSION_ID'] !== 'null'
             ) {
-                $chargePermissionId = $log['OXPS_AMAZON_CHARGE_PERMISSION_ID'];
+                $chargePermissionId = $log['OSC_AMAZON_CHARGE_PERMISSION_ID'];
             }
         }
 
@@ -562,8 +562,8 @@ class AmazonService
         $chargeId = null;
 
         foreach ($logs as $log) {
-            if (!empty($log['OXPS_AMAZON_CHARGE_ID']) && $log['OXPS_AMAZON_CHARGE_ID'] !== 'null') {
-                $chargeId = $log['OXPS_AMAZON_CHARGE_ID'];
+            if (!empty($log['OSC_AMAZON_CHARGE_ID']) && $log['OSC_AMAZON_CHARGE_ID'] !== 'null') {
+                $chargeId = $log['OSC_AMAZON_CHARGE_ID'];
                 continue;
             }
         }
@@ -715,7 +715,7 @@ class AmazonService
         $delivery = OxNew(DeliverySet::class);
 
         if ($delivery->load($deliveryType)) {
-            $deliveryDetails[0]['carrierCode'] = $delivery->oxdeliveryset__oxps_amazon_carrier->rawValue;
+            $deliveryDetails[0]['carrierCode'] = $delivery->oxdeliveryset__osc_amazon_carrier->rawValue;
         }
 
         if (!empty($deliveryDetails)) {
@@ -757,18 +757,18 @@ class AmazonService
         }
 
         foreach ($logMessages as $logMessage) {
-            if (strpos($logMessage['OXPS_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
+            if (strpos($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
                 $logsWithChargePermission = $repository->findLogMessageForOrderId(
-                    $logMessage['OXPS_AMAZON_OXORDERID']
+                    $logMessage['OSC_AMAZON_OXORDERID']
                 );
             } else {
-                if ($logMessage['OXPS_AMAZON_CHARGE_PERMISSION_ID'] === 'null') {
+                if ($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID'] === 'null') {
                     $logsWithChargePermission = $repository->findLogMessageForOrderId(
-                        $logMessage['OXPS_AMAZON_OXORDERID']
+                        $logMessage['OSC_AMAZON_OXORDERID']
                     );
                 } else {
                     $logsWithChargePermission = $repository->findLogMessageForChargePermissionId(
-                        $logMessage['OXPS_AMAZON_CHARGE_PERMISSION_ID']
+                        $logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']
                     );
                 }
             }

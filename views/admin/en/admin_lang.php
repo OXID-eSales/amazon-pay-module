@@ -54,7 +54,6 @@ $aLang = [
     'OSC_AMAZONPAY_CAPTYPE_TWO_STEP'   => 'Two Step',
     'OSC_AMAZONPAY_EXCLUDED'           => 'Exclude AmazonPay',
     'OSC_AMAZONPAY_CARRIER_CODE'       => 'Amazon Carrier Code',
-    'OSC_AMAZONPAY_PLEASE_CHOOSE'      => 'Please choose',
 
     'OSC_AMAZONPAY_PAYMENT_WAS_SHIPPING'    => 'Amazon payment is made after shipping',
     'OSC_AMAZONPAY_PAYMENT_WHEN_SHIPPING'   => 'Amazon payment is made on shipping',

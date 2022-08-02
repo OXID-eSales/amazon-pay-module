@@ -133,9 +133,6 @@
             <label for="opmode">[{oxmultilang ident="OSC_AMAZONPAY_CAPTYPE"}]</label>
             <div class="controls">
                 <select name="conf[amazonPayCapType]" id="captype" class="form-control" required>
-                    <option value="">
-                        [{oxmultilang ident="OSC_AMAZONPAY_PLEASE_CHOOSE"}]
-                    </option>
                     <option value="1" [{if $config->isOneStepCapture()}]selected[{/if}]>
                         [{oxmultilang ident="OSC_AMAZONPAY_CAPTYPE_ONE_STEP"}]
                     </option>

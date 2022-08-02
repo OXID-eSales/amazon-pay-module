@@ -132,6 +132,7 @@ class UserComponent extends UserComponent_Parent
             $this->createUser() === false &&
             !$this->_blIsNewUser
         ) {
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return null;
         }
         return parent::registerUser();

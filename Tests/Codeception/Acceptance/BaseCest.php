@@ -27,8 +27,9 @@ abstract class BaseCest
     {
         $I->haveInDatabase(
             'oxobject2payment',
-            ['OXID' => 'testAmazonPay',
-                'OXOBJECTID' => 'a7c40f631fc920687.20179984',
+            [
+                'OXID' => 'testAmazonPay',
+                'OXOBJECTID' => 'oxidstandard',
                 'OXPAYMENTID' => 'oxidamazon',
                 'OXTYPE' => 'oxcountry'
             ]
@@ -40,6 +41,7 @@ abstract class BaseCest
     public function _after(AcceptanceTester $I): void
     {
         $I->clearShopCache();
+        $I->cleanUp();
     }
 
     /**
@@ -51,10 +53,22 @@ abstract class BaseCest
 
         $acceptCertificatePage = new AcceptSSLCertificate($this->I);
         $acceptCertificatePage->acceptCertificate();
+    }
 
+    /**
+     * @return void
+     */
+    protected function _addProductToBasket()
+    {
         $basketItem = Fixtures::get('product');
         $basketSteps = new BasketSteps($this->I);
         $basketSteps->addProductToBasket($basketItem['id'], $this->amount);
+    }
+
+    protected function _openDetailPage()
+    {
+        $this->I->waitForText(Translator::translate('MORE_INFO'));
+        $this->I->click(Translator::translate('MORE_INFO'));
     }
 
     /**
@@ -65,6 +79,30 @@ abstract class BaseCest
         $homePage = $this->I->openShop();
         $clientData = Fixtures::get('client');
         $homePage->loginUser($clientData['username'], $clientData['password']);
+    }
+
+    protected function _loginOxidWithAmazonCredentials()
+    {
+        $loginInput = "//input[@name='lgn_usr' and ".
+            "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";
+        $passwordInput = "//input[@name='lgn_pwd' and ".
+            "@class='form-control js-oxValidate js-oxValidate_notEmpty textbox stepsPasswordbox']";
+        $loginButton = "//button[@class='btn btn-primary submitButton']";
+        $continueButton = "//button[@id='userNextStepTop']";
+
+        $this->I->waitForPageLoad();
+        $this->I->waitForElement($loginInput);
+        $this->I->fillField($loginInput, Fixtures::get('amazonClientUsername'));
+        $this->I->fillField($passwordInput, Fixtures::get('amazonClientPassword'));
+        $this->I->click($loginButton);
+
+        $this->I->waitForPageLoad();
+        $this->I->waitForElement($continueButton);
+        $this->I->clickWithLeftButton($continueButton);
+
+        $this->I->waitForPageLoad();
+        $this->I->waitForText(Translator::translate('AMAZON_PAY_UNLINK'));
+        $this->I->click(Translator::translate('AMAZON_PAY_UNLINK'));
     }
 
     /**
@@ -108,6 +146,19 @@ abstract class BaseCest
     /**
      * @return void
      */
+    protected function _checkAccountExist()
+    {
+        $this->I->waitForDocumentReadyState();
+        $this->I->waitForText(strip_tags(sprintf(
+            Translator::translate('AMAZON_PAY_USEREXISTS'),
+            Fixtures::get('amazonClientUsername'),
+            Fixtures::get('amazonClientUsername')
+        )));
+    }
+
+    /**
+     * @return void
+     */
     protected function _submitPaymentMethod()
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
@@ -137,6 +188,7 @@ abstract class BaseCest
      */
     protected function _checkSuccessfulPayment()
     {
+        $this->I->waitForDocumentReadyState();
         $this->I->waitForText(Translator::translate('THANK_YOU'));
     }
 

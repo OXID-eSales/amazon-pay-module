@@ -46,14 +46,14 @@ class CategoryTest extends UnitTestCase
         $this->category->oxcategories__oxtitle = new Field("test title");
         $this->category->oxcategories__oxparentid = new Field("oxrootid");
 
-        $this->setRequestParameter('editval', ['oxcategories__oxps_amazon_exclude' => false]);
+        $this->setRequestParameter('editval', ['oxcategories__osc_amazon_exclude' => false]);
         $this->category->save();
         $this->assertTrue($this->category->load('testSaveId'));
 
-        $this->setRequestParameter('editval', ['oxcategories__oxps_amazon_exclude' => true]);
+        $this->setRequestParameter('editval', ['oxcategories__osc_amazon_exclude' => true]);
         $this->category->save();
         $this->assertTrue($this->category->load('testSaveId'));
 
-        $this->assertSame('1', $this->category->oxcategories__oxps_amazon_exclude->rawValue);
+        $this->assertSame('1', $this->category->oxcategories__osc_amazon_exclude->rawValue);
     }
 }

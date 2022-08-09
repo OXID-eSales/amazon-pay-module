@@ -46,7 +46,7 @@ class LoggerTest extends UnitTestCase
         ]);
 
         $messages = $amazonLogger->getRepository()->findLogMessageForUserId($id);
-        $this->assertSame($messages[0]['OXPS_AMAZON_OXUSERID'], $id);
+        $this->assertSame($messages[0]['OSC_AMAZON_OXUSERID'], $id);
 
         $logFileContents = file_get_contents(Registry::getConfig()->getLogsDir() . self::TEST_LOG_NAME);
 

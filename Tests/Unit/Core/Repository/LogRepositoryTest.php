@@ -46,7 +46,7 @@ class LogRepositoryTest extends UnitTestCase
         $results = $this->logRepository->findLogMessageForChargeId($logMessage->getChargeId());
 
         $this->assertNotEmpty($results[0]);
-        $this->assertSame($results[0]['OXPS_AMAZON_OXUSERID'], $logMessage->getUserId());
+        $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
     public function testFindLogMessageForUserId(): void
@@ -57,7 +57,7 @@ class LogRepositoryTest extends UnitTestCase
         $results = $this->logRepository->findLogMessageForUserId($logMessage->getUserId());
 
         $this->assertNotEmpty($results[0]);
-        $this->assertSame($results[0]['OXPS_AMAZON_OXUSERID'], $logMessage->getUserId());
+        $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
     public function testFindLogMessageForIdentifier(): void
@@ -68,7 +68,7 @@ class LogRepositoryTest extends UnitTestCase
         $results = $this->logRepository->findLogMessageForIdentifier($logMessage->getIdentifier());
 
         $this->assertNotEmpty($results[0]);
-        $this->assertSame($results[0]['OXPS_AMAZON_OXUSERID'], $logMessage->getUserId());
+        $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
     public function testFindLogMessageForChargePermissionId(): void
@@ -79,7 +79,7 @@ class LogRepositoryTest extends UnitTestCase
         $results = $this->logRepository->findLogMessageForChargePermissionId($logMessage->getChargePermissionId());
 
         $this->assertNotEmpty($results[0]);
-        $this->assertSame($results[0]['OXPS_AMAZON_OXUSERID'], $logMessage->getUserId());
+        $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
     public function testFindLogMessageForOrderId(): void
@@ -90,7 +90,7 @@ class LogRepositoryTest extends UnitTestCase
         $results = $this->logRepository->findLogMessageForOrderId($logMessage->getOrderId());
 
         $this->assertNotEmpty($results[0]);
-        $this->assertSame($results[0]['OXPS_AMAZON_OXUSERID'], $logMessage->getUserId());
+        $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
     public function testFindLogMessageForChargeId(): void
@@ -101,7 +101,7 @@ class LogRepositoryTest extends UnitTestCase
         $results = $this->logRepository->findLogMessageForChargeId($logMessage->getChargeId());
 
         $this->assertNotEmpty($results[0]);
-        $this->assertSame($results[0]['OXPS_AMAZON_OXUSERID'], $logMessage->getUserId());
+        $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
     public function testFindOrderIdByChargeId(): void

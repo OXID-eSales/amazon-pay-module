@@ -1,5 +1,5 @@
 {
-    "name": "oxid-solution-catalysts/amazon-pay-module",
+    "name": "oxid-esales/amazon-pay-module",
     "description": "AmazonPay module for OXID",
     "type": "oxideshop-module",
     "keywords": ["oxid", "modules", "amazonpay", "amazon", "pay"],

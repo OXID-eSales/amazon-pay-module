@@ -3,7 +3,7 @@ name: Manual Coverage
 on: workflow_dispatch
 
 env:
-  PACKAGE_NAME: 'oxid-solution-catalysts/amazon-pay-module'
+  PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
   MODULE_PATH: 'osc/amazonpay'
 
 jobs:

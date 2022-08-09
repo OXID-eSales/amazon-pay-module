@@ -22,11 +22,11 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
-use OxidProfessionalServices\AmazonPay\Core\Logger;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidEsales\TestingLibrary\UnitTestCase;
-use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 class LoggerTest extends UnitTestCase
 {

@@ -1,4 +1,4 @@
-namespace: OxidProfessionalServices\AmazonPay\Tests\Codeception
+namespace: OxidSolutionCatalysts\AmazonPay\Tests\Codeception
 params:
   - Codeception/Config/params.php
 paths:

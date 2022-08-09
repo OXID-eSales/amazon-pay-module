@@ -20,11 +20,11 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Integration\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core;
 
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\TestingLibrary\UnitTestCase;
-use OxidProfessionalServices\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 
 class ConfigTest extends UnitTestCase
 {

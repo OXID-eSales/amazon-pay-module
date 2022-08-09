@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Codeception;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception;
 
 use OxidEsales\Codeception\Page\Home;
 

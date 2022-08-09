@@ -7,10 +7,10 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Acceptance;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
-use OxidProfessionalServices\AmazonPay\Tests\Codeception\AcceptanceTester;
+use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
 final class AmazonPayWithoutLoginCest extends BaseCest
 {

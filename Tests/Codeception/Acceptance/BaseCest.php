@@ -7,16 +7,16 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Acceptance;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Tests\Codeception\AcceptanceTester;
-use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AcceptSSLCertificate;
-use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
-use OxidProfessionalServices\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
+use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
+use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AcceptSSLCertificate;
+use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
+use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
 abstract class BaseCest
 {
@@ -51,6 +51,7 @@ abstract class BaseCest
     {
         $this->I->openShop();
 
+        $this->I->wait(5);
         $acceptCertificatePage = new AcceptSSLCertificate($this->I);
         $acceptCertificatePage->acceptCertificate();
     }
@@ -99,10 +100,6 @@ abstract class BaseCest
         $this->I->waitForPageLoad();
         $this->I->waitForElement($continueButton);
         $this->I->clickWithLeftButton($continueButton);
-
-        $this->I->waitForPageLoad();
-        $this->I->waitForText(Translator::translate('AMAZON_PAY_UNLINK'));
-        $this->I->click(Translator::translate('AMAZON_PAY_UNLINK'));
     }
 
     /**

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Codeception\Page;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page;
 
 use OxidEsales\Codeception\Page\Page;
 

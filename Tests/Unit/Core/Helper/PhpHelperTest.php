@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core\Helper;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Helper;
 
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class PhpHelperTest extends UnitTestCase

@@ -20,12 +20,12 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Integration\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\UtilsObject;
 use OxidEsales\TestingLibrary\UnitTestCase;
-use OxidProfessionalServices\AmazonPay\Core\Logger as AmazonLogger;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger as AmazonLogger;
 
 class LoggerTest extends UnitTestCase
 {

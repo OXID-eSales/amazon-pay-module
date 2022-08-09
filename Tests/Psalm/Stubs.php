@@ -5,13 +5,13 @@
  * See LICENSE file for license details.
  */
 
-namespace  OxidProfessionalServices\AmazonPay\Component;
+namespace  OxidSolutionCatalysts\AmazonPay\Component;
 
 class UserComponent_parent extends \OxidEsales\Eshop\Application\Component\UserComponent
 {
 }
 
-namespace  OxidProfessionalServices\AmazonPay\Core;
+namespace  OxidSolutionCatalysts\AmazonPay\Core;
 
 
 class AmazonInputValidator_parent extends \OxidEsales\Eshop\Core\InputValidator
@@ -23,7 +23,7 @@ class ViewConfig_parent extends \OxidEsales\Eshop\Core\ViewConfig
 }
 
 
-namespace  OxidProfessionalServices\AmazonPay\Model;
+namespace  OxidSolutionCatalysts\AmazonPay\Model;
 
 class Basket_parent extends \OxidEsales\Eshop\Application\Model\Basket
 {
@@ -45,7 +45,7 @@ class Category_parent extends \OxidEsales\Eshop\Application\Model\Category
 {
 }
 
-namespace  OxidProfessionalServices\AmazonPay\Controller;
+namespace  OxidSolutionCatalysts\AmazonPay\Controller;
 
 class ArticleDetailsController_parent extends \OxidEsales\Eshop\Application\Controller\ArticleDetailsController
 {
@@ -59,7 +59,7 @@ class UserController_parent extends \OxidEsales\Eshop\Application\Controller\Use
 {
 }
 
-namespace  OxidProfessionalServices\AmazonPay\Controller\Admin;
+namespace  OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 class OrderMain_parent extends \OxidEsales\Eshop\Application\Controller\Admin\OrderMain
 {

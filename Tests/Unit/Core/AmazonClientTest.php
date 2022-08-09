@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
 class AmazonClientTest extends AmazonTestCase
 {

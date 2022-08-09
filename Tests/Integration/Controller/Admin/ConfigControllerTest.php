@@ -20,11 +20,11 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Integration\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
 use OxidEsales\TestingLibrary\UnitTestCase;
-use OxidProfessionalServices\AmazonPay\Controller\Admin\ConfigController;
-use OxidProfessionalServices\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 
 class ConfigControllerTest extends UnitTestCase
 {

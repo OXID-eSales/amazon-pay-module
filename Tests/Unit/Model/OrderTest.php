@@ -22,12 +22,12 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Model;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Model;
 
 use Mockery;
 use OxidEsales\Eshop\Application\Model\Order as EshopOrderModel;
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Tests\Unit\Core\AmazonTestCase;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 
 class OrderTest extends AmazonTestCase
 {

@@ -22,7 +22,7 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Model;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Model;
 
 use OxidEsales\Eshop\Application\Model\Article as EshopArticleModel;
 use OxidEsales\TestingLibrary\UnitTestCase;

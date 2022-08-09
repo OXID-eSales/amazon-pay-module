@@ -5,10 +5,10 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Helper\AmazonCarrier;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\AmazonCarrier;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
 
 /**
@@ -28,8 +28,8 @@ class DeliverySetMain extends DeliverySetMain_parent
             $deliverySet = oxNew(DeliverySet::class);
             $deliverySet->load($oxId);
 
-            if ($deliverySet->oxdeliveryset__oxps_amazon_carrier->rawValue !== null) {
-                $this->addTplParam('selectedAmazonCarrier', $deliverySet->oxdeliveryset__oxps_amazon_carrier);
+            if ($deliverySet->oxdeliveryset__osc_amazon_carrier->rawValue !== null) {
+                $this->addTplParam('selectedAmazonCarrier', $deliverySet->oxdeliveryset__osc_amazon_carrier);
             } else {
                 // Default
                 $this->addTplParam('selectedAmazonCarrier', 'NULL');
@@ -49,7 +49,7 @@ class DeliverySetMain extends DeliverySetMain_parent
         $result = parent::save();
 
         $id = $this->getEditObjectId();
-        $aParams['oxdeliveryset__oxps_amazon_carrier'] = Registry::getRequest()
+        $aParams['oxdeliveryset__osc_amazon_carrier'] = Registry::getRequest()
             ->getRequestParameter('editAmazonCarrier');
         $oDelSet = oxNew(DeliverySet::class);
         if ($oDelSet->load($id)) {

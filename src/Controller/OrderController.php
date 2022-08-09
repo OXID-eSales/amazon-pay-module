@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller;
+namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
@@ -15,12 +15,12 @@ use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Component\UserComponent;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
-use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
-use OxidProfessionalServices\AmazonPay\Core\Payload;
-use OxidProfessionalServices\AmazonPay\Core\Config;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Payload;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Class OrderController

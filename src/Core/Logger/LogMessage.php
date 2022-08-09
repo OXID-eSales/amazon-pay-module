@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core\Logger;
+namespace OxidSolutionCatalysts\AmazonPay\Core\Logger;
 
 class LogMessage
 {

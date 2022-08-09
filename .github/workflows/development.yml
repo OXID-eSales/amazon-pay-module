@@ -4,7 +4,7 @@ on: [ push, pull_request ]
 
 env:
   PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
-  MODULE_PATH: 'oxps/amazonpay'
+  MODULE_PATH: 'osc/amazonpay'
   SONARCLOUD_ORGANIZATION: 'oxid-esales'
   SONARCLOUD_PROJECT_KEY: 'OXID-eSales_amazon-pay-module'
 

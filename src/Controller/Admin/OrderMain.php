@@ -5,12 +5,12 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
-use OxidProfessionalServices\AmazonPay\Core\Config;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 /**
  * Class OrderMain
@@ -66,11 +66,11 @@ class OrderMain extends OrderMain_parent
             if (!empty($logMessages)) {
                 foreach ($logMessages as $logMessage) {
                     $logsWithChargePermission = $repository->findLogMessageForChargePermissionId(
-                        $logMessage['OXPS_AMAZON_CHARGE_PERMISSION_ID']
+                        $logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']
                     );
                     foreach ($logsWithChargePermission as $logWithChargePermission) {
-                        if ($logWithChargePermission['OXPS_AMAZON_CHARGE_PERMISSION_ID'] !== null) {
-                            $chargePermissionId = $logWithChargePermission['OXPS_AMAZON_CHARGE_PERMISSION_ID'];
+                        if ($logWithChargePermission['OSC_AMAZON_CHARGE_PERMISSION_ID'] !== null) {
+                            $chargePermissionId = $logWithChargePermission['OSC_AMAZON_CHARGE_PERMISSION_ID'];
                             break;
                         }
                     }
@@ -92,17 +92,17 @@ class OrderMain extends OrderMain_parent
             if (!empty($logMessages)) {
                 foreach ($logMessages as $logMessage) {
                     $logsWithChargePermission = $repository->findLogMessageForChargePermissionId(
-                        $logMessage['OXPS_AMAZON_CHARGE_PERMISSION_ID']
+                        $logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']
                     );
                     foreach ($logsWithChargePermission as $logWithChargePermission) {
-                        if ($logWithChargePermission['OXPS_AMAZON_RESPONSE_MSG'] === 'Captured') {
+                        if ($logWithChargePermission['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
                             return -1;
                         }
-                        $chargeIdSet = isset($logWithChargePermission['OXPS_AMAZON_CHARGE_ID'])
-                            && $logWithChargePermission['OXPS_AMAZON_CHARGE_ID'] !== null
-                            && $logWithChargePermission['OXPS_AMAZON_CHARGE_ID'] !== 'null';
+                        $chargeIdSet = isset($logWithChargePermission['OSC_AMAZON_CHARGE_ID'])
+                            && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== null
+                            && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== 'null';
                         if ($chargeIdSet) {
-                            $chargeId = $logWithChargePermission['OXPS_AMAZON_CHARGE_ID'];
+                            $chargeId = $logWithChargePermission['OSC_AMAZON_CHARGE_ID'];
                             break;
                         }
                     }

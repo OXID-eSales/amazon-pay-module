@@ -5,15 +5,15 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Component;
+namespace OxidSolutionCatalysts\AmazonPay\Component;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
-use OxidProfessionalServices\AmazonPay\Core\Config;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
-use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Handles Amazon checkout sessions
@@ -132,6 +132,7 @@ class UserComponent extends UserComponent_Parent
             $this->createUser() === false &&
             !$this->_blIsNewUser
         ) {
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return null;
         }
         return parent::registerUser();

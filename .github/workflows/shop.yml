@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 env:
   PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
-  MODULE_PATH: 'oxps/amazonpay'
+  MODULE_PATH: 'osc/amazonpay'
 
 jobs:
   install_shop_with_module:
@@ -32,7 +32,7 @@ jobs:
           make addbasicservices
           make file=services/selenium-chrome.yml addservice
           make file=services/selenium-firefox.yml addservice
-          
+
           perl -pi\
             -e "s#PHP_VERSION=.*#PHP_VERSION='${{ matrix.php }}'#g;"\
             .env

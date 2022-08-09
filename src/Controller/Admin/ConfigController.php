@@ -5,15 +5,15 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 /**
  * Controller for admin > Amazon Pay/Configuration page

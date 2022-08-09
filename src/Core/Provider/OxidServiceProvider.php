@@ -5,13 +5,13 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core\Provider;
+namespace OxidSolutionCatalysts\AmazonPay\Core\Provider;
 
 use OxidEsales\Eshop\Application\Model\User;
-use OxidProfessionalServices\AmazonPay\Core\AmazonClient;
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Core\Logger;
-use OxidProfessionalServices\AmazonPay\Core\ServiceFactory;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
+use OxidSolutionCatalysts\AmazonPay\Core\ServiceFactory;
 use Psr\Log\LoggerInterface;
 
 class OxidServiceProvider

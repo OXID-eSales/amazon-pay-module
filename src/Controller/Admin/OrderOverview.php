@@ -5,11 +5,11 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 class OrderOverview extends OrderOverview_parent
 {
@@ -32,49 +32,49 @@ class OrderOverview extends OrderOverview_parent
             foreach ($orderLogs as $orderLog) {
                 $newFilteredLog = [];
 
-                if ($orderLog['OXPS_AMAZON_REQUEST_TYPE'] === 'IPN') {
+                if ($orderLog['OSC_AMAZON_REQUEST_TYPE'] === 'IPN') {
                     $ipnLog = [];
                     $ipnLog['time'] = $orderLog['OXTIMESTAMP'];
-                    $ipnLog['identifier'] = $orderLog['OXPS_AMAZON_IDENTIFIER'];
-                    $ipnLog['requestType'] = $orderLog['OXPS_AMAZON_OBJECT_TYPE'];
+                    $ipnLog['identifier'] = $orderLog['OSC_AMAZON_IDENTIFIER'];
+                    $ipnLog['requestType'] = $orderLog['OSC_AMAZON_OBJECT_TYPE'];
                     $ipnLogs[] = $ipnLog;
                     continue;
                 }
 
-                if (in_array($orderLog['OXPS_AMAZON_PAYLOGID'], $existingItems, true)) {
+                if (in_array($orderLog['OSC_AMAZON_PAYLOGID'], $existingItems, true)) {
                     continue;
                 }
 
-                $existingItems[] = $orderLog['OXPS_AMAZON_PAYLOGID'];
+                $existingItems[] = $orderLog['OSC_AMAZON_PAYLOGID'];
 
                 $newFilteredLog['time'] = $orderLog['OXTIMESTAMP'];
-                $newFilteredLog['identifier'] = $orderLog['OXPS_AMAZON_IDENTIFIER'];
-                $newFilteredLog['statusCode'] = $orderLog['OXPS_AMAZON_STATUS_CODE'] === '200' ? 'success' : 'error';
+                $newFilteredLog['identifier'] = $orderLog['OSC_AMAZON_IDENTIFIER'];
+                $newFilteredLog['statusCode'] = $orderLog['OSC_AMAZON_STATUS_CODE'] === '200' ? 'success' : 'error';
 
-                if (strpos($orderLog['OXPS_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
+                if (strpos($orderLog['OSC_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
                     $newFilteredLog['statusCode'] = 'error';
-                    $newFilteredLog['identifier'] = 'ORDER ID:' . $orderLog['OXPS_AMAZON_OXORDERID'];
+                    $newFilteredLog['identifier'] = 'ORDER ID:' . $orderLog['OSC_AMAZON_OXORDERID'];
                 }
 
-                if ($orderLog['OXPS_AMAZON_RESPONSE_MSG'] === 'Captured') {
+                if ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
                     $newFilteredLog['requestType'] = 'Payment captured';
                     $isCaptured = true;
                     $isOneStepCapture = false;
-                } elseif ($orderLog['OXPS_AMAZON_RESPONSE_MSG'] === 'Completed') {
+                } elseif ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Completed') {
                     $newFilteredLog['requestType'] = 'Checkout complete';
                     $isOneStepCapture = false;
-                } elseif ($orderLog['OXPS_AMAZON_RESPONSE_MSG'] === 'Completed & Captured') {
+                } elseif ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Completed & Captured') {
                     $newFilteredLog['requestType'] = 'Checkout & Capture complete';
                     $isOneStepCapture = true;
                     $isCaptured = true;
-                } elseif ($orderLog['OXPS_AMAZON_RESPONSE_MSG'] === 'Canceled') {
+                } elseif ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Canceled') {
                     $newFilteredLog['requestType'] = 'Canceled';
                     $isCaptured = true;
-                } elseif ($orderLog['OXPS_AMAZON_RESPONSE_MSG'] === 'Refunded') {
+                } elseif ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Refunded') {
                     $newFilteredLog['requestType'] = 'Refund Complete';
                     $isCaptured = true;
                 } else {
-                    $newFilteredLog['requestType'] = $orderLog['OXPS_AMAZON_RESPONSE_MSG'];
+                    $newFilteredLog['requestType'] = $orderLog['OSC_AMAZON_RESPONSE_MSG'];
                 }
 
                 $filteredLogs[] = $newFilteredLog;

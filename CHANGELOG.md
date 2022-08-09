@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.0] - Release with new Namespace
+
+* we change the namespace from OxidProfessional (oxps) to OxidSolutionCatalysts (osc)
+* please read the documentation for the upgrade from v1.2.0 to v2.0.0
+
 ## [1.2.0] - Technical Release
 
 * simplify the template structure (remove theme param from metadata, add switch within the templates)

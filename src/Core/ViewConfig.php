@@ -5,12 +5,12 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * Amazon Pay getters for templates
@@ -36,7 +36,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getAmazonConfig()
     {
-        return Registry::get(\OxidProfessionalServices\AmazonPay\Core\Config::class);
+        return Registry::get(\OxidSolutionCatalysts\AmazonPay\Core\Config::class);
     }
 
     /**
@@ -160,8 +160,8 @@ class ViewConfig extends ViewConfig_parent
 
         $productIdSql = "'" . implode("', '", $productIds) . "'";
 
-        $sql = "SELECT oa.OXPS_AMAZON_EXCLUDE as excludeArticle,
-               oc.OXPS_AMAZON_EXCLUDE as excludeCategory
+        $sql = "SELECT oa.OSC_AMAZON_EXCLUDE as excludeArticle,
+               oc.OSC_AMAZON_EXCLUDE as excludeCategory
           FROM oxarticles oa
           JOIN oxobject2category o2c
             ON (o2c.OXOBJECTID = oa.OXID)

@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 /**
  * Amazon Pay module constants
@@ -20,7 +20,7 @@ class Constants
     /**
      * @var string Module ID
      */
-    public const MODULE_ID = 'oxps_amazonpay';
+    public const MODULE_ID = 'osc_amazonpay';
 
     /**
      * @var string Amazon checkout session id param name

@@ -5,16 +5,16 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger as MonoLogLogger;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
-use OxidProfessionalServices\AmazonPay\Core\Logger\LogMessage;
-use OxidProfessionalServices\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
+use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 

@@ -5,15 +5,15 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Model;
+namespace OxidSolutionCatalysts\AmazonPay\Model;
 
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
-use OxidProfessionalServices\AmazonPay\Core\Helper\PhpHelper;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Order
@@ -121,7 +121,7 @@ class Order extends Order_parent
                 $this->oxorder__oxtransstatus = new Field('NOT_FINISHED', Field::T_RAW);
                 $this->oxorder__oxtransid = new Field('AMZ_PAYMENT_PENDING', Field::T_RAW);
                 $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
-                $this->oxorder__oxps_amazon_remark = new Field(
+                $this->oxorder__osc_amazon_remark = new Field(
                     'AmazonPay Authorisation pending',
                     Field::T_RAW
                 );
@@ -131,7 +131,7 @@ class Order extends Order_parent
             case "AMZ_AUTH_STILL_PENDING":
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field(
+                    $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay Authorisation still pending: ' . $data['chargeAmount'],
                         Field::T_RAW
                     );
@@ -145,12 +145,12 @@ class Order extends Order_parent
                     if ($data['chargeId']) {
                         $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     }
-                    $this->oxorder__oxps_amazon_remark = new Field(
+                    $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay ERROR: ' . $response['reasonCode'],
                         Field::T_RAW
                     );
                 } else {
-                    $this->oxorder__oxps_amazon_remark = new Field('AmazonPay: ERROR');
+                    $this->oxorder__osc_amazon_remark = new Field('AmazonPay: ERROR');
                 }
                 $this->save();
                 break;
@@ -164,7 +164,7 @@ class Order extends Order_parent
                 $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field(
+                    $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay Captured: ' . $data['chargeAmount'],
                         Field::T_RAW
                     );
@@ -175,7 +175,7 @@ class Order extends Order_parent
             case "AMZ_2STEP_AUTH_OK":
                 if (is_array($data)) {
                     $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    $this->oxorder__oxps_amazon_remark = new Field(
+                    $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay Authorized (not Captured):' . $data['chargeAmount'],
                         Field::T_RAW
                     );

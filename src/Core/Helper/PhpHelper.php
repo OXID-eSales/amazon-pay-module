@@ -5,7 +5,7 @@
  * See LICENSE file for license details.
  */
 
-namespace OxidProfessionalServices\AmazonPay\Core\Helper;
+namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
 class PhpHelper
 {

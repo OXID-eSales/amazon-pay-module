@@ -2,13 +2,13 @@
 [{if $edit->oxorder__oxpaymenttype->value == $oViewConf->getAmazonPaymentId()}]
     </table>
     <br>
-    <p><b>[{oxmultilang ident="OXPS_AMAZONPAY_TRANSACTION_HISTORY"}]</b></p>
+    <p><b>[{oxmultilang ident="OSC_AMAZONPAY_TRANSACTION_HISTORY"}]</b></p>
     <table style="width: 100%">
 
     <tr>
-        <td style="width: 20%"><b>[{oxmultilang ident="OXPS_AMAZONPAY_DATE" sufix="COLON"}]</b></td>
-        <td style="width: 30%"><b>[{oxmultilang ident="OXPS_AMAZONPAY_REFERENCE" sufix="COLON"}]</b></td>
-        <td style="width: 50%"><b>[{oxmultilang ident="OXPS_AMAZONPAY_RESULT" sufix="COLON"}]</b></td>
+        <td style="width: 20%"><b>[{oxmultilang ident="OSC_AMAZONPAY_DATE" sufix="COLON"}]</b></td>
+        <td style="width: 30%"><b>[{oxmultilang ident="OSC_AMAZONPAY_REFERENCE" sufix="COLON"}]</b></td>
+        <td style="width: 50%"><b>[{oxmultilang ident="OSC_AMAZONPAY_RESULT" sufix="COLON"}]</b></td>
     </tr>
 
     [{foreach from=$orderLogs item=logItem name=logItemName}]
@@ -20,13 +20,13 @@
     [{/foreach}]
     </table>
     <br />
-    <p><b>[{oxmultilang ident="OXPS_AMAZONPAY_IPN_HISTORY"}]</b></p>
+    <p><b>[{oxmultilang ident="OSC_AMAZONPAY_IPN_HISTORY"}]</b></p>
     <table style="width: 100%">
 
     <tr>
-        <td style="width: 20%"><b>[{oxmultilang ident="OXPS_AMAZONPAY_DATE" sufix="COLON"}]</b></td>
-        <td style="width: 30%"><b>[{oxmultilang ident="OXPS_AMAZONPAY_REFERENCE" sufix="COLON"}]</b></td>
-        <td style="width: 50%"><b>[{oxmultilang ident="OXPS_AMAZONPAY_RESULT" sufix="COLON"}]</b></td>
+        <td style="width: 20%"><b>[{oxmultilang ident="OSC_AMAZONPAY_DATE" sufix="COLON"}]</b></td>
+        <td style="width: 30%"><b>[{oxmultilang ident="OSC_AMAZONPAY_REFERENCE" sufix="COLON"}]</b></td>
+        <td style="width: 50%"><b>[{oxmultilang ident="OSC_AMAZONPAY_RESULT" sufix="COLON"}]</b></td>
     </tr>
 
     [{foreach from=$ipnLogs item=logItem name=logItemName}]

@@ -2,7 +2,7 @@
 <OX>
     <OXMENU id="NAVIGATION_ESHOPADMIN">
         <MAINMENU id="amazonpay">
-            <SUBMENU id="OXPS_AMAZONPAY_CONFIG" cl="amazonconfig"/>
+            <SUBMENU id="OSC_AMAZONPAY_CONFIG" cl="amazonconfig"/>
         </MAINMENU>
     </OXMENU>
 </OX>

@@ -190,23 +190,6 @@ abstract class BaseCest
     }
 
     /**
-     * @param AcceptanceTester $I
-     * @return void
-     */
-    protected function _setAcceptance(AcceptanceTester $I)
-    {
-        $this->I = $I;
-    }
-
-    /**
-     * @return AcceptanceTester
-     */
-    protected function _getAcceptance(): AcceptanceTester
-    {
-        return $this->I;
-    }
-
-    /**
      * @return string price of order
      */
     protected function _getPrice(): string

@@ -188,24 +188,4 @@ abstract class BaseCest
         $this->I->waitForDocumentReadyState();
         $this->I->waitForText(Translator::translate('THANK_YOU'));
     }
-
-    /**
-     * @return string price of order
-     */
-    protected function _getPrice(): string
-    {
-        $basketItem = Fixtures::get('product');
-        return Registry::getLang()->formatCurrency(
-            $basketItem['bruttoprice_single'] * $this->amount + $basketItem['shipping_cost']
-        );
-    }
-
-    /**
-     * @return string currency
-     */
-    protected function _getCurrency(): string
-    {
-        $basketItem = Fixtures::get('product');
-        return $basketItem['currency'];
-    }
 }

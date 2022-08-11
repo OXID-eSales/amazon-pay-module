@@ -62,6 +62,7 @@ jobs:
 
       - name: Prepare SSL configuration
         run: |
+          mkdir -p containers/httpd/certs/
           echo "${{ secrets.SSL_CERTIFICATE }}" > containers/httpd/certs/localhost.local.crt
           echo "${{ secrets.SSL_KEY }}" > containers/httpd/certs/localhost.local.key
           echo "${{ secrets.HTTPD_SSL_CONFIGURATION }}" > containers/httpd/Dockerfile

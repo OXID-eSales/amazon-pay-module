@@ -69,7 +69,7 @@ jobs:
           echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf.dist
           perl -pe\
             'print "\n- 443:443"'\
-            services/apache.yaml
+            services/apache.yml
 
       - name: Start containers
         run: |

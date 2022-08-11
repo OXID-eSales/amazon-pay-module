@@ -33,8 +33,8 @@ class Events
      */
     public static function onActivate(): void
     {
-        self::updateOxpsToOsc();
         self::createLogTable();
+        self::updateOxpsToOsc();
         self::addPaymentMethod();
         self::enablePaymentMethod();
         self::addArticleColumn();
@@ -58,12 +58,9 @@ class Events
 
     protected static function updateOxpsToOscArticleColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxarticles') . '\'
-                AND COLUMN_NAME = \'OXPS_AMAZON_EXCLUDE\'';
+        $sql = 'show columns
+                from `oxarticles`
+                like \'OXPS_AMAZON_EXCLUDE\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
@@ -79,16 +76,13 @@ class Events
 
     protected static function addArticleColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxarticles') . '\'
-                AND COLUMN_NAME = \'OSC_AMAZON_EXCLUDE\'';
+        $sql = 'show columns
+                from `oxarticles`
+                like \'OSC_AMAZON_EXCLUDE\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
-        if (count($result) === 0) {
+        if (!count($result)) {
             $sql = 'ALTER TABLE `oxarticles` ADD COLUMN `OSC_AMAZON_EXCLUDE`
                                 tinyint(1)
                                 NOT NULL
@@ -101,12 +95,9 @@ class Events
 
     protected static function updateOxpsToOscCategoryColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxcategories') . '\'
-                AND COLUMN_NAME = \'OXPS_AMAZON_EXCLUDE\'';
+        $sql = 'show columns
+                from `oxcategories`
+                like \'OXPS_AMAZON_EXCLUDE\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
@@ -123,16 +114,13 @@ class Events
 
     protected static function addCategoryColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxcategories') . '\'
-                AND COLUMN_NAME = \'OSC_AMAZON_EXCLUDE\'';
+        $sql = 'show columns
+                from `oxcategories`
+                like \'OSC_AMAZON_EXCLUDE\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
-        if (count($result) === 0) {
+        if (!count($result)) {
             $sql = 'ALTER TABLE `oxcategories` ADD COLUMN `OSC_AMAZON_EXCLUDE`
                                 tinyint(1)
                                 NOT NULL
@@ -145,12 +133,9 @@ class Events
 
     protected static function updateOxpsToOscDeliverySetColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = sprintf('SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxdeliveryset') . '\'
-                AND COLUMN_NAME = \'OXPS_AMAZON_CARRIER\'');
+        $sql = 'show columns
+                from `oxdeliveryset`
+                like \'OXPS_AMAZON_CARRIER\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
@@ -165,16 +150,13 @@ class Events
 
     protected static function addDeliverySetColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = sprintf('SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxdeliveryset') . '\'
-                AND COLUMN_NAME = \'OSC_AMAZON_CARRIER\'');
+        $sql = 'show columns
+                from `oxdeliveryset`
+                like \'OSC_AMAZON_CARRIER\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
-        if (count($result) === 0) {
+        if (!count($result)) {
             $sql = 'ALTER TABLE `oxdeliveryset` ADD COLUMN `OSC_AMAZON_CARRIER`
                                 VARCHAR (100)';
 
@@ -184,12 +166,9 @@ class Events
 
     protected static function updateOxpsToOscOrderColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxorder') . '\'
-                AND COLUMN_NAME = \'OXPS_AMAZON_REMARK\'';
+        $sql = 'show columns
+                from `oxorder`
+                like \'OXPS_AMAZON_REMARK\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
@@ -206,16 +185,13 @@ class Events
 
     protected static function addOrderColumn(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName('oxorder') . '\'
-                AND COLUMN_NAME = \'OSC_AMAZON_REMARK\'';
+        $sql = 'show columns
+                from `oxorder`
+                like \'OSC_AMAZON_REMARK\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
-        if (count($result) === 0) {
+        if (!count($result)) {
             $sql = 'ALTER TABLE `oxorder` ADD COLUMN `OSC_AMAZON_REMARK`
                                 varchar(255)
                                 NOT NULL
@@ -308,12 +284,9 @@ class Events
 
     protected static function updateOxpsToOscLogTable(): void
     {
-        $viewNameGenerator = Registry::get(\OxidEsales\Eshop\Core\TableViewNameGenerator::class);
-
-        $sql = 'SELECT COLUMN_NAME
-                FROM information_schema.COLUMNS
-                WHERE TABLE_NAME = \'' . $viewNameGenerator->getViewName(LogRepository::TABLE_NAME) . '\'
-                AND COLUMN_NAME = \'OXPS_AMAZON_PAYLOGID\'';
+        $sql = 'show columns
+                from `' . LogRepository::TABLE_NAME . '`
+                like \'OXPS_AMAZON_PAYLOGID\'';
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 

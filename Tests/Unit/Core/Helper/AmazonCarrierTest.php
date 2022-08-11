@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core\Helper;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Helper;
 
-use OxidProfessionalServices\AmazonPay\Core\Helper\AmazonCarrier;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\AmazonCarrier;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class AmazonCarrierTest extends UnitTestCase

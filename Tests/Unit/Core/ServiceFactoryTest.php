@@ -22,11 +22,11 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
-use OxidProfessionalServices\AmazonPay\Core\AmazonClient;
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Core\ServiceFactory;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\ServiceFactory;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class ServiceFactoryTest extends UnitTestCase

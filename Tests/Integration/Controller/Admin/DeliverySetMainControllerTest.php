@@ -20,7 +20,7 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Integration\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain;
 use OxidEsales\TestingLibrary\UnitTestCase;

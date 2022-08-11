@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core\Logger;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Logger;
 
-use OxidProfessionalServices\AmazonPay\Core\Logger\LogMessage;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class LogMessageTest extends UnitTestCase

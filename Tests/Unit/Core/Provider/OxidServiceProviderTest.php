@@ -22,13 +22,13 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core\Provider;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Provider;
 
 use OxidEsales\Eshop\Application\Model\User;
-use OxidProfessionalServices\AmazonPay\Core\AmazonClient;
-use OxidProfessionalServices\AmazonPay\Core\AmazonService;
-use OxidProfessionalServices\AmazonPay\Core\Logger;
-use OxidProfessionalServices\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
+use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class OxidServiceProviderTest extends UnitTestCase

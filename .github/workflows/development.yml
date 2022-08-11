@@ -60,6 +60,17 @@ jobs:
                  -e 's/<sCompileDir>/\/var\/www\/source\/tmp\//'\
               source/source/config.inc.php
 
+      - name: Prepare SSL configuration
+        run: |
+          mkdir -p containers/httpd/certs/
+          echo "${{ secrets.SSL_CERTIFICATE }}" > containers/httpd/certs/localhost.local.crt
+          echo "${{ secrets.SSL_KEY }}" > containers/httpd/certs/localhost.local.key
+          echo "${{ secrets.HTTPD_SSL_CONFIGURATION }}" > containers/httpd/Dockerfile
+          echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf.dist
+          perl -pi\
+            -e 'print "\n- 443:443"'\
+            services/apache.yml
+
       - name: Start containers
         run: |
           make up
@@ -78,13 +89,17 @@ jobs:
           docker-compose exec -T \
             php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
 
-      - name: Install dependencies, reset shop and configure module settings
+      - name: Install dependencies and reset shop
         run: |
           docker-compose exec -T php composer update --no-interaction
           docker-compose exec -T php php vendor/bin/reset-shop
+
+      - name: Put module settings
+        continue-on-error: true
+        run: |
           mkdir -p source/var/configuration/environment/
           echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/environment/1.yaml
-          docker-compose exec -T php bin/oe-console oe:module:install-configuration source/modules/${{ env.MODULE_PATH }}
+          docker-compose exec -T php bin/oe-console oe:module:apply-configuration
 
       - name: Show docker log
         if: always()
@@ -111,6 +126,7 @@ jobs:
 
   unit_tests:
     strategy:
+      fail-fast: false
       matrix:
         php: [ '7.4', '8.0' ]
     needs: [ install_shop_with_module ]
@@ -159,6 +175,56 @@ jobs:
           path: |
             source/coverage.xml
             source/phpunit.xml
+
+  codeception_tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.0' ]
+    needs: [ install_shop_with_module ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load current installation from cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./*
+          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+          restore-keys: |
+            development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+
+      - name: Start containers
+        run: |
+          make up
+          sleep 2
+
+      - name: Install codeception dependencies
+        run: |
+          docker-compose exec -T php composer require codeception/module-rest:^1.4.2 --dev --no-update
+          docker-compose exec -T php composer require codeception/module-phpbrowser:^1.0.2 --dev --no-update
+          docker-compose exec -T php composer update
+
+      - name: Prepare login credentials
+        run: |
+          sed -i -e 's/<AmazonPay Client Username>/${{ secrets.AMAZON_USERNAME }}/'\
+                 -e 's/<AmazonPay Client Password>/${{ secrets.AMAZON_PASSWORD }}/'\
+              source/vendor/oxid-esales/amazon-pay-module/Tests/Codeception/_data/amazonpayData.php
+
+      - name: Run tests
+        run: |
+          docker-compose exec -T \
+            -e PARTIAL_MODULE_PATHS=${{ env.MODULE_PATH }} \
+            -e ACTIVATE_ALL_MODULES=1 \
+            -e RUN_TESTS_FOR_SHOP=0 \
+            -e RUN_TESTS_FOR_MODULES=0 \
+            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
+            php php vendor/bin/runtests-codeception
+
+      - name: Stop containers
+        if: always()
+        run: |
+          docker-compose down
+          sleep 2
 
   sonarcloud:
     needs: [ unit_tests ]

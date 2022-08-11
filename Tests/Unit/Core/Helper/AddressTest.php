@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core\Helper;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Helper;
 
-use OxidProfessionalServices\AmazonPay\Core\Helper\Address;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class AddressTest extends UnitTestCase
@@ -78,7 +78,7 @@ class AddressTest extends UnitTestCase
 
     /**
      * @dataProvider amazonDbMapBillingAddressProvider
-     * @covers \OxidProfessionalServices\AmazonPay\Core\Helper\Address::getAddressLines
+     * @covers \OxidSolutionCatalysts\AmazonPay\Core\Helper\Address::getAddressLines
      * @param array $address
      * @param string $key
      * @param string $value
@@ -107,7 +107,7 @@ class AddressTest extends UnitTestCase
 
     /**
      * @dataProvider amazonDbMapShippingAddressProvider
-     * @covers \OxidProfessionalServices\AmazonPay\Core\Helper\Address::getAddressLines
+     * @covers \OxidSolutionCatalysts\AmazonPay\Core\Helper\Address::getAddressLines
      * @param array $address
      * @param string $key
      * @param string $value
@@ -141,7 +141,7 @@ class AddressTest extends UnitTestCase
 
     /**
      * @dataProvider  amazonViewMapAddressProvider
-     * @covers        \OxidProfessionalServices\AmazonPay\Core\Helper\Address::getAddressLines
+     * @covers        \OxidSolutionCatalysts\AmazonPay\Core\Helper\Address::getAddressLines
      * @param array $address
      * @param string $key
      * @param string $value

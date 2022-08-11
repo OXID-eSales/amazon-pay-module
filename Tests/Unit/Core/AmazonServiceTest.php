@@ -22,10 +22,10 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
 use OxidEsales\Eshop\Core\Registry;
-use OxidProfessionalServices\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 class AmazonServiceTest extends AmazonTestCase
 {

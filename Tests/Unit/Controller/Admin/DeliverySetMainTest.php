@@ -22,9 +22,9 @@
 
 declare(strict_types=1);
 
-namespace OxidProfessionalServices\AmazonPay\Tests\Unit\Controller\Admin;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Controller\Admin;
 
-use OxidProfessionalServices\AmazonPay\Controller\Admin\DeliverySetMain;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
 class DeliverySetMainTest extends UnitTestCase

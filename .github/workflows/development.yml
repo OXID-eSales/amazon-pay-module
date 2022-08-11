@@ -60,6 +60,16 @@ jobs:
                  -e 's/<sCompileDir>/\/var\/www\/source\/tmp\//'\
               source/source/config.inc.php
 
+      - name: Prepare SSL configuration
+        run: |
+          echo "${{ secrets.SSL_CERTIFICATE }}" > containers/httpd/certs/localhost.local.crt
+          echo "${{ secrets.SSL_KEY }}" > containers/httpd/certs/localhost.local.key
+          echo "${{ secrets.HTTPD_SSL_CONFIGURATION }}" > containers/httpd/Dockerfile
+          echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf.dist
+          perl -pe\
+            -e 's#- 443:443#g'\
+            services/apache.yaml
+
       - name: Start containers
         run: |
           make up

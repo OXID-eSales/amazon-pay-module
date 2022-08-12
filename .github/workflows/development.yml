@@ -122,6 +122,10 @@ jobs:
             source/config.inc.php
             data/php/logs/error_log.txt
             services/apache.yml
+            containers/httpd/certs/localhost.local.crt
+            containers/httpd/certs/localhost.local.key
+            containers/httpd/Dockerfile
+            containers/httpd/project.conf.dist
 
   unit_tests:
     strategy:

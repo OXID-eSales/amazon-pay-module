@@ -56,6 +56,7 @@ jobs:
                  -e 's/<dbPwd>/root/'\
                  -e 's/<dbPort>/3306/'\
                  -e 's/<sShopURL>/https:\/\/localhost.local\//'\
+                 -e 's/<sSSLShopURL>/https:\/\/localhost.local\//'\
                  -e 's/<sShopDir>/\/var\/www\/source\//'\
                  -e 's/<sCompileDir>/\/var\/www\/source\/tmp\//'\
               source/source/config.inc.php

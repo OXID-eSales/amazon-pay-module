@@ -24,11 +24,12 @@ class AcceptSSLCertificate extends Page
     {
         $I = $this->user;
 
-        try {
+        $I->waitForText($this->markerString);
+        /*try {
             $I->waitForText($this->markerString);
         } catch (\Exception $e) {
             return;
-        }
+        }*/
 
         $I->waitForElement($this->advancedButton);
         $I->click($this->advancedButton);

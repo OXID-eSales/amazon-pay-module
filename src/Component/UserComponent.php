@@ -64,9 +64,7 @@ class UserComponent extends UserComponent_Parent
             $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
         }
 
-        $registrationResult = $this->registerUser();
-
-        if ($registrationResult) {
+        if ($this->createUser() !== false) {
             $basket = $session->getBasket();
             $user = $this->getUser();
             $countryOxId = $user->getActiveCountry();
@@ -93,6 +91,7 @@ class UserComponent extends UserComponent_Parent
                 $basket->setShipping(reset($possibleDeliverySets));
             }
         } else {
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user', false, 302);
         }
     }
@@ -117,25 +116,6 @@ class UserComponent extends UserComponent_Parent
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         return parent::logout();
-    }
-
-    /**
-     * Creates new oxid user
-     *
-     * @return string partial parameter string or null
-     */
-    public function registerUser()
-    {
-        $amazonService = OxidServiceProvider::getAmazonService();
-        if (
-            $amazonService->isAmazonSessionActive() &&
-            $this->createUser() === false &&
-            !$this->_blIsNewUser
-        ) {
-            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-            return null;
-        }
-        return parent::registerUser();
     }
 
     /**

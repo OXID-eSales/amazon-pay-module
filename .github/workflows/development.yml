@@ -66,7 +66,7 @@ jobs:
           echo "${{ secrets.SSL_CERTIFICATE }}" > containers/httpd/certs/localhost.local.crt
           echo "${{ secrets.SSL_KEY }}" > containers/httpd/certs/localhost.local.key
           echo "${{ secrets.HTTPD_SSL_CONFIGURATION }}" > containers/httpd/Dockerfile
-          echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf.dist
+          echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf
           sed -i '$ a\      - 443:443' services/apache.yml
 
       - name: Start containers
@@ -125,7 +125,7 @@ jobs:
             containers/httpd/certs/localhost.local.crt
             containers/httpd/certs/localhost.local.key
             containers/httpd/Dockerfile
-            containers/httpd/project.conf.dist
+            containers/httpd/project.conf
 
   unit_tests:
     strategy:

@@ -224,6 +224,16 @@ jobs:
           docker-compose down
           sleep 2
 
+      - name: Upload log artifact
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: CodeceptionTestsLog-${{ matrix.php }}
+          path: |
+            source/vendor/${{ env.PACKAGE_NAME }}/Tests/Codeception/_output/
+            source/source/log/oxideshop.log
+            source/data/php/logs/error_log.txt
+
   sonarcloud:
     needs: [ unit_tests ]
     if: always()

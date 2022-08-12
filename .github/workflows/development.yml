@@ -67,9 +67,7 @@ jobs:
           echo "${{ secrets.SSL_KEY }}" > containers/httpd/certs/localhost.local.key
           echo "${{ secrets.HTTPD_SSL_CONFIGURATION }}" > containers/httpd/Dockerfile
           echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf.dist
-          sed -i\
-            -e "\n- 443:443"\
-            services/apache.yml
+          sed -i '$ a\      - 443:443' services/apache.yml
 
       - name: Start containers
         run: |

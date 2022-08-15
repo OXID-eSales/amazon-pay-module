@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 * we change the namespace from OxidProfessional (oxps) to OxidSolutionCatalysts (osc)
 * please read the documentation for the upgrade from v1.2.0 to v2.0.0
+* rename method `ViewConfig::isCompatibleTheme()` as  `ViewConfig::isThemeBasedOn()`
 
 ## [1.2.0] - Technical Release
 

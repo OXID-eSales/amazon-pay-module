@@ -188,7 +188,7 @@ class ViewConfig extends ViewConfig_parent
     public function isFlowCompatibleTheme()
     {
         if (is_null($this->isFlowCompatibleTheme)) {
-            $this->isFlowCompatibleTheme = $this->isCompatibleTheme('flow');
+            $this->isFlowCompatibleTheme = $this->isThemeBasedOn('flow');
         }
         return $this->isFlowCompatibleTheme;
     }
@@ -201,7 +201,7 @@ class ViewConfig extends ViewConfig_parent
     public function isWaveCompatibleTheme()
     {
         if (is_null($this->isWaveCompatibleTheme)) {
-            $this->isWaveCompatibleTheme = $this->isCompatibleTheme('wave');
+            $this->isWaveCompatibleTheme = $this->isThemeBasedOn('wave');
         }
         return $this->isWaveCompatibleTheme;
     }
@@ -217,7 +217,7 @@ class ViewConfig extends ViewConfig_parent
      *
      * @psalm-param 'flow'|'wave' $themeId
      */
-    public function isCompatibleTheme(string $themeId)
+    public function isThemeBasedOn(string $themeId)
     {
         $result = false;
         if ($themeId) {

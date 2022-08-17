@@ -55,6 +55,7 @@ abstract class BaseCest
         $acceptCertificatePage = new AcceptSSLCertificate($this->I);
         $acceptCertificatePage->acceptCertificate();
 
+        $this->I->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->waitForPageLoad();
     }

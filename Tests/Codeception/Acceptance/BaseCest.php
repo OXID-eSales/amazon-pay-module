@@ -50,12 +50,6 @@ abstract class BaseCest
     protected function _initializeTest()
     {
         $this->I->openShop();
-
-        $this->I->wait(5);
-        $acceptCertificatePage = new AcceptSSLCertificate($this->I);
-        $acceptCertificatePage->acceptCertificate();
-
-        $this->I->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->waitForPageLoad();
     }

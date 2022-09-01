@@ -56,20 +56,10 @@ jobs:
                  -e 's/<dbPwd>/root/'\
                  -e 's/<dbPort>/3306/'\
                  -e 's/<sShopURL>/https:\/\/localhost.local\//'\
+                 -e 's/<sSSLShopURL>/https:\/\/localhost.local\//'\
                  -e 's/<sShopDir>/\/var\/www\/source\//'\
                  -e 's/<sCompileDir>/\/var\/www\/source\/tmp\//'\
               source/source/config.inc.php
-
-      - name: Prepare SSL configuration
-        run: |
-          mkdir -p containers/httpd/certs/
-          echo "${{ secrets.SSL_CERTIFICATE }}" > containers/httpd/certs/localhost.local.crt
-          echo "${{ secrets.SSL_KEY }}" > containers/httpd/certs/localhost.local.key
-          echo "${{ secrets.HTTPD_SSL_CONFIGURATION }}" > containers/httpd/Dockerfile
-          echo "${{ secrets.PROJECT_CONF_SSL_CONFIGURATION }}" > containers/httpd/project.conf.dist
-          perl -pi\
-            -e 'print "\n- 443:443"'\
-            services/apache.yml
 
       - name: Start containers
         run: |
@@ -225,6 +215,16 @@ jobs:
         run: |
           docker-compose down
           sleep 2
+
+      - name: Upload log artifact
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: CodeceptionTestsLog-${{ matrix.php }}
+          path: |
+            source/vendor/${{ env.PACKAGE_NAME }}/Tests/Codeception/_output/
+            source/source/log/oxideshop.log
+            source/data/php/logs/error_log.txt
 
   sonarcloud:
     needs: [ unit_tests ]

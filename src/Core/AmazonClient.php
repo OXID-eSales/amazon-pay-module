@@ -48,8 +48,7 @@ class AmazonClient extends Client
 
         if (!$headers) {
             $headers = [
-                'x-amz-pay-Idempotency-Key' => $config->getUuid(),
-                'platformId' => $config->getPlatformId()
+                'x-amz-pay-Idempotency-Key' => $config->getUuid()
             ];
         }
 
@@ -68,7 +67,8 @@ class AmazonClient extends Client
                 ],
                 'paymentDetails' => [
                     'presentmentCurrency' => $config->getPresentmentCurrency()
-                ]
+                ],
+                'platformId' => $config->getPlatformId()
             ];
         }
 

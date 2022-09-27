@@ -10,11 +10,12 @@ declare(strict_types=1);
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
+use OxidEsales\Codeception\Admin\AdminLoginPage;
+use OxidEsales\Codeception\Admin\AdminPanel;
 use OxidEsales\Codeception\Module\Translation\Translator;
+use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
-use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
-use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AcceptSSLCertificate;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
@@ -82,9 +83,9 @@ abstract class BaseCest
 
     protected function _loginOxidWithAmazonCredentials()
     {
-        $loginInput = "//input[@name='lgn_usr' and ".
+        $loginInput = "//input[@name='lgn_usr' and " .
             "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";
-        $passwordInput = "//input[@name='lgn_pwd' and ".
+        $passwordInput = "//input[@name='lgn_pwd' and " .
             "@class='form-control js-oxValidate js-oxValidate_notEmpty textbox stepsPasswordbox']";
         $loginButton = "//button[@class='btn btn-primary submitButton']";
         $continueButton = "//button[@id='userNextStepTop']";
@@ -179,11 +180,33 @@ abstract class BaseCest
     }
 
     /**
-     * @return void
+     * @return mixed
+     * @throws \Exception
      */
     protected function _checkSuccessfulPayment()
     {
+        $this->I->wait(10);
+        $thankYouPage = new ThankYou($this->I);
+        $orderNumber = $thankYouPage->grabOrderNumber();
+        return $orderNumber;
+    }
+
+    protected function _loginAdmin(): AdminPanel
+    {
+        $adminLoginPage = new AdminLoginPage($this->I);
+        $this->I->amOnPage($adminLoginPage->URL);
+
+        $admin = Fixtures::get('adminUser');
+        return $adminLoginPage->login($admin['userLoginName'], $admin['userPassword']);
+    }
+
+    protected function _openOrderPayPal(string $orderNumber): void
+    {
+        $adminPanel = $this->_loginAdmin();
+        $orders = $adminPanel->openOrders();
         $this->I->waitForDocumentReadyState();
-        $this->I->waitForText(Translator::translate('THANK_YOU'));
+        $orders->find($orders->orderNumberInput, $orderNumber);
+
+        $this->I->selectListFrame();
     }
 }

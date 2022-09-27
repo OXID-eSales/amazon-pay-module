@@ -11,12 +11,10 @@ use Exception;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
 use OxidEsales\Eshop\Application\Model\Order;
-use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Field;
-use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -345,6 +343,66 @@ class AmazonService
     }
 
     /**
+     * @param $orderId
+     * @param LoggerInterface $logger
+     * @return void
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     */
+    public function createRefund($orderId, LoggerInterface $logger): void
+    {
+        $repository = oxNew(LogRepository::class);
+        $order = new Order();
+        $order->load($orderId);
+
+        $amazonConfig = oxNew(Config::class);
+        $body = [
+            'chargeId' => $repository->findLogMessageForOrderId($orderId)[0]['OSC_AMAZON_CHARGE_ID'],
+            'refundAmount' => [
+                'amount' => str_replace(
+                    ',',
+                    '.',
+                    Registry::getLang()->formatCurrency($order->getTotalOrderSum())
+                ),
+                'currencyCode' => $order->getOrderCurrency()->name
+            ],
+            'softDescriptor' => 'AMZ*OXID'
+        ];
+
+        $result = OxidServiceProvider::getAmazonClient()->createRefund(
+            $body,
+            [
+                'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
+                'platformId' => $amazonConfig->getPlatformId()
+            ]
+        );
+
+        $response = PhpHelper::jsonToArray($result['response']);
+
+        if ($result['status'] !== 201) {
+            return;
+        }
+
+        $refundedAmount = $response['refundAmount']['amount'];
+        $currency = $response['refundAmount']['currencyCode'];
+
+        if ($response['statusDetails']['state'] === 'Refunded') {
+            $response['statusDetails']['state'] = 'Refunded: ' . $refundedAmount . ' ' . $currency;
+        }
+
+        $repository->markOrderPaid(
+            $orderId,
+            'AmazonPay REFUND: ' . $refundedAmount,
+            'REFUNDED',
+            $response['chargeId']
+        );
+
+        $result['identifier'] = $response['refundId'];
+        $result['orderId'] = $orderId;
+        $logger->info($response['statusDetails']['state'], $result);
+    }
+
+    /**
      * @param $refundId
      * @param $logger
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
@@ -352,6 +410,7 @@ class AmazonService
      */
     public function processRefund($refundId, LoggerInterface $logger): void
     {
+        $logger->info("Start processRefund");
         $amazonConfig = oxNew(Config::class);
 
         $result = OxidServiceProvider::getAmazonClient()->getRefund(
@@ -369,7 +428,7 @@ class AmazonService
         }
 
         $refundedAmount = $response['refundAmount']['amount'];
-        $currency = $response['refundAmount']['currency'];
+        $currency = $response['refundAmount']['currencyCode'];
 
         if ($response['statusDetails']['state'] === 'Refunded') {
             $response['statusDetails']['state'] = 'Refunded: ' . $refundedAmount . ' ' . $currency;

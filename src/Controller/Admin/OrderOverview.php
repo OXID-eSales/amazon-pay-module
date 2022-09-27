@@ -9,6 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 class OrderOverview extends OrderOverview_parent
@@ -107,5 +108,22 @@ class OrderOverview extends OrderOverview_parent
         $this->addTplParam('isCaptured', $isCaptured);
 
         return parent::render();
+    }
+
+    public function refundpayment()
+    {
+        $oOrder = oxNew(Order::class);
+
+        if (
+            $oOrder->load($this->getEditObjectId()) &&
+            $oOrder->oxorder__oxpaymenttype->value === Constants::PAYMENT_ID &&
+            $oOrder->getId() !== null
+        ) {
+            $logger = new Logger();
+            OxidServiceProvider::getAmazonService()->createRefund(
+                $oOrder->getId(),
+                $logger
+            );
+        }
     }
 }

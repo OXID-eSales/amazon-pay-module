@@ -65,4 +65,5 @@ $aLang = [
     'OSC_AMAZONPAY_RESULT'                  => 'Result',
     'OSC_AMAZONPAY_REMARK'                  => 'Amazon Pay notice',
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'Exclude AmazonPay',
+    'OSC_AMAZONPAY_REFUND'                  => 'Refund',
 ];

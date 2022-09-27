@@ -23,4 +23,8 @@ return [
         "username" => "amazonpayuser@oxid-esales.dev",
         "password" => "useruser",
     ],
+    'adminUser' => [
+        'userLoginName' => 'management@management.com',
+        'userPassword' => 'useruser',
+    ],
 ];

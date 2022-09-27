@@ -26,25 +26,23 @@ final class RefundCest extends BaseCest {
         $this->_submitOrder();
         $orderNumber = $this->_checkSuccessfulPayment();
 
-        $orderId = $I->grabFromDatabase('oxorder', 'oxid', ['OXORDERNR' => $orderNumber]);
         $orderStatus = $I->grabFromDatabase('oxorder', 'oxtransstatus', ['OXORDERNR' => $orderNumber]);
         $orderRemark = $I->grabFromDatabase('oxorder', 'osc_amazon_remark', ['OXORDERNR' => $orderNumber]);
 
         $this->_openOrderPayPal($orderNumber);
-        $I->see($orderId);
-        $I->see(Translator::translate("GENERAL_ORDERNUM") . ' ' . $orderNumber);
-        $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ' ' . $orderStatus);
-        $I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ' ' . $orderRemark);
+        $I->selectEditFrame();
+        $I->see(Translator::translate("GENERAL_ORDERNUM") . ': ' . $orderNumber);
+        $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ': ' . $orderStatus);
+        $I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ': ' . $orderRemark);
 
-        $I->waitForElement("//input[name='refundButton']");
-        $I->click("//input[name='refundButton']");
+        $I->waitForElement("//input[@name='refundButton']");
+        $I->click("//input[@name='refundButton']");
 
         $orderStatus = $I->grabFromDatabase('oxorder', 'oxtransstatus', ['OXORDERNR' => $orderNumber]);
         $orderRemark = $I->grabFromDatabase('oxorder', 'osc_amazon_remark', ['OXORDERNR' => $orderNumber]);
 
-        $I->see($orderId);
-        $I->see(Translator::translate("GENERAL_ORDERNUM") . ' ' . $orderNumber);
-        $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ' ' . $orderStatus);
-        $I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ' ' . $orderRemark);
+        $I->see(Translator::translate("GENERAL_ORDERNUM") . ': ' . $orderNumber);
+        $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ': ' . $orderStatus);
+        $I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ': ' . $orderRemark);
     }
 }

@@ -11,6 +11,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Admin\AdminLoginPage;
+use OxidEsales\Codeception\Admin\AdminPanel;
 use OxidEsales\Codeception\Admin\Orders;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Page\Checkout\ThankYou;
@@ -191,42 +192,21 @@ abstract class BaseCest
         return $orderNumber;
     }
 
-    protected function _loginAdmin()
+    protected function _loginAdmin(): AdminPanel
     {
-        $userAccountLoginName = '#usr';
-        $userAccountLoginPassword = '#pwd';
-        $userAccountLoginButton = '.btn';
-
         $adminLoginPage = new AdminLoginPage($this->I);
         $this->I->amOnPage($adminLoginPage->URL);
-
         $admin = Fixtures::get('adminUser');
-        $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
-        $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
-        $this->I->click($userAccountLoginButton);
-        $this->I->waitForDocumentReadyState();
-
-        $this->I->switchToFrame("basefrm");
-        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
+        return $adminLoginPage->login($admin['userLoginName'], $admin['userPassword']);
     }
 
     protected function _openOrderPayPal(string $orderNumber): void
     {
-        $this->_loginAdmin();
-        $this->I->wait(1);
-        $this->I->switchToFrame(null);
-        $this->I->switchToFrame("navigation");
-        $this->I->switchToFrame("adminnav");
-        $this->I->see(Translator::translate("mxorders"));
-        $this->I->click(Translator::translate("mxorders"));
-        $this->I->see(Translator::translate("mxdisplayorders"));
-        $this->I->click(Translator::translate("mxdisplayorders"));
+        $adminPanel = $this->_loginAdmin();
+        $orders = $adminPanel->openOrders();
         $this->I->waitForDocumentReadyState();
-
-        $orders = new Orders($this->I);
         $orders->find($orders->orderNumberInput, $orderNumber);
 
-        $this->I->switchToFrame(null);
-        $this->I->switchToFrame("basefrm");
+        $this->I->selectListFrame();
     }
 }

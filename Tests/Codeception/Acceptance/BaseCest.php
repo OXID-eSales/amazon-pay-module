@@ -11,7 +11,6 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
 use OxidEsales\Codeception\Admin\AdminLoginPage;
-use OxidEsales\Codeception\Admin\AdminPanel;
 use OxidEsales\Codeception\Admin\Orders;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Page\Checkout\ThankYou;
@@ -192,18 +191,28 @@ abstract class BaseCest
         return $orderNumber;
     }
 
-    protected function _loginAdmin(): AdminPanel
+    protected function _loginAdmin()
     {
+        $userAccountLoginName = '#usr';
+        $userAccountLoginPassword = '#pwd';
+        $userAccountLoginButton = '.btn';
+
         $adminLoginPage = new AdminLoginPage($this->I);
         $this->I->amOnPage($adminLoginPage->URL);
+
         $admin = Fixtures::get('adminUser');
-        return $adminLoginPage->login($admin['userLoginName'], $admin['userPassword']);
+        $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
+        $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
+        $this->I->click($userAccountLoginButton);
+        $this->I->waitForDocumentReadyState();
+
+        $this->I->switchToFrame("basefrm");
+        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
     }
 
     protected function _openOrderPayPal(string $orderNumber): void
     {
-        $adminPanel = $this->_loginAdmin();
-
+        $this->_loginAdmin();
         $this->I->wait(1);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");

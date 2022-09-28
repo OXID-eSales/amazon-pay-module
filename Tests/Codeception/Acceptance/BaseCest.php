@@ -205,13 +205,16 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
         $this->I->click($userAccountLoginButton);
         $this->I->waitForDocumentReadyState();
+
+        $this->I->switchToFrame("basefrm");
+        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
     }
 
     protected function _openOrderPayPal(string $orderNumber): void
     {
         $this->_loginAdmin();
-        $this->I->waitForDocumentReadyState();
         $this->I->wait(1);
+        $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");
         $this->I->see(Translator::translate("mxorders"));

@@ -210,6 +210,7 @@ abstract class BaseCest
     protected function _openOrderPayPal(string $orderNumber): void
     {
         $this->_loginAdmin();
+        $this->I->waitForDocumentReadyState();
         $this->I->wait(1);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");

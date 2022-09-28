@@ -210,8 +210,9 @@ abstract class BaseCest
     protected function _openOrderPayPal(string $orderNumber): void
     {
         $this->_loginAdmin();
-        $this->I->wait(10);
-        $this->I->selectNavigationFrame();
+        $this->I->wait(1);
+        $this->I->switchToFrame("navigation");
+        $this->I->switchToFrame("adminnav");
         $this->I->see(Translator::translate("mxorders"));
         $this->I->click(Translator::translate("mxorders"));
         $this->I->see(Translator::translate("mxdisplayorders"));
@@ -221,6 +222,7 @@ abstract class BaseCest
         $orders = new Orders($this->I);
         $orders->find($orders->orderNumberInput, $orderNumber);
 
-        $this->I->selectListFrame();
+        $this->I->switchToFrame(null);
+        $this->I->switchToFrame("basefrm");
     }
 }

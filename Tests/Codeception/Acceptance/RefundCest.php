@@ -30,7 +30,7 @@ final class RefundCest extends BaseCest {
         $orderRemark = $I->grabFromDatabase('oxorder', 'osc_amazon_remark', ['OXORDERNR' => $orderNumber]);
 
         $this->_openOrderPayPal($orderNumber);
-        $I->selectEditFrame();
+        $I->switchToFrame("edit");
         $I->see(Translator::translate("GENERAL_ORDERNUM") . ': ' . $orderNumber);
         $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ': ' . $orderStatus);
         $I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ': ' . $orderRemark);

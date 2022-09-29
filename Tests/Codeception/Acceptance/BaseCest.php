@@ -10,11 +10,12 @@ declare(strict_types=1);
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use Codeception\Util\Fixtures;
+use OxidEsales\Codeception\Admin\AdminLoginPage;
+use OxidEsales\Codeception\Admin\Orders;
 use OxidEsales\Codeception\Module\Translation\Translator;
+use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
-use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
-use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AcceptSSLCertificate;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
@@ -82,9 +83,9 @@ abstract class BaseCest
 
     protected function _loginOxidWithAmazonCredentials()
     {
-        $loginInput = "//input[@name='lgn_usr' and ".
+        $loginInput = "//input[@name='lgn_usr' and " .
             "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";
-        $passwordInput = "//input[@name='lgn_pwd' and ".
+        $passwordInput = "//input[@name='lgn_pwd' and " .
             "@class='form-control js-oxValidate js-oxValidate_notEmpty textbox stepsPasswordbox']";
         $loginButton = "//button[@class='btn btn-primary submitButton']";
         $continueButton = "//button[@id='userNextStepTop']";
@@ -179,11 +180,53 @@ abstract class BaseCest
     }
 
     /**
-     * @return void
+     * @return mixed
+     * @throws \Exception
      */
     protected function _checkSuccessfulPayment()
     {
+        $this->I->wait(10);
+        $thankYouPage = new ThankYou($this->I);
+        $orderNumber = $thankYouPage->grabOrderNumber();
+        return $orderNumber;
+    }
+
+    protected function _loginAdmin()
+    {
+        $userAccountLoginName = '#usr';
+        $userAccountLoginPassword = '#pwd';
+        $userAccountLoginButton = '.btn';
+
+        $adminLoginPage = new AdminLoginPage($this->I);
+        $this->I->amOnPage($adminLoginPage->URL);
+
+        $admin = Fixtures::get('adminUser');
+        $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
+        $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
+        $this->I->click($userAccountLoginButton);
         $this->I->waitForDocumentReadyState();
-        $this->I->waitForText(Translator::translate('THANK_YOU'));
+
+        $this->I->switchToFrame("basefrm");
+        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
+    }
+
+    protected function _openOrderPayPal(string $orderNumber): void
+    {
+        $this->_loginAdmin();
+        $this->I->wait(1);
+        $this->I->switchToFrame(null);
+        $this->I->switchToFrame("navigation");
+        $this->I->switchToFrame("adminnav");
+        $this->I->see(Translator::translate("mxorders"));
+        $this->I->click(Translator::translate("mxorders"));
+        $this->I->see(Translator::translate("mxdisplayorders"));
+        $this->I->click(Translator::translate("mxdisplayorders"));
+        $this->I->waitForDocumentReadyState();
+
+        $orders = new Orders($this->I);
+        $orders->find($orders->orderNumberInput, $orderNumber);
+
+        $this->I->switchToFrame(null);
+        $this->I->switchToFrame("basefrm");
     }
 }

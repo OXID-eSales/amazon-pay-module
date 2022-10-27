@@ -136,4 +136,25 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }
+
+    /**
+     * @param AcceptanceTester $I
+     * @return void
+     * @group AmazonPayWithLoginPaymentTest
+     */
+    public function checkErrorAfterDeclinedPayment(AcceptanceTester  $I)
+    {
+        $I->wantToTest('Test error after declined AmazonPay');
+
+        $this->_initializeTest();
+        $this->_addProductToBasket();
+        $this->_loginOxid();
+        $this->_openCheckout();
+        $this->_openAmazonPayPage();
+        $this->_loginAmazonPayment();
+        $this->_changePaymentToBuyerCanceledOption();
+        $this->_submitPaymentMethod();
+        $this->_submitOrder();
+        $this->_checkUnsuccessfulPayment();
+    }
 }

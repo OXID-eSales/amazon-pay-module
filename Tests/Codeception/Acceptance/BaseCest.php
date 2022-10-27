@@ -142,6 +142,15 @@ abstract class BaseCest
     /**
      * @return void
      */
+    protected function _changePaymentToBuyerCanceledOption()
+    {
+        $amazonpayInformationPage = new AmazonPayInformation($this->I);
+        $amazonpayInformationPage->changePaymentToBuyerCanceledOption();
+    }
+
+    /**
+     * @return void
+     */
     protected function _checkAccountExist()
     {
         $this->I->waitForDocumentReadyState();
@@ -189,6 +198,13 @@ abstract class BaseCest
         $thankYouPage = new ThankYou($this->I);
         $orderNumber = $thankYouPage->grabOrderNumber();
         return $orderNumber;
+    }
+
+    protected  function _checkUnsuccessfulPayment()
+    {
+        $this->I->wait(10);
+
+        $this->I->see("Checkout was unsuccessful because the buyer cancelled the transaction or payment was declined");
     }
 
     protected function _loginAdmin()

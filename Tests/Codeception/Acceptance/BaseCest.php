@@ -164,7 +164,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _cancelPeyment()
+    protected function _cancelPayment()
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->cancelPayment();
@@ -210,7 +210,7 @@ abstract class BaseCest
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
     }
 
-    protected function _openOrderPayPal(string $orderNumber): void
+    protected function _openOrder(string $orderNumber): void
     {
         $this->_loginAdmin();
         $this->I->wait(1);

@@ -87,7 +87,7 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_openBasketDisplay();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
-        $this->_cancelPeyment();
+        $this->_cancelPayment();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
         $this->_submitOrder();
@@ -109,7 +109,7 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_openCheckout();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
-        $this->_cancelPeyment();
+        $this->_cancelPayment();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
         $this->_submitOrder();
@@ -130,7 +130,7 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_openDetailPage();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
-        $this->_cancelPeyment();
+        $this->_cancelPayment();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
         $this->_submitOrder();

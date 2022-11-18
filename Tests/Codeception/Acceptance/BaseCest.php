@@ -15,6 +15,7 @@ use OxidEsales\Codeception\Admin\Orders;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
@@ -41,6 +42,7 @@ abstract class BaseCest
 
     public function _after(AcceptanceTester $I): void
     {
+        OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         $I->clearShopCache();
         $I->cleanUp();
     }

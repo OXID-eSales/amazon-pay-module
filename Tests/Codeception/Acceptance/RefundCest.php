@@ -4,9 +4,10 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance\BaseCest;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
-use \OxidEsales\Codeception\Module\Translation\Translator;
+use OxidEsales\Codeception\Module\Translation\Translator;
 
-final class RefundCest extends BaseCest {
+final class RefundCest extends BaseCest
+{
     /**
      * @param AcceptanceTester $I
      * @return void

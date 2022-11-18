@@ -15,6 +15,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
+use Psr\Log\LogLevel;
 
 /**
  * Class DispatchController
@@ -34,7 +35,7 @@ class DispatchController extends FrontendController
 
         switch ($action) {
             case 'review':
-                $amazonSessionId = $this->getRequestAmazonSessionId();
+                $amazonSessionId = $this->setRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -117,5 +118,24 @@ class DispatchController extends FrontendController
         return ($amazonSessionId === OxidServiceProvider::getAmazonService()->getCheckoutSessionId()) ?
             $amazonSessionId :
             false;
+    }
+
+    /**
+     * set Amazon Session ID and validate it
+     *
+     * @return mixed
+     */
+    protected function setRequestAmazonSessionId()
+    {
+        $amazonSessionId = Registry::getRequest()
+            ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+
+        if (is_null(OxidServiceProvider::getAmazonService()->getCheckoutSessionId()))
+        {
+            OxidServiceProvider::getAmazonService()->storeAmazonSession($amazonSessionId);
+            return $amazonSessionId;
+        }
+
+        return $this->getRequestAmazonSessionId();
     }
 }

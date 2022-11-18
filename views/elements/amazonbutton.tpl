@@ -11,7 +11,7 @@
         productType: 'PayAndShip',
         placement: 'Cart',
         createCheckoutSessionConfig: {
-            payloadJSON: '[{$oViewConf->getPayload()}]',
+            payloadJSON: '[{$oViewConf->getPayloadExpress()}]',
             signature: '[{$oViewConf->getSignature()}]',
             publicKeyId: '[{$amazonConfig->getPublicKeyId()}]'
         }

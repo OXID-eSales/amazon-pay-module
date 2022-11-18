@@ -239,24 +239,19 @@ class ViewConfig extends ViewConfig_parent
      *
      * @return false|string
      */
-    public function getPayload()
+    public function getPayloadExpress()
     {
-        $config = OxidServiceProvider::getAmazonClient()->getModuleConfig();
+        $payload = new Payload();
+        $payload->setCheckoutReviewReturnUrl();
+        $payload->setStoreId();
+        $payload->addScopes([
+            "name",
+            "email",
+            "phoneNumber",
+            "billingAddress"
+        ]);
 
-        $payload = [
-            'webCheckoutDetails' => [
-                'checkoutReviewReturnUrl' => $config->checkoutReviewUrl(),
-                'checkoutResultReturnUrl' => $config->checkoutResultUrl()
-            ],
-            'storeId' => $config->getStoreId(),
-            "scopes" => [
-                "name",
-                "email",
-                "phoneNumber",
-                "billingAddress"
-            ]
-        ];
-        return json_encode($payload);
+        return json_encode($payload->getData());
     }
 
     /**
@@ -267,6 +262,6 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getSignature(): string
     {
-        return OxidServiceProvider::getAmazonClient()->generateButtonSignature($this->getPayload());
+        return OxidServiceProvider::getAmazonClient()->generateButtonSignature($this->getPayloadExpress());
     }
 }

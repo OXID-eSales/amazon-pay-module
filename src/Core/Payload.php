@@ -9,6 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 class Payload
 {
@@ -63,11 +64,51 @@ class Payload
     private $merchantReferenceId;
 
     /**
+     * @var string
+     */
+    private $checkoutReviewReturnUrl;
+
+    /**
+     * @var string
+     */
+    private $checkoutResultReturnUrl;
+
+    /**
+     * @var string
+     */
+    private $storeId;
+
+    /**
+     * @var array
+     */
+    private $scopes = [];
+
+    /**
      * @return array
      */
     public function getData(): array
     {
         $data = [];
+
+        if (!empty($this->checkoutReviewReturnUrl))
+        {
+            $data['webCheckoutDetails']['checkoutReviewReturnUrl'] = $this->checkoutReviewReturnUrl;
+        }
+
+        if (!empty($this->checkoutResultReturnUrl))
+        {
+            $data['webCheckoutDetails']['checkoutReviewReturnUrl'] = $this->checkoutResultReturnUrl;
+        }
+
+        if (!empty($this->storeId))
+        {
+            $data['storeId'] = $this->storeId;
+        }
+
+        if (!empty($this->scopes))
+        {
+            $data['scopes'] = $this->scopes;
+        }
 
         if (
             is_bool($this->canHandlePendingAuthorization) ||
@@ -189,6 +230,42 @@ class Payload
     public function setCheckoutChargeAmount($checkoutChargeAmount): void
     {
         $this->checkoutChargeAmount = $checkoutChargeAmount;
+    }
+
+    /**
+     * @return void
+     */
+    public function setCheckoutReviewReturnUrl(): void
+    {
+        $this->checkoutReviewReturnUrl =
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutReviewUrl();
+    }
+
+    /**
+     * @return void
+     */
+    public function setCheckoutResultReturnUrl(): void
+    {
+        $this->checkoutResultReturnUrl =
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutResultUrl();
+    }
+
+    /**
+     * @return void
+     */
+    public function setStoreId(): void
+    {
+        $this->storeId =
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->getStoreId();
+    }
+
+    /**
+     * @param array $scopes
+     * @return void
+     */
+    public function addScopes(array $scopes): void
+    {
+        $this->scopes = array_merge($this->scopes, $scopes);
     }
 
     /**

@@ -234,6 +234,11 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
+    /**
+     * Template variable getter. Get payload in JSON Format
+     *
+     * @return false|string
+     */
     public function getPayload()
     {
         $config = OxidServiceProvider::getAmazonClient()->getModuleConfig();
@@ -254,6 +259,12 @@ class ViewConfig extends ViewConfig_parent
         return json_encode($payload);
     }
 
+    /**
+     * Template variable getter. Get Signature for Payload
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function getSignature(): string
     {
         return OxidServiceProvider::getAmazonClient()->generateButtonSignature($this->getPayload());

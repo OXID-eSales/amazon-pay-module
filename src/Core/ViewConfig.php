@@ -233,4 +233,29 @@ class ViewConfig extends ViewConfig_parent
         }
         return $result;
     }
+
+    public function getPayload()
+    {
+        $config = OxidServiceProvider::getAmazonClient()->getModuleConfig();
+
+        $payload = [
+            'webCheckoutDetails' => [
+                'checkoutReviewReturnUrl' => $config->checkoutReviewUrl(),
+                'checkoutResultReturnUrl' => $config->checkoutResultUrl()
+            ],
+            'storeId' => $config->getStoreId(),
+            "scopes" => [
+                "name",
+                "email",
+                "phoneNumber",
+                "billingAddress"
+            ]
+        ];
+        return json_encode($payload);
+    }
+
+    public function getSignature(): string
+    {
+        return OxidServiceProvider::getAmazonClient()->generateButtonSignature($this->getPayload());
+    }
 }

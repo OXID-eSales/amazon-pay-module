@@ -235,10 +235,11 @@ class Payload
     /**
      * @return void
      */
-    public function setCheckoutReviewReturnUrl(): void
+    public function setCheckoutReviewReturnUrl($articlesId = null): void
     {
         $this->checkoutReviewReturnUrl =
-            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutReviewUrl();
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutReviewUrl() .
+            (is_null($articlesId) ? '' : ('&anid=' . $articlesId));
     }
 
     /**

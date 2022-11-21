@@ -32,6 +32,11 @@ class ViewConfig extends ViewConfig_parent
     protected $isWaveCompatibleTheme = null;
 
     /**
+     * articlesId for the checkout review url
+     */
+    protected $articlesId = null;
+
+    /**
      * @return object|Config
      */
     public function getAmazonConfig()
@@ -234,6 +239,11 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
+    public function setArticlesId($articlesId)
+    {
+        $this->articlesId = $articlesId;
+    }
+
     /**
      * Template variable getter. Get payload in JSON Format
      *
@@ -242,7 +252,7 @@ class ViewConfig extends ViewConfig_parent
     public function getPayloadExpress()
     {
         $payload = new Payload();
-        $payload->setCheckoutReviewReturnUrl();
+        $payload->setCheckoutReviewReturnUrl($this->articlesId);
         $payload->setStoreId();
         $payload->addScopes([
             "name",

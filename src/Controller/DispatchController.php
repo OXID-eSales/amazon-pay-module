@@ -127,6 +127,25 @@ class DispatchController extends FrontendController
      */
     protected function setRequestAmazonSessionId()
     {
+
+        if ($sProductId = Registry::getRequest()->getRequestParameter('anid')) {
+            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+            $database->startTransaction();
+            try {
+                $basket = Registry::getSession()->getBasket();
+                $basket->addToBasket(
+                    $sProductId,
+                    1
+                );
+                // Remove flag of "new item added" to not show "Item added" popup when returning to checkout
+                $basket->isNewItemAdded();
+                $basket->calculateBasket(true);
+            } catch (\Exception $exception) {
+                $database->rollbackTransaction();
+                throw $exception;
+            }
+        }
+
         $amazonSessionId = Registry::getRequest()
             ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
 

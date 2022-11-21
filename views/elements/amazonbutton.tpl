@@ -1,6 +1,5 @@
 [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
-<script src="https://static-eu.payments-amazon.com/checkout.js"></script>
 <div class="amazonpay-button [{$buttonclass}]" id="[{$buttonId}]"></div>
 
 [{if $oxArticlesId}][{$oViewConf->setArticlesId($oxArticlesId)}][{/if}]

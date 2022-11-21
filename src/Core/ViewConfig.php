@@ -253,6 +253,7 @@ class ViewConfig extends ViewConfig_parent
     {
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($this->articlesId);
+        $payload->setCheckoutResultReturnUrl();
         $payload->setStoreId();
         $payload->addScopes([
             "name",

@@ -97,7 +97,7 @@ class Payload
 
         if (!empty($this->checkoutResultReturnUrl))
         {
-            $data['webCheckoutDetails']['checkoutReviewReturnUrl'] = $this->checkoutResultReturnUrl;
+            $data['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->checkoutResultReturnUrl;
         }
 
         if (!empty($this->storeId))

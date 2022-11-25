@@ -38,7 +38,7 @@ class Order extends Order_parent
         // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
         // stop finalize order
         if (
-            $oBasket->getPaymentId() === Constants::PAYMENT_ID &&
+            Constants::isAmazonPayment($oBasket->getPaymentId()) &&
             !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
         ) {
             return self::ORDER_STATE_PAYMENTERROR; // means no authentication
@@ -67,7 +67,7 @@ class Order extends Order_parent
         if (
             $ret < 2  &&
             !$blRecalculatingOrder &&
-            $oBasket->getPaymentId() === Constants::PAYMENT_ID
+            Constants::isAmazonPayment($oBasket->getPaymentId())
         ) {
             $this->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
         }

@@ -71,13 +71,13 @@ class ConfigTest extends UnitTestCase
         $this->assertStringContainsString('cl=amazondispatch&action=ipn', $config->getIPNUrl());
     }
 
-    public function testDisplayInPDP(): void
+    public function testDisplayExpressInPDP(): void
     {
         $config = new Config();
-        $this->setConfigParam('blAmazonPayPDP', true);
-        $this->assertTrue($config->displayInPDP());
-        $this->setConfigParam('blAmazonPayPDP', false);
-        $this->assertFalse($config->displayInPDP());
+        $this->setConfigParam('blAmazonPayExpressPDP', true);
+        $this->assertTrue($config->displayExpressInPDP());
+        $this->setConfigParam('blAmazonPayExpressPDP', false);
+        $this->assertFalse($config->displayExpressInPDP());
     }
 
     public function testUseExclusion(): void
@@ -89,13 +89,13 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->useExclusion());
     }
 
-    public function testDisplayInMinicartAndModal(): void
+    public function testDisplayExpressInMinicartAndModal(): void
     {
         $config = new Config();
-        $this->setConfigParam('blAmazonPayMinicartAndModal', true);
-        $this->assertTrue($config->displayInMiniCartAndModal());
-        $this->setConfigParam('blAmazonPayMinicartAndModal', false);
-        $this->assertFalse($config->displayInMiniCartAndModal());
+        $this->setConfigParam('blAmazonPayExpressMinicartAndModal', true);
+        $this->assertTrue($config->displayExpressInMiniCartAndModal());
+        $this->setConfigParam('blAmazonPayExpressMinicartAndModal', false);
+        $this->assertFalse($config->displayExpressInMiniCartAndModal());
     }
 
     public function testCheckHealthMissingPrivKey(): void

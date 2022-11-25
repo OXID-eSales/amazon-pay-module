@@ -1,3 +1,3 @@
-[{if $sPaymentID != $oViewConf->getAmazonPaymentId()}]
+[{if $sPaymentID === $oViewConf->getAmazonExpressPaymentId()}]
     [{$smarty.block.parent}]
 [{/if}]

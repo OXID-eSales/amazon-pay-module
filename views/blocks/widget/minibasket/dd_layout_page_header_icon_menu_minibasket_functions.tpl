@@ -1,4 +1,4 @@
 [{$smarty.block.parent}]
-[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive() && $oViewConf->displayInMiniCartAndModal()}]
+[{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive() && $oViewConf->displayExpressInMiniCartAndModal()}]
     [{include file="amazonpay/flow_dd_layout_page_header_icon_menu_minibasket_functions.tpl"}]
 [{/if}]

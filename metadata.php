@@ -84,6 +84,7 @@ $aModule = [
     ],
     'templates' => [
         'amazonpay/amazonconfig.tpl' => 'osc/amazonpay/views/admin/tpl/amazonconfig.tpl',
+        'amazonpay/amazonexpressbutton.tpl' => 'osc/amazonpay/views/elements/amazonexpressbutton.tpl',
         'amazonpay/amazonbutton.tpl' => 'osc/amazonpay/views/elements/amazonbutton.tpl',
         'amazonpay/filtered_billing_address.tpl' => 'osc/amazonpay/views/elements/filtered_billing_address.tpl',
         'amazonpay/filtered_delivery_address.tpl' => 'osc/amazonpay/views/elements/filtered_delivery_address.tpl',
@@ -262,8 +263,8 @@ $aModule = [
         ['name' => 'sAmazonPayPubKeyId', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayMerchantId', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayStoreId', 'type' => 'str', 'value' => '', 'group' => null],
-        ['name' => 'blAmazonPayPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
-        ['name' => 'blAmazonPayMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
+        ['name' => 'blAmazonPayExpressPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
+        ['name' => 'blAmazonPayExpressMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
         ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
     ]

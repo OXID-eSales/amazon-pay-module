@@ -37,8 +37,8 @@ $aLang = [
     'HELP_OSC_AMAZONPAY_IPN'           => 'IPN-Nachrichten werden von Amazon Pay ohne Ihr Zutun gesendet und können zur Aktualisierung Ihres
         internen Auftragsverwaltungssystems und zur Bearbeitung von Bestellungen verwendet werden.<br>Besteht Ihre Server-/Shopkonfiguration aus mehreren URLs,
         so tauschen Sie die vorgeschlagene Domain der o.g. URL gegen Ihre passende Domain aus und achten darauf, das die neue URL frei durch Amazon zugänglich ist.',
-    'OSC_AMAZONPAY_PLACEMENT'          => 'Platzierung',
-    'HELP_OSC_AMAZONPAY_PLACEMENT'     => 'Definieren Sie, wo die Amazon Pay-Schaltfläche in Ihrem Online-Shop angezeigt werden soll.',
+    'OSC_AMAZONPAYEXPRESS_PLACEMENT'          => 'Platzierung Amazon Express',
+    'HELP_OSC_AMAZONPAYEXPRESS_PLACEMENT'     => 'Definieren Sie, wo die Amazon Pay-Schaltfläche in Ihrem Online-Shop angezeigt werden soll.',
     'OSC_AMAZONPAY_PDP'                => 'Produktdetailseite',
     'OSC_AMAZONPAY_MINICART_AND_MODAL' => 'Warenkorb + Warenkorb-PopUp',
     'OSC_AMAZONPAY_PERFORMANCE'        => 'Performance',

@@ -44,22 +44,24 @@ class ConfigControllerTest extends UnitTestCase
             [['sAmazonPayPubKeyId' => 'key id '], 'key id', 'getterMethod' => 'getPublicKeyId'],
             [['sAmazonPayMerchantId' => 'merchant id'], 'merchant id', 'getterMethod' => 'getMerchantId'],
             [['sAmazonPayStoreId' => 'store id'], 'store id', 'getterMethod' => 'getStoreId'],
-            [['blAmazonPayPDP' => 'on'], true, 'getterMethod' => 'displayInPDP'],
-            [['blAmazonPayPDP' => 1], true, 'getterMethod' => 'displayInPDP'],
-            [['blAmazonPayPDP' => ''], false, 'getterMethod' => 'displayInPDP'],
-            [['blAmazonPayPDP' => null], false, 'getterMethod' => 'displayInPDP'],
+            [['blAmazonPayExpressPDP' => 'on'], true, 'getterMethod' => 'displayExpressInPDP'],
+            [['blAmazonPayExpressPDP' => 1], true, 'getterMethod' => 'displayExpressInPDP'],
+            [['blAmazonPayExpressPDP' => ''], false, 'getterMethod' => 'displayExpressInPDP'],
+            [['blAmazonPayExpressPDP' => null], false, 'getterMethod' => 'displayExpressInPDP'],
             [['blAmazonPayUseExclusion' => 'on'], true, 'getterMethod' => 'useExclusion'],
             [['blAmazonPayUseExclusion' => 1], true, 'getterMethod' => 'useExclusion'],
             [['blAmazonPayUseExclusion' => ''], false, 'getterMethod' => 'useExclusion'],
             [['blAmazonPayUseExclusion' => null], false, 'getterMethod' => 'useExclusion'],
-            [['blAmazonPayMinicartAndModal' => 'on'], true, 'getterMethod' => 'displayInMiniCartAndModal'],
-            [['blAmazonPayMinicartAndModal' => ''], false, 'getterMethod' => 'displayInMiniCartAndModal'],
+            [['blAmazonPayExpressMinicartAndModal' => 'on'], true, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
+            [['blAmazonPayExpressMinicartAndModal' => 1], true, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
+            [['blAmazonPayExpressMinicartAndModal' => ''], false, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
+            [['blAmazonPayExpressMinicartAndModal' => null], false, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
         ];
     }
 
     /**
      * @dataProvider configValueProvider
-     * @covers ConfigController::handleSpecialFields
+     * @covers       ConfigController::handleSpecialFields
      *
      * @param $conf array Configuration values
      * @param $expected mixed Expected return value

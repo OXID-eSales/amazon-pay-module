@@ -1,5 +1,5 @@
 [{$smarty.block.parent}]
-[{if $edit->oxorder__oxpaymenttype->value == $oViewConf->getAmazonPaymentId()}]
+[{if $oViewConf->isAmazonPaymentId($edit->oxorder__oxpaymenttype->value)}]
     </table>
     <br>
     <p><b>[{oxmultilang ident="OSC_AMAZONPAY_TRANSACTION_HISTORY"}]</b></p>

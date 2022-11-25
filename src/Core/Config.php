@@ -278,9 +278,9 @@ class Config
     /**
      * @return bool
      */
-    public function displayInPDP(): bool
+    public function displayExpressInPDP(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayPDP');
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressPDP');
     }
 
     /**
@@ -294,9 +294,9 @@ class Config
     /**
      * @return bool
      */
-    public function displayInMiniCartAndModal(): bool
+    public function displayExpressInMiniCartAndModal(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayMinicartAndModal');
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressMinicartAndModal');
     }
 
     /**
@@ -344,7 +344,8 @@ class Config
         if ($this->countryList === null) {
             $this->countryList = [];
             $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
-            $payment->load(Constants::PAYMENT_ID);
+            /** TODO should be variable for any amazonpay ID */
+            $payment->load(Constants::PAYMENT_ID_EXPRESS);
             foreach ($payment->getCountries() as $countryOxId) {
                 // check deliverysets
                 $deliverySetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);

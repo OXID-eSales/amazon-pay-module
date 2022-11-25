@@ -11,6 +11,7 @@ use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
 use OxidEsales\Eshop\Core\Field;
+use OxidEsales\Eshop\Core\Model\BaseModel as EshopBaseModel;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
@@ -28,15 +29,18 @@ class Events
         ]
     ];
 
+    protected static $paymentIds;
+
     /**
      * Execute action on activate event
      */
     public static function onActivate(): void
     {
+        self::$paymentIds = Constants::getPaymentIds();
         self::createLogTable();
         self::updateOxpsToOsc();
-        self::addPaymentMethod();
-        self::enablePaymentMethod();
+        self::addPaymentMethods();
+        self::enablePaymentMethods();
         self::addArticleColumn();
         self::addCategoryColumn();
         self::addDeliverySetColumn();
@@ -203,13 +207,21 @@ class Events
     }
 
     /**
-     * Add PayPal payment method set EN and DE long descriptions
+     * Add payment methods set EN and DE long descriptions
      */
-    protected static function addPaymentMethod(): void
+    protected static function addPaymentMethods(): void
+    {
+        foreach (Constants::PAYMENT_DESCRIPTIONS as $paymentId => $paymentDescription) {
+            self::createPaymentMethod($paymentId, $paymentDescription);
+        }
+    }
+
+    protected static function createPaymentMethod($paymentId, $paymentDescription): void
     {
         $payment = oxNew(Payment::class);
-        if (!$payment->load(Constants::PAYMENT_ID)) {
-            $payment->setId(Constants::PAYMENT_ID);
+        $paymentLoaded = $payment->load($paymentId);
+        if (!$paymentLoaded) {
+            $payment->setId($paymentId);
             $params = [
                 'oxpayments__oxactive' => true,
                 'oxpayments__oxaddsum' => 0,
@@ -220,12 +232,13 @@ class Events
             ];
             $payment->assign($params);
             $payment->save();
+            self::assignPaymentToActiveDeliverySets($paymentId);
 
             $languages = Registry::getLang()->getLanguageIds();
-            foreach (Constants::PAYMENT_DESCRIPTIONS as $languageAbbreviation => $values) {
+            foreach ($paymentDescription as $languageAbbreviation => $values) {
                 $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
-                    $payment->loadInLang($languageId, Constants::PAYMENT_ID);
+                    $payment->loadInLang($languageId, $paymentId);
                     $params = [
                         'oxpayments__oxdesc' => $values['title'],
                         'oxpayments__oxlongdesc' => $values['desc']
@@ -238,26 +251,67 @@ class Events
     }
 
     /**
-     * Disables payment method
+     * Disables payment methods
      */
-    protected static function disablePaymentMethod(): void
+    protected static function disablePaymentMethods(): void
     {
-        $payment = oxNew(Payment::class);
-        if ($payment->load(Constants::PAYMENT_ID)) {
-            $payment->oxpayments__oxactive = new Field(0);
-            $payment->save();
+        foreach(self::$paymentIds as $id){
+            $payment = oxNew(Payment::class);
+            if ($payment->load($id)) {
+                $payment->oxpayments__oxactive = new Field(0);
+                $payment->save();
+            }
         }
     }
 
     /**
-     * Activates PayPal payment method
+     * Activates  payment methods
      */
-    protected static function enablePaymentMethod(): void
+    protected static function enablePaymentMethods(): void
     {
-        $payment = oxNew(Payment::class);
-        $payment->load(Constants::PAYMENT_ID);
-        $payment->oxpayments__oxactive = new Field(1);
-        $payment->save();
+        foreach(self::$paymentIds as $id){
+            $payment = oxNew(Payment::class);
+            if ($payment->load($id)) {
+                $payment->oxpayments__oxactive = new Field(1);
+                $payment->save();
+            }
+        }
+    }
+
+    protected static function assignPaymentToActiveDeliverySets(string $paymentId): void
+    {
+        $deliverySetIds = self::getActiveDeliverySetIds();
+        foreach ($deliverySetIds as $deliverySetId) {
+            self::assignPaymentToDelivery($paymentId, $deliverySetId);
+        }
+    }
+
+    protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId): void
+    {
+        $object2Payment = oxNew(EshopBaseModel::class);
+        $object2Payment->init('oxobject2payment');
+        $object2Payment->assign(
+            [
+                'oxpaymentid' => $paymentId,
+                'oxobjectid'  => $deliverySetId,
+                'oxtype'      => 'oxdelset'
+            ]
+        );
+        $object2Payment->save();
+    }
+
+    protected static function getActiveDeliverySetIds(): array
+    {
+        $sql = 'SELECT `OXID`
+                FROM `oxdeliveryset`
+                WHERE `oxactive` = 1';
+        $fromDb = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
+
+        foreach ($fromDb as $row) {
+            $result[$row['OXID']] = $row['OXID'];
+        }
+
+        return $result;
     }
 
     /**
@@ -267,7 +321,7 @@ class Events
      */
     public static function onDeactivate(): void
     {
-        self::disablePaymentMethod();
+        self::disablePaymentMethods();
     }
 
     /**

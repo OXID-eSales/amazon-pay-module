@@ -6,7 +6,7 @@
         <div class="panel-body">
             [{if !$oViewConf->isAmazonSessionActive()}]
                 <div class="pull-left">
-                    [{include file='amazonpay/amazonbutton.tpl' buttonId='AmazonPayButtonCheckOutUser' display='inline-block'}]
+                    [{include file='amazonpay/amazonexpressbutton.tpl' buttonId='AmazonPayButtonCheckOutUser' display='inline-block'}]
                     <br />
                     [{oxmultilang ident="AMAZON_PAY_ADVANTAGES"}]
                 </div>

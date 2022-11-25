@@ -92,13 +92,13 @@ abstract class BaseCest
         $loginButton = "//button[@class='btn btn-primary submitButton']";
         $continueButton = "//button[@id='userNextStepTop']";
 
-        $this->I->waitForPageLoad();
+        $this->I->waitForDocumentReadyState();
         $this->I->waitForElement($loginInput);
         $this->I->fillField($loginInput, Fixtures::get('amazonClientUsername'));
         $this->I->fillField($passwordInput, Fixtures::get('amazonClientPassword'));
         $this->I->click($loginButton);
 
-        $this->I->waitForPageLoad();
+        $this->I->waitForDocumentReadyState();
         $this->I->waitForElement($continueButton);
         $this->I->clickWithLeftButton($continueButton);
     }
@@ -207,7 +207,6 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
         $this->I->click($userAccountLoginButton);
         $this->I->waitForDocumentReadyState();
-
         $this->I->switchToFrame("basefrm");
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
     }
@@ -215,7 +214,7 @@ abstract class BaseCest
     protected function _openOrder(string $orderNumber): void
     {
         $this->_loginAdmin();
-        $this->I->wait(1);
+        $this->I->wait(15);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");

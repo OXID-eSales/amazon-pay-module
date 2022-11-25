@@ -81,13 +81,13 @@ class UserComponent extends UserComponent_Parent
                     $basket->getPrice()->getBruttoPrice(),
                     $user
                 );
-                if (array_key_exists(Constants::PAYMENT_ID, $paymentList)) {
+                if (array_key_exists(Constants::PAYMENT_ID_EXPRESS, $paymentList)) {
                     $possibleDeliverySets[] = $deliverySet->getId();
                 }
             }
 
             if (count($possibleDeliverySets)) {
-                $basket->setPayment(Constants::PAYMENT_ID);
+                $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
                 $basket->setShipping(reset($possibleDeliverySets));
             }
         } else {

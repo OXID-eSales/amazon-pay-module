@@ -62,9 +62,9 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function displayInPDP(): bool
+    public function displayExpressInPDP(): bool
     {
-        return $this->getAmazonConfig()->displayInPDP();
+        return $this->getAmazonConfig()->displayExpressInPDP();
     }
 
     /**
@@ -78,9 +78,9 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function displayInMiniCartAndModal(): bool
+    public function displayExpressInMiniCartAndModal(): bool
     {
-        return $this->getAmazonConfig()->displayInMiniCartAndModal();
+        return $this->getAmazonConfig()->displayExpressInMiniCartAndModal();
     }
 
     /**
@@ -118,7 +118,7 @@ class ViewConfig extends ViewConfig_parent
     {
         return (
             Registry::getSession()->getVariable('sShipSet') &&
-            (Registry::getSession()->getVariable('paymentid') === Constants::PAYMENT_ID)
+            Constants::isAmazonPayment(Registry::getSession()->getVariable('paymentid'))
         );
     }
 
@@ -131,6 +131,17 @@ class ViewConfig extends ViewConfig_parent
     {
         return Constants::PAYMENT_ID;
     }
+
+    public function getAmazonExpressPaymentId(): string
+    {
+        return Constants::PAYMENT_ID_EXPRESS;
+    }
+
+    public function isAmazonPaymentId($paymentId): bool
+    {
+        return Constants::isAmazonPayment($paymentId);
+    }
+
     /**
      * @param null $oxid
      * @return bool

@@ -91,25 +91,25 @@
         </div>
 
         <div class="form-group">
-            <label for="button-placement">[{oxmultilang ident="OSC_AMAZONPAY_PLACEMENT"}]</label>
+            <label for="button-placement">[{oxmultilang ident="OSC_AMAZONPAYEXPRESS_PLACEMENT"}]</label>
             <div class="controls">
                 <div>
                     <div class="checkbox">
                         <label>
-                            <input type="hidden" name="conf[blAmazonPayPDP]" value="0" />
-                            <input id="placementDetailPage" type="checkbox" name="conf[blAmazonPayPDP]" [{if $config->displayInPDP()}]checked[{/if}] value="1" />
+                            <input type="hidden" name="conf[blAmazonPayExpressPDP]" value="0" />
+                            <input id="placementDetailPage" type="checkbox" name="conf[blAmazonPayExpressPDP]" [{if $config->displayExpressInPDP()}]checked[{/if}] value="1" />
                             [{oxmultilang ident="OSC_AMAZONPAY_PDP"}]
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input type="hidden" name="conf[blAmazonPayMinicartAndModal]" value="0" />
-                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayMinicartAndModal]" [{if $config->displayInMiniCartAndModal()}]checked[{/if}] value="1" />
+                            <input type="hidden" name="conf[blAmazonPayExpressMinicartAndModal]" value="0" />
+                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayExpressMinicartAndModal]" [{if $config->displayExpressInMiniCartAndModal()}]checked[{/if}] value="1" />
                             [{oxmultilang ident="OSC_AMAZONPAY_MINICART_AND_MODAL"}]
                         </label>
                     </div>
                 </div>
-                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_PLACEMENT"}]</span>
+                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAYEXPRESS_PLACEMENT"}]</span>
             </div>
         </div>
 

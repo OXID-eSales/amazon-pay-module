@@ -7,7 +7,7 @@
             <div class="card-body oxEqualized">
                 [{if !$oViewConf->isAmazonSessionActive()}]
                     <div class="text-left">
-                        [{include file='amazonpay/amazonbutton.tpl' buttonId='AmazonPayButtonCheckOutUser' display='inline-block'}]
+                        [{include file='amazonpay/amazonexpressbutton.tpl' buttonId='AmazonPayButtonCheckOutUser' display='inline-block'}]
                     </div><br />
                     [{oxmultilang ident="AMAZON_PAY_ADVANTAGES"}]
                 [{else}]

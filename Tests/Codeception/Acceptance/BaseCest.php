@@ -206,6 +206,7 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
         $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
         $this->I->click($userAccountLoginButton);
+        $this->I->wait(10);
         $this->I->waitForDocumentReadyState();
         $this->I->switchToFrame("basefrm");
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));

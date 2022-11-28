@@ -12,7 +12,6 @@ final class RefundCest extends BaseCest
      * @param AcceptanceTester $I
      * @return void
      * @group RefundTest
-     * @group one
      */
     public function checkRefundPaymentWorks(AcceptanceTester $I)
     {

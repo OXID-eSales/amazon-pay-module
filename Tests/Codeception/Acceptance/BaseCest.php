@@ -208,6 +208,7 @@ abstract class BaseCest
         $this->I->click($userAccountLoginButton);
         $this->I->wait(10);
         $this->I->waitForDocumentReadyState();
+        $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
     }

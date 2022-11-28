@@ -83,7 +83,10 @@ abstract class BaseCest
         $homePage->loginUser($clientData['username'], $clientData['password']);
     }
 
-    protected function _loginOxidWithAmazonCredentials()
+    /**
+     * @throws \Exception
+     */
+    protected function _loginOxidWithAmazonCredentials(): void
     {
         $loginInput = "//input[@name='lgn_usr' and " .
             "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";
@@ -92,13 +95,13 @@ abstract class BaseCest
         $loginButton = "//button[@class='btn btn-primary submitButton']";
         $continueButton = "//button[@id='userNextStepTop']";
 
-        $this->I->waitForDocumentReadyState();
+        $this->I->waitForPageLoad();
         $this->I->waitForElement($loginInput);
         $this->I->fillField($loginInput, Fixtures::get('amazonClientUsername'));
         $this->I->fillField($passwordInput, Fixtures::get('amazonClientPassword'));
         $this->I->click($loginButton);
 
-        $this->I->waitForDocumentReadyState();
+        $this->I->waitForPageLoad();
         $this->I->waitForElement($continueButton);
         $this->I->clickWithLeftButton($continueButton);
     }

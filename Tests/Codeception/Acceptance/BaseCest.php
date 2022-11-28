@@ -209,7 +209,7 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
         $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
         $this->I->click($userAccountLoginButton);
-        $this->I->waitForPageLoad(20);
+        $this->I->wait(20);
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");

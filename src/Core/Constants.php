@@ -69,7 +69,7 @@ class Constants
         'ProcessingFailure',
     ];
 
-    public static function isAmazonPayment($id): bool
+    public static function isAmazonPayment(string $id): bool
     {
         return !empty(self::PAYMENT_DESCRIPTIONS[$id]);
     }

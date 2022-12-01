@@ -11,6 +11,8 @@ use Exception;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Registry;
@@ -343,13 +345,14 @@ class AmazonService
     }
 
     /**
-     * @param $orderId
+     * @param string $orderId
      * @param LoggerInterface $logger
      * @return void
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund($orderId, LoggerInterface $logger): void
+    public function createRefund(string $orderId, LoggerInterface $logger): void
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
@@ -362,8 +365,9 @@ class AmazonService
                 'amount' => str_replace(
                     ',',
                     '.',
-                    Registry::getLang()->formatCurrency($order->getTotalOrderSum())
+                    Registry::getLang()->formatCurrency((float)$order->getTotalOrderSum())
                 ),
+
                 'currencyCode' => $order->getOrderCurrency()->name
             ],
             'softDescriptor' => 'AMZ*OXID'
@@ -604,7 +608,7 @@ class AmazonService
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function processCancel($orderId): void
+    public function processCancel(string $orderId): void
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);

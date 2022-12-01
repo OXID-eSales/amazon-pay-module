@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Copyright © OXID eSales AG. All rights reserved.
  * See LICENSE file for license details.
  */
-$sLangName = 'English';
 
+$sLangName = 'English';
 $aLang = [
     'charset'                          => 'UTF-8',
     'amazonpay'                        => 'Amazon Pay',

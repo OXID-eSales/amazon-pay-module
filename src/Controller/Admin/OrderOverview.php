@@ -110,7 +110,7 @@ class OrderOverview extends OrderOverview_parent
         return parent::render();
     }
 
-    public function refundpayment()
+    public function refundpayment(): void
     {
         $oOrder = oxNew(Order::class);
 

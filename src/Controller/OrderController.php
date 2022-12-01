@@ -44,16 +44,17 @@ class OrderController extends OrderController_parent
         }
 
         if ($amazonService->isAmazonSessionActive()) {
-            $this->initAmazonPayExpress($amazonService,$user,$session);
+            $this->initAmazonPayExpress($amazonService, $user, $session);
         }
 
         parent::init();
     }
 
-    protected function initAmazonPayExpress($amazonService, $user, $session){
+    protected function initAmazonPayExpress(\OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService, User $user, \OxidEsales\Eshop\Core\Session $session): void
+    {
         $amazonSession = $amazonService->getCheckoutSession();
         // Create guest user if not logged in
-        if (!$user) {
+        if (!$user->loadActiveUser()) {
             $userComponent = oxNew(UserComponent::class);
             $userComponent->createGuestUser($amazonSession);
 
@@ -186,7 +187,10 @@ class OrderController extends OrderController_parent
         return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }
 
-    protected function setAmazonPayAsPaymentMethod($paymentId): void
+    /**
+     * @psalm-param 'oxidamazonexpress' $paymentId
+     */
+    protected function setAmazonPayAsPaymentMethod(string $paymentId): void
     {
         $basket = $this->getBasket();
         $user = $this->getUser();

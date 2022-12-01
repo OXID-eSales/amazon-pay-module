@@ -250,7 +250,7 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
-    public function setArticlesId($articlesId)
+    public function setArticlesId($articlesId): void
     {
         $this->articlesId = $articlesId;
     }

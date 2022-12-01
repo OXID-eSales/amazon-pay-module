@@ -149,8 +149,7 @@ class DispatchController extends FrontendController
         $amazonSessionId = Registry::getRequest()
             ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
 
-        if (is_null(OxidServiceProvider::getAmazonService()->getCheckoutSessionId()))
-        {
+        if (is_null(OxidServiceProvider::getAmazonService()->getCheckoutSessionId())) {
             OxidServiceProvider::getAmazonService()->storeAmazonSession($amazonSessionId);
             return $amazonSessionId;
         }

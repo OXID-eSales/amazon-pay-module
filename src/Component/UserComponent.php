@@ -10,6 +10,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Component;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\EshopCommunity\Application\Controller\RegisterController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
@@ -19,7 +20,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  * Handles Amazon checkout sessions
  * @mixin \OxidEsales\Eshop\Application\Component\UserComponent
  */
-class UserComponent extends UserComponent_Parent
+class UserComponent extends UserComponent_parent
 {
     /**
      * @param array $amazonSession
@@ -29,7 +30,7 @@ class UserComponent extends UserComponent_Parent
         $session = Registry::getSession();
         $config = new Config();
 
-        $this->setParent(oxNew('Register'));
+        $this->setParent(oxNew(RegisterController::class));
 
         $this->setRequestParameter('userLoginName', $amazonSession['response']['buyer']['name']);
         $this->setRequestParameter('lgn_usr', $amazonSession['response']['buyer']['email']);
@@ -110,12 +111,13 @@ class UserComponent extends UserComponent_Parent
      * "usr", "dynvalue", "paymentid"<br>
      * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
      * oxcmp_user::oUser, forces basket to recalculate.
+     * @return null
      */
     public function logout()
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        return parent::logout();
+        parent::logout();
     }
 
     /**

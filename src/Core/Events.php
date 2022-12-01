@@ -216,7 +216,13 @@ class Events
         }
     }
 
-    protected static function createPaymentMethod($paymentId, $paymentDescription): void
+    /**
+     * @param string[][] $paymentDescription
+     *
+     * @psalm-param 'oxidamazon'|'oxidamazonexpress' $paymentId
+     * @psalm-param array{en: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}, de: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}} $paymentDescription
+     */
+    protected static function createPaymentMethod(string $paymentId, array $paymentDescription): void
     {
         $payment = oxNew(Payment::class);
         $paymentLoaded = $payment->load($paymentId);
@@ -255,7 +261,7 @@ class Events
      */
     protected static function disablePaymentMethods(): void
     {
-        foreach(self::$paymentIds as $id){
+        foreach (self::$paymentIds as $id) {
             $payment = oxNew(Payment::class);
             if ($payment->load($id)) {
                 $payment->oxpayments__oxactive = new Field(0);
@@ -269,7 +275,7 @@ class Events
      */
     protected static function enablePaymentMethods(): void
     {
-        foreach(self::$paymentIds as $id){
+        foreach (self::$paymentIds as $id) {
             $payment = oxNew(Payment::class);
             if ($payment->load($id)) {
                 $payment->oxpayments__oxactive = new Field(1);

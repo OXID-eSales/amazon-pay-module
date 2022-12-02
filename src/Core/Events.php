@@ -10,6 +10,8 @@ namespace OxidSolutionCatalysts\AmazonPay\Core;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Model\BaseModel as EshopBaseModel;
 use OxidEsales\Eshop\Core\Registry;
@@ -29,18 +31,15 @@ class Events
         ]
     ];
 
-    protected static $paymentIds;
-
     /**
      * Execute action on activate event
+     * @return void
      */
     public static function onActivate(): void
     {
-        self::$paymentIds = Constants::getPaymentIds();
         self::createLogTable();
         self::updateOxpsToOsc();
         self::addPaymentMethods();
-        self::enablePaymentMethods();
         self::addArticleColumn();
         self::addCategoryColumn();
         self::addDeliverySetColumn();
@@ -51,6 +50,9 @@ class Events
         $dbMetaDataHandler->updateViews();
     }
 
+    /**
+     * @return void
+     */
     protected static function updateOxpsToOsc(): void
     {
         self::updateOxpsToOscArticleColumn();
@@ -78,6 +80,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function addArticleColumn(): void
     {
         $sql = 'show columns
@@ -257,33 +264,9 @@ class Events
     }
 
     /**
-     * Disables payment methods
+     * @param string $paymentId
+     * @return void
      */
-    protected static function disablePaymentMethods(): void
-    {
-        foreach (self::$paymentIds as $id) {
-            $payment = oxNew(Payment::class);
-            if ($payment->load($id)) {
-                $payment->oxpayments__oxactive = new Field(0);
-                $payment->save();
-            }
-        }
-    }
-
-    /**
-     * Activates  payment methods
-     */
-    protected static function enablePaymentMethods(): void
-    {
-        foreach (self::$paymentIds as $id) {
-            $payment = oxNew(Payment::class);
-            if ($payment->load($id)) {
-                $payment->oxpayments__oxactive = new Field(1);
-                $payment->save();
-            }
-        }
-    }
-
     protected static function assignPaymentToActiveDeliverySets(string $paymentId): void
     {
         $deliverySetIds = self::getActiveDeliverySetIds();
@@ -292,6 +275,12 @@ class Events
         }
     }
 
+    /**
+     * @param string $paymentId
+     * @param string $deliverySetId
+     * @return void
+     * @throws \Exception
+     */
     protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId): void
     {
         $object2Payment = oxNew(EshopBaseModel::class);
@@ -306,6 +295,11 @@ class Events
         $object2Payment->save();
     }
 
+    /**
+     * @return array
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function getActiveDeliverySetIds(): array
     {
         $sql = 'SELECT `OXID`
@@ -313,6 +307,7 @@ class Events
                 WHERE `oxactive` = 1';
         $fromDb = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
+        $result = [];
         foreach ($fromDb as $row) {
             $result[$row['OXID']] = $row['OXID'];
         }
@@ -327,11 +322,11 @@ class Events
      */
     public static function onDeactivate(): void
     {
-        self::disablePaymentMethods();
     }
 
     /**
      * add details controller to requireSession
+     * @return void
      */
     protected static function addRequireSession(): void
     {

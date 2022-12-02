@@ -116,9 +116,10 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonPaymentPossible(): bool
     {
+        $paymentId = Registry::getSession()->getVariable('paymentid') ?? '';
         return (
             Registry::getSession()->getVariable('sShipSet') &&
-            Constants::isAmazonPayment(Registry::getSession()->getVariable('paymentid'))
+            Constants::isAmazonPayment($paymentId)
         );
     }
 

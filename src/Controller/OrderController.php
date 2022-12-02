@@ -34,7 +34,7 @@ class OrderController extends OrderController_parent
     public function init()
     {
         /** @var User $user */
-        $user = $this->getUser();
+
         $session = Registry::getSession();
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
@@ -43,18 +43,24 @@ class OrderController extends OrderController_parent
             parent::init();
         }
 
-        if ($amazonService->isAmazonSessionActive()) {
-            $this->initAmazonPayExpress($amazonService, $user, $session);
+        $amazonServiceIsActive = $amazonService->isAmazonSessionActive();
+        if ($amazonServiceIsActive) {
+            $this->initAmazonPayExpress($amazonService, $session);
         }
 
         parent::init();
     }
 
-    protected function initAmazonPayExpress(\OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService, User $user, \OxidEsales\Eshop\Core\Session $session): void
+    protected function initAmazonPayExpress(\OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService, \OxidEsales\Eshop\Core\Session $session): void
     {
+        $user = $this->getUser();
+        $activeUser = false;
+        if ($user) {
+            $activeUser = $user->loadActiveUser();
+        }
         $amazonSession = $amazonService->getCheckoutSession();
         // Create guest user if not logged in
-        if (!$user->loadActiveUser()) {
+        if (!$activeUser) {
             $userComponent = oxNew(UserComponent::class);
             $userComponent->createGuestUser($amazonSession);
 
@@ -82,12 +88,14 @@ class OrderController extends OrderController_parent
     {
         $basket = $this->getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
+        $paymentId = $basket->getPaymentId() ?? '';
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
         // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
         // or Amazon Pay is excluded stop executing order
         if (
             (
-                Constants::isAmazonPayment($basket->getPaymentId()) &&
+                $isAmazonPayment &&
                 !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
             ) ||
             $exclude
@@ -95,7 +103,7 @@ class OrderController extends OrderController_parent
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return;
-        } elseif (Constants::isAmazonPayment($basket->getPaymentId())) {
+        } elseif ($isAmazonPayment) {
             // if payment is 'oxidamazon' call parent::execute to validate and finalize order
             // then try to complete order at Amazon Pay
             $ret = parent::execute();

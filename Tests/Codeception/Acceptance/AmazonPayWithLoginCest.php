@@ -17,6 +17,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @param AcceptanceTester $I
      * @return void
      * @group AmazonPayWithLoginPaymentTest
+     * @group a
      */
     public function checkPaymentFromBasketWorks(AcceptanceTester $I)
     {
@@ -25,6 +26,8 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_initializeTest();
         $this->_addProductToBasket();
         $this->_loginOxid();
+        $I->makeScreenshot("afterlogin.png");
+        $I->wait(5);
         $this->_openBasketDisplay();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();

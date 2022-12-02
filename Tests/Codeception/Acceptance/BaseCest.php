@@ -79,8 +79,13 @@ abstract class BaseCest
     protected function _loginOxid()
     {
         $homePage = $this->I->openShop();
+        $this->I->waitForDocumentReadyState();
+        $this->I->wait(5);
         $clientData = Fixtures::get('client');
+        $this->I->makeScreenshot('beforeLogin.png');
         $homePage->loginUser($clientData['username'], $clientData['password']);
+        $this->I->makeScreenshot('afterLogin.png');
+        $this->I->wait(5);
     }
 
     /**
@@ -150,6 +155,7 @@ abstract class BaseCest
     protected function _checkAccountExist()
     {
         $this->I->waitForDocumentReadyState();
+        $this->I->makeScreenshot('Account already exists');
         $this->I->waitForText(strip_tags(sprintf(
             Translator::translate('AMAZON_PAY_USEREXISTS'),
             Fixtures::get('amazonClientUsername'),

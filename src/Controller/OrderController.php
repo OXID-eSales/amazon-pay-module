@@ -46,9 +46,15 @@ class OrderController extends OrderController_parent
         $amazonServiceIsActive = $amazonService->isAmazonSessionActive();
         if ($amazonServiceIsActive) {
             $this->initAmazonPayExpress($amazonService, $session);
+        } else {
+            $this->initAmazonPay();
         }
 
         parent::init();
+    }
+
+    protected function initAmazonPay(){
+        $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
 
     protected function initAmazonPayExpress(\OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService, \OxidEsales\Eshop\Core\Session $session): void

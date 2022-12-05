@@ -348,6 +348,7 @@ class AmazonService
      * @return void
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @psalm-suppress UndefinedDocblockClass
      */
     public function createRefund($orderId, LoggerInterface $logger): void
     {
@@ -362,7 +363,7 @@ class AmazonService
                 'amount' => str_replace(
                     ',',
                     '.',
-                    Registry::getLang()->formatCurrency($order->getTotalOrderSum())
+                    Registry::getLang()->formatCurrency((float)$order->getTotalOrderSum())
                 ),
                 'currencyCode' => $order->getOrderCurrency()->name
             ],

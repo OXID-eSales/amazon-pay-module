@@ -19,7 +19,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  * Handles Amazon checkout sessions
  * @mixin \OxidEsales\Eshop\Application\Component\UserComponent
  */
-class UserComponent extends UserComponent_Parent
+class UserComponent extends UserComponent_parent
 {
     /**
      * @param array $amazonSession
@@ -110,12 +110,13 @@ class UserComponent extends UserComponent_Parent
      * "usr", "dynvalue", "paymentid"<br>
      * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
      * oxcmp_user::oUser, forces basket to recalculate.
+     * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        return parent::logout();
+        parent::logout();
     }
 
     /**

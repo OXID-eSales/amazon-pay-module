@@ -90,23 +90,19 @@ class Payload
     {
         $data = [];
 
-        if (!empty($this->checkoutReviewReturnUrl))
-        {
+        if (!empty($this->checkoutReviewReturnUrl)) {
             $data['webCheckoutDetails']['checkoutReviewReturnUrl'] = $this->checkoutReviewReturnUrl;
         }
 
-        if (!empty($this->checkoutResultReturnUrl))
-        {
+        if (!empty($this->checkoutResultReturnUrl)) {
             $data['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->checkoutResultReturnUrl;
         }
 
-        if (!empty($this->storeId))
-        {
+        if (!empty($this->storeId)) {
             $data['storeId'] = $this->storeId;
         }
 
-        if (!empty($this->scopes))
-        {
+        if (!empty($this->scopes)) {
             $data['scopes'] = $this->scopes;
         }
 

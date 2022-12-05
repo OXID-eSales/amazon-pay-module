@@ -1,5 +1,7 @@
 <?php
 
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
+
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance\BaseCest;

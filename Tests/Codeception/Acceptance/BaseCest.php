@@ -79,11 +79,19 @@ abstract class BaseCest
     protected function _loginOxid()
     {
         $homePage = $this->I->openShop();
+        $this->I->waitForDocumentReadyState();
+        $this->I->wait(5);
         $clientData = Fixtures::get('client');
+        $this->I->makeScreenshot('beforeLogin.png');
         $homePage->loginUser($clientData['username'], $clientData['password']);
+        $this->I->makeScreenshot('afterLogin.png');
+        $this->I->wait(5);
     }
 
-    protected function _loginOxidWithAmazonCredentials()
+    /**
+     * @throws \Exception
+     */
+    protected function _loginOxidWithAmazonCredentials(): void
     {
         $loginInput = "//input[@name='lgn_usr' and " .
             "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";

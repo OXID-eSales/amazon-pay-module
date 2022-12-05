@@ -30,7 +30,7 @@ class AcceptSSLCertificate extends Page
             return;
         }
 
-        $I->waitForElement($this->advancedButton);
+        $I->waitForElement($this->advancedButton,30);
         $I->click($this->advancedButton);
         $I->click($this->proceedLink);
     }

@@ -7,9 +7,11 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\User;
 
 class Payload
 {
@@ -286,5 +288,45 @@ class Payload
     {
         unset($data['merchantMetadata']);
         return $data;
+    }
+
+    /**
+     * @param User $user
+     * @return Payload
+     */
+    public function setAddressDetails(User $user): Payload
+    {
+        $addressLine1 = sprintf('%s %s',
+            $user->oxuser__oxstreet,
+            $user->oxuser__oxstreetnr,
+        );
+
+        $oCountry = oxNew(Country::class);
+        $oCountry->load($user->oxuser__oxcountryid);
+        $sCountryCode = $oCountry->oxcountry__oxisoalpha2->value;
+
+
+        // set mandatory standard fields
+        $this->addressDetails = [
+            'name' => $user->oxuser__oxfname . ' ' . $user->oxuser__oxlname,
+            'addressLine1' => $addressLine1,
+            'postalCode' => $user->oxuser__oxzip->value,
+            'city' => $user->oxuser__oxcity->value,
+            'countryCode' => $sCountryCode
+        ];
+
+        // check for additional fields
+
+        // check for phone number
+        $phoneNumber = null;
+        if (!empty($user->oxuser__oxfon->value)) { // phone number
+            $phoneNumber = $user->oxuser__oxfon->value;
+        } else if (!empty($user->oxuser__oxprivfon->value)) { // phone number (private)
+            $phoneNumber = $user->oxuser__oxprivfon->value;
+        } else if (!empty($user->oxuser__oxmobfon->value)) { // phone number (private)
+            $phoneNumber = $user->oxuser__oxmobfon->value;
+        }
+        $this->addressDetails['phoneNumber'] = $phoneNumber ?? '0'; // when no number was provided, Amazon accepts '0'
+        return $this;
     }
 }

@@ -12,6 +12,6 @@ declare(strict_types=1);
  */
 
 return [
-    'amazonClientUsername' => '<AmazonPay Client Username>',
-    'amazonClientPassword' => '<AmazonPay Client Password>',
+    'amazonClientUsername' => 'michael.walter+test@oxid-esales.com',
+    'amazonClientPassword' => 'mHsng9xC4GCsRbwN',
 ];

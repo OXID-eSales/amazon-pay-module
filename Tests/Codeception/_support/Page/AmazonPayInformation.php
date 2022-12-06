@@ -24,7 +24,7 @@ class AmazonPayInformation extends Page
         $I = $this->user;
 
         $I->waitForElement($this->continueToCheckout);
-        $I->waitForElementClickable($this->continueToCheckout);
+        $I->waitForElementClickable($this->continueToCheckout, 30);
         $I->click($this->continueToCheckout);
     }
 

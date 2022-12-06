@@ -136,7 +136,7 @@ abstract class BaseCest
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
-        $this->I->waitForElement($amazonpayDiv);
+        $this->I->waitForElement($amazonpayDiv, 30);
         $this->I->click($amazonpayDiv);
     }
 

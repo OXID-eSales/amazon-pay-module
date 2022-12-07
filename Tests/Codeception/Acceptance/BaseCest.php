@@ -82,9 +82,7 @@ abstract class BaseCest
         $this->I->waitForDocumentReadyState();
         $this->I->wait(5);
         $clientData = Fixtures::get('client');
-        $this->I->makeScreenshot('beforeLogin.png');
         $homePage->loginUser($clientData['username'], $clientData['password']);
-        $this->I->makeScreenshot('afterLogin.png');
         $this->I->wait(5);
     }
 
@@ -136,7 +134,6 @@ abstract class BaseCest
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
-        $this->I->makeScreenshot();
         $this->I->waitForElement($amazonpayDiv, 30);
         $this->I->click($amazonpayDiv);
     }

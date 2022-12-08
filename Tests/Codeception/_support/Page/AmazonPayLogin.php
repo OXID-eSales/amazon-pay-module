@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page;
 
 use Codeception\Util\Fixtures;
-use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Page\Page;
 
 class AmazonPayLogin extends Page
@@ -31,8 +30,5 @@ class AmazonPayLogin extends Page
         $I->fillField($this->amazonpayEmailInput, Fixtures::get('amazonClientUsername'));
         $I->fillField($this->amazonpayPasswordInput, Fixtures::get('amazonClientPassword'));
         $I->click($this->signInSubmitInput);
-
-        $I->see(Translator::translate('SHIPPING_ADDRESS'));
-        $I->see(Translator::translate('PAYMENT_METHOD'));
     }
 }

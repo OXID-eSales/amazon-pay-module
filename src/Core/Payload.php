@@ -86,6 +86,11 @@ class Payload
     private $scopes = [];
 
     /**
+     * @var array
+     */
+    private array $addressDetails;
+
+    /**
      * @return array
      */
     public function getData(): array
@@ -113,7 +118,7 @@ class Payload
             !empty($this->paymentIntent) ||
             !empty($this->paymentDetailsChargeAmount)
         ) {
-            $data['paymentDetails'] = [];
+            #$data['paymentDetails'] = [];
             if (is_bool($this->canHandlePendingAuthorization)) {
                 $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
             }
@@ -145,6 +150,11 @@ class Payload
             $data['chargeAmount'] = [];
             $data['chargeAmount']['amount'] = $this->checkoutChargeAmount;
             $data['chargeAmount']['currencyCode'] = $this->currencyCode;
+        }
+
+        if (!empty($this->addressDetails)) {
+            $data['addressDetails'] = $this->addressDetails;
+            $data['webCheckoutDetails']['checkoutMode'] = 'ProcessOrder';
         }
 
         return $data;
@@ -245,8 +255,17 @@ class Payload
      */
     public function setCheckoutResultReturnUrl(): void
     {
-        $this->checkoutResultReturnUrl =
-            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutResultUrl();
+        $this->checkoutResultReturnUrl = Registry::getConfig()->getCurrentShopUrl(false)
+            . 'index.php?cl=order&fnc=execute&action=result&stoken='
+            . Registry::getSession()->getSessionChallengeToken();
+    }
+
+    /**
+     * @return void
+     */
+    public function setCheckoutResultReturnUrlExpress(): void
+    {
+        $this->checkoutResultReturnUrl = OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutResultUrl();
     }
 
     /**
@@ -254,8 +273,7 @@ class Payload
      */
     public function setStoreId(): void
     {
-        $this->storeId =
-            OxidServiceProvider::getAmazonClient()->getModuleConfig()->getStoreId();
+        $this->storeId = OxidServiceProvider::getAmazonClient()->getModuleConfig()->getStoreId();
     }
 
     /**
@@ -274,7 +292,7 @@ class Payload
     protected function addMerchantMetaData(array $data): array
     {
         $data['merchantMetadata'] = [];
-        $data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
+        //$data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
         $data['merchantMetadata']['merchantStoreName'] = $this->merchantStoreName;
         $data['merchantMetadata']['noteToBuyer'] = $this->noteToBuyer;
         return $data;
@@ -296,7 +314,8 @@ class Payload
      */
     public function setAddressDetails(User $user): Payload
     {
-        $addressLine1 = sprintf('%s %s',
+        $addressLine1 = sprintf(
+            '%s %s',
             $user->oxuser__oxstreet,
             $user->oxuser__oxstreetnr,
         );
@@ -308,7 +327,7 @@ class Payload
 
         // set mandatory standard fields
         $this->addressDetails = [
-            'name' => $user->oxuser__oxfname . ' ' . $user->oxuser__oxlname,
+            'name' => $user->oxuser__oxfname->value . ' ' . $user->oxuser__oxlname->value,
             'addressLine1' => $addressLine1,
             'postalCode' => $user->oxuser__oxzip->value,
             'city' => $user->oxuser__oxcity->value,
@@ -316,16 +335,16 @@ class Payload
         ];
 
         // check for additional fields
-
         // check for phone number
         $phoneNumber = null;
         if (!empty($user->oxuser__oxfon->value)) { // phone number
             $phoneNumber = $user->oxuser__oxfon->value;
-        } else if (!empty($user->oxuser__oxprivfon->value)) { // phone number (private)
+        } elseif (!empty($user->oxuser__oxprivfon->value)) { // phone number (private)
             $phoneNumber = $user->oxuser__oxprivfon->value;
-        } else if (!empty($user->oxuser__oxmobfon->value)) { // phone number (private)
+        } elseif (!empty($user->oxuser__oxmobfon->value)) { // phone number (private)
             $phoneNumber = $user->oxuser__oxmobfon->value;
         }
+        /** TODO Change default number to  0 */
         $this->addressDetails['phoneNumber'] = $phoneNumber ?? '0'; // when no number was provided, Amazon accepts '0'
         return $this;
     }

@@ -18,7 +18,7 @@ class OrderList extends OrderList_parent
     /**
      * @return void
      */
-    public function cancelOrder()
+    public function cancelOrder(): void
     {
         OxidServiceProvider::getAmazonService()->processCancel($this->getEditObjectId());
         parent::cancelOrder();

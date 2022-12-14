@@ -1,9 +1,9 @@
 [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
-<div class="amazonpay-button [{$buttonclass}]" id="[{$buttonId}]"></div>
+[{assign var="aPayload" value=$oViewConf->getPayloadExpress()}]
+<div class="amazonpay-button [{$buttonclass}] express" id="[{$buttonId}]"></div>
 
 [{if $oxArticlesId}][{$oViewConf->setArticlesId($oxArticlesId)}][{/if}]
-
 [{capture name="amazonpay_script"}]
     amazon.Pay.renderButton('#[{$buttonId}]', {
         merchantId: '[{$amazonConfig->getMerchantId()}]',
@@ -13,10 +13,11 @@
             productType: 'PayAndShip',
             placement: 'Cart',
             createCheckoutSessionConfig: {
-            payloadJSON: '[{$oViewConf->getPayloadExpress()}]',
-            signature: '[{$oViewConf->getSignature()}]',
-            publicKeyId: '[{$amazonConfig->getPublicKeyId()}]'
+                payloadJSON: '[{$aPayload}]',
+                signature: '[{$oViewConf->signature}]',
+                publicKeyId: '[{$amazonConfig->getPublicKeyId()}]'
         }
     });
+    console.log([{$aPayload}]);
     [{/capture}]
 [{oxscript add=$smarty.capture.amazonpay_script}]

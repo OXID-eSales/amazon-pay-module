@@ -113,10 +113,12 @@ class AmazonService
      */
     public function isAmazonSessionActive(): bool
     {
-        if (!$this->getCheckoutSessionId()) {
+        $checkoutSessionId = $this->getCheckoutSessionId();
+        if (!$checkoutSessionId) {
             $session = Registry::getSession();
             $paymentId = $session->getVariable('paymentid') ?? '';
-            if (Constants::isAmazonPayment($paymentId)) {
+            $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+            if ($isAmazonPayment) {
                 self::unsetPaymentMethod();
             }
             return false;
@@ -250,8 +252,8 @@ class AmazonService
      * Processing Amazon Pay
      *
      * @param $amazonSessionId
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
-     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param Basket $oBasket Basket object
+     * @param LoggerInterface $logger Logger
      * @param bool $bl2Step
      *
      */
@@ -323,8 +325,8 @@ class AmazonService
      * Processing Amazon Pay Auth an Capt
      *
      * @param $amazonSessionId
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
-     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param Basket $oBasket Basket object
+     * @param LoggerInterface $logger Logger
      *
      */
     public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
@@ -336,8 +338,8 @@ class AmazonService
      * Processing Amazon Pay Auth
      *
      * @param $amazonSessionId
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
-     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param Basket $oBasket Basket object
+     * @param LoggerInterface $logger Logger
      *
      */
     public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void

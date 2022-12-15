@@ -69,7 +69,7 @@ abstract class BaseCest
 
     protected function _openDetailPage()
     {
-        $this->I->waitForText(Translator::translate('MORE_INFO'));
+        $this->I->waitForText(Translator::translate('MORE_INFO'), 60);
         $this->I->click(Translator::translate('MORE_INFO'));
     }
 
@@ -101,13 +101,13 @@ abstract class BaseCest
         $continueButton = "//button[@id='userNextStepTop']";
 
         $this->I->waitForPageLoad();
-        $this->I->waitForElement($loginInput);
+        $this->I->waitForElement($loginInput, 60);
         $this->I->fillField($loginInput, Fixtures::get('amazonClientUsername'));
         $this->I->fillField($passwordInput, Fixtures::get('amazonClientPassword'));
         $this->I->click($loginButton);
 
         $this->I->waitForPageLoad();
-        $this->I->waitForElement($continueButton);
+        $this->I->waitForElement($continueButton, 60);
         $this->I->clickWithLeftButton($continueButton);
     }
 
@@ -136,7 +136,7 @@ abstract class BaseCest
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
-        $this->I->waitForElement($amazonpayDiv);
+        $this->I->waitForElement($amazonpayDiv, 60);
         $this->I->click($amazonpayDiv);
     }
 
@@ -151,6 +151,7 @@ abstract class BaseCest
 
     /**
      * @return void
+     * @throws \Exception
      */
     protected function _checkAccountExist()
     {
@@ -160,7 +161,7 @@ abstract class BaseCest
             Translator::translate('AMAZON_PAY_USEREXISTS'),
             Fixtures::get('amazonClientUsername'),
             Fixtures::get('amazonClientUsername')
-        )));
+        )), 60);
     }
 
     /**
@@ -186,7 +187,7 @@ abstract class BaseCest
      */
     protected function _submitOrder()
     {
-        $this->I->waitForText(Translator::translate('SUBMIT_ORDER'));
+        $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
     }
 
@@ -202,6 +203,9 @@ abstract class BaseCest
         return $orderNumber;
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function _loginAdmin()
     {
         $userAccountLoginName = '#usr';
@@ -219,7 +223,7 @@ abstract class BaseCest
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
-        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
+        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
     protected function _openOrder(string $orderNumber): void

@@ -116,10 +116,13 @@ class Order extends Order_parent
 
     public function updateAmazonPayOrderStatus(string $amazonPayStatus, $data = null): void
     {
+        if ($data['chargeId']) {
+            $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
+        }
+
         switch ($amazonPayStatus) {
             case "AMZ_PAYMENT_PENDING":
                 $this->oxorder__oxtransstatus = new Field('NOT_FINISHED', Field::T_RAW);
-                $this->oxorder__oxtransid = new Field('AMZ_PAYMENT_PENDING', Field::T_RAW);
                 $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
                 $this->oxorder__osc_amazon_remark = new Field(
                     'AmazonPay Authorisation pending',
@@ -130,7 +133,6 @@ class Order extends Order_parent
 
             case "AMZ_AUTH_STILL_PENDING":
                 if (is_array($data)) {
-                    $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay Authorisation still pending: ' . $data['chargeAmount'],
                         Field::T_RAW
@@ -142,9 +144,6 @@ class Order extends Order_parent
             case "AMZ_AUTH_AND_CAPT_FAILED":
                 if (is_array($data)) {
                     $response = PhpHelper::jsonToArray($data['result']['response']);
-                    if ($data['chargeId']) {
-                        $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
-                    }
                     $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay ERROR: ' . $response['reasonCode'],
                         Field::T_RAW
@@ -163,7 +162,6 @@ class Order extends Order_parent
                 $this->oxorder__oxpaid = new Field(\date('Y-m-d H:i:s'), Field::T_RAW);
                 $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
                 if (is_array($data)) {
-                    $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay Captured: ' . $data['chargeAmount'],
                         Field::T_RAW
@@ -174,7 +172,6 @@ class Order extends Order_parent
 
             case "AMZ_2STEP_AUTH_OK":
                 if (is_array($data)) {
-                    $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
                     $this->oxorder__osc_amazon_remark = new Field(
                         'AmazonPay Authorized (not Captured):' . $data['chargeAmount'],
                         Field::T_RAW

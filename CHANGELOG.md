@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.1] - Release 
+
+* add process of refund payment
+* update template to use Amazon Pay Express
+* extends functionality of Payload objects
+* add methods `ViewConfig::setArticlesId(string)`, `ViewConfig::getPayloadExpress()`, `ViewConfig::getSignature()`
+
 ## [2.0.0] - Release with new Namespace
 
 * we change the namespace from OxidProfessional (oxps) to OxidSolutionCatalysts (osc)

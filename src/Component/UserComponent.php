@@ -111,9 +111,9 @@ class UserComponent extends UserComponent_parent
      * "usr", "dynvalue", "paymentid"<br>
      * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
      * oxcmp_user::oUser, forces basket to recalculate.
-     * @return null
+     * @return void
      */
-    public function logout()
+    public function logout(): void
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();

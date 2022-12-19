@@ -23,8 +23,9 @@ class AmazonPayInformation extends Page
     {
         $I = $this->user;
 
-        $I->waitForElement($this->continueToCheckout, 60);
-        $I->makeScreenshot(time() . 'continueToCheckout');
+        $I->waitForDocumentReadyState();
+        $I->waitForElement($this->continueToCheckout);
+        $I->waitForElementClickable($this->continueToCheckout, 30);
         $I->click($this->continueToCheckout);
     }
 
@@ -32,7 +33,7 @@ class AmazonPayInformation extends Page
     {
         $I = $this->user;
 
-        $I->waitForElement($this->cancelCheckout, 60);
+        $I->waitForElement($this->cancelCheckout, 30);
         $I->click($this->cancelCheckout);
     }
 }

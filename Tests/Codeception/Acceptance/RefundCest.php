@@ -2,6 +2,8 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
+
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 

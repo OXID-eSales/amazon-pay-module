@@ -84,7 +84,6 @@ abstract class BaseCest
         $clientData = Fixtures::get('client');
         $this->I->makeScreenshot(time() . 'beforeLogin.png');
         $homePage->loginUser($clientData['username'], $clientData['password']);
-        $this->I->makeScreenshot(time() . 'afterLogin.png');
         $this->I->wait(5);
     }
 

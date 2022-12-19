@@ -37,25 +37,97 @@ class ConfigControllerTest extends UnitTestCase
     public function configValueProvider(): array
     {
         return [
-            [['blAmazonPaySandboxMode' => 'sandbox'], true, 'getterMethod' => 'isSandbox'],
-            [['blAmazonPaySandboxMode' => 'prod'], false, 'getterMethod' => 'isSandbox'],
-            [['blAmazonPaySandboxMode' => 'undefined'], false, 'getterMethod' => 'isSandbox'],
-            [['sAmazonPayPrivKey' => 'key'], 'key', 'getterMethod' => 'getPrivateKey'],
-            [['sAmazonPayPubKeyId' => 'key id '], 'key id', 'getterMethod' => 'getPublicKeyId'],
-            [['sAmazonPayMerchantId' => 'merchant id'], 'merchant id', 'getterMethod' => 'getMerchantId'],
-            [['sAmazonPayStoreId' => 'store id'], 'store id', 'getterMethod' => 'getStoreId'],
-            [['blAmazonPayExpressPDP' => 'on'], true, 'getterMethod' => 'displayExpressInPDP'],
-            [['blAmazonPayExpressPDP' => 1], true, 'getterMethod' => 'displayExpressInPDP'],
-            [['blAmazonPayExpressPDP' => ''], false, 'getterMethod' => 'displayExpressInPDP'],
-            [['blAmazonPayExpressPDP' => null], false, 'getterMethod' => 'displayExpressInPDP'],
-            [['blAmazonPayUseExclusion' => 'on'], true, 'getterMethod' => 'useExclusion'],
-            [['blAmazonPayUseExclusion' => 1], true, 'getterMethod' => 'useExclusion'],
-            [['blAmazonPayUseExclusion' => ''], false, 'getterMethod' => 'useExclusion'],
-            [['blAmazonPayUseExclusion' => null], false, 'getterMethod' => 'useExclusion'],
-            [['blAmazonPayExpressMinicartAndModal' => 'on'], true, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
-            [['blAmazonPayExpressMinicartAndModal' => 1], true, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
-            [['blAmazonPayExpressMinicartAndModal' => ''], false, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
-            [['blAmazonPayExpressMinicartAndModal' => null], false, 'getterMethod' => 'displayExpressInMiniCartAndModal'],
+            [
+                ['blAmazonPaySandboxMode' => 'sandbox'],
+                true, 'getterMethod' => 'isSandbox'],
+            [
+                ['blAmazonPaySandboxMode' => 'prod'],
+                false, 'getterMethod' => 'isSandbox'],
+            [
+                ['blAmazonPaySandboxMode' => 'undefined'],
+                false,
+                'getterMethod' => 'isSandbox'
+            ],
+            [
+                ['sAmazonPayPrivKey' => 'key'],
+                'key',
+                'getterMethod' => 'getPrivateKey'
+            ],
+            [
+                ['sAmazonPayPubKeyId' => 'key id '],
+                'key id',
+                'getterMethod' => 'getPublicKeyId'
+            ],
+            [
+                ['sAmazonPayMerchantId' => 'merchant id'],
+                'merchant id',
+                'getterMethod' => 'getMerchantId'
+            ],
+            [
+                ['sAmazonPayStoreId' => 'store id'],
+                'store id',
+                'getterMethod' => 'getStoreId'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => 'on'],
+                true,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => 1],
+                true,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => ''],
+                false,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => null],
+                false,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayUseExclusion' => 'on'],
+                true,
+                'getterMethod' => 'useExclusion'
+            ],
+            [
+                ['blAmazonPayUseExclusion' => 1],
+                true,
+                'getterMethod' => 'useExclusion'
+            ],
+            [
+                ['blAmazonPayUseExclusion' => ''],
+                false,
+                'getterMethod' => 'useExclusion'
+            ],
+            [
+                ['blAmazonPayUseExclusion' => null],
+                false,
+                'getterMethod' => 'useExclusion'
+            ],
+            [
+                ['blAmazonPayExpressMinicartAndModal' => 'on'],
+                true,
+                'getterMethod' => 'displayExpressInMiniCartAndModal'
+            ],
+            [
+                ['blAmazonPayExpressMinicartAndModal' => 1],
+                true,
+                'getterMethod' => 'displayExpressInMiniCartAndModal'
+            ],
+            [
+                ['blAmazonPayExpressMinicartAndModal' => ''],
+                false,
+                'getterMethod' => 'displayExpressInMiniCartAndModal'
+            ],
+            [
+                ['blAmazonPayExpressMinicartAndModal' => null],
+                false,
+                'getterMethod' => 'displayExpressInMiniCartAndModal'
+            ],
         ];
     }
 

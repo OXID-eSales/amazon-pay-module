@@ -26,7 +26,7 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_initializeTest();
         $this->_addProductToBasket();
         $this->_loginOxid();
-        $I->makeScreenshot(time().'afterlogin.png');
+        $I->makeScreenshot(time() . 'afterlogin.png');
         $I->wait(5);
         $this->_openBasketDisplay();
         $this->_openAmazonPayPage();

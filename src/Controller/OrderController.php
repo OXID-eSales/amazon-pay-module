@@ -57,8 +57,10 @@ class OrderController extends OrderController_parent
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
 
-    protected function initAmazonPayExpress(\OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService, \OxidEsales\Eshop\Core\Session $session): void
-    {
+    protected function initAmazonPayExpress(
+        \OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService,
+        \OxidEsales\Eshop\Core\Session $session
+    ): void {
         $user = $this->getUser();
         $activeUser = false;
         if ($user) {

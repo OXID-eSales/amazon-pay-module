@@ -25,6 +25,7 @@
     <!-- some of the files can have longer lines, at least temporary -->
     <rule ref="Generic.Files.LineLength">
         <exclude-pattern>../translations</exclude-pattern>
+        <exclude-pattern>../src/Core/Events.php</exclude-pattern>
     </rule>
 
     <!-- code coverage ignore SideEffects -->

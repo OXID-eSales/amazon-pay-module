@@ -1,6 +1,5 @@
 [{assign var="oPayment" value=$oView->getPayment()}]
 [{assign var="paymentId" value=$oPayment->getId()}]
-paymentid top level: [{$paymentId}]<br />
 [{if
     (
         $oViewConf->isAmazonActive() &&

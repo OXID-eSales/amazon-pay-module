@@ -174,6 +174,19 @@ abstract class BaseCest
 
     /**
      * @return void
+     * @throws \Exception
+     */
+    protected function _changePaymentMethod(): void
+    {
+        $amazonPayment = '#payment_oxidamazon';
+        $paymentNextStep = '#paymentNextStepBottom';
+        $this->I->waitForElement($amazonPayment,60);
+        $this->I->click($amazonPayment);
+        $this->I->click($paymentNextStep);
+    }
+
+    /**
+     * @return void
      */
     protected function _cancelPayment()
     {

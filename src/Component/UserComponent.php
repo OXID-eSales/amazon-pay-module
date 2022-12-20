@@ -10,6 +10,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Component;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\EshopCommunity\Application\Controller\RegisterController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
@@ -29,7 +30,7 @@ class UserComponent extends UserComponent_parent
         $session = Registry::getSession();
         $config = new Config();
 
-        $this->setParent(oxNew('Register'));
+        $this->setParent(oxNew(RegisterController::class));
 
         $this->setRequestParameter('userLoginName', $amazonSession['response']['buyer']['name']);
         $this->setRequestParameter('lgn_usr', $amazonSession['response']['buyer']['email']);
@@ -81,13 +82,13 @@ class UserComponent extends UserComponent_parent
                     $basket->getPrice()->getBruttoPrice(),
                     $user
                 );
-                if (array_key_exists(Constants::PAYMENT_ID, $paymentList)) {
+                if (array_key_exists(Constants::PAYMENT_ID_EXPRESS, $paymentList)) {
                     $possibleDeliverySets[] = $deliverySet->getId();
                 }
             }
 
             if (count($possibleDeliverySets)) {
-                $basket->setPayment(Constants::PAYMENT_ID);
+                $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
                 $basket->setShipping(reset($possibleDeliverySets));
             }
         } else {

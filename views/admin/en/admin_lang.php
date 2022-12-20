@@ -1,10 +1,11 @@
 <?php
+
 /**
  * Copyright © OXID eSales AG. All rights reserved.
  * See LICENSE file for license details.
  */
-$sLangName = 'English';
 
+$sLangName = 'English';
 $aLang = [
     'charset'                          => 'UTF-8',
     'amazonpay'                        => 'Amazon Pay',
@@ -36,8 +37,8 @@ $aLang = [
     'HELP_OSC_AMAZONPAY_IPN'           => 'IPN messages are sent by Amazon Pay without any action required on your part and
          can be used to update your internal order management system and process orders.<br>If your server/shop configuration consists of several URLs,
          so exchange the suggested domain of the above URL for your suitable domain and make sure that the new URL is freely accessible through Amazon.',
-    'OSC_AMAZONPAY_PLACEMENT'          => 'Placement',
-    'HELP_OSC_AMAZONPAY_PLACEMENT'     => 'Define where to show the Amazon Pay button in your online store.',
+    'OSC_AMAZONPAYEXPRESS_PLACEMENT'          => 'Placement of Amazon Express',
+    'HELP_OSC_AMAZONPAYEXPRESS_PLACEMENT'     => 'Define where to show the Amazon Express Pay button in your online store.',
     'OSC_AMAZONPAY_PDP'                => 'Product Detail Page',
     'OSC_AMAZONPAY_MINICART_AND_MODAL' => 'Basket + Basket-Modal',
     'OSC_AMAZONPAY_PERFORMANCE'        => 'Performance',

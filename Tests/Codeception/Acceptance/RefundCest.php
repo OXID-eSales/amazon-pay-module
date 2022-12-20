@@ -1,12 +1,10 @@
 <?php
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
-use OxidSolutionCatalysts\AmazonPay\Core\Logger;
-use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance\BaseCest;
-use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 use OxidEsales\Codeception\Module\Translation\Translator;
+use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
 final class RefundCest extends BaseCest
 {
@@ -38,7 +36,7 @@ final class RefundCest extends BaseCest
         $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ': ' . $orderStatus);
         $I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ': ' . $orderRemark);
 
-        $I->waitForElement("//input[@name='refundButton']");
+        $I->waitForElement("//input[@name='refundButton']", 60);
         $I->click("//input[@name='refundButton']");
 
         $orderStatus = $I->grabFromDatabase('oxorder', 'oxtransstatus', ['OXORDERNR' => $orderNumber]);

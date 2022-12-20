@@ -18,6 +18,11 @@ class Constants
     public const PAYMENT_ID = 'oxidamazon';
 
     /**
+     * @var string Payment ID
+     */
+    public const PAYMENT_ID_EXPRESS = 'oxidamazonexpress';
+
+    /**
      * @var string Module ID
      */
     public const MODULE_ID = 'osc_amazonpay';
@@ -64,17 +69,39 @@ class Constants
         'ProcessingFailure',
     ];
 
+    public static function isAmazonPayment(string $id): bool
+    {
+        return !empty(self::PAYMENT_DESCRIPTIONS[$id]);
+    }
+
+    public static function getPaymentIds(): array
+    {
+        return array_keys(self::PAYMENT_DESCRIPTIONS);
+    }
+
     /**
      * @var array default Payment-Descriptions
      */
     public const PAYMENT_DESCRIPTIONS = [
-        'en' => [
-            'title' => 'AmazonPay',
-            'desc'  => '<div>AmazonPay</div>'
+        self::PAYMENT_ID => [
+            'en' => [
+                'title' => 'AmazonPay',
+                'desc' => '<div>AmazonPay</div>'
+            ],
+            'de' => [
+                'title' => 'AmazonPay',
+                'desc' => '<div>AmazonPay</div>'
+            ]
         ],
-        'de' => [
-            'title' => 'AmazonPay',
-            'desc'  => '<div>AmazonPay</div>'
-        ]
+        self::PAYMENT_ID_EXPRESS => [
+            'en' => [
+                'title' => 'AmazonPay Express',
+                'desc' => '<div>AmazonPay Express</div>'
+            ],
+            'de' => [
+                'title' => 'AmazonPay Express',
+                'desc' => '<div>AmazonPay Express</div>'
+            ]
+        ],
     ];
 }

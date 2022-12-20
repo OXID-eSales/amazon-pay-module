@@ -69,7 +69,7 @@ abstract class BaseCest
 
     protected function _openDetailPage()
     {
-        $this->I->waitForText(Translator::translate('MORE_INFO'));
+        $this->I->waitForText(Translator::translate('MORE_INFO'), 60);
         $this->I->click(Translator::translate('MORE_INFO'));
     }
 
@@ -82,6 +82,7 @@ abstract class BaseCest
         $this->I->waitForDocumentReadyState();
         $this->I->wait(5);
         $clientData = Fixtures::get('client');
+        $this->I->makeScreenshot(time() . 'beforeLogin.png');
         $homePage->loginUser($clientData['username'], $clientData['password']);
         $this->I->wait(5);
     }
@@ -99,13 +100,13 @@ abstract class BaseCest
         $continueButton = "//button[@id='userNextStepTop']";
 
         $this->I->waitForPageLoad();
-        $this->I->waitForElement($loginInput);
+        $this->I->waitForElement($loginInput, 60);
         $this->I->fillField($loginInput, Fixtures::get('amazonClientUsername'));
         $this->I->fillField($passwordInput, Fixtures::get('amazonClientPassword'));
         $this->I->click($loginButton);
 
         $this->I->waitForPageLoad();
-        $this->I->waitForElement($continueButton);
+        $this->I->waitForElement($continueButton, 60);
         $this->I->clickWithLeftButton($continueButton);
     }
 
@@ -134,7 +135,7 @@ abstract class BaseCest
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
-        $this->I->waitForElement($amazonpayDiv, 30);
+        $this->I->waitForElement($amazonpayDiv, 60);
         $this->I->click($amazonpayDiv);
     }
 
@@ -149,15 +150,17 @@ abstract class BaseCest
 
     /**
      * @return void
+     * @throws \Exception
      */
     protected function _checkAccountExist()
     {
         $this->I->waitForDocumentReadyState();
+        $this->I->makeScreenshot(time() . 'Account already exists');
         $this->I->waitForText(strip_tags(sprintf(
             Translator::translate('AMAZON_PAY_USEREXISTS'),
             Fixtures::get('amazonClientUsername'),
             Fixtures::get('amazonClientUsername')
-        )));
+        )), 60);
     }
 
     /**
@@ -167,6 +170,19 @@ abstract class BaseCest
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->submitPayment();
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    protected function _changePaymentMethod(): void
+    {
+        $amazonPayment = '#payment_oxidamazon';
+        $paymentNextStep = '#paymentNextStepBottom';
+        $this->I->waitForElement($amazonPayment,60);
+        $this->I->click($amazonPayment);
+        $this->I->click($paymentNextStep);
     }
 
     /**
@@ -183,7 +199,7 @@ abstract class BaseCest
      */
     protected function _submitOrder()
     {
-        $this->I->waitForText(Translator::translate('SUBMIT_ORDER'));
+        $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
     }
 
@@ -199,6 +215,9 @@ abstract class BaseCest
         return $orderNumber;
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function _loginAdmin()
     {
         $userAccountLoginName = '#usr';
@@ -212,16 +231,17 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
         $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
         $this->I->click($userAccountLoginButton);
-        $this->I->waitForDocumentReadyState();
+        $this->I->wait(5);
 
+        $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
-        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'));
+        $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
     protected function _openOrder(string $orderNumber): void
     {
         $this->_loginAdmin();
-        $this->I->wait(1);
+        $this->I->wait(15);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");

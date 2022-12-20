@@ -15,7 +15,10 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class OrderList extends OrderList_parent
 {
-    public function cancelOrder()
+    /**
+     * @return void
+     */
+    public function cancelOrder(): void
     {
         OxidServiceProvider::getAmazonService()->processCancel($this->getEditObjectId());
         parent::cancelOrder();

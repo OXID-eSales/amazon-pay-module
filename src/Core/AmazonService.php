@@ -11,6 +11,8 @@ use Exception;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Registry;
@@ -111,9 +113,12 @@ class AmazonService
      */
     public function isAmazonSessionActive(): bool
     {
-        if (!$this->getCheckoutSessionId()) {
+        $checkoutSessionId = $this->getCheckoutSessionId();
+        if (!$checkoutSessionId) {
             $session = Registry::getSession();
-            if ($session->getVariable('paymentid') === Constants::PAYMENT_ID) {
+            $paymentId = $session->getVariable('paymentid') ?? '';
+            $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+            if ($isAmazonPayment) {
                 self::unsetPaymentMethod();
             }
             return false;
@@ -247,8 +252,8 @@ class AmazonService
      * Processing Amazon Pay
      *
      * @param $amazonSessionId
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
-     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param Basket $oBasket Basket object
+     * @param LoggerInterface $logger Logger
      * @param bool $bl2Step
      *
      */
@@ -320,8 +325,8 @@ class AmazonService
      * Processing Amazon Pay Auth an Capt
      *
      * @param $amazonSessionId
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
-     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param Basket $oBasket Basket object
+     * @param LoggerInterface $logger Logger
      *
      */
     public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
@@ -333,8 +338,8 @@ class AmazonService
      * Processing Amazon Pay Auth
      *
      * @param $amazonSessionId
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
-     * @param \Psr\Log\LoggerInterface $logger Logger
+     * @param Basket $oBasket Basket object
+     * @param LoggerInterface $logger Logger
      *
      */
     public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
@@ -343,14 +348,14 @@ class AmazonService
     }
 
     /**
-     * @param $orderId
+     * @param string $orderId
      * @param LoggerInterface $logger
      * @return void
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund($orderId, LoggerInterface $logger): void
+    public function createRefund(string $orderId, LoggerInterface $logger): void
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
@@ -365,6 +370,7 @@ class AmazonService
                     '.',
                     Registry::getLang()->formatCurrency((float)$order->getTotalOrderSum())
                 ),
+
                 'currencyCode' => $order->getOrderCurrency()->name
             ],
             'softDescriptor' => 'AMZ*OXID'
@@ -605,7 +611,7 @@ class AmazonService
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function processCancel($orderId): void
+    public function processCancel(string $orderId): void
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);

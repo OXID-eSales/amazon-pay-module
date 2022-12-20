@@ -127,12 +127,12 @@ class ConfigController extends AdminController
             $conf['amazonPayCapType'] = '1';
         }
 
-        if (!isset($conf['blAmazonPayPDP'])) {
-            $conf['blAmazonPayPDP'] = 0;
+        if (!isset($conf['blAmazonPayExpressPDP'])) {
+            $conf['blAmazonPayExpressPDP'] = 0;
         }
 
-        if (!isset($conf['blAmazonPayMinicartAndModal'])) {
-            $conf['blAmazonPayMinicartAndModal'] = 0;
+        if (!isset($conf['blAmazonPayExpressMinicartAndModal'])) {
+            $conf['blAmazonPayExpressMinicartAndModal'] = 0;
         }
 
         return $conf;

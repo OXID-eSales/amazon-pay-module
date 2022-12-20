@@ -7,19 +7,19 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
-use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Application\Model\Country;
-use OxidEsales\Eshop\Application\Model\Order;
-use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Application\Model\PaymentList;
-use OxidEsales\Eshop\Application\Model\DeliverySetList;
-use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Component\UserComponent;
+use OxidEsales\Eshop\Application\Model\DeliveryList;
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\PaymentList;
+use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Registry;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
-use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -34,65 +34,102 @@ class OrderController extends OrderController_parent
     public function init()
     {
         /** @var User $user */
-        $user = $this->getUser();
+
         $session = Registry::getSession();
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
 
-        if (
-            !$exclude &&
-            $amazonService->isAmazonSessionActive()
-        ) {
-            $amazonSession = $amazonService->getCheckoutSession();
-            // Create guest user if not logged in
-            if (!$user) {
-                $userComponent = oxNew(UserComponent::class);
-                $userComponent->createGuestUser($amazonSession);
+        if ($exclude) {
+            parent::init();
+        }
 
-                $this->setAmazonPayAsPaymentMethod();
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
-            } else {
-                // if Amazon provides a shipping address use it
-                if ($amazonSession['response']['shippingAddress']) {
-                    $deliveryAddress = Address::mapAddressToDb(
-                        $amazonSession['response']['shippingAddress'],
-                        'oxaddress__'
-                    );
-                    $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
-                    $this->setAmazonPayAsPaymentMethod();
-                } else {
-                    // if amazon does not provide a shipping address and we already have an oxid user,
-                    // use oxid-user-data
-                    $this->setAmazonPayAsPaymentMethod();
-                    $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
-                }
-            }
+        $amazonServiceIsActive = $amazonService->isAmazonSessionActive();
+        if ($amazonServiceIsActive) {
+            $this->initAmazonPayExpress($amazonService, $session);
+        } else {
+            $this->initAmazonPay();
         }
         parent::init();
+    }
+
+    protected function initAmazonPay()
+    {
+        $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
+    }
+
+    protected function initAmazonPayExpress(
+        \OxidSolutionCatalysts\AmazonPay\Core\AmazonService $amazonService,
+        \OxidEsales\Eshop\Core\Session $session
+    ): void {
+        $user = $this->getUser();
+        $activeUser = false;
+        if ($user) {
+            $activeUser = $user->loadActiveUser();
+        }
+        $amazonSession = $amazonService->getCheckoutSession();
+        // Create guest user if not logged in
+        if (!$activeUser) {
+            $userComponent = oxNew(UserComponent::class);
+            $userComponent->createGuestUser($amazonSession);
+
+            $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID_EXPRESS);
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
+        } else {
+            // if Amazon provides a shipping address use it
+            if ($amazonSession['response']['shippingAddress']) {
+                $deliveryAddress = Address::mapAddressToDb(
+                    $amazonSession['response']['shippingAddress'],
+                    'oxaddress__'
+                );
+                $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
+                $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID_EXPRESS);
+            } else {
+                // if amazon does not provide a shipping address, and we already have an oxid user,
+                // use oxid-user-data
+                $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID_EXPRESS);
+                $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
+            }
+        }
     }
 
     public function execute()
     {
         $basket = $this->getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
+        $paymentId = $basket->getPaymentId() ?? '';
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
+        $amazonSessionId = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+        if (!empty($amazonSessionId)) {
+            OxidServiceProvider::getAmazonService()->storeAmazonSession($amazonSessionId);
+        }
+
+        $isAmazonSessionActive = OxidServiceProvider::getAmazonService()->isAmazonSessionActive();
         // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
         // or Amazon Pay is excluded stop executing order
         if (
-            ($basket->getPaymentId() === Constants::PAYMENT_ID &&
-                !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) ||
+            (
+                $isAmazonPayment &&
+                !$isAmazonSessionActive
+            ) ||
             $exclude
         ) {
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return;
-        } elseif ($basket->getPaymentId() === Constants::PAYMENT_ID) {
+        } elseif ($isAmazonPayment) {
             // if payment is 'oxidamazon' call parent::execute to validate and finalize order
             // then try to complete order at Amazon Pay
             $ret = parent::execute();
             // if order is validated and finalized complete Amazon Pay
             if ($ret === 'thankyou') {
-                $this->completeAmazonPayment();
+                if ($paymentId === Constants::PAYMENT_ID_EXPRESS) {
+                    $this->completeAmazonPaymentExpress();
+                } elseif ($paymentId === Constants::PAYMENT_ID) {
+                    $logger = new Logger();
+                    OxidServiceProvider::getAmazonService()->processOneStepPayment($amazonSessionId, $basket, $logger);
+                    $this->completeAmazonPayment();
+                }
             }
         }
 
@@ -105,12 +142,54 @@ class OrderController extends OrderController_parent
 
     protected function completeAmazonPayment(): void
     {
+
+        $payload = new Payload();
+        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue(
+            (float)$this->getBasket()->getPrice()->getBruttoPrice()
+        ));
+        $amazonConfig = oxNew(Config::class);
+        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
+        $payload = $payload->removeMerchantMetadata($payload->getData());
+        $amazonSessionId = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $oOrder = oxNew(Order::class);
+
+        $isOrderLoaded = $oOrder->load($orderOxId);
+        $result = OxidServiceProvider::getAmazonClient()->completeCheckoutSession(
+            $amazonSessionId,
+            $payload
+        );
+
+        if (
+            isset($result['response']) &&
+            isset($result['status']) &&
+            $result['status'] === 200 &&
+            $isOrderLoaded
+        ) {
+            $response = PhpHelper::jsonToArray($result['response']);
+            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
+            if ($redirectUrl !== false) {
+                Registry::getUtils()->redirect($redirectUrl, false, 301);
+            }
+        } else {
+            Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
+            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+            if ($oOrder->isLoaded()) {
+                $oOrder->delete();
+            }
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
+        }
+    }
+
+    protected function completeAmazonPaymentExpress(): void
+    {
         $payload = new Payload();
         $orderOxId = Registry::getSession()->getVariable('sess_challenge');
         $oOrder = oxNew(Order::class);
         if ($oOrder->load($orderOxId)) {
             $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
         }
+
         $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
             (float)$this->getBasket()->getPrice()->getBruttoPrice()
         ));
@@ -172,12 +251,16 @@ class OrderController extends OrderController_parent
      *
      * @return object
      */
-    public function getBillingAddressAsObj()
+    public function getBillingAddressAsObj(): object
     {
         return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }
 
-    protected function setAmazonPayAsPaymentMethod(): void
+    /**
+     * @param string $paymentId
+     * @return void
+     */
+    protected function setAmazonPayAsPaymentMethod(string $paymentId): void
     {
         $basket = $this->getBasket();
         $user = $this->getUser();
@@ -203,7 +286,7 @@ class OrderController extends OrderController_parent
             foreach ($deliverySetList as $shipSetId => $shipSet) {
                 $paymentList = $payListObj->getPaymentList($shipSetId, $basketPrice, $user);
                 if (
-                    isset($paymentList[Constants::PAYMENT_ID]) &&
+                    isset($paymentList[$paymentId]) &&
                     $delListObj->hasDeliveries($basket, $user, $countryOxId, $shipSetId)
                 ) {
                     if (is_null($fallbackShipSet)) {
@@ -224,9 +307,9 @@ class OrderController extends OrderController_parent
         }
 
         if ($actShipSet) {
-            $basket->setPayment(Constants::PAYMENT_ID);
+            $basket->setPayment($paymentId);
             $basket->setShipping($actShipSet);
-            $session->setVariable('paymentid', Constants::PAYMENT_ID);
+            $session->setVariable('paymentid', $paymentId);
         } else {
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         }

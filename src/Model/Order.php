@@ -35,10 +35,11 @@ class Order extends Order_parent
      */
     protected function prepareFinalizeOrder(Basket $oBasket, $oUser)
     {
-        // if payment is 'oxidamazon' but we do not have a Amazon Pay Session
+        $paymentId = $oBasket->getPaymentId() ?? '';
+        // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
         // stop finalize order
         if (
-            $oBasket->getPaymentId() === Constants::PAYMENT_ID &&
+            Constants::isAmazonPayment($paymentId) &&
             !OxidServiceProvider::getAmazonService()->isAmazonSessionActive()
         ) {
             return self::ORDER_STATE_PAYMENTERROR; // means no authentication
@@ -64,10 +65,12 @@ class Order extends Order_parent
 
         // Authorize and Capture via Amazon Pay will be done after finalizeOrder in OXID
         // therefore we reset status to "not finished yet"
+        $paymentId = $oBasket->getPaymentId() ?? '';
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
         if (
             $ret < 2  &&
             !$blRecalculatingOrder &&
-            $oBasket->getPaymentId() === Constants::PAYMENT_ID
+            $isAmazonPayment
         ) {
             $this->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
         }

@@ -23,7 +23,8 @@ class Basket extends Basket_parent
     protected function _findDelivCountry() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $deliveryCountryId = null;
-        if ($this->getPaymentId() === Constants::PAYMENT_ID) {
+        $paymentId = $this->getPaymentId() ?? '';
+        if (Constants::isAmazonPayment($paymentId)) {
             $deliveryCountryId = Registry::getSession()->getVariable('amazonCountryOxId');
         }
         if (is_null($deliveryCountryId)) {

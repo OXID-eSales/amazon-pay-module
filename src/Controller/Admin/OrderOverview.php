@@ -26,7 +26,7 @@ class OrderOverview extends OrderOverview_parent
 
         if (
             $oOrder->load($this->getEditObjectId()) &&
-            $oOrder->oxorder__oxpaymenttype->value === Constants::PAYMENT_ID
+            Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value)
         ) {
             $orderLogs = OxidServiceProvider::getAmazonService()->getOrderLogs($oOrder);
 
@@ -110,13 +110,13 @@ class OrderOverview extends OrderOverview_parent
         return parent::render();
     }
 
-    public function refundpayment()
+    public function refundpayment(): void
     {
         $oOrder = oxNew(Order::class);
 
         if (
             $oOrder->load($this->getEditObjectId()) &&
-            $oOrder->oxorder__oxpaymenttype->value === Constants::PAYMENT_ID &&
+            Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value) &&
             $oOrder->getId() !== null
         ) {
             $logger = new Logger();

@@ -17,7 +17,6 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @param AcceptanceTester $I
      * @return void
      * @group AmazonPayWithLoginPaymentTest
-     * @group a
      */
     public function checkPaymentFromBasketWorks(AcceptanceTester $I)
     {
@@ -26,7 +25,7 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_initializeTest();
         $this->_addProductToBasket();
         $this->_loginOxid();
-        $I->makeScreenshot("afterlogin.png");
+        $I->makeScreenshot(time() . 'afterlogin.png');
         $I->wait(5);
         $this->_openBasketDisplay();
         $this->_openAmazonPayPage();
@@ -49,10 +48,10 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_addProductToBasket();
         $this->_loginOxid();
         $this->_openCheckout();
+        $this->_changePaymentMethod();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
         $this->_submitPaymentMethod();
-        $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }
 
@@ -101,6 +100,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @param AcceptanceTester $I
      * @return void
      * @group AmazonPayWithLoginPaymentTest
+     * @throws \Exception
      */
     public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
     {
@@ -110,12 +110,12 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_addProductToBasket();
         $this->_loginOxid();
         $this->_openCheckout();
+        $this->_changePaymentMethod();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
         $this->_cancelPayment();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
-        $this->_submitOrder();
         $this->_checkSuccessfulPayment();
     }
 

@@ -17,7 +17,28 @@ return [
         'shipping_cost' => '3.90',
         'currency' => '€'
     ],
-
+    'amazonExclude' => [
+        'excludedProduct' => [
+            'artId' => '1402',
+            'id' => '05848170643ab0deb9914566391c0c63'
+        ],
+        'notExcludedProduct' => [
+            'artId' => '1001',
+            'id' => '1001'
+        ],
+        'categoryExcluded' => [
+            'sortNum' => '101',
+            'id' => '0f4fb00809cec9aa0910aa9c8fe36751',
+        ],
+        'productInExcludedCategory' => [
+            'artId' => '1209',
+            'id' => 'b5666b6d4bcb67c61dee4887bfba8351'
+        ],
+        'productInNotExcludedCategory' => [
+            'artId' => '2102',
+            'id' => 'd86e244c8114c8214fbf83da8d6336b3'
+        ]
+    ],
     // User for testing
     'client' => [
         "username" => "amazonpayuser@oxid-esales.dev",

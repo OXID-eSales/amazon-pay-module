@@ -181,8 +181,11 @@ class ViewConfig extends ViewConfig_parent
             return false;
         }
 
-        $productIdSql = "'" . implode("', '", $productIds) . "'";
-
+        // generates the string "?,?,?,?," for an array with count() = 4 and strips the trailing comma
+        $questionMarks = trim(
+            str_pad("", count($productIds) * 2, '?,'),
+            ','
+        );
         $sql = "SELECT oa.OSC_AMAZON_EXCLUDE as excludeArticle,
                oc.OSC_AMAZON_EXCLUDE as excludeCategory
           FROM oxarticles oa
@@ -190,9 +193,9 @@ class ViewConfig extends ViewConfig_parent
             ON (o2c.OXOBJECTID = oa.OXID)
           JOIN oxcategories oc
             ON (oc.OXID = o2c.OXCATNID)
-         WHERE oa.OXID in (?)";
+         WHERE oa.OXID in (" . $questionMarks . ")";
 
-        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, [$productIdSql]);
+        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIds);
 
         foreach ($results as $result) {
             if ($result['excludeArticle'] === '1' || $result['excludeCategory'] === '1') {

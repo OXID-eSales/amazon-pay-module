@@ -58,6 +58,36 @@ abstract class BaseCest
     }
 
     /**
+     * @param string $element
+     * @return false|string
+     */
+    protected function _grabTextFromElementWhenPresent(string $element)
+    {
+        try {
+            $this->I->seeElement($element);
+            $isFound = $this->I->grabTextFrom($element);
+        } catch (\Exception $e) {
+            $isFound = false;
+        }
+        return $isFound;
+    }
+
+    /**
+     * @param string $text
+     * @param string $errorMsg
+     * @return void
+     */
+    protected function _failIfTextNotSeen(string $text, string $errorMsg = ''): void
+    {
+        $errorMsg = $errorMsg ?? 'Text not found: ' . $text;
+        try {
+            $this->I->see($text);
+        } catch (\Exception $e) {
+            $this->I->fail($errorMsg);
+        }
+    }
+
+    /**
      * @return void
      */
     protected function _addProductToBasket()
@@ -180,7 +210,7 @@ abstract class BaseCest
     {
         $amazonPayment = '#payment_oxidamazon';
         $paymentNextStep = '#paymentNextStepBottom';
-        $this->I->waitForElement($amazonPayment,60);
+        $this->I->waitForElement($amazonPayment, 60);
         $this->I->click($amazonPayment);
         $this->I->click($paymentNextStep);
     }
@@ -253,6 +283,25 @@ abstract class BaseCest
 
         $orders = new Orders($this->I);
         $orders->find($orders->orderNumberInput, $orderNumber);
+
+        $this->I->switchToFrame(null);
+        $this->I->switchToFrame("basefrm");
+    }
+
+    protected function _openAdminAmazonPayConfig(): void
+    {
+        $this->I->switchToFrame(null);
+        $this->I->switchToFrame("navigation");
+        $this->I->switchToFrame("adminnav");
+        try {
+            $this->I->see(Translator::translate("amazonpay"));
+        } catch (\Exception $e) {
+            $this->I->fail('Amazon Pay menu item not found. Is the module active?');
+        }
+        $this->I->click(Translator::translate("amazonpay"));
+        $this->I->see(Translator::translate("OSC_AMAZONPAY_CONFIG"));
+        $this->I->click(Translator::translate("OSC_AMAZONPAY_CONFIG"));
+        $this->I->waitForDocumentReadyState();
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");

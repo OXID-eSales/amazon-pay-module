@@ -32,8 +32,8 @@ class UserComponent extends UserComponent_parent
 
         $this->setParent(oxNew(RegisterController::class));
 
-        $this->setRequestParameter('userLoginName', $amazonSession['response']['buyer']['name']);
-        $this->setRequestParameter('lgn_usr', $amazonSession['response']['buyer']['email']);
+        $this->setRequestParameter('userLoginName', $this->_getNameFromAmazonResponse($amazonSession));
+        $this->setRequestParameter('lgn_usr', $this->_getEMailFromAmazonResponse($amazonSession));
 
         // Guest users have a blank password
         $password = '';
@@ -93,7 +93,11 @@ class UserComponent extends UserComponent_parent
             }
         } else {
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user', false, 302);
+            Registry::getUtils()->redirect(
+                Registry::getConfig()->getShopHomeUrl() . 'cl=user',
+                false,
+                302
+            );
         }
     }
 
@@ -142,5 +146,23 @@ class UserComponent extends UserComponent_parent
             $aDelAdress = $aDeladr;
         }
         return $aDelAdress;
+    }
+
+    protected function _getNameFromAmazonResponse(array $amazonSession): string
+    {
+        if (array_key_exists('buyer', $amazonSession['response'])) {
+            return $amazonSession['response']['buyer']['name'];
+        }
+
+        return $amazonSession['response']['name'];
+    }
+
+    protected function _getEMailFromAmazonResponse(array $amazonSession)
+    {
+        if (array_key_exists('buyer', $amazonSession['response'])) {
+            return $amazonSession['response']['buyer']['email'];
+        }
+
+        return $amazonSession['response']['email'];
     }
 }

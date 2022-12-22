@@ -78,12 +78,27 @@ class Payload
     /**
      * @var string
      */
+    private $signInReturnUrl;
+
+    /**
+     * @var string
+     */
+    private $signInCancelUrl;
+
+    /**
+     * @var string
+     */
     private $storeId;
 
     /**
      * @var array
      */
     private $scopes = [];
+
+    /**
+     * @var array
+     */
+    private $signInScopes = [];
 
     /**
      * @var array
@@ -105,12 +120,24 @@ class Payload
             $data['webCheckoutDetails']['checkoutResultReturnUrl'] = $this->checkoutResultReturnUrl;
         }
 
+        if (!empty($this->signInReturnUrl)) {
+            $data['signInReturnUrl'] = $this->signInReturnUrl;
+        }
+
+        if (!empty($this->signInCancelUrl)) {
+            $data['signInCancelUrl'] = $this->signInCancelUrl;
+        }
+
         if (!empty($this->storeId)) {
             $data['storeId'] = $this->storeId;
         }
 
         if (!empty($this->scopes)) {
             $data['scopes'] = $this->scopes;
+        }
+
+        if (!empty($this->signInScopes)) {
+            $data['signInScopes'] = $this->signInScopes;
         }
 
         if (
@@ -253,6 +280,24 @@ class Payload
     /**
      * @return void
      */
+    public function setSignInReturnUrl(): void
+    {
+        $this->signInReturnUrl =
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->signInReturnUrl();
+    }
+
+    /**
+     * @return void
+     */
+    public function setSignInCancelUrl(): void
+    {
+        $this->signInCancelUrl =
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->signInCancelUrl();
+    }
+
+    /**
+     * @return void
+     */
     public function setCheckoutResultReturnUrl(): void
     {
         $this->checkoutResultReturnUrl = Registry::getConfig()->getCurrentShopUrl(false)
@@ -283,6 +328,11 @@ class Payload
     public function addScopes(array $scopes): void
     {
         $this->scopes = array_merge($this->scopes, $scopes);
+    }
+
+    public function addSignInScopes(array $scopes): void
+    {
+        $this->signInScopes = array_merge($this->scopes, $scopes);
     }
 
     /**

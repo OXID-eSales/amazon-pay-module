@@ -331,6 +331,32 @@ class ViewConfig extends ViewConfig_parent
     }
 
     /**
+     * Template variable getter. Get payload in JSON Format for Sign In
+     *
+     * @return false|string
+     */
+    public function getPayloadSignIn()
+    {
+        $payload = new Payload();
+        $payload->setSignInReturnUrl();
+        $payload->setSignInCancelUrl();
+        $payload->setStoreId();
+        $payload->addSignInScopes([
+            "name",
+            "email",
+            "postalCode",
+            "shippingAddress",
+            "billingAddress",
+            "phoneNumber"
+        ]);
+
+        $payloadData = $payload->getData();
+        $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $this->signature = $this->getSignature($payloadJSON);
+        return $payloadJSON;
+    }
+
+    /**
      * Template variable getter. Get Signature for Payload
      *
      * @param string $type

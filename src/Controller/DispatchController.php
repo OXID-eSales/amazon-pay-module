@@ -10,6 +10,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller;
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;

@@ -44,6 +44,11 @@ class Constants
     public const CHECKOUT_REQUEST_PARAMETER_ID = 'amazonCheckoutSessionId';
 
     /**
+     * @var string Amazon checkout buyer token param name
+     */
+    public const CHECKOUT_REQUEST_BUYER_TOKEN = 'buyerToken';
+
+    /**
      * @var string Amazon Plattform ID
      */
     public const PLATTFORM_ID = 'A1O8CIV1A24A6X';

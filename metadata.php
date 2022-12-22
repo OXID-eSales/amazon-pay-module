@@ -86,6 +86,7 @@ $aModule = [
         'amazonpay/amazonconfig.tpl' => 'osc/amazonpay/views/admin/tpl/amazonconfig.tpl',
         'amazonpay/amazonexpressbutton.tpl' => 'osc/amazonpay/views/elements/amazonexpressbutton.tpl',
         'amazonpay/amazonbutton.tpl' => 'osc/amazonpay/views/elements/amazonbutton.tpl',
+        'amazonpay/amazonloginbutton.tpl' => 'osc/amazonpay/views/elements/amazonloginbutton.tpl',
         'amazonpay/filtered_billing_address.tpl' => 'osc/amazonpay/views/elements/filtered_billing_address.tpl',
         'amazonpay/filtered_delivery_address.tpl' => 'osc/amazonpay/views/elements/filtered_delivery_address.tpl',
         'amazonpay/user_checkout_shipping_head_flow.tpl' =>
@@ -255,6 +256,12 @@ $aModule = [
             'block' => 'change_payment',
             'file' => '/views/blocks/page/checkout/change_payment.tpl',
             'position' => '5'
+        ],
+        [
+            'template' => 'widget/header/loginbox.tpl',
+            'block' => 'thirdparty_login',
+            'file' => '/views/blocks/page/account/thirdparty_login.tpl',
+            'position' => '1'
         ],
     ],
     'settings' => [

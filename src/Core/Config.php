@@ -329,6 +329,30 @@ class Config
     }
 
     /**
+     * @return string
+     */
+    public function signInReturnUrl(): string
+    {
+        return html_entity_decode(
+            Registry::getConfig()->getCurrentShopUrl(false)
+            . 'index.php?cl=amazondispatch&action=signin&stoken='
+            . Registry::getSession()->getSessionChallengeToken()
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function signInCancelUrl(): string
+    {
+        return html_entity_decode(
+            Registry::getConfig()->getCurrentShopUrl(false)
+            . 'index.php?cl=user&stoken='
+            . Registry::getSession()->getSessionChallengeToken()
+        );
+    }
+
+    /**
      * Return country list
      *
      * @return array

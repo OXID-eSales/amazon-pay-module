@@ -8,7 +8,7 @@
                 [{oxmultilang ident="AMAZON_PAY_GUARANTEE"}]
             </div>
             <div class="panel-footer">
-                [{include file="amazonpay/amazonexpressbutton.tpl" buttonId="AmazonPayButtonCheckoutUser"}]
+                [{include file="amazonpay/amazonloginbutton.tpl" buttonId="AmazonPayButtonCheckoutUser"}]
             </div>
         </div>
     </div>

@@ -10,8 +10,11 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller;
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Registry;
+use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -31,6 +34,7 @@ class DispatchController extends FrontendController
 
         $logger = new Logger();
         $action = Registry::getRequest()->getRequestParameter('action');
+
         switch ($action) {
             case 'review':
                 $amazonSessionId = $this->setRequestAmazonSessionId();
@@ -72,7 +76,6 @@ class DispatchController extends FrontendController
                     );
                 }
 
-
                 break;
             case 'ipn':
                 $message = Message::fromRawPostData();
@@ -108,6 +111,46 @@ class DispatchController extends FrontendController
 
                 OxidServiceProvider::getAmazonService()->checkOrderState($orderId);
 
+                break;
+
+            case 'signin':
+                $buyerToken = Registry::getRequest()
+                    ->getRequestParameter(Constants::CHECKOUT_REQUEST_BUYER_TOKEN);
+
+                $result = OxidServiceProvider::getAmazonClient()->getBuyer($buyerToken);
+
+                $response['response'] = PhpHelper::jsonToArray($result['response']);
+
+                if ($result['status'] !== 200) {
+                    return;
+                }
+
+                /** @var User $user */
+                $user = $this->getUser();
+                $session = Registry::getSession();
+
+                if (!$user) {
+                    // Create guest user if not logged in
+                    $userComponent = oxNew(UserComponent::class);
+                    $userComponent->createGuestUser($response);
+                } else {
+                    // if Amazon provides a shipping address use it
+                    if ($response['response']['shippingAddress']) {
+                        $deliveryAddress = Address::mapAddressToDb(
+                            $response['response']['shippingAddress'],
+                            'oxaddress__'
+                        );
+                        $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
+                    } else {
+                        // if amazon does not provide a shipping address and we already have an oxid user,
+                        // use oxid-user-data
+                        $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
+                    }
+                }
+
+                Registry::getUtils()->redirect(
+                    Registry::getConfig()->getShopHomeUrl() . 'cl=user'
+                );
                 break;
         }
     }

@@ -2,7 +2,6 @@
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
 [{assign var="aPayload" value=$oViewConf->getPayloadSignIn()}]
 <div class="amazonpay-button [{$buttonclass}]" id="[{$buttonId}]"></div>
-
 [{capture name="amazonpay_login_script"}]
     amazon.Pay.renderButton('#[{$buttonId}]', {
         merchantId: '[{$amazonConfig->getMerchantId()}]',
@@ -20,4 +19,3 @@
     });
 [{/capture}]
 [{oxscript add=$smarty.capture.amazonpay_login_script}]
-

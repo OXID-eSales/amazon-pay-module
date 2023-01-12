@@ -23,8 +23,8 @@ return [
             'id' => '05848170643ab0deb9914566391c0c63'
         ],
         'notExcludedProduct' => [
-            'artId' => '1001',
-            'id' => '1001'
+            'artId' => '3102',
+            'id' => 'adc5ee42bd3c37a27a488769d22ad9ed'
         ],
         'categoryExcluded' => [
             'sortNum' => '101',

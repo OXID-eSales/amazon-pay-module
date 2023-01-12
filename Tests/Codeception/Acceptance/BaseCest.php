@@ -15,6 +15,7 @@ use OxidEsales\Codeception\Admin\Orders;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Page\Checkout\ThankYou;
 use OxidEsales\Codeception\Step\Basket as BasketSteps;
+use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
@@ -28,6 +29,9 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I): void
     {
+        $I->deleteFromDatabase('oxuser', ['oxusername' => Fixtures::get('amazonClientUsername')]);
+        $I->deleteFromDatabase('oxuser', ['oxusername' => Fixtures::get('amazonClientUsername')]);
+
         $I->haveInDatabase(
             'oxobject2payment',
             [
@@ -55,6 +59,7 @@ abstract class BaseCest
     {
         $this->I->openShop();
         $this->I->waitForDocumentReadyState();
+        $this->I->wait(5);
         $this->I->waitForPageLoad();
     }
 
@@ -117,6 +122,19 @@ abstract class BaseCest
         $this->I->wait(5);
     }
 
+    protected function _loginOxidViaAmazon()
+    {
+        $amazonLoginButton = "//div[contains(@id, 'AmazonPayWidget')]";
+
+        $homePage = $this->I->openShop();
+        $this->I->waitForDocumentReadyState();
+        $this->I->wait(5);
+
+        $homePage->openAccountMenu();
+        $this->I->waitForElement($amazonLoginButton, 60);
+        $this->I->click($amazonLoginButton);
+    }
+
     /**
      * @throws \Exception
      */
@@ -127,7 +145,6 @@ abstract class BaseCest
         $passwordInput = "//input[@name='lgn_pwd' and " .
             "@class='form-control js-oxValidate js-oxValidate_notEmpty textbox stepsPasswordbox']";
         $loginButton = "//button[@class='btn btn-primary submitButton']";
-        $continueButton = "//button[@id='userNextStepTop']";
 
         $this->I->waitForPageLoad();
         $this->I->waitForElement($loginInput, 60);
@@ -135,9 +152,7 @@ abstract class BaseCest
         $this->I->fillField($passwordInput, $_ENV['AMAZONPAY_CLIENT_PASSWORD']);
         $this->I->click($loginButton);
 
-        $this->I->waitForPageLoad();
-        $this->I->waitForElement($continueButton, 60);
-        $this->I->clickWithLeftButton($continueButton);
+        $this->_confirmAddress();
     }
 
     /**
@@ -180,6 +195,7 @@ abstract class BaseCest
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
         $this->I->waitForElement($amazonpayDiv, 60);
+        $this->I->waitForElementClickable($amazonpayDiv, 60);
         $this->I->click($amazonpayDiv);
     }
 
@@ -240,6 +256,30 @@ abstract class BaseCest
 
     /**
      * @return void
+     * @throws \Exception
+     */
+    protected function _confirmAddress()
+    {
+        $continueButton = "//button[@id='userNextStepTop']";
+
+        $this->I->waitForPageLoad();
+        $this->I->waitForElement($continueButton, 60);
+        $this->I->clickWithLeftButton($continueButton);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    protected function _confirmPayment()
+    {
+        $paymentNextStep = '#paymentNextStepBottom';
+        $this->I->waitForElement($paymentNextStep, 60);
+        $this->I->click($paymentNextStep);
+    }
+
+    /**
+     * @return void
      */
     protected function _submitOrder()
     {
@@ -257,6 +297,37 @@ abstract class BaseCest
         $thankYouPage = new ThankYou($this->I);
         $orderNumber = $thankYouPage->grabOrderNumber();
         return $orderNumber;
+    }
+
+    /**
+     * @param string $orderNumber
+     * @return array
+     */
+    protected function _checkDatabase(string $orderNumber): array
+    {
+        $orderStatus = $this->I->grabFromDatabase(
+            'oxorder',
+            'oxtransstatus',
+            [
+                'OXORDERNR' => $orderNumber
+            ]
+        );
+        $this->I->assertNotNull($orderStatus);
+
+        $orderRemark = $this->I->grabFromDatabase(
+            'oxorder',
+            'osc_amazon_remark',
+            [
+                'OXORDERNR' => $orderNumber
+            ]
+        );
+        $this->I->assertNotNull($orderRemark);
+
+        return [
+            'orderNumber' => $orderNumber,
+            'orderStatus' => $orderStatus,
+            'orderRemark' => $orderRemark
+        ];
     }
 
     /**
@@ -281,6 +352,11 @@ abstract class BaseCest
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
+    /**
+     * @param string $orderNumber
+     * @return void
+     * @throws \Exception
+     */
     protected function _openOrder(string $orderNumber): void
     {
         $this->_loginAdmin();
@@ -301,6 +377,21 @@ abstract class BaseCest
         $this->I->switchToFrame("basefrm");
     }
 
+    /**
+     * @param array $data
+     * @return void
+     */
+    protected function _checkDataOnAdminPage(array $data)
+    {
+        $this->I->selectEditFrame();
+        $this->I->see(Translator::translate("GENERAL_ORDERNUM") . ': ' . $data['orderNumber']);
+        $this->I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ': ' . $data['orderStatus']);
+        $this->I->see(Translator::translate("OSC_AMAZONPAY_REMARK") . ': ' . $data['orderRemark']);
+    }
+
+    /**
+     * @return void
+     */
     protected function _openAdminAmazonPayConfig(): void
     {
         $this->I->switchToFrame(null);

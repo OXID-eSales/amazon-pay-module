@@ -26,6 +26,8 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidEsales\TestingLibrary\UnitTestCase;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidEsales\Eshop\Core\Registry;
 
 class PayloadTest extends UnitTestCase
 {
@@ -128,5 +130,82 @@ class PayloadTest extends UnitTestCase
         $data = $payload->removeMerchantMetadata($payload->getData());
 
         $this->assertNull($data['merchantMetadata']);
+    }
+
+    public function testSetCheckoutReviewReturnUrl(): void
+    {
+        $payload = new Payload();
+        $payload->setCheckoutReviewReturnUrl();
+
+        $data = $payload->getData();
+        $this->assertSame(
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutReviewUrl(),
+            $data['webCheckoutDetails']['checkoutReviewReturnUrl']
+        );
+    }
+
+    public function testSetCheckoutResultReturnUrl(): void
+    {
+        $payload = new Payload();
+        $payload->setCheckoutResultReturnUrl();
+
+        $data = $payload->getData();
+        $this->assertStringContainsString(
+            $this->checkoutResultReturnUrl = Registry::getConfig()->getCurrentShopUrl(false),
+            $data['webCheckoutDetails']['checkoutResultReturnUrl']
+        );
+
+        $this->assertStringContainsString(
+            "index.php?cl=order&fnc=execute&action=result&stoken=",
+            $data['webCheckoutDetails']['checkoutResultReturnUrl']
+        );
+    }
+
+    public function testSetCheckoutResultReturnUrlExpress(): void
+    {
+        $payload = new Payload();
+        $payload->setCheckoutResultReturnUrlExpress();
+
+        $data = $payload->getData();
+        $this->assertSame(
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutResultUrl(),
+            $data['webCheckoutDetails']['checkoutResultReturnUrl']
+        );
+    }
+
+    public function testSetSignInReturnUrl(): void
+    {
+        $payload = new Payload();
+        $payload->setSignInReturnUrl();
+
+        $data = $payload->getData();
+        $this->assertSame(
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->signInReturnUrl(),
+            $data['signInReturnUrl']
+        );
+    }
+
+    public function testSetSignInCancelUrl(): void
+    {
+        $payload = new Payload();
+        $payload->setSignInCancelUrl();
+
+        $data = $payload->getData();
+        $this->assertSame(
+            OxidServiceProvider::getAmazonClient()->getModuleConfig()->signInCancelUrl(),
+            $data['signInCancelUrl']
+        );
+    }
+
+    public function testSetStoreId(): void
+    {
+        $payload = new Payload();
+        $payload->setStoreId();
+
+        $data = $payload->getData();
+        $this->assertSame(
+            $this->storeId = OxidServiceProvider::getAmazonClient()->getModuleConfig()->getStoreId(),
+            $data['storeId']
+        );
     }
 }

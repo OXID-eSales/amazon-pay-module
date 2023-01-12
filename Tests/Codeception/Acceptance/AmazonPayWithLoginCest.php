@@ -25,14 +25,16 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_initializeTest();
         $this->_addProductToBasket();
         $this->_loginOxid();
-        $I->makeScreenshot(time() . 'afterlogin.png');
-        $I->wait(5);
         $this->_openBasketDisplay();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
         $this->_submitPaymentMethod();
         $this->_submitOrder();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -53,7 +55,11 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
         $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -72,7 +78,11 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_loginAmazonPayment();
         $this->_submitPaymentMethod();
         $this->_submitOrder();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -94,7 +104,11 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
         $this->_submitOrder();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -117,7 +131,11 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_cancelPayment();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -138,6 +156,10 @@ final class AmazonPayWithLoginCest extends BaseCest
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
         $this->_submitOrder();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 }

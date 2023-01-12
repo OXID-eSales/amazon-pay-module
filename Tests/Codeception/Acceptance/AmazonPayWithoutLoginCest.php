@@ -42,8 +42,8 @@ final class AmazonPayWithoutLoginCest extends BaseCest
 
     public function _after(AcceptanceTester $I): void
     {
-        parent::_after($I);
         $I->deleteFromDatabase('oxuser', ['OXID' => 'testAmazonPay']);
+        parent::_after($I);
     }
 
     /**
@@ -66,30 +66,11 @@ final class AmazonPayWithoutLoginCest extends BaseCest
         $this->_changePaymentMethod();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
-    }
+        $orderNumber = $this->_checkSuccessfulPayment();
 
-    /**
-     * @param AcceptanceTester $I
-     * @return void
-     * @group AmazonPayWithoutLoginPaymentTest
-     */
-    public function checkPaymentFromAddressPageWorks(AcceptanceTester $I)
-    {
-        $I->wantToTest('Test AmazonPay via Address Page without login payment works');
-
-        $this->_initializeTest();
-        $this->_addProductToBasket();
-        $this->_openCheckout();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_submitPaymentMethod();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -111,14 +92,17 @@ final class AmazonPayWithoutLoginCest extends BaseCest
         $this->_changePaymentMethod();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
      * @param AcceptanceTester $I
      * @return void
      * @group AmazonPayWithoutLoginPaymentTest
-     * @group asd
      */
     public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I)
     {
@@ -137,32 +121,11 @@ final class AmazonPayWithoutLoginCest extends BaseCest
         $this->_changePaymentMethod();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
-    }
+        $orderNumber = $this->_checkSuccessfulPayment();
 
-    /**
-     * @param AcceptanceTester $I
-     * @return void
-     * @group AmazonPayWithoutLoginPaymentTest
-     */
-    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
-    {
-        $I->wantToTest('Test AmazonPay via Address Page without login with return payment works');
-
-        $this->_initializeTest();
-        $this->_addProductToBasket();
-        $this->_openCheckout();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_cancelPayment();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 
     /**
@@ -186,6 +149,10 @@ final class AmazonPayWithoutLoginCest extends BaseCest
         $this->_changePaymentMethod();
         $this->_openAmazonPayPage();
         $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $orderNumber = $this->_checkSuccessfulPayment();
+
+        $data = $this->_checkDatabase($orderNumber);
+        $this->_openOrder($orderNumber);
+        $this->_checkDataOnAdminPage($data);
     }
 }

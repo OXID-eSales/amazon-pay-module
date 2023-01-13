@@ -1,4 +1,4 @@
-[{if !$oxcmp_user && !$oView->getLoginOption() && $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive()}]
+[{if !$oxcmp_user && !$oView->getLoginOption() && $oViewConf->isAmazonActive() && !$oViewConf->isAmazonSessionActive() && !$oViewConf->socialLoginDeactivated()}]
     [{if $oViewConf->isFlowCompatibleTheme()}]
         [{include file="amazonpay/checkout_user_main_flow.tpl"}]
     [{else}]

@@ -45,7 +45,7 @@ return [
         "password" => "useruser",
     ],
     'adminUser' => [
-        'userLoginName' => 'admin',
-        'userPassword' => 'admin',
+        'userLoginName' => 'management@management.com',
+        'userPassword' => 'useruser',
     ],
 ];

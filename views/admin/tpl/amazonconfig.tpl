@@ -129,8 +129,24 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="button-placement">[{oxmultilang ident="OSC_AMAZONPAY_SOCIAL_LOGIN"}]</label>
+            <div class="controls">
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonSocialLoginDeactivated]" value="0" />
+                            <input id="amazonSocialLoginDeactivated" type="checkbox" name="conf[blAmazonSocialLoginDeactivated]" [{if $config->socialLoginDeactivated()}]checked[{/if}] value="1" />
+                            [{oxmultilang ident="OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED"}]
+                        </label>
+                    </div>
+                </div>
+                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_EXCLUSION"}]</span>
+            </div>
+        </div>
+
         <div class="form-group jsonform-error-captureType">
-            <label for="opmode">[{oxmultilang ident="OSC_AMAZONPAY_CAPTYPE"}]</label>
+            <label for="captype">[{oxmultilang ident="OSC_AMAZONPAY_CAPTYPE"}]</label>
             <div class="controls">
                 <select name="conf[amazonPayCapType]" id="captype" class="form-control" required>
                     <option value="1" [{if $config->isOneStepCapture()}]selected[{/if}]>

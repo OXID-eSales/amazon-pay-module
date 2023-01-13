@@ -82,6 +82,14 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
+    public function socialLoginDeactivated(): bool
+    {
+        return $this->getAmazonConfig()->socialLoginDeactivated();
+    }
+
+    /**
+     * @return bool
+     */
     public function displayExpressInMiniCartAndModal(): bool
     {
         return $this->getAmazonConfig()->displayExpressInMiniCartAndModal();

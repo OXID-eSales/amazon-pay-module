@@ -273,6 +273,7 @@ $aModule = [
         ['name' => 'blAmazonPayExpressPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayExpressMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
+        ['name' => 'blAmazonSocialLoginDeactivated', 'type' => 'bool', 'value' => 'false', 'group' => null],
         ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
     ]
 ];

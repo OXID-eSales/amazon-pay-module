@@ -24,6 +24,7 @@ abstract class BaseCest
 {
     private int $amount = 1;
     private AcceptanceTester $I;
+    private $homePage;
 
     public function _before(AcceptanceTester $I): void
     {
@@ -145,8 +146,10 @@ abstract class BaseCest
      */
     protected function _openCheckout()
     {
-        $homePage = $this->I->openShop();
-        $homePage->openMiniBasket()->openCheckout();
+        if (!$this->homePage) {
+            $this->homePage = $this->I->openShop();
+        }
+        $this->homePage->openMiniBasket()->openCheckout();
     }
 
     /**
@@ -154,8 +157,20 @@ abstract class BaseCest
      */
     protected function _openBasketDisplay()
     {
-        $homePage = $this->I->openShop();
-        $homePage->openMiniBasket()->openBasketDisplay();
+        if (!$this->homePage) {
+            $this->homePage = $this->I->openShop();
+        }
+
+        $this->homePage->openMiniBasket()->openBasketDisplay();
+    }
+
+    protected function _openAccountMenu()
+    {
+        if (!$this->homePage) {
+            $this->homePage = $this->I->openShop();
+        }
+
+        $this->homePage->openAccountMenu();
     }
 
     /**
@@ -299,6 +314,7 @@ abstract class BaseCest
             $this->I->fail('Amazon Pay menu item not found. Is the module active?');
         }
         $this->I->click(Translator::translate("amazonpay"));
+        $this->I->waitForElementVisible('[name="nav_amazonconfig"]',60);
         $this->I->see(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->click(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->waitForDocumentReadyState();

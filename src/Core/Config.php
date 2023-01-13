@@ -294,6 +294,14 @@ class Config
     /**
      * @return bool
      */
+    public function socialLoginDeactivated(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonSocialLoginDeactivated');
+    }
+
+    /**
+     * @return bool
+     */
     public function displayExpressInMiniCartAndModal(): bool
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressMinicartAndModal');

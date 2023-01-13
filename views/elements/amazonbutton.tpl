@@ -16,6 +16,5 @@
             signature: '[{$oViewConf->signature}]',
         }
     });
-    console.log([{$aPayload}]);
 [{/capture}]
 [{oxscript add=$smarty.capture.amazonpay_script}]

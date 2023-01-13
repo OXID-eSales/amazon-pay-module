@@ -30,7 +30,6 @@ abstract class BaseCest
     public function _before(AcceptanceTester $I): void
     {
         $I->deleteFromDatabase('oxuser', ['oxusername' => Fixtures::get('amazonClientUsername')]);
-        $I->deleteFromDatabase('oxuser', ['oxusername' => Fixtures::get('amazonClientUsername')]);
 
         $I->haveInDatabase(
             'oxobject2payment',
@@ -48,8 +47,12 @@ abstract class BaseCest
     public function _after(AcceptanceTester $I): void
     {
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+
         $I->clearShopCache();
         $I->cleanUp();
+
+        $I->resetCookie('sid');
+        $I->resetCookie('sid_key');
     }
 
     /**

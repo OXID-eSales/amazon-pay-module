@@ -314,6 +314,7 @@ abstract class BaseCest
             $this->I->fail('Amazon Pay menu item not found. Is the module active?');
         }
         $this->I->click(Translator::translate("amazonpay"));
+        $this->I->waitForElementVisible('[name="nav_amazonconfig"]',60);
         $this->I->see(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->click(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->waitForDocumentReadyState();

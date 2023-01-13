@@ -27,6 +27,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
         $this->_openCheckout();
         $I->seeElement($this->amazonSocialLoginCheckoutPage);
 
+        // deactivate option
         $I->openNewTab();
         $this->_loginAdmin();
         $this->_openAdminAmazonPayConfig();
@@ -39,7 +40,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
             $I->fail('Error on saving amazon module config: ' . $error);
         }
         $I->waitForElement('.alert-success', 60);
-        $I->closeTab();
+        $I->switchToPreviousTab();
 
         $I->reloadPage();
         $this->_openAccountMenu();
@@ -54,5 +55,21 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
         } catch (\Exception $e) {
             $I->fail('Social login in the account menu should be absent, but is still there');
         }
+
+        // reactivate option for following tests
+        $I->switchToNextTab();
+        $I->reloadPage();
+        $this->_openAdminAmazonPayConfig();
+        $I->scrollTo($this->amazonSocialLoginDeactivated);
+        $I->uncheckOption($this->amazonSocialLoginDeactivated);
+        $I->submitForm('.amazonpay-config form', []);
+        $I->waitForDocumentReadyState();
+        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        if ($error) {
+            $I->fail('Error on saving amazon module config: ' . $error);
+        }
+        $I->waitForElement('.alert-success', 60);
+        $I->wait(30);
+        $I->closeTab();
     }
 }

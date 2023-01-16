@@ -13,7 +13,7 @@ use Exception;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance\BaseCest;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
-class AmazonPayLoginCest extends BaseCest
+final class AmazonPayLoginCest extends BaseCest
 {
     /**
      * @param AcceptanceTester $I

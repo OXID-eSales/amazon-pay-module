@@ -49,7 +49,11 @@
         "psalm-errors": "psalm --no-cache",
         "psalm-automatic": "psalm --alter --issues=MissingReturnType,InvalidFalsableReturnType,InvalidReturnType,InvalidNullableReturnType,MissingParamType",
         "phpcs": "phpcs --standard=Tests/phpcs.xml",
-        "phpcbf": "phpcbf --standard=Tests/phpcs.xml"
+        "phpcbf": "phpcbf --standard=Tests/phpcs.xml",
+        "static": [
+            "@phpcs",
+            "@psalm-errors"
+        ]
     },
     "config": {
         "allow-plugins": {

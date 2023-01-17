@@ -293,6 +293,9 @@ class ViewConfig extends ViewConfig_parent
             "billingAddress"
         ]);
 
+        $amazonConfig = $this->getAmazonConfig();
+        $payload->setPlatformId($amazonConfig->getPlatformId());
+
         $payloadData = $payload->getData();
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
         $this->signature = $this->getSignature($payloadJSON);
@@ -321,6 +324,8 @@ class ViewConfig extends ViewConfig_parent
         ]);
         $payload->setPaymentIntent('AuthorizeWithCapture');
         $payload->setAddressDetails($user);
+
+        $payload->setPlatformId($amazonConfig->getPlatformId());
 
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
         $session = Registry::getSession();
@@ -357,6 +362,9 @@ class ViewConfig extends ViewConfig_parent
             "billingAddress",
             "phoneNumber"
         ]);
+
+        $amazonConfig = $this->getAmazonConfig();
+        $payload->setPlatformId($amazonConfig->getPlatformId());
 
         $payloadData = $payload->getData();
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);

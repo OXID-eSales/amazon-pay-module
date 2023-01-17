@@ -18,5 +18,5 @@
                 publicKeyId: '[{$amazonConfig->getPublicKeyId()}]'
         }
     });
-    [{/capture}]
+[{/capture}]
 [{oxscript add=$smarty.capture.amazonpay_script}]

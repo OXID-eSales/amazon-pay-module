@@ -76,7 +76,7 @@ final class AmazonPayExcludeCest extends BaseCest
         try {
             $I->waitForElement('#AmazonPayButtonProductMain', 60);
         } catch (\Exception $e) {
-            $I->fail('Amazon Express but is absent, but should be shown');
+            $I->fail('Amazon Express is absent, but should be shown');
         }
     }
 

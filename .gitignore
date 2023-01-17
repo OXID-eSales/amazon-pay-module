@@ -4,3 +4,4 @@
 /var/
 /composer.lock
 /Tests/.phpunit.result.cache
+/Tests/.env

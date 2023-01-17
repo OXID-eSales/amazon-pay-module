@@ -111,9 +111,8 @@ abstract class BaseCest
         $homePage = $this->I->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->wait(5);
-        $clientData = Fixtures::get('client');
         $this->I->makeScreenshot(time() . 'beforeLogin.png');
-        $homePage->loginUser($clientData['username'], $clientData['password']);
+        $homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
         $this->I->wait(5);
     }
 
@@ -131,8 +130,8 @@ abstract class BaseCest
 
         $this->I->waitForPageLoad();
         $this->I->waitForElement($loginInput, 60);
-        $this->I->fillField($loginInput, Fixtures::get('amazonClientUsername'));
-        $this->I->fillField($passwordInput, Fixtures::get('amazonClientPassword'));
+        $this->I->fillField($loginInput, $_ENV['AMAZONPAY_CLIENT_USERNAME']);
+        $this->I->fillField($passwordInput, $_ENV['AMAZONPAY_CLIENT_PASSWORD']);
         $this->I->click($loginButton);
 
         $this->I->waitForPageLoad();
@@ -188,8 +187,8 @@ abstract class BaseCest
         $this->I->makeScreenshot(time() . 'Account already exists');
         $this->I->waitForText(strip_tags(sprintf(
             Translator::translate('AMAZON_PAY_USEREXISTS'),
-            Fixtures::get('amazonClientUsername'),
-            Fixtures::get('amazonClientUsername')
+            $_ENV['AMAZONPAY_CLIENT_USERNAME'],
+            $_ENV['AMAZONPAY_CLIENT_USERNAME']
         )), 60);
     }
 
@@ -257,9 +256,8 @@ abstract class BaseCest
         $adminLoginPage = new AdminLoginPage($this->I);
         $this->I->amOnPage($adminLoginPage->URL);
 
-        $admin = Fixtures::get('adminUser');
-        $this->I->fillField($userAccountLoginName, $admin['userLoginName']);
-        $this->I->fillField($userAccountLoginPassword, $admin['userPassword']);
+        $this->I->fillField($userAccountLoginName, $_ENV['OXID_ADMIN_USERNAME']);
+        $this->I->fillField($userAccountLoginPassword, $_ENV['OXID_ADMIN_PASSWORD']);
         $this->I->click($userAccountLoginButton);
         $this->I->wait(5);
 

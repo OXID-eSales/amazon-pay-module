@@ -104,6 +104,10 @@ class Payload
      * @var array
      */
     private array $addressDetails;
+    /**
+     * @var string
+     */
+    private string $platformId;
 
     /**
      * @return array
@@ -184,7 +188,20 @@ class Payload
             $data['webCheckoutDetails']['checkoutMode'] = 'ProcessOrder';
         }
 
+        if (!empty($this->platformId)) {
+            $data['platformId'] = $this->platformId;
+        }
+
         return $data;
+    }
+
+    /**
+     * @param string $id
+     * @return void
+     */
+    public function setPlatformId(string $id)
+    {
+        $this->platformId = $id;
     }
 
     /**

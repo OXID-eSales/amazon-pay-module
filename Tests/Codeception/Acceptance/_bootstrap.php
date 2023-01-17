@@ -12,4 +12,3 @@ use OxidEsales\Codeception\Module\FixturesHelper;
 
 $helper = new FixturesHelper();
 $helper->loadRuntimeFixtures(__DIR__ . '/../_data/fixtures.php');
-$helper->loadRuntimeFixtures(__DIR__ . '/../_data/amazonpayData.php');

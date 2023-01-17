@@ -15,7 +15,7 @@ jobs:
         php: [ '7.4', '8.0' ]
     runs-on: ubuntu-latest
     steps:
-      - name: Clone testing environment v3.0.0
+      - name: Clone testing environment v4.0.0
         run: git clone https://github.com/OXID-eSales/docker-eshop-sdk.git .
 
       - name: Clone the shop
@@ -82,6 +82,7 @@ jobs:
       - name: Install dependencies and reset shop
         run: |
           docker-compose exec -T php composer update --no-interaction
+          docker-compose exec -T php composer require vlucas/phpdotenv --no-interaction --dev
           docker-compose exec -T php php vendor/bin/reset-shop
 
       - name: Put module settings
@@ -95,6 +96,11 @@ jobs:
         if: always()
         run: |
           docker-compose logs
+      - name: Create .env-file
+        continue-on-error: true
+        working-directory: source/test-module/Tests
+        run: |
+          echo "${{ secrets.DOTENV }}" > .env
 
       - name: Stop containers
         if: always()
@@ -194,12 +200,6 @@ jobs:
           docker-compose exec -T php composer require codeception/module-phpbrowser:^1.0.2 --dev --no-update
           docker-compose exec -T php composer update
 
-      - name: Prepare login credentials
-        run: |
-          sed -i -e 's/<AmazonPay Client Username>/${{ secrets.AMAZON_USERNAME }}/'\
-                 -e 's/<AmazonPay Client Password>/${{ secrets.AMAZON_PASSWORD }}/'\
-              source/vendor/oxid-esales/amazon-pay-module/Tests/Codeception/_data/amazonpayData.php
-
       - name: Run tests
         run: |
           docker-compose exec -T \
@@ -208,7 +208,7 @@ jobs:
             -e RUN_TESTS_FOR_SHOP=0 \
             -e RUN_TESTS_FOR_MODULES=0 \
             -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
-            php php vendor/bin/runtests-codeception
+            php php vendor/bin/runtests-codeception --steps --debug
 
       - name: Stop containers
         if: always()

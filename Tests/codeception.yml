@@ -1,6 +1,7 @@
 namespace: OxidSolutionCatalysts\AmazonPay\Tests\Codeception
 params:
   - Codeception/Config/params.php
+  - .env
 paths:
   tests: Codeception
   output: Codeception/_output

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
-use Codeception\Util\Fixtures;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
 final class AmazonPayWithoutLoginCest extends BaseCest
@@ -24,8 +23,8 @@ final class AmazonPayWithoutLoginCest extends BaseCest
                 'OXACTIVE' => 1,
                 'OXRIGHTS' => 'user',
                 'OXSHOPID' => 1,
-                'OXUSERNAME' => Fixtures::get('amazonClientUsername'),
-                'OXPASSWORD' => hash('sha512', Fixtures::get('amazonClientPassword')),
+                'OXUSERNAME' => $_ENV['AMAZONPAY_CLIENT_USERNAME'],
+                'OXPASSWORD' => hash('sha512', $_ENV['AMAZONPAY_CLIENT_PASSWORD']),
                 'OXPASSSALT' => '',
                 'OXFNAME' => 'TestUserName',
                 'OXLNAME' => 'TestUserSurname',

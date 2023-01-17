@@ -39,13 +39,4 @@ return [
             'id' => 'd86e244c8114c8214fbf83da8d6336b3'
         ]
     ],
-    // User for testing
-    'client' => [
-        "username" => "amazonpayuser@oxid-esales.dev",
-        "password" => "useruser",
-    ],
-    'adminUser' => [
-        'userLoginName' => 'admin',
-        'userPassword' => 'admin',
-    ],
 ];

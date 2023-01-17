@@ -208,7 +208,7 @@ jobs:
             -e RUN_TESTS_FOR_SHOP=0 \
             -e RUN_TESTS_FOR_MODULES=0 \
             -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
-            php php vendor/bin/runtests-codeception
+            php php vendor/bin/runtests-codeception --steps --debug
 
       - name: Stop containers
         if: always()
@@ -225,6 +225,7 @@ jobs:
             source/vendor/${{ env.PACKAGE_NAME }}/Tests/Codeception/_output/
             source/source/log/oxideshop.log
             source/data/php/logs/error_log.txt
+            source/vendor/${{ env.PACKAGE_NAME }}/Tests/.env
 
   sonarcloud:
     needs: [ unit_tests ]

@@ -163,9 +163,7 @@ abstract class BaseCest
      */
     protected function _openCheckout()
     {
-        if (!$this->homePage) {
-            $this->homePage = $this->I->openShop();
-        }
+        $this->homePage = $this->I->openShop();
         $this->homePage->openMiniBasket()->openCheckout();
     }
 
@@ -174,10 +172,7 @@ abstract class BaseCest
      */
     protected function _openBasketDisplay()
     {
-        if (!$this->homePage) {
-            $this->homePage = $this->I->openShop();
-        }
-
+        $this->homePage = $this->I->openShop();
         $this->homePage->openMiniBasket()->openBasketDisplay();
     }
 

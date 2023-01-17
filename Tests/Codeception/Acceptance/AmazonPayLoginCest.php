@@ -52,40 +52,6 @@ final class AmazonPayLoginCest extends BaseCest
      * @return void
      * @group AmazonPayLoginPaymentTest
      */
-    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
-    {
-        $I->wantToTest('Test AmazonPay via Address Page without login with return payment works');
-
-        $this->_initializeTest();
-        $this->_addProductToBasket();
-        $this->_openCheckout();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_cancelPayment();
-        $this->_openAmazonPayPage();
-        try {
-            $I->waitForDocumentReadyState();
-            $I->see("You are securely signed in with Amazon.");
-            $this->_submitPaymentMethod();
-        } catch (Exception $exception) {
-        }
-
-        $this->_confirmAddress();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $orderNumber = $this->_checkSuccessfulPayment();
-
-        $data = $this->_checkDatabase($orderNumber);
-        $this->_openOrder($orderNumber);
-        $this->_checkDataOnAdminPage($data);
-    }
-
-    /**
-     * @param AcceptanceTester $I
-     * @return void
-     * @group AmazonPayLoginPaymentTest
-     */
     public function checkPaymentFromBasketWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay login via widget');

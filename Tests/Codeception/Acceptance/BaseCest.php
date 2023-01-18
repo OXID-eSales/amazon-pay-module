@@ -29,7 +29,7 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I): void
     {
-        $I->deleteFromDatabase('oxuser', ['oxusername' => Fixtures::get('amazonClientUsername')]);
+        $I->deleteFromDatabase('oxuser', ['oxusername' => $_ENV['OXID_CLIENT_USERNAME']]);
 
         $I->haveInDatabase(
             'oxobject2payment',

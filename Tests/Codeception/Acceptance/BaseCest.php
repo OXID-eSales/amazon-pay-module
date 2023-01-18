@@ -192,6 +192,7 @@ abstract class BaseCest
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
+        $this->I->makeScreenshot(time() . 'open amazon page');
         $this->I->waitForElement($amazonpayDiv, 60);
         $this->I->waitForElementClickable($amazonpayDiv, 60);
         $this->I->click($amazonpayDiv);
@@ -238,6 +239,7 @@ abstract class BaseCest
     {
         $amazonPayment = '#payment_oxidamazon';
         $paymentNextStep = '#paymentNextStepBottom';
+        $this->I->makeScreenshot(time() . 'change payment method');
         $this->I->waitForElement($amazonPayment, 60);
         $this->I->click($amazonPayment);
         $this->I->click($paymentNextStep);

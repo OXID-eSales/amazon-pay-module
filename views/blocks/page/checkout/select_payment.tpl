@@ -1,5 +1,3 @@
-[{if $sPaymentID === $oViewConf->getAmazonExpressPaymentId()}]
-    [{include file='amazonpay/payment_amazonpay.tpl' buttonId="AmazonPayButtonChangePayment" buttonClass="small"}]
-[{else}]
+[{if $sPaymentID !== $oViewConf->getAmazonExpressPaymentId()}]
     [{$smarty.block.parent}]
 [{/if}]

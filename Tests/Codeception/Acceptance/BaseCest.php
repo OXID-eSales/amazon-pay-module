@@ -29,7 +29,6 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I): void
     {
-        $I->deleteFromDatabase('oxuser', ['oxusername' => $_ENV['OXID_CLIENT_USERNAME']]);
         $I->deleteFromDatabase('oxuser', ['oxusername' => $_ENV['AMAZONPAY_CLIENT_USERNAME']]);
 
         $I->haveInDatabase(

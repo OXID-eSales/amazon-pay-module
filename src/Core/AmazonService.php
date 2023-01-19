@@ -301,14 +301,14 @@ class AmazonService
                 } else {
                     $order->updateAmazonPayOrderStatus('AMZ_2STEP_AUTH_OK', $data);
                 }
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false, 302);
             } elseif ($result['status'] === 202) {
                 $data = [
                     "chargeAmount" => $request['chargeAmount']['amount'],
                     "chargeId" => $response['chargeId']
                 ];
                 $order->updateAmazonPayOrderStatus('AMZ_AUTH_STILL_PENDING', $data);
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', true, 302);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false, 302);
             } else {
                 $data = [
                     "result" => $result,

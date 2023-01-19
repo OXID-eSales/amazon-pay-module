@@ -283,6 +283,7 @@ abstract class BaseCest
      */
     protected function _submitOrder()
     {
+        $this->I->makeScreenshot(time() . 'Order now page');
         $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
     }

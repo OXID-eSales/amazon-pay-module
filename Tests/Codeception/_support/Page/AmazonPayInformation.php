@@ -34,6 +34,8 @@ class AmazonPayInformation extends Page
     {
         $I = $this->user;
 
+        $I->waitForDocumentReadyState();
+        $I->waitForElement($this->cancelCheckout);
         $I->waitForElementClickable($this->cancelCheckout, 30);
         $I->click($this->cancelCheckout);
     }

@@ -11,7 +11,7 @@
             ledgerCurrency: '[{$amazonConfig->getLedgerCurrency()}]',
             checkoutLanguage: '[{$amazonConfig->getCheckoutLanguage()}]',
             productType: 'PayAndShip',
-            placement: 'Cart',
+            placement: '[{$placement}]',
             createCheckoutSessionConfig: {
                 payloadJSON: '[{$aPayload}]',
                 signature: '[{$oViewConf->signature}]',

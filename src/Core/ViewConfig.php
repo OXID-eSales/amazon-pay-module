@@ -124,6 +124,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template getter isAmazonPaymentPossible
      *
+     * @param null $paymentId
      * @return boolean
      */
     public function isAmazonPaymentPossible($paymentId = null): bool
@@ -274,10 +275,18 @@ class ViewConfig extends ViewConfig_parent
         $this->articlesId = $articlesId;
     }
 
+    public function getPaymentDescriptor()
+    {
+        $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
+        $paymentDescriptor = $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
+        return $paymentDescriptor;
+    }
+
     /**
      * Template variable getter. Get payload in JSON Format
      *
      * @return false|string
+     * @throws \Exception
      */
     public function getPayloadExpress()
     {

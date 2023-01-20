@@ -109,6 +109,8 @@ $aModule = [
         'amazonpay/checkout_user_main_wave.tpl' => 'osc/amazonpay/views/elements/checkout_user_main_wave.tpl',
         'amazonpay/shippingandpayment_flow.tpl' => 'osc/amazonpay/views/elements/shippingandpayment_flow.tpl',
         'amazonpay/shippingandpayment_wave.tpl' => 'osc/amazonpay/views/elements/shippingandpayment_wave.tpl',
+        'amazonpay/shippingandpayment_error_flow.tpl' => 'osc/amazonpay/views/elements/shippingandpayment_error_flow.tpl',
+        'amazonpay/shippingandpayment_error_wave.tpl' => 'osc/amazonpay/views/elements/shippingandpayment_error_wave.tpl',
         'amazonpay/details_productmain_tobasket.tpl' =>
             'osc/amazonpay/views/elements/details_productmain_tobasket.tpl',
         'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl' =>

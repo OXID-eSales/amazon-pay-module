@@ -38,9 +38,11 @@ class OrderController extends OrderController_parent
         $session = Registry::getSession();
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
-
-        if ($exclude) {
+        $oBasket = $this->getBasket();
+        $paymentId = $oBasket->getPaymentId();
+        if ($exclude || ($paymentId && !Constants::isAmazonPayment($paymentId))) {
             parent::init();
+            return;
         }
 
         $amazonServiceIsActive = $amazonService->isAmazonSessionActive();
@@ -267,6 +269,9 @@ class OrderController extends OrderController_parent
         $session = Registry::getSession();
         $countryOxId = $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
+        $session->setVariable('paymentId', $paymentId);
+        $session->setVariable('_selected_paymentid', $paymentId);
+
 
         $actShipSet = null;
         $fallbackShipSet = null;

@@ -27,7 +27,7 @@ class AmazonPayInformation extends Page
         $I->waitForElement($this->continueToCheckout);
         $I->waitForElementClickable($this->continueToCheckout, 30);
         $I->makeScreenshot(time() . 'submitPayment.png');
-        $I->click($this->continueToCheckout);
+        $I->retryClick($this->continueToCheckout);
     }
 
     public function cancelPayment()
@@ -37,6 +37,6 @@ class AmazonPayInformation extends Page
         $I->waitForDocumentReadyState();
         $I->waitForElement($this->cancelCheckout);
         $I->waitForElementClickable($this->cancelCheckout, 30);
-        $I->click($this->cancelCheckout);
+        $I->retryClick($this->cancelCheckout);
     }
 }

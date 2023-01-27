@@ -20,6 +20,21 @@ class OrderArticle extends OrderArticle_parent
      */
     public function deleteThisArticle()
     {
+        $this->refundAmazon();
+        parent::deleteThisArticle();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function storno()
+    {
+        $this->refundAmazon();
+        parent::storno();
+    }
+
+    private function refundAmazon()
+    {
         // get article id
         $sOrderArtId = Registry::getConfig()->getRequestParameter('sArtID');
         $sOrderId = $this->getEditObjectId();
@@ -39,7 +54,5 @@ class OrderArticle extends OrderArticle_parent
                 );
             }
         }
-
-        parent::deleteThisArticle();
     }
 }

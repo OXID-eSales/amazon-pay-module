@@ -222,20 +222,7 @@ class Order extends Order_parent
             return false;
         }
 
-        $oOrder = oxNew(Order::class);
-        if (!$oOrder->load($sOxId)) {
-            return false;
-        }
-
-        if (Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value)) {
-            $logger = new Logger();
-            OxidServiceProvider::getAmazonService()->createRefund(
-                $sOxId,
-                (float)$oOrder->getTotalOrderSum(),
-                $logger
-            );
-        }
-
+        OxidServiceProvider::getAmazonService()->processCancel($sOxId);
         return parent::delete($sOxId);
     }
 }

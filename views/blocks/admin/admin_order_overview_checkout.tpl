@@ -4,7 +4,7 @@
         <td class="edittext"><b>[{oxmultilang ident="OSC_AMAZONPAY_REMARK" suffix="COLON"}]</b></td>
         <td class="edittext">[{$edit->oxorder__osc_amazon_remark->value}]<br></td>
     </tr>
-    [{if $edit->oxorder__oxtransstatus->value == 'OK'}]
+    [{if $edit->oxorder__oxtransstatus->value == 'OK' && $oViewConf->isAmazonActive()}]
         <tr>
             <td>
                 <form name="refundpayment" id="refundpayment" action="[{$oViewConf->getSelfLink()}]" >

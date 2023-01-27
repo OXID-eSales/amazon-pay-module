@@ -108,6 +108,7 @@ class Payload
      * @var string
      */
     private string $platformId;
+    private array $addressRestrictions;
 
     /**
      * @return array
@@ -192,7 +193,16 @@ class Payload
             $data['platformId'] = $this->platformId;
         }
 
+        if (!empty($this->addressRestrictions)) {
+            $data['deliverySpecifications']['addressRestrictions']['type'] = 'Allowed';
+            $data['deliverySpecifications']['addressRestrictions']['restrictions'] = $this->addressRestrictions;
+        }
+
         return $data;
+    }
+    public function setAddressRestrictions(array $allowedCountries): void
+    {
+        $this->addressRestrictions = $allowedCountries;
     }
 
     /**

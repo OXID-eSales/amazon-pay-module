@@ -70,4 +70,5 @@ $aLang = [
     'OSC_AMAZONPAY_REMARK'                  => 'Amazon Pay Mitteilung',
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'AmazonPay ausschließen',
     'OSC_AMAZONPAY_REFUND'                  => 'Erstatten',
+    'OSC_AMAZONPAY_REFUND_ANNOTATION'       => 'Machen Sie eine Rückerstattung von bis zu ',
 ];

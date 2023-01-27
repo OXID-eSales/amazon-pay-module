@@ -241,6 +241,23 @@ class AmazonService
         return $this->billingAddress;
     }
 
+    /**
+     * Maximal amount to refund
+     *
+     * @param $orderId
+     * @return float
+     */
+    public function getMaximalRefundAmount($orderId): float
+    {
+        $order = new Order();
+        $order->load($orderId);
+
+        $orderAmount = (float)$order->getTotalOrderSum();
+        $compensation = min(75, 0.15 * $orderAmount);
+
+        return min(150000, $orderAmount + $compensation);
+    }
+
     public function unsetPaymentMethod(): void
     {
         $session = Registry::getSession();
@@ -355,11 +372,15 @@ class AmazonService
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund(string $orderId, LoggerInterface $logger): void
+    public function createRefund(string $orderId, float $refundAmount, LoggerInterface $logger): void
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
         $order->load($orderId);
+
+        if (!(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))) {
+            return;
+        }
 
         $amazonConfig = oxNew(Config::class);
         $body = [
@@ -368,9 +389,8 @@ class AmazonService
                 'amount' => str_replace(
                     ',',
                     '.',
-                    Registry::getLang()->formatCurrency((float)$order->getTotalOrderSum())
+                    Registry::getLang()->formatCurrency($refundAmount)
                 ),
-
                 'currencyCode' => $order->getOrderCurrency()->name
             ],
             'softDescriptor' => 'AMZ*OXID'

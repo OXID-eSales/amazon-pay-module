@@ -10,7 +10,6 @@ namespace OxidSolutionCatalysts\AmazonPay\Core;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Core\Request;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -156,6 +155,11 @@ class ViewConfig extends ViewConfig_parent
     public function isAmazonPaymentId($paymentId): bool
     {
         return Constants::isAmazonPayment($paymentId);
+    }
+
+    public function getMaximalRefundAmount($paymentId): float
+    {
+        return OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($paymentId);
     }
 
     /**

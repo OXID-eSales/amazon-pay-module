@@ -6,9 +6,16 @@
     </tr>
     [{if $edit->oxorder__oxtransstatus->value == 'OK'}]
         <tr>
+            <td class="edittext">
+                [{oxmultilang ident="OSC_AMAZONPAY_REFUND_ANNOTATION"}]
+                [{$oViewConf->getMaximalRefundAmount($oxid)}]
+            </td>
+        </tr>
+        <tr>
             <td>
                 <form name="refundpayment" id="refundpayment" action="[{$oViewConf->getSelfLink()}]" >
                     [{$oViewConf->getHiddenSid()}]
+                    <input type="text" name="refundAmount" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                     <input type="button" name="refundButton" value="[{oxmultilang ident="OSC_AMAZONPAY_REFUND"}]" onclick="document.refundpayment.submit()" />
                     <input type="hidden" name="oxid" value="[{$oxid}]">
                     <input type="hidden" name="cl" value="order_overview">

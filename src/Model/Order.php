@@ -13,6 +13,7 @@ use OxidEsales\Eshop\Application\Model\Basket;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -205,5 +206,36 @@ class Order extends Order_parent
     public function setAmazonService(AmazonService $amazonService): void
     {
         $this->amazonService = $amazonService;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete($sOxId = null)
+    {
+        $sOxId = $sOxId ?: $this->getId();
+        if (!$sOxId) {
+            return false;
+        }
+
+        if (!$this->canDelete($sOxId)) {
+            return false;
+        }
+
+        $oOrder = oxNew(Order::class);
+        if (!$oOrder->load($sOxId)) {
+            return false;
+        }
+
+        if (Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value)) {
+            $logger = new Logger();
+            OxidServiceProvider::getAmazonService()->createRefund(
+                $sOxId,
+                (float)$oOrder->getTotalOrderSum(),
+                $logger
+            );
+        }
+
+        return parent::delete($sOxId);
     }
 }

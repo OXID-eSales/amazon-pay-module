@@ -10,8 +10,8 @@ use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain as DeliverySet
 use OxidEsales\Eshop\Application\Controller\Admin\OrderList as OrderListController;
 use OxidEsales\Eshop\Application\Controller\Admin\OrderMain as OrderMainController;
 use OxidEsales\Eshop\Application\Controller\Admin\OrderOverview as CoreOrderOverviewmodel;
+use OxidEsales\Eshop\Application\Controller\Admin\OrderArticle as CoreOrderArticleModel;
 use OxidEsales\Eshop\Application\Controller\ArticleDetailsController as CoreArticleDetailsController;
-use OxidEsales\Eshop\Application\Controller\FrontendController as CoreFrontendController;
 use OxidEsales\Eshop\Application\Controller\OrderController as CoreOrderController;
 use OxidEsales\Eshop\Application\Controller\UserController as CoreUserController;
 use OxidEsales\Eshop\Application\Model\Article as CoreArticleModel;
@@ -27,6 +27,7 @@ use OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain as AmazonDe
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderList as AmazonOrderList;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderMain as AmazonOrderMain;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderOverview as ModuleOrderOverview;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderArticle as ModuleOrderArticle;
 use OxidSolutionCatalysts\AmazonPay\Controller\AmazonCheckoutController;
 use OxidSolutionCatalysts\AmazonPay\Controller\ArticleDetailsController;
 use OxidSolutionCatalysts\AmazonPay\Controller\DispatchController;
@@ -66,6 +67,7 @@ $aModule = [
         CoreOrderController::class => OrderController::class,
         CoreArticleDetailsController::class => ArticleDetailsController::class,
         CoreOrderOverviewmodel::class => ModuleOrderOverview::class,
+        CoreOrderArticleModel::class => ModuleOrderArticle::class,
         CoreUserComponent::class => UserComponent::class,
         CoreOrderModel::class => ModuleOrder::class,
         CoreUserModel::class => ModuleUser::class,

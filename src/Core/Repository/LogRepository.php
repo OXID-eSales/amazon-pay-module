@@ -195,4 +195,18 @@ class LogRepository
             ]
         );
     }
+
+    /**
+     * @param $orderId
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function deleteLogMessageByOrderId($orderId)
+    {
+        $sql = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID =' . $orderId;
+        DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
+            $sql
+        );
+    }
 }

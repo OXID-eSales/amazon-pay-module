@@ -242,14 +242,17 @@ class Order extends Order_parent
         $repository = oxNew(LogRepository::class);
         $logMessage = $repository->findLogMessageForOrderId($oxid);
 
-        if (in_array($logMessage[0]['OSC_AMAZON_RESPONSE_MSG'],
-                array('Captured',
+        if (
+            in_array(
+                $logMessage[0]['OSC_AMAZON_RESPONSE_MSG'],
+                ['Captured',
                     'Completed & Captured',
-                    'Refunded')
-                )
-        )
-        {
-            Registry::getUtilsView()->addErrorToDisplay();
+                    'Refunded']
+            )
+        ) {
+            Registry::getUtilsView()->addErrorToDisplay(
+                Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR')
+            );
             return false;
         }
 

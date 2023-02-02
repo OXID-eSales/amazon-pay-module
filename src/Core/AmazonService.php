@@ -381,7 +381,8 @@ class AmazonService
         if (!(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))) {
             Registry::getUtilsView()->addErrorToDisplay(
                 Registry::getLang()->translateString(("OSC_AMAZONPAY_REFUND_ANNOTATION") .
-                    $this->getMaximalRefundAmount($orderId)));
+                $this->getMaximalRefundAmount($orderId))
+            );
             return;
         }
 

@@ -243,11 +243,14 @@ class Order extends Order_parent
         $logMessage = $repository->findLogMessageForOrderId($oxid);
 
         if (
+            isset($logMessage[0]['OSC_AMAZON_RESPONSE_MSG']) &&
             in_array(
                 $logMessage[0]['OSC_AMAZON_RESPONSE_MSG'],
-                ['Captured',
+                [
+                    'Captured',
                     'Completed & Captured',
-                    'Refunded']
+                    'Refunded'
+                ]
             )
         ) {
             Registry::getUtilsView()->addErrorToDisplay(

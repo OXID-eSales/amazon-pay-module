@@ -71,5 +71,5 @@ $aLang = [
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'AmazonPay ausschließen',
     'OSC_AMAZONPAY_REFUND'                  => 'Erstatten',
     'OSC_AMAZONPAY_REFUND_ANNOTATION'       => 'Machen Sie eine Rückerstattung von bis zu ',
-    'OSC_AMAZONPAY_DELETE_ERROR'            => 'Bestellung kann nicht gelöscht werden',
+    'OSC_AMAZONPAY_DELETE_ERROR'            => 'Bestellung kann nicht gelöscht werden, da bereits Geld zwischen dem Shop und Amazon transferiert wurde.',
 ];

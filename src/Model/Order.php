@@ -10,10 +10,13 @@ namespace OxidSolutionCatalysts\AmazonPay\Model;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Order
@@ -205,5 +208,57 @@ class Order extends Order_parent
     public function setAmazonService(AmazonService $amazonService): void
     {
         $this->amazonService = $amazonService;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete($sOxId = null)
+    {
+        $sOxId = $sOxId ?: $this->getId();
+        if (!$sOxId) {
+            return false;
+        }
+
+        if (!$this->canDelete($sOxId)) {
+            return false;
+        }
+
+        OxidServiceProvider::getAmazonService()->processCancel($sOxId);
+
+        $repository = oxNew(LogRepository::class);
+        $repository->deleteLogMessageByOrderId($sOxId);
+
+        return parent::delete($sOxId);
+    }
+
+    public function canDelete($oxid = null)
+    {
+        $oxid = $oxid ?: $this->getId();
+        if (!$oxid) {
+            return false;
+        }
+
+        $repository = oxNew(LogRepository::class);
+        $logMessage = $repository->findLogMessageForOrderId($oxid);
+
+        if (
+            isset($logMessage[0]['OSC_AMAZON_RESPONSE_MSG']) &&
+            in_array(
+                $logMessage[0]['OSC_AMAZON_RESPONSE_MSG'],
+                [
+                    'Captured',
+                    'Completed & Captured',
+                    'Refunded'
+                ]
+            )
+        ) {
+            Registry::getUtilsView()->addErrorToDisplay(
+                Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR')
+            );
+            return false;
+        }
+
+        return parent::canDelete($oxid);
     }
 }

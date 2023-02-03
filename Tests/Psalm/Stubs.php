@@ -76,3 +76,7 @@ class OrderList_parent extends \OxidEsales\Eshop\Application\Controller\Admin\Or
 class DeliverySetMain_parent extends \OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain
 {
 }
+
+class OrderArticle_parent extends \OxidEsales\Eshop\Application\Model\OrderArticle
+{
+}

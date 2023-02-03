@@ -7,7 +7,10 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\Order;
 
 /**
  * Class OrderListController
@@ -20,7 +23,25 @@ class OrderList extends OrderList_parent
      */
     public function cancelOrder(): void
     {
-        OxidServiceProvider::getAmazonService()->processCancel($this->getEditObjectId());
+        $sOxId = $this->getEditObjectId();
+        if (!$sOxId) {
+            return;
+        }
+
+        $oOrder = oxNew(Order::class);
+        if (!$oOrder->load($sOxId)) {
+            return;
+        }
+
+        if (Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value)) {
+            $logger = new Logger();
+            OxidServiceProvider::getAmazonService()->createRefund(
+                $sOxId,
+                (float)$oOrder->getTotalOrderSum(),
+                $logger
+            );
+        }
+
         parent::cancelOrder();
     }
 }

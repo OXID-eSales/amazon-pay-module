@@ -113,6 +113,7 @@ class OrderOverview extends OrderOverview_parent
     public function refundpayment(): void
     {
         $oOrder = oxNew(Order::class);
+        $refundAmount = \OxidEsales\Eshop\Core\Registry::getRequest()->getRequestParameter("refundAmount");
 
         if (
             $oOrder->load($this->getEditObjectId()) &&
@@ -122,6 +123,7 @@ class OrderOverview extends OrderOverview_parent
             $logger = new Logger();
             OxidServiceProvider::getAmazonService()->createRefund(
                 $oOrder->getId(),
+                $refundAmount,
                 $logger
             );
         }

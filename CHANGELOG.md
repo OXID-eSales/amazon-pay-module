@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.0.2] - New Feature
 * added additional payment button
 * If the order or individual items are canceled or deleted, Amazon will issue a refund or cancel
+* Fix bug showing of maintenance mode in admin panel after refund
+* Added log in via Amazon
+* Added partial refund
 
 ## [2.0.1] - Release 
 

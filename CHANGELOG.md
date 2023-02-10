@@ -5,15 +5,36 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.2] - New Feature
+
+### Added
+ 
 * added additional payment button
 * If the order or individual items are canceled or deleted, Amazon will issue a refund or cancel
+* Added log in via Amazon
+* Added partial refund
+
+### Fixed
+
+* Fix bug showing of maintenance mode in admin panel after refund
+* [0007350](https://bugs.oxid-esales.com/view.php?id=7350) OXTRANSID contains authorize status codes
 
 ## [2.0.1] - Release 
 
-* add process of refund payment
+### Added
+
 * update template to use Amazon Pay Express
 * extends functionality of Payload objects
 * add methods `ViewConfig::setArticlesId(string)`, `ViewConfig::getPayloadExpress()`, `ViewConfig::getSignature()`
+
+### Fixed
+
+* [0007345](https://bugs.oxid-esales.com/view.php?id=7345) Refunds are not booked
+* [0007369](https://bugs.oxid-esales.com/view.php?id=7369) Delay in the response when amazon pay button is clicked
+* [0007368](https://bugs.oxid-esales.com/view.php?id=7368) Declined message is not shown when buyer selects the declined simulation code card
+* [0007371](https://bugs.oxid-esales.com/view.php?id=7371) Amazon pay button is missing from the product/basket page after the previous order is placed successfully
+* [0007370](https://bugs.oxid-esales.com/view.php?id=7370) Emails are not shared to buyer after successful placement of order
+* [0007379](https://bugs.oxid-esales.com/view.php?id=7379) Error messages from the DispatchController spam the log, probably a template is missing here
+* [0007351](https://bugs.oxid-esales.com/view.php?id=7351) PlatformId set in headers instead of Payload
 
 ## [2.0.0] - Release with new Namespace
 

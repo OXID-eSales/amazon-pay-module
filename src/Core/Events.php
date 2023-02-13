@@ -236,7 +236,7 @@ class Events
         if (!$paymentLoaded) {
             $payment->setId($paymentId);
             $params = [
-                'oxpayments__oxactive' => true,
+                'oxpayments__oxactive' => false,
                 'oxpayments__oxaddsum' => 0,
                 'oxpayments__oxaddsumtype' => 'abs',
                 'oxpayments__oxfromboni' => 0,

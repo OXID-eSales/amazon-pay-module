@@ -131,6 +131,10 @@ class ConfigController extends AdminController
             $conf['blAmazonPayExpressPDP'] = 0;
         }
 
+        if (!isset($conf['blDeactivateSocialLogin'])) {
+            $conf['blAmazonPayExpressPDP'] = 0;
+        }
+
         if (!isset($conf['blAmazonPayExpressMinicartAndModal'])) {
             $conf['blAmazonPayExpressMinicartAndModal'] = 0;
         }

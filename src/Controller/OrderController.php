@@ -33,8 +33,6 @@ class OrderController extends OrderController_parent
      */
     public function init()
     {
-        /** @var User $user */
-
         $session = Registry::getSession();
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $amazonService = OxidServiceProvider::getAmazonService();
@@ -54,7 +52,7 @@ class OrderController extends OrderController_parent
         parent::init();
     }
 
-    protected function initAmazonPay()
+    protected function initAmazonPay(): void
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
@@ -98,8 +96,9 @@ class OrderController extends OrderController_parent
     {
         $basket = $this->getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
-        $paymentId = $basket->getPaymentId() ?? '';
+        $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+        $ret = null;
 
         $amazonSessionId = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
         if (!empty($amazonSessionId)) {
@@ -118,7 +117,7 @@ class OrderController extends OrderController_parent
         ) {
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-            return;
+            return $ret;
         } elseif ($isAmazonPayment) {
             // if payment is 'oxidamazon' call parent::execute to validate and finalize order
             // then try to complete order at Amazon Pay
@@ -150,10 +149,10 @@ class OrderController extends OrderController_parent
             (float)$this->getBasket()->getPrice()->getBruttoPrice()
         ));
         $amazonConfig = oxNew(Config::class);
-        $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
+        $payload->setCurrencyCode((string)$amazonConfig->getPresentmentCurrency());
         $payload = $payload->removeMerchantMetadata($payload->getData());
-        $amazonSessionId = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
-        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $amazonSessionId = (string)OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
+        $orderOxId = (string)Registry::getSession()->getVariable('sess_challenge');
         $oOrder = oxNew(Order::class);
 
         $isOrderLoaded = $oOrder->load($orderOxId);
@@ -169,7 +168,7 @@ class OrderController extends OrderController_parent
             $isOrderLoaded
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
-            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
+            $redirectUrl = (string)PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
             if ($redirectUrl !== false) {
                 Registry::getUtils()->redirect($redirectUrl, false, 301);
             }
@@ -186,10 +185,10 @@ class OrderController extends OrderController_parent
     protected function completeAmazonPaymentExpress(): void
     {
         $payload = new Payload();
-        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $orderOxId = (string)Registry::getSession()->getVariable('sess_challenge');
         $oOrder = oxNew(Order::class);
         if ($oOrder->load($orderOxId)) {
-            $payload->setMerchantReferenceId($oOrder->oxorder__oxordernr->value);
+            $payload->setMerchantReferenceId((string)$oOrder->getFieldData('oxordernr'));
         }
 
         $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
@@ -197,8 +196,8 @@ class OrderController extends OrderController_parent
         ));
 
         $activeShop = Registry::getConfig()->getActiveShop();
-        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+        $payload->setMerchantStoreName((string)$activeShop->getFieldData('oxcompany'));
+        $payload->setNoteToBuyer((string)$activeShop->getFieldData('oxordersubject'));
 
         $amazonConfig = oxNew(Config::class);
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
@@ -224,7 +223,7 @@ class OrderController extends OrderController_parent
             !empty((PhpHelper::getArrayValue('amazonPayRedirectUrl', PhpHelper::jsonToArray($result['response']))))
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
-            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
+            $redirectUrl = (string)PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
             if ($redirectUrl !== false) {
                 Registry::getUtils()->redirect($redirectUrl, false, 301);
             }
@@ -298,7 +297,7 @@ class OrderController extends OrderController_parent
                         $fallbackShipSet = $shipSetId;
                     }
                     if ($shipSetId == $lastShipSet) {
-                        $actShipSet = $lastShipSet;
+                        $actShipSet = (string)$lastShipSet;
                     }
                 }
             }
@@ -307,7 +306,7 @@ class OrderController extends OrderController_parent
                 if ($lastShipSet) {
                     Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
                 }
-                $actShipSet = $fallbackShipSet;
+                $actShipSet = (string)$fallbackShipSet;
             }
         }
 

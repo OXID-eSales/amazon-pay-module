@@ -37,7 +37,7 @@ class DispatchController extends FrontendController
 
         switch ($action) {
             case 'review':
-                $amazonSessionId = $this->setRequestAmazonSessionId();
+                $amazonSessionId = (string)$this->setRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -46,7 +46,7 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect($redirectUrl, true, 302);
                 break;
             case 'result':
-                $amazonSessionId = $this->getRequestAmazonSessionId();
+                $amazonSessionId = (string)$this->getRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     $amazonSessionId = $this->setRequestAmazonSessionId();
                 }
@@ -125,7 +125,6 @@ class DispatchController extends FrontendController
                     return;
                 }
 
-                /** @var User $user */
                 $user = $this->getUser();
                 $session = Registry::getSession();
 
@@ -179,7 +178,7 @@ class DispatchController extends FrontendController
     {
 
         // add item to basket if an "anid" was provided in the url
-        if ($sProductId = Registry::getRequest()->getRequestParameter('anid')) {
+        if ($sProductId = (string)Registry::getRequest()->getRequestParameter('anid')) {
             $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
             $database->startTransaction();
             try {
@@ -197,7 +196,8 @@ class DispatchController extends FrontendController
             }
         }
 
-        $amazonSessionId = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+        $amazonSessionId = (string)Registry::getRequest()
+                           ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
 
         if (is_null(OxidServiceProvider::getAmazonService()->getCheckoutSessionId())) {
             OxidServiceProvider::getAmazonService()->storeAmazonSession($amazonSessionId);

@@ -63,6 +63,11 @@ class_alias(
 );
 
 class_alias(
+    \OxidEsales\Eshop\Core\ViewConfig::class,
+    \OxidSolutionCatalysts\AmazonPay\Core\ViewConfig_parent::class
+);
+
+class_alias(
     \OxidEsales\Eshop\Application\Model\Article::class,
     \OxidSolutionCatalysts\AmazonPay\Model\Article_parent::class
 );

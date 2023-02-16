@@ -27,9 +27,9 @@ class DeliverySetMain extends DeliverySetMain_parent
         if ($oxId !== -1) {
             $deliverySet = oxNew(DeliverySet::class);
             $deliverySet->load($oxId);
-
-            if ($deliverySet->oxdeliveryset__osc_amazon_carrier->rawValue !== null) {
-                $this->addTplParam('selectedAmazonCarrier', $deliverySet->oxdeliveryset__osc_amazon_carrier);
+            $amazonCarrier = $deliverySet->getRawFieldData('osc_amazon_carrier');
+            if ($amazonCarrier !== null) {
+                $this->addTplParam('selectedAmazonCarrier', $amazonCarrier);
             } else {
                 // Default
                 $this->addTplParam('selectedAmazonCarrier', 'NULL');

@@ -25,6 +25,6 @@ class Article extends Article_parent
      */
     public function isAmazonExclude(): bool
     {
-        return (bool)$this->oxarticles__osc_amazon_exclude->value;
+        return (bool)$this->getFieldData('osc_amazon_exclude');
     }
 }

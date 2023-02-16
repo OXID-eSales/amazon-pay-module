@@ -42,7 +42,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
             $oEx = oxNew(UserException::class);
 
             $oEx->setMessage(sprintf(
-                Registry::getLang()->translateString('AMAZON_PAY_USEREXISTS'),
+                (string)Registry::getLang()->translateString('AMAZON_PAY_USEREXISTS'),
                 $sLogin,
                 $sLogin
             ));

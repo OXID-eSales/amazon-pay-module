@@ -48,15 +48,15 @@ class PhpHelper
 
     /**
      * Get POST from $_POST or php://input if set
-     * @return array|mixed
+     * @return array
      */
-    public static function getPost()
+    public static function getPost(): array
     {
         if (!empty($_POST)) {
             return $_POST;
         }
 
-        $post = json_decode(file_get_contents('php://input'), true);
+        $post = json_decode((string)file_get_contents('php://input'), true);
         if (json_last_error() == JSON_ERROR_NONE) {
             return $post;
         }

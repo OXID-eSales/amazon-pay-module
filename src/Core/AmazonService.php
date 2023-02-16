@@ -28,7 +28,7 @@ class AmazonService
     /**
      * @var AmazonClient
      */
-    private $client;
+    private AmazonClient $client;
     /**
      * @var array
      */
@@ -37,9 +37,9 @@ class AmazonService
     /**
      * Delivery address
      *
-     * @var \stdClass
+     * @var stdClass|null
      */
-    protected $deliveryAddress = null;
+    protected ?\stdClass $deliveryAddress = null;
 
     /**
      * Billing address
@@ -98,7 +98,7 @@ class AmazonService
     /**
      * @param $checkoutSessionId
      */
-    public function storeAmazonSession($checkoutSessionId): void
+    public function storeAmazonSession(string $checkoutSessionId): void
     {
         Registry::getSession()->setVariable(
             Constants::SESSION_CHECKOUT_ID,
@@ -116,7 +116,7 @@ class AmazonService
         $checkoutSessionId = $this->getCheckoutSessionId();
         if (!$checkoutSessionId) {
             $session = Registry::getSession();
-            $paymentId = $session->getVariable('paymentid') ?? '';
+            $paymentId = (string)$session->getVariable('paymentid') ?? '';
             $isAmazonPayment = Constants::isAmazonPayment($paymentId);
             if ($isAmazonPayment) {
                 self::unsetPaymentMethod();
@@ -199,7 +199,7 @@ class AmazonService
     {
         if (is_null($this->deliveryAddress)) {
             $this->deliveryAddress = new \stdClass();
-            $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+            $oOrder = oxNew(Order::class);
             if ($deliveryAddress = $oOrder->getDelAddressInfo()) {
                 foreach ($deliveryAddress as $key => $value) {
                     $this->deliveryAddress->{$key} = new Field($value, Field::T_RAW);
@@ -244,10 +244,10 @@ class AmazonService
     /**
      * Maximal amount to refund
      *
-     * @param $orderId
+     * @param string $orderId
      * @return float
      */
-    public function getMaximalRefundAmount($orderId): float
+    public function getMaximalRefundAmount(string $orderId): float
     {
         $order = new Order();
         $order->load($orderId);
@@ -268,14 +268,18 @@ class AmazonService
     /**
      * Processing Amazon Pay
      *
-     * @param $amazonSessionId
-     * @param Basket $oBasket Basket object
+     * @param string $amazonSessionId
+     * @param Basket $basket Basket object
      * @param LoggerInterface $logger Logger
      * @param bool $bl2Step
      *
      */
-    protected function processPayment($amazonSessionId, Basket $basket, LoggerInterface $logger, $bl2Step = false): void
-    {
+    protected function processPayment(
+        string $amazonSessionId,
+        Basket $basket,
+        LoggerInterface $logger,
+        bool $bl2Step = false
+    ): void {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
@@ -283,8 +287,8 @@ class AmazonService
 
         $activeShop = Registry::getConfig()->getActiveShop();
 
-        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+        $payload->setMerchantStoreName($activeShop->getFieldData('oxcompany'));
+        $payload->setNoteToBuyer($activeShop->getFieldData('oxordersubject'));
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
@@ -339,14 +343,13 @@ class AmazonService
     }
 
     /**
-     * Processing Amazon Pay Auth an Capt
+     * Processing Amazon Pay Auth and Capture
      *
-     * @param $amazonSessionId
-     * @param Basket $oBasket Basket object
+     * @param string $amazonSessionId
+     * @param Basket $basket
      * @param LoggerInterface $logger Logger
-     *
      */
-    public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
+    public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->processPayment($amazonSessionId, $basket, $logger, false);
     }
@@ -354,12 +357,11 @@ class AmazonService
     /**
      * Processing Amazon Pay Auth
      *
-     * @param $amazonSessionId
-     * @param Basket $oBasket Basket object
+     * @param string $amazonSessionId
+     * @param Basket $basket
      * @param LoggerInterface $logger Logger
-     *
      */
-    public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger): void
+    public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
         $this->processPayment($amazonSessionId, $basket, $logger, true);
     }

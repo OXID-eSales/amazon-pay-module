@@ -7,9 +7,9 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Component;
 
-use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\PaymentList;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Application\Controller\RegisterController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -71,10 +71,10 @@ class UserComponent extends UserComponent_parent
             $countryOxId = $user->getActiveCountry();
 
             $deliverySetList = Registry::get(DeliverySetList::class)
-            ->getDeliverySetList(
-                $user,
-                $countryOxId
-            );
+                ->getDeliverySetList(
+                    $user,
+                    $countryOxId
+                );
             $possibleDeliverySets = [];
             foreach ($deliverySetList as $deliverySet) {
                 $paymentList = Registry::get(PaymentList::class)->getPaymentList(
@@ -115,13 +115,13 @@ class UserComponent extends UserComponent_parent
      * "usr", "dynvalue", "paymentid"<br>
      * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
      * oxcmp_user::oUser, forces basket to recalculate.
-     * @return void
+     * @return null
      */
-    public function logout(): void
+    public function logout()
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        parent::logout();
+        return parent::logout();
     }
 
     /**
@@ -141,7 +141,7 @@ class UserComponent extends UserComponent_parent
             return parent::_getDelAddressData();
         }
         $aDelAdress = [];
-        $aDeladr = $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
+        $aDeladr = (array) $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
         if (count($aDeladr)) {
             $aDelAdress = $aDeladr;
         }
@@ -157,7 +157,7 @@ class UserComponent extends UserComponent_parent
         return $amazonSession['response']['name'];
     }
 
-    protected function _getEMailFromAmazonResponse(array $amazonSession)
+    protected function _getEMailFromAmazonResponse(array $amazonSession): string
     {
         if (array_key_exists('buyer', $amazonSession['response'])) {
             return $amazonSession['response']['buyer']['email'];

@@ -183,11 +183,11 @@ class Config
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getPresentmentCurrency(): ?string
+    public function getPresentmentCurrency(): string
     {
-        $currencyAbbr = null;
+        $currencyAbbr = '';
 
         $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
 

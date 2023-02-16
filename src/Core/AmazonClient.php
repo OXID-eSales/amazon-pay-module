@@ -39,10 +39,13 @@ class AmazonClient extends Client
         $this->moduleConfig = $moduleConfig;
     }
 
+
     /**
      * @inheritDoc
+     * @param array $payload
+     * @param array $headers
      */
-    public function createCheckoutSession($payload = null, $headers = null)
+    public function createCheckoutSession($payload = [], $headers = []): array
     {
         $config = $this->getModuleConfig();
 
@@ -77,10 +80,11 @@ class AmazonClient extends Client
 
     /**
      * @inheritDoc
-     *
+     * @param string $checkoutSessionId
+     * @param array $headers
      * @return array
      */
-    public function getCheckoutSession($checkoutSessionId, $headers = null)
+    public function getCheckoutSession($checkoutSessionId, $headers = []): array
     {
         return $this->decodeResponse(parent::getCheckoutSession($checkoutSessionId, $headers));
     }

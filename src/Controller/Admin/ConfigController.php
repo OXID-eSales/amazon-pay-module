@@ -10,9 +10,9 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 /**
@@ -56,7 +56,7 @@ class ConfigController extends AdminController
      */
     public function save()
     {
-        $confArr = Registry::getRequest()->getRequestEscapedParameter('conf');
+        $confArr = (array)Registry::getRequest()->getRequestEscapedParameter('conf');
         $shopId = (string)Registry::getConfig()->getShopId();
 
         $confArr = $this->handleSpecialFields($confArr);
@@ -143,10 +143,10 @@ class ConfigController extends AdminController
     }
 
     /**
-    * check if using DaoBridge is possible
-    *
-    * @return boolean
-    */
+     * check if using DaoBridge is possible
+     *
+     * @return boolean
+     */
     protected function useDaoBridge()
     {
         return class_exists(

@@ -25,7 +25,7 @@ class AmazonCheckoutController extends FrontendController
     public function createCheckout(): void
     {
         // if an article is given, we put it in the shopping cart
-        if ($sProductId = Registry::getRequest()->getRequestParameter('anid')) {
+        if ($sProductId = (string)Registry::getRequest()->getRequestParameter('anid')) {
             $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
             $database->startTransaction();
             try {

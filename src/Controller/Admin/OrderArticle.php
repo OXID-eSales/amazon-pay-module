@@ -18,7 +18,7 @@ class OrderArticle extends OrderArticle_parent
     /**
      * @inheritdoc
      */
-    public function deleteThisArticle()
+    public function deleteThisArticle(): void
     {
         $this->refundAmazon();
         parent::deleteThisArticle();
@@ -27,16 +27,16 @@ class OrderArticle extends OrderArticle_parent
     /**
      * @inheritdoc
      */
-    public function storno()
+    public function storno(): void
     {
         $this->refundAmazon();
         parent::storno();
     }
 
-    private function refundAmazon()
+    private function refundAmazon(): void
     {
         // get article id
-        $sOrderArtId = Registry::getConfig()->getRequestParameter('sArtID');
+        $sOrderArtId = (string) Registry::getConfig()->getRequestParameter('sArtID');
         $sOrderId = $this->getEditObjectId();
 
         $oOrderArticle = oxNew(\OxidEsales\Eshop\Application\Model\OrderArticle::class);
@@ -49,7 +49,7 @@ class OrderArticle extends OrderArticle_parent
                 $logger = new Logger();
                 OxidServiceProvider::getAmazonService()->createRefund(
                     $oOrderArticle->getOrder()->getId(),
-                    (float)$oOrderArticle->getTotalBrutPriceFormated,
+                    (float)$oOrderArticle->getTotalBrutPriceFormated(),
                     $logger
                 );
             }

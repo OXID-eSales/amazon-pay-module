@@ -8,6 +8,8 @@
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
@@ -38,7 +40,7 @@ class OrderMain extends OrderMain_parent
                 $amazonConfig = oxNew(Config::class);
                 $currencyCode = $order->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
 
-                if ($order->oxorder__oxtransstatus->rawValue !== 'OK') {
+                if ($order->getRawFieldData('oxtransstatus') !== 'OK') {
                     OxidServiceProvider::getAmazonService()
                         ->capturePaymentForOrder(
                             $chargeId,
@@ -49,14 +51,14 @@ class OrderMain extends OrderMain_parent
 
                 OxidServiceProvider::getAmazonService()->sendAlexaNotification(
                     $this->getOrderChargePermissionId($order),
-                    $order->oxorder__oxtrackcode->rawValue,
-                    $order->oxorder__oxdeltype->rawValue
+                    $order->getRawFieldData('oxtrackcode'),
+                    $order->getRawFieldData('oxdeltype')
                 );
             }
         }
     }
 
-    protected function getOrderChargePermissionId(Order $oOrder)
+    protected function getOrderChargePermissionId(Order $oOrder): string
     {
         $chargePermissionId = null;
 
@@ -81,10 +83,15 @@ class OrderMain extends OrderMain_parent
         return $chargePermissionId;
     }
 
-
-    protected function getOrderChargeId(Order $oOrder)
+    /**
+     * @param Order $oOrder
+     * @return string|int
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    protected function getOrderChargeId(Order $oOrder): string
     {
-        $chargeId = null;
+        $chargeId = '';
 
         if ($oOrder->load($this->getEditObjectId())) {
             $repository = oxNew(LogRepository::class);

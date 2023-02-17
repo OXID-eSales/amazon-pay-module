@@ -23,8 +23,8 @@ return [
             'id' => '05848170643ab0deb9914566391c0c63'
         ],
         'notExcludedProduct' => [
-            'artId' => '1001',
-            'id' => '1001'
+            'artId' => '3501',
+            'id' => 'f4f981b0d9e34d2aeda82d79412480a4'
         ],
         'categoryExcluded' => [
             'sortNum' => '101',
@@ -35,8 +35,8 @@ return [
             'id' => 'b5666b6d4bcb67c61dee4887bfba8351'
         ],
         'productInNotExcludedCategory' => [
-            'artId' => '2102',
-            'id' => 'd86e244c8114c8214fbf83da8d6336b3'
+            'artId' => '2103',
+            'id' => 'ed6573c0259d6a6fb641d106dcb2faec'
         ]
     ],
 ];

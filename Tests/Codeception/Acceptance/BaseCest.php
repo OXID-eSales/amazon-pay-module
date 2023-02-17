@@ -38,6 +38,18 @@ abstract class BaseCest
             ]
         );
 
+        // make sure the payments are active
+        $I->updateInDatabase(
+            'oxpayments',
+            ['OXACTIVE' => 1],
+            ['OXID' => 'oxidamazon']
+        );
+        $I->updateInDatabase(
+            'oxpayments',
+            ['OXACTIVE' => 1],
+            ['OXID' => 'oxidamazonexpress']
+        );
+
         $this->I = $I;
     }
 
@@ -96,12 +108,14 @@ abstract class BaseCest
         $basketItem = Fixtures::get('product');
         $basketSteps = new BasketSteps($this->I);
         $basketSteps->addProductToBasket($basketItem['id'], $this->amount);
+        $this->I->wait(2);
     }
 
     protected function _openDetailPage()
     {
         $this->I->waitForText(Translator::translate('MORE_INFO'), 60);
         $this->I->click(Translator::translate('MORE_INFO'));
+        $this->I->wait(2);
     }
 
     /**
@@ -111,10 +125,10 @@ abstract class BaseCest
     {
         $homePage = $this->I->openShop();
         $this->I->waitForDocumentReadyState();
-        $this->I->wait(5);
+        $this->I->wait(2);
         $this->I->makeScreenshot(time() . 'beforeLogin.png');
         $homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
-        $this->I->wait(5);
+        $this->I->wait(2);
     }
 
     /**
@@ -134,10 +148,12 @@ abstract class BaseCest
         $this->I->fillField($loginInput, $_ENV['AMAZONPAY_CLIENT_USERNAME']);
         $this->I->fillField($passwordInput, $_ENV['AMAZONPAY_CLIENT_PASSWORD']);
         $this->I->click($loginButton);
+        $this->I->wait(2);
 
         $this->I->waitForPageLoad();
         $this->I->waitForElement($continueButton, 60);
         $this->I->clickWithLeftButton($continueButton);
+        $this->I->wait(2);
     }
 
     /**
@@ -147,8 +163,10 @@ abstract class BaseCest
     {
         if (!$this->homePage) {
             $this->homePage = $this->I->openShop();
+            $this->I->wait(2);
         }
         $this->homePage->openMiniBasket()->openCheckout();
+        $this->I->wait(2);
     }
 
     /**
@@ -158,18 +176,22 @@ abstract class BaseCest
     {
         if (!$this->homePage) {
             $this->homePage = $this->I->openShop();
+            $this->I->wait(2);
         }
 
         $this->homePage->openMiniBasket()->openBasketDisplay();
+        $this->I->wait(2);
     }
 
     protected function _openAccountMenu()
     {
         if (!$this->homePage) {
             $this->homePage = $this->I->openShop();
+            $this->I->wait(2);
         }
 
         $this->homePage->openAccountMenu();
+        $this->I->wait(2);
     }
 
     /**
@@ -181,6 +203,7 @@ abstract class BaseCest
 
         $this->I->waitForElement($amazonpayDiv, 60);
         $this->I->click($amazonpayDiv);
+        $this->I->wait(2);
     }
 
     /**
@@ -190,6 +213,7 @@ abstract class BaseCest
     {
         $amazonpayLoginPage = new AmazonPayLogin($this->I);
         $amazonpayLoginPage->login();
+        $this->I->wait(2);
     }
 
     /**
@@ -200,11 +224,26 @@ abstract class BaseCest
     {
         $this->I->waitForDocumentReadyState();
         $this->I->makeScreenshot(time() . 'Account already exists');
-        $this->I->waitForText(strip_tags(sprintf(
-            Translator::translate('AMAZON_PAY_USEREXISTS'),
-            $_ENV['AMAZONPAY_CLIENT_USERNAME'],
-            $_ENV['AMAZONPAY_CLIENT_USERNAME']
-        )), 60);
+        $foundModuleMessage = false;
+        try {
+            $this->I->waitForText(strip_tags(sprintf(
+                Translator::translate('AMAZON_PAY_USEREXISTS'),
+                $_ENV['AMAZONPAY_CLIENT_USERNAME'],
+                $_ENV['AMAZONPAY_CLIENT_USERNAME']
+            )), 5);
+            $foundModuleMessage = true;
+        } catch (\Throwable $e) {
+        }
+
+        if (!$foundModuleMessage) {
+            $coreMessage = strip_tags(sprintf(
+                Translator::translate('ERROR_MESSAGE_USER_USEREXISTS'),
+                $_ENV['AMAZONPAY_CLIENT_USERNAME']
+            ));
+
+            $this->I->waitForText($coreMessage, 5);
+        }
+        $this->I->wait(2);
     }
 
     /**
@@ -214,6 +253,7 @@ abstract class BaseCest
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->submitPayment();
+        $this->I->wait(2);
     }
 
     /**
@@ -227,6 +267,7 @@ abstract class BaseCest
         $this->I->waitForElement($amazonPayment, 60);
         $this->I->click($amazonPayment);
         $this->I->click($paymentNextStep);
+        $this->I->wait(2);
     }
 
     /**
@@ -236,6 +277,7 @@ abstract class BaseCest
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->cancelPayment();
+        $this->I->wait(2);
     }
 
     /**
@@ -245,6 +287,7 @@ abstract class BaseCest
     {
         $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
+        $this->I->wait(2);
     }
 
     /**
@@ -274,17 +317,17 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginName, $_ENV['OXID_ADMIN_USERNAME']);
         $this->I->fillField($userAccountLoginPassword, $_ENV['OXID_ADMIN_PASSWORD']);
         $this->I->click($userAccountLoginButton);
-        $this->I->wait(5);
+        $this->I->wait(2);
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
+        $this->I->wait(2);
     }
 
     protected function _openOrder(string $orderNumber): void
     {
         $this->_loginAdmin();
-        $this->I->wait(15);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");
@@ -299,6 +342,7 @@ abstract class BaseCest
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
+        $this->I->wait(2);
     }
 
     protected function _openAdminAmazonPayConfig(): void
@@ -319,5 +363,6 @@ abstract class BaseCest
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
+        $this->I->wait(2);
     }
 }

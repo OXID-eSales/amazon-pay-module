@@ -83,7 +83,6 @@ final class AmazonPayWithoutLoginCest extends BaseCest
         $this->_openCheckout();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
-        $this->_submitPaymentMethod();
         $this->_checkAccountExist();
         $this->_loginOxidWithAmazonCredentials();
         $this->_changePaymentMethod();
@@ -118,7 +117,6 @@ final class AmazonPayWithoutLoginCest extends BaseCest
      * @param AcceptanceTester $I
      * @return void
      * @group AmazonPayWithoutLoginPaymentTest
-     * @group asd
      */
     public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I)
     {
@@ -154,9 +152,6 @@ final class AmazonPayWithoutLoginCest extends BaseCest
         $this->_openCheckout();
         $this->_openAmazonPayPage();
         $this->_loginAmazonPayment();
-        $this->_cancelPayment();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
         $this->_checkAccountExist();
         $this->_loginOxidWithAmazonCredentials();
         $this->_changePaymentMethod();

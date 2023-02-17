@@ -7,21 +7,23 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
-use Exception;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
-use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Email;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\InputException;
-use OxidEsales\Eshop\Core\Email;
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Field;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Core\Field as FieldAlias;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Model\Order;
 use Psr\Log\LoggerInterface;
+use stdClass;
 
 class AmazonService
 {
@@ -32,28 +34,28 @@ class AmazonService
     /**
      * @var array
      */
-    private $checkoutSession;
+    private array $checkoutSession;
 
     /**
      * Delivery address
      *
-     * @var stdClass|null
+     * @var stdClass
      */
-    protected ?\stdClass $deliveryAddress = null;
+    protected stdClass $deliveryAddress;
 
     /**
      * Billing address
      *
-     * @var \stdClass
+     * @var stdClass
      */
-    protected $billingAddress = null;
+    protected stdClass $billingAddress;
 
     /**
      * Billing address fields
      *
      * @var array
      */
-    protected $billingAddressFields = [
+    protected array $billingAddressFields = [
         'oxuser__oxcompany',
         'oxuser__oxusername',
         'oxuser__oxsal',
@@ -75,28 +77,27 @@ class AmazonService
     /**
      * oxuser object
      *
-     * @var \OxidEsales\Eshop\Application\Model\User
+     * @var User
      */
-    protected $actUser = null;
+    protected ?User $actUser = null;
 
     /**
      * AmazonService constructor.
      *
-     * @param AmazonClient|null $client
-     * @throws Exception
+     * @param AmazonClient $client
      */
-    public function __construct(AmazonClient $client = null)
+    public function __construct(AmazonClient $client)
     {
         $this->client = $client;
 
-        if (!$client) {
+        if (!empty($client)) {
             $factory = oxNew(ServiceFactory::class);
             $this->client = $factory->getClient();
         }
     }
 
     /**
-     * @param $checkoutSessionId
+     * @param string $checkoutSessionId
      */
     public function storeAmazonSession(string $checkoutSessionId): void
     {
@@ -116,7 +117,8 @@ class AmazonService
         $checkoutSessionId = $this->getCheckoutSessionId();
         if (!$checkoutSessionId) {
             $session = Registry::getSession();
-            $paymentId = (string)$session->getVariable('paymentid') ?? '';
+            /** @var string $paymentId */
+            $paymentId = $session->getVariable('paymentid') ?? '';
             $isAmazonPayment = Constants::isAmazonPayment($paymentId);
             if ($isAmazonPayment) {
                 self::unsetPaymentMethod();
@@ -144,11 +146,13 @@ class AmazonService
     /**
      * Amazon checkout session id getter
      *
-     * @return mixed
+     * @return string
      */
-    public function getCheckoutSessionId()
+    public function getCheckoutSessionId(): string
     {
-        return Registry::getSession()->getVariable(Constants::SESSION_CHECKOUT_ID);
+        /** @var string $sessionId */
+        $sessionId = Registry::getSession()->getVariable(Constants::SESSION_CHECKOUT_ID);
+        return $sessionId;
     }
 
     /**
@@ -158,7 +162,7 @@ class AmazonService
      */
     public function getCheckoutSession(): array
     {
-        if ($this->checkoutSession !== null) {
+        if ($this->checkoutSession != null) {
             return $this->checkoutSession;
         }
 
@@ -193,16 +197,19 @@ class AmazonService
     /**
      * Oxid formatted delivery address from Amazon
      *
-     * @return object
+     * @return stdClass
+     * @throws DatabaseConnectionException
      */
-    public function getDeliveryAddressAsObj()
+    public function getDeliveryAddressAsObj(): stdClass
     {
-        if (is_null($this->deliveryAddress)) {
-            $this->deliveryAddress = new \stdClass();
+        if ($this->deliveryAddress === new stdClass()) {
+            $this->deliveryAddress = new stdClass();
             $oOrder = oxNew(Order::class);
-            if ($deliveryAddress = $oOrder->getDelAddressInfo()) {
+            /** @var \OxidEsales\EshopCommunity\Application\Model\Address $deliveryAddress */
+            $deliveryAddress = $oOrder->getDelAddressInfo();
+            if (!empty($deliveryAddress)) {
                 foreach ($deliveryAddress as $key => $value) {
-                    $this->deliveryAddress->{$key} = new Field($value, Field::T_RAW);
+                    $this->deliveryAddress->{$key} = new Field($value, FieldAlias::T_RAW);
                 }
             }
         }
@@ -227,15 +234,15 @@ class AmazonService
     /**
      * Oxid formatted billing address from Amazon
      *
-     * @return object
+     * @return stdClass
      */
-    public function getBillingAddressAsObj()
+    public function getBillingAddressAsObj(): stdClass
     {
-        if (is_null($this->billingAddress)) {
+        if ($this->billingAddress === new stdClass()) {
             $oUser = $this->getUser();
-            $this->billingAddress = new \stdClass();
+            $this->billingAddress = new stdClass();
             foreach ($this->billingAddressFields as $key) {
-                $this->billingAddress->{$key} = new Field($oUser->{$key}->rawValue, Field::T_RAW);
+                $this->billingAddress->{$key} = new Field($oUser->{$key}->rawValue, FieldAlias::T_RAW);
             }
         }
         return $this->billingAddress;
@@ -275,20 +282,24 @@ class AmazonService
      *
      */
     protected function processPayment(
-        string $amazonSessionId,
-        Basket $basket,
+        string          $amazonSessionId,
+        Basket          $basket,
         LoggerInterface $logger,
-        bool $bl2Step = false
-    ): void {
+        bool            $bl2Step = false
+    ): void
+    {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
         $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue((float)$basket->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
-
-        $payload->setMerchantStoreName($activeShop->getFieldData('oxcompany'));
-        $payload->setNoteToBuyer($activeShop->getFieldData('oxordersubject'));
+        /** @var string $oxCompany */
+        $oxCompany = $activeShop->getFieldData('oxcompany');
+        $payload->setMerchantStoreName($oxCompany);
+        /** @var string $oxOrderSubject */
+        $oxOrderSubject = $activeShop->getFieldData('oxordersubject');
+        $payload->setNoteToBuyer($oxOrderSubject);
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
@@ -310,6 +321,7 @@ class AmazonService
         Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
         $request = PhpHelper::jsonToArray($result['request']);
 
+        /** @var Order $order */
         $order = oxNew(Order::class);
         if ($order->load($basket->getOrderId())) {
             if ($result['status'] === 200) {
@@ -349,7 +361,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
+    public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
         $this->processPayment($amazonSessionId, $basket, $logger, false);
     }
@@ -380,10 +392,12 @@ class AmazonService
         $order = new Order();
         $order->load($orderId);
 
-        if (!(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))) {
+        if (
+            !(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))
+        ) {
             Registry::getUtilsView()->addErrorToDisplay(
                 Registry::getLang()->translateString(("OSC_AMAZONPAY_REFUND_ANNOTATION") .
-                $this->getMaximalRefundAmount($orderId)) . $order->getOrderCurrency()->name
+                    $this->getMaximalRefundAmount($orderId)) . $order->getOrderCurrency()
             );
             return;
         }
@@ -401,6 +415,7 @@ class AmazonService
             ],
             'softDescriptor' => 'AMZ*OXID'
         ];
+
 
         $result = OxidServiceProvider::getAmazonClient()->createRefund(
             $body,
@@ -436,12 +451,12 @@ class AmazonService
     }
 
     /**
-     * @param $refundId
-     * @param $logger
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @param string $refundId
+     * @param LoggerInterface $logger
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    public function processRefund($refundId, LoggerInterface $logger): void
+    public function processRefund(string $refundId, LoggerInterface $logger): void
     {
         $logger->info("Start processRefund");
         $amazonConfig = oxNew(Config::class);
@@ -468,17 +483,20 @@ class AmazonService
         }
 
         $repository = oxNew(LogRepository::class);
-        $orderId = $repository->findOrderIdByChargeId($response['chargeId']);
+        /** @var string $chargeId */
+        $chargeId = $response['chargeId'];
+        $orderId = $repository->findOrderIdByChargeId($chargeId);
 
-        if ($orderId === null) {
+        if ($orderId === '') {
             return;
         }
 
+        $chargeId = (string)$response['chargeId'];
         $repository->markOrderPaid(
             $orderId,
             'AmazonPay REFUND: ' . $refundedAmount,
             'REFUNDED',
-            $response['chargeId']
+            $chargeId
         );
 
         $result['identifier'] = $refundId;
@@ -490,13 +508,14 @@ class AmazonService
      * @param $chargeId
      * @param $logger
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @throws DatabaseErrorException
      */
-    public function processCharge($chargeId, LoggerInterface $logger): void
+    public function processCharge(string $chargeId, LoggerInterface $logger): void
     {
         $amazonConfig = oxNew(Config::class);
 
-        $result = OxidServiceProvider::getAmazonClient()->getCharge(
+        $client = OxidServiceProvider::getAmazonClient();
+        $result = $client->getCharge(
             $chargeId,
             [
                 'x-amz-pay-Idempotency-Key' => $amazonConfig->getUuid(),
@@ -511,9 +530,11 @@ class AmazonService
         }
 
         $repository = oxNew(LogRepository::class);
-        $orderId = $repository->findOrderIdByChargeId($response['chargeId']);
+        /** @var string $chargeId */
+        $chargeId = $response['chargeId'];
+        $orderId = $repository->findOrderIdByChargeId($chargeId);
 
-        if ($orderId === null) {
+        if ($orderId == null) {
             return;
         }
 
@@ -535,11 +556,11 @@ class AmazonService
     }
 
     /**
-     * @param $orderId
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @param string $orderId
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    public function checkOrderState($orderId): void
+    public function checkOrderState(string $orderId): void
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
@@ -635,7 +656,7 @@ class AmazonService
     /**
      * @param $orderId
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @throws DatabaseErrorException
      */
     public function processCancel(string $orderId): void
     {
@@ -656,7 +677,6 @@ class AmazonService
         foreach ($logs as $log) {
             if (!empty($log['OSC_AMAZON_CHARGE_ID']) && $log['OSC_AMAZON_CHARGE_ID'] !== 'null') {
                 $chargeId = $log['OSC_AMAZON_CHARGE_ID'];
-                continue;
             }
         }
 
@@ -718,14 +738,21 @@ class AmazonService
         $order = oxNew(Order::class);
         $orderNr = '';
         if ($orderId && $order->load($orderId)) {
-            $orderNr = $order->oxorder__oxordernr->value;
+            /** @var string $orderNr */
+            $orderNr = $order->getFieldData('oxordernr');
         }
 
+        /** @var string $oxowneremail */
+        $oxowneremail = $shop->getFieldData('oxowneremail');
+        /** @var string $subject */
+        $subject = $lang->translateString("AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT");
+        /** @var string $errorMessage */
+        $errorMessage = $lang->translateString("AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE");
         $mailer->sendEmail(
-            $shop->oxshops__oxowneremail->value,
-            $lang->translateString("AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_SUBJECT"),
+            $oxowneremail,
+            $subject,
             sprintf(
-                $lang->translateString("AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE"),
+                $errorMessage,
                 $orderNr
             )
         );
@@ -736,13 +763,13 @@ class AmazonService
     }
 
     /**
-     * @param $chargeId
-     * @param $amount
-     * @param $currencyCode
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @param string $chargeId
+     * @param string $amount
+     * @param string $currencyCode
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    public function capturePaymentForOrder($chargeId, string $amount, $currencyCode): void
+    public function capturePaymentForOrder(string $chargeId, string $amount, string $currencyCode): void
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();
@@ -753,8 +780,12 @@ class AmazonService
 
         $activeShop = Registry::getConfig()->getActiveShop();
 
-        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+        /** @var string $oxcompany */
+        $oxcompany = $activeShop->getFieldData('oxcompany');
+        $payload->setMerchantStoreName($oxcompany);
+        /** @var string $oxordersubject */
+        $oxordersubject = $activeShop->getFieldData('oxordersubject');
+        $payload->setNoteToBuyer($oxordersubject);
         $payload->setCurrencyCode($currencyCode);
 
         $result = OxidServiceProvider::getAmazonClient()->captureCharge(
@@ -775,7 +806,13 @@ class AmazonService
             );
 
             $exception = oxNew(InputException::class, 'AmazonPay: ' . $response['message']);
-            Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'order_overview');
+            Registry::getUtilsView()->addErrorToDisplay(
+                $exception,
+                false,
+                false,
+                '',
+                'order_overview'
+            );
 
             return;
         }
@@ -792,7 +829,7 @@ class AmazonService
         $logger->info($response['statusDetails']['state'], $result);
     }
 
-    public function sendAlexaNotification($chargePermissionId, $trackingCode = null, $deliveryType = null): void
+    public function sendAlexaNotification(string $chargePermissionId, string $trackingCode = '', string $deliveryType = ''): void
     {
         $amazonConfig = oxNew(Config::class);
 
@@ -807,7 +844,9 @@ class AmazonService
         $delivery = OxNew(DeliverySet::class);
 
         if ($delivery->load($deliveryType)) {
-            $deliveryDetails[0]['carrierCode'] = $delivery->oxdeliveryset__osc_amazon_carrier->rawValue;
+            /** @var string $osc_amazon_carrier */
+            $osc_amazon_carrier = $delivery->getRawFieldData('osc_amazon_carrier');
+            $deliveryDetails[0]['carrierCode'] = $osc_amazon_carrier;
         }
 
         if (!empty($deliveryDetails)) {
@@ -835,7 +874,7 @@ class AmazonService
      * @param Order $order
      * @return array
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @throws DatabaseErrorException
      */
     public function getOrderLogs(Order $order): array
     {
@@ -849,7 +888,7 @@ class AmazonService
         }
 
         foreach ($logMessages as $logMessage) {
-            if (strpos($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
+            if (str_contains($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error')) {
                 $logsWithChargePermission = $repository->findLogMessageForOrderId(
                     $logMessage['OSC_AMAZON_OXORDERID']
                 );
@@ -876,10 +915,10 @@ class AmazonService
     /**
      * Active user getter
      */
-    private function getUser(): \OxidEsales\Eshop\Application\Model\User
+    private function getUser(): User
     {
         if ($this->actUser === null) {
-            $this->actUser = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
+            $this->actUser = oxNew(User::class);
             $this->actUser->loadActiveUser();
         }
         return $this->actUser;

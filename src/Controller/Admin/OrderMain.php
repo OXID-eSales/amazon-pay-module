@@ -33,7 +33,7 @@ class OrderMain extends OrderMain_parent
             $chargeId = $this->getOrderChargeId($order);
 
             if (!OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
-                if ($chargeId === null || $chargeId === -1) {
+                if ($chargeId === '-1') {
                     return;
                 }
 
@@ -49,15 +49,23 @@ class OrderMain extends OrderMain_parent
                         );
                 }
 
+                /** @var string $oxtrackcode */
+                $oxtrackcode = $order->getRawFieldData('oxtrackcode');
+                /** @var string $oxdeltype */
+                $oxdeltype = $order->getRawFieldData('oxdeltype');
                 OxidServiceProvider::getAmazonService()->sendAlexaNotification(
                     $this->getOrderChargePermissionId($order),
-                    $order->getRawFieldData('oxtrackcode'),
-                    $order->getRawFieldData('oxdeltype')
+                    $oxtrackcode,
+                    $oxdeltype
                 );
             }
         }
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     protected function getOrderChargePermissionId(Order $oOrder): string
     {
         $chargePermissionId = null;
@@ -85,7 +93,7 @@ class OrderMain extends OrderMain_parent
 
     /**
      * @param Order $oOrder
-     * @return string|int
+     * @return string
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -103,10 +111,9 @@ class OrderMain extends OrderMain_parent
                     );
                     foreach ($logsWithChargePermission as $logWithChargePermission) {
                         if ($logWithChargePermission['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
-                            return -1;
+                            return '-1';
                         }
                         $chargeIdSet = isset($logWithChargePermission['OSC_AMAZON_CHARGE_ID'])
-                            && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== null
                             && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== 'null';
                         if ($chargeIdSet) {
                             $chargeId = $logWithChargePermission['OSC_AMAZON_CHARGE_ID'];

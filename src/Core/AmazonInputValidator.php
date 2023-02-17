@@ -7,6 +7,8 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Exception\UserException;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
@@ -18,54 +20,55 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 class AmazonInputValidator extends AmazonInputValidator_parent
 {
     /**
-     * Checks if user name does not break logic:
+     * Checks if username does not break logic:
      *  - if user wants to UPDATE his login name, performing check if
      *    user entered correct password
-     *  - additionally checking for user name duplicates. This is usually
+     *  - additionally checking for username duplicates. This is usually
      *    needed when creating new users.
      * On any error exception is thrown.
      *
-     * @param \OxidEsales\Eshop\Application\Model\User $oUser       active user
-     * @param string                                   $sLogin      user preferred login name
-     * @param array                                    $aInvAddress user information
-     *
-     * @return \OxidEsales\Eshop\Core\Exception\StandardException|string login name
+     * @param $user
+     * @param $login
+     * @param $invAddress
+     * @return string login name
      */
-    public function checkLogin($oUser, $sLogin, $aInvAddress)
+    public function checkLogin($user, $login, $invAddress): string
     {
-        $sLogin = $aInvAddress['oxuser__oxusername'] ?? $sLogin;
+        $login = $invAddress['oxuser__oxusername'] ?? $login;
 
         $service = OxidServiceProvider::getAmazonService();
 
-        if ($service->isAmazonSessionActive() && $oUser->checkIfEmailExists($sLogin)) {
+        if ($service->isAmazonSessionActive() && $user->checkIfEmailExists($login)) {
             //if exists then we do not allow to do that
             $oEx = oxNew(UserException::class);
 
+            /** @var string $userExistsMessage */
+            $userExistsMessage = Registry::getLang()->translateString('AMAZON_PAY_USEREXISTS');
             $oEx->setMessage(sprintf(
-                (string)Registry::getLang()->translateString('AMAZON_PAY_USEREXISTS'),
-                $sLogin,
-                $sLogin
+                $userExistsMessage,
+                $login,
+                $login
             ));
 
             return $this->_addValidationError("oxuser__oxusername", $oEx);
         }
 
-        return parent::checkLogin($oUser, $sLogin, $aInvAddress);
+        return parent::checkLogin($user, $login, $invAddress);
     }
 
     /**
      * Disabling validation for Amazon addresses when Amazon Pay is active
      *
-     * @param \OxidEsales\Eshop\Application\Model\User  $user Active user.
+     * @param User $user Active user.
      * @param array $billingAddress  Billing address.
      * @param array $deliveryAddress Delivery address.
      */
-    public function checkRequiredFields($user, $billingAddress, $deliveryAddress)
+    public function checkRequiredFields($user, $billingAddress, $deliveryAddress): void
     {
         $service = OxidServiceProvider::getAmazonService();
 
         if (!$service->isAmazonSessionActive()) {
-            return parent::checkRequiredFields($user, $billingAddress, $deliveryAddress);
+            parent::checkRequiredFields($user, $billingAddress, $deliveryAddress);
         }
     }
 }

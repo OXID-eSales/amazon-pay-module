@@ -23,7 +23,7 @@ class_alias(
 );
 
 class_alias(
-    \OxidEsales\Eshop\Application\Controller\Admin\OrderArticle::class,
+    \OxidEsales\EshopCommunity\Application\Controller\Admin\OrderArticle::class,
     \OxidSolutionCatalysts\AmazonPay\Controller\Admin\OrderArticle_parent::class
 );
 
@@ -63,8 +63,8 @@ class_alias(
 );
 
 class_alias(
-    \OxidEsales\Eshop\Core\ViewConfig::class,
-    \OxidSolutionCatalysts\AmazonPay\Core\ViewConfig_parent::class
+    \OxidEsales\Eshop\Core\InputValidator::class,
+    \OxidSolutionCatalysts\AmazonPay\Core\AmazonInputValidator_parent::class
 );
 
 class_alias(

@@ -23,14 +23,14 @@ class Logger extends AbstractLogger
     /**
      * @var LogRepository
      */
-    private $repository;
+    private LogRepository $repository;
 
     /**
      * @var string
      */
-    private $logFileName;
+    private string $logFileName;
 
-    public function __construct($logFileName = 'amazonpay.log')
+    public function __construct(string $logFileName = 'amazonpay.log')
     {
         $this->logFileName = $logFileName;
         $this->repository = oxNew(LogRepository::class);
@@ -48,21 +48,21 @@ class Logger extends AbstractLogger
 
         $user = Registry::getSession()->getUser();
         $basket = Registry::getSession()->getBasket();
-        $defaultUser = $user !== false ? $user->getId() : 'guest';
+        $defaultUser = $user->getId() ?: 'guest';
         $userId = !empty($context['userId']) ? $context['userId'] : $defaultUser;
 
         $logMessage = new LogMessage();
         $logMessage->setUserId($userId);
-        $logMessage->setOrderId($context['orderId'] ?? $basket->getOrderId() ?? 'no basket');
-        $logMessage->setShopId($context['shopId'] ?? Registry::getConfig()->getShopId());
+        $logMessage->setOrderId($context['orderId'] ?: $basket->getOrderId() ?: 'no basket');
+        $logMessage->setShopId($context['shopId'] ?: Registry::getConfig()->getShopId());
         $logMessage->setRequestType($context['requestType'] ?? 'amazonpay');
         $logMessage->setResponseMessage($message);
-        $logMessage->setStatusCode($context['statusCode'] ?? '200');
-        $logMessage->setIdentifier($context['identifier'] ?? $context['orderId'] ?? $userId);
-        $logMessage->setChargeId($context['chargeId'] ?? 'null');
-        $logMessage->setChargePermissionId($context['chargePermissionId'] ?? 'null');
-        $logMessage->setObjectId($context['objectId'] ?? 'null');
-        $logMessage->setObjectType($context['objectType'] ?? 'null');
+        $logMessage->setStatusCode($context['statusCode'] ?: '200');
+        $logMessage->setIdentifier($context['identifier'] ?: $context['orderId'] ?: $userId);
+        $logMessage->setChargeId($context['chargeId'] ?: 'null');
+        $logMessage->setChargePermissionId($context['chargePermissionId'] ?: 'null');
+        $logMessage->setObjectId($context['objectId'] ?: 'null');
+        $logMessage->setObjectType($context['objectType'] ?: 'null');
 
         $this->repository->saveLogMessage($logMessage);
     }

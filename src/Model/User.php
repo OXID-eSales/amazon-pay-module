@@ -11,7 +11,6 @@ use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\UserAddressList;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
-use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -19,21 +18,21 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class User extends User_parent
 {
-    private $amazonAddress = null;
+    private ?Address $amazonAddress = null;
 
     /**
      * @inherit doc
      *
      * @param array $aDelAddress address data array
      */
-    protected function _assignAddress($aDelAddress)
+    protected function _assignAddress($aDelAddress): void
     {
         $session = Registry::getSession();
         if (
             $session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
             !$session->getVariable(Constants::SESSION_DELIVERY_ADDR)
         ) {
-            return parent::_assignAddress($aDelAddress);
+            parent::_assignAddress($aDelAddress);
         }
         Registry::getSession()->setVariable('deladrid', null);
     }
@@ -43,7 +42,7 @@ class User extends User_parent
      *
      * @return Address|null
      */
-    private function getAmazonAddress()
+    private function getAmazonAddress(): ?Address
     {
         if ($this->amazonAddress === null) {
             $service = OxidServiceProvider::getAmazonService();

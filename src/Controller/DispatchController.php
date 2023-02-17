@@ -11,6 +11,8 @@ use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -27,6 +29,7 @@ class DispatchController extends FrontendController
 {
     /**
      * @return void
+     * @throws \Exception
      */
     public function init(): void
     {
@@ -37,7 +40,8 @@ class DispatchController extends FrontendController
 
         switch ($action) {
             case 'review':
-                $amazonSessionId = (string)$this->setRequestAmazonSessionId();
+                /** @var string $amazonSessionId */
+                $amazonSessionId = $this->setRequestAmazonSessionId();
                 if (!$amazonSessionId) {
                     return;
                 }
@@ -46,12 +50,13 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect($redirectUrl, true, 302);
                 break;
             case 'result':
-                $amazonSessionId = (string)$this->getRequestAmazonSessionId();
-                if (!$amazonSessionId) {
+                /** @var string $amazonSessionId */
+                $amazonSessionId = $this->getRequestAmazonSessionId();
+                if ($amazonSessionId === '') {
                     $amazonSessionId = $this->setRequestAmazonSessionId();
                 }
 
-                if (!$amazonSessionId) {
+                if ($amazonSessionId === '') {
                     return;
                 }
 
@@ -107,6 +112,7 @@ class DispatchController extends FrontendController
                 break;
 
             case 'poll':
+                /** @var string $orderId */
                 $orderId = Registry::getRequest()->getRequestParameter('orderId');
 
                 OxidServiceProvider::getAmazonService()->checkOrderState($orderId);
@@ -157,29 +163,32 @@ class DispatchController extends FrontendController
     /**
      * get Amazon Session ID and validate it
      *
-     * @return mixed
+     * @return string
      */
-    protected function getRequestAmazonSessionId()
+    protected function getRequestAmazonSessionId(): string
     {
+        /** @var string $amazonSessionIdRequest */
         $amazonSessionIdRequest = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
         $amazonSessionIdService = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
         return
             $amazonSessionIdRequest === $amazonSessionIdService ?
                 $amazonSessionIdRequest :
-                false;
+                '';
     }
 
     /**
      * set Amazon Session ID and validate it
      *
-     * @return mixed
+     * @return string
+     * @throws DatabaseErrorException
      */
-    protected function setRequestAmazonSessionId()
+    protected function setRequestAmazonSessionId(): string
     {
-
         // add item to basket if an "anid" was provided in the url
-        if ($sProductId = (string)Registry::getRequest()->getRequestParameter('anid')) {
-            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        /** @var string $anid */
+        $anid = Registry::getRequest()->getRequestParameter('anid');
+        if ($sProductId = $anid) {
+            $database = DatabaseProvider::getDb();
             $database->startTransaction();
             try {
                 $basket = Registry::getSession()->getBasket();
@@ -187,7 +196,7 @@ class DispatchController extends FrontendController
                     $sProductId,
                     1
                 );
-                // Remove flag of "new item added" to not show "Item added" popup when returning to checkout
+                // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
             } catch (\Exception $exception) {
@@ -196,7 +205,8 @@ class DispatchController extends FrontendController
             }
         }
 
-        $amazonSessionId = (string)Registry::getRequest()
+        /** @var string $amazonSessionId */
+        $amazonSessionId = Registry::getRequest()
                            ->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
 
         if (is_null(OxidServiceProvider::getAmazonService()->getCheckoutSessionId())) {

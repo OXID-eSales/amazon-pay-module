@@ -7,14 +7,15 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
-use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Core\Model\BaseModel;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
-use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
@@ -23,22 +24,18 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
  */
 class Order extends Order_parent
 {
-    /** @var AmazonService */
-    private $amazonService;
+    private AmazonService $amazonService;
 
     /**
      * Security and Cleanup before finalize order
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
-     * @param object                                     $oUser                Current User object
-     *
+     * @param Basket $oBasket Basket object
      * @return int|null
      *
-     * @psalm-return 2|null
      */
-    protected function prepareFinalizeOrder(Basket $oBasket, $oUser)
+    protected function prepareFinalizeOrder(Basket $oBasket): ?int
     {
-        $paymentId = $oBasket->getPaymentId() ?? '';
+        $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
         // stop finalize order
         if (
@@ -47,20 +44,21 @@ class Order extends Order_parent
         ) {
             return self::ORDER_STATE_PAYMENTERROR; // means no authentication
         }
+        return 0;
     }
 
     /**
      * Order checking, processing and saving method.
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
-     * @param object                                     $oUser                Current User object
-     * @param bool                                       $blRecalculatingOrder Order recalculation
+     * @param Basket $oBasket Basket object
+     * @param object $oUser Current User object
+     * @param bool $blRecalculatingOrder Order recalculation
      *
      * @return integer
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): ?int
     {
-        $ret = $this->prepareFinalizeOrder($oBasket, $oUser);
+        $ret = $this->prepareFinalizeOrder($oBasket);
 
         if ($ret !== self::ORDER_STATE_PAYMENTERROR) {
             $ret = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
@@ -68,10 +66,10 @@ class Order extends Order_parent
 
         // Authorize and Capture via Amazon Pay will be done after finalizeOrder in OXID
         // therefore we reset status to "not finished yet"
-        $paymentId = $oBasket->getPaymentId() ?? '';
+        $paymentId = $oBasket->getPaymentId() ?: '';
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
         if (
-            $ret < 2  &&
+            $ret < 2 &&
             !$blRecalculatingOrder &&
             $isAmazonPayment
         ) {
@@ -83,9 +81,9 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
+     * @return \OxidEsales\Eshop\Application\Model\Address|null
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      *
-     * @return \OxidEsales\Eshop\Application\Model\Address|null
      */
     public function getDelAddressInfo()
     {
@@ -120,70 +118,63 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus(string $amazonPayStatus, $data = null): void
+    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = []): void
     {
-        if ($data['chargeId']) {
-            $this->oxorder__oxtransid = new Field($data['chargeId'], Field::T_RAW);
+        if (!empty($data) && $data['chargeId']) {
+
+            $this->_setFieldData('oxtransid', $data['chargeId']);
         }
 
         switch ($amazonPayStatus) {
             case "AMZ_PAYMENT_PENDING":
-                $this->oxorder__oxtransstatus = new Field('NOT_FINISHED', Field::T_RAW);
-                $this->oxorder__oxfolder = new Field('ORDERFOLDER_PROBLEMS', Field::T_RAW);
-                $this->oxorder__osc_amazon_remark = new Field(
-                    'AmazonPay Authorisation pending',
-                    Field::T_RAW
-                );
+                $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');
+                $this->_setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
+                $this->_setFieldData('osc_amazon_remark', 'AmazonPay Authorisation pending');
                 $this->save();
                 break;
 
             case "AMZ_AUTH_STILL_PENDING":
                 if (is_array($data)) {
-                    $this->oxorder__osc_amazon_remark = new Field(
-                        'AmazonPay Authorisation still pending: ' . $data['chargeAmount'],
-                        Field::T_RAW
+                    $this->_setFieldData(
+                        'osc_amazon_remark', 'AmazonPay Authorisation still pending: '
+                        . $data['chargeAmount']
                     );
                 }
                 $this->save();
                 break;
 
             case "AMZ_AUTH_AND_CAPT_FAILED":
-                if (is_array($data)) {
+                $remark = 'AmazonPay: ERROR';
+                if (!empty($data['result']['response'])) {
                     $response = PhpHelper::jsonToArray($data['result']['response']);
-                    $this->oxorder__osc_amazon_remark = new Field(
-                        'AmazonPay ERROR: ' . $response['reasonCode'],
-                        Field::T_RAW
-                    );
-                } else {
-                    $this->oxorder__osc_amazon_remark = new Field('AmazonPay: ERROR');
+                    $remark = 'AmazonPay ERROR: ' . $response['reasonCode'];
                 }
+
+                $this->_setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
 
             case "AMZ_AUTH_AND_CAPT_OK":
                 // we move the order only if the oxtransstatus not OK before
                 if ($this->getFieldData('oxpaid') == '0000-00-00 00:00:00') {
-                    $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                    $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 }
-                $this->oxorder__oxpaid = new Field(\date('Y-m-d H:i:s'), Field::T_RAW);
-                $this->oxorder__oxtransstatus = new Field('OK', Field::T_RAW);
+                $this->_setFieldData('oxpaid', \date('Y-m-d H:i:s'));
+                $this->_setFieldData('oxtransstatus', 'OK');
                 if (is_array($data)) {
-                    $this->oxorder__osc_amazon_remark = new Field(
-                        'AmazonPay Captured: ' . $data['chargeAmount'],
-                        Field::T_RAW
-                    );
+                    $this->_setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);
                 }
                 $this->save();
                 break;
 
             case "AMZ_2STEP_AUTH_OK":
-                if (is_array($data)) {
-                    $this->oxorder__osc_amazon_remark = new Field(
-                        'AmazonPay Authorized (not Captured):' . $data['chargeAmount'],
-                        Field::T_RAW
+                if (!empty($data['chargeAmount'])) {
+                    $this->_setFieldData(
+                        'osc_amazon_remark', 'AmazonPay Authorized (not Captured):' . $data['chargeAmount']
                     );
+
                 }
-                $this->oxorder__oxfolder = new Field('ORDERFOLDER_NEW', Field::T_RAW);
+                $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 $this->save();
                 break;
         }
@@ -195,6 +186,7 @@ class Order extends Order_parent
      */
     public function getAmazonService(): AmazonService
     {
+
         if (empty($this->amazonService)) {
             $this->setAmazonService(OxidServiceProvider::getAmazonService());
             return $this->amazonService;
@@ -213,7 +205,7 @@ class Order extends Order_parent
     /**
      * @inheritdoc
      */
-    public function delete($sOxId = null)
+    public function delete($sOxId = null): bool
     {
         $sOxId = $sOxId ?: $this->getId();
         if (!$sOxId) {
@@ -232,7 +224,8 @@ class Order extends Order_parent
         return parent::delete($sOxId);
     }
 
-    public function canDelete($oxid = null)
+    /** @inheritdoc  */
+    public function canDelete(string $oxid = ''): bool
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {
@@ -253,12 +246,16 @@ class Order extends Order_parent
                 ]
             )
         ) {
-            Registry::getUtilsView()->addErrorToDisplay(
-                Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR')
-            );
+            /** @var string $deleteError */
+            $deleteError = Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR');
+            Registry::getUtilsView()->addErrorToDisplay($deleteError);
             return false;
         }
 
-        return parent::canDelete($oxid);
+        if(method_exists(Order_parent::class,'canDelete')){
+            return parent::canDelete($oxid);
+        }
+        return true;
+
     }
 }

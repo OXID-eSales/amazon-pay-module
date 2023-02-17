@@ -96,7 +96,8 @@ class LogRepository
     public function findLogMessageForChargePermissionId(
         string $chargePermissionId,
         string $orderBy = 'OXTIMESTAMP'
-    ): array {
+    ): array
+    {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]
@@ -133,13 +134,13 @@ class LogRepository
 
     /**
      * @param string $chargeId
-     * @return mixed|null
+     * @return string
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function findOrderIdByChargeId($chargeId)
+    public function findOrderIdByChargeId(string $chargeId): string
     {
-        $orderId = null;
+        $orderId = '';
 
         $logMessages = $this->findLogMessageForChargeId($chargeId);
 
@@ -177,13 +178,13 @@ class LogRepository
     }
 
     /**
-     * @param $orderId
+     * @param string $orderId
      * @param string $transStatus
      * @param string $chargeId
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function updateOrderStatus($orderId, $transStatus = 'OK', $chargeId = ''): void
+    public function updateOrderStatus(string $orderId, string $transStatus = 'OK', string $chargeId = ''): void
     {
         $sql = 'UPDATE oxorder SET OXTRANSSTATUS = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
@@ -197,12 +198,12 @@ class LogRepository
     }
 
     /**
-     * @param $orderId
+     * @param string $orderId
      * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function deleteLogMessageByOrderId($orderId)
+    public function deleteLogMessageByOrderId(string $orderId): void
     {
         $sql = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID =' . $orderId;
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(

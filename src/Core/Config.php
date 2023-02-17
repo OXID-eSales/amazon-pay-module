@@ -7,6 +7,8 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 
@@ -133,7 +135,9 @@ class Config
      */
     public function getPrivateKey(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
+        /** @var string $sAmazonPayPrivKey */
+        $sAmazonPayPrivKey = Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
+        return $sAmazonPayPrivKey;
     }
 
     /**
@@ -149,7 +153,9 @@ class Config
      */
     public function getPublicKeyId(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
+        /** @var string $sAmazonPayPubKeyId */
+        $sAmazonPayPubKeyId = Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
+        return $sAmazonPayPubKeyId;
     }
 
     /**
@@ -157,7 +163,9 @@ class Config
      */
     public function getMerchantId(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayMerchantId');
+        /** @var string $sAmazonPayMerchantId */
+        $sAmazonPayMerchantId = Registry::getConfig()->getConfigParam('sAmazonPayMerchantId');
+        return $sAmazonPayMerchantId;
     }
 
     /**
@@ -165,7 +173,9 @@ class Config
      */
     public function getStoreId(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayStoreId');
+        /** @var string $sAmazonPayStoreId */
+        $sAmazonPayStoreId = Registry::getConfig()->getConfigParam('sAmazonPayStoreId');
+        return $sAmazonPayStoreId;
     }
 
     /**
@@ -367,11 +377,9 @@ class Config
      */
     public function getCountryList(): array
     {
-        $activeUser = false;
-        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        if ($user->loadActiveUser()) {
-            $activeUser = $user;
-        }
+        $user = oxNew(User::class);
+        $user->loadActiveUser();
+        $activeUser = $user;
 
         if ($this->countryList === null) {
             $this->countryList = [];
@@ -380,12 +388,14 @@ class Config
             $payment->load(Constants::PAYMENT_ID_EXPRESS);
             foreach ($payment->getCountries() as $countryOxId) {
                 // check deliverysets
-                $deliverySetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
+                $deliverySetList = oxNew(DeliverySetList::class);
                 $deliverySetData = $deliverySetList->getDeliverySetList($activeUser, $countryOxId);
                 if (count($deliverySetData)) {
                     $oxidCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
                     $oxidCountry->load($countryOxId);
-                    $this->countryList[$countryOxId] = $oxidCountry->oxcountry__oxisoalpha2->value;
+                    /** @var string $oxisoalpha2 */
+                    $oxisoalpha2 = $oxidCountry->getFieldData('oxisoalpha2');
+                    $this->countryList[$countryOxId] = $oxisoalpha2;
                 }
             }
         }

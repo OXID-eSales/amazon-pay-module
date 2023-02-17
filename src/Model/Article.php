@@ -16,7 +16,6 @@ use OxidEsales\Eshop\Core\Registry;
  */
 class Article extends Article_parent
 {
-    protected $blAmazonExclude = false;
 
     /**
      * Checks if article is buyable.

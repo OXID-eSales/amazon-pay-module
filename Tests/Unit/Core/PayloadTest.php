@@ -30,7 +30,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class PayloadTest extends UnitTestCase
 {
     /** @var Payload */
-    private $payload;
+    private Payload $payload;
 
     protected function setUp(): void
     {

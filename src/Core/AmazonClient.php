@@ -21,7 +21,7 @@ class AmazonClient extends Client
     /**
      * @var Config
      */
-    private $moduleConfig;
+    private Config $moduleConfig;
 
     /**
      * AmazonClient constructor.
@@ -45,11 +45,11 @@ class AmazonClient extends Client
      * @param array $payload
      * @param array $headers
      */
-    public function createCheckoutSession($payload = [], $headers = []): array
+    public function createCheckoutSession(array $payload = [], array $headers = []): array
     {
         $config = $this->getModuleConfig();
 
-        if (!$headers) {
+        if (!empty($headers)) {
             $headers = [
                 'x-amz-pay-Idempotency-Key' => $config->getUuid()
             ];

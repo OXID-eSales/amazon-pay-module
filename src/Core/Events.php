@@ -24,7 +24,7 @@ class Events
      *
      * @var array
      */
-    protected static $requireSessionWithParams = [
+    protected static array $requireSessionWithParams = [
         'cl' => [
             'details'        => true,
             'amazondispatch' => true
@@ -251,6 +251,7 @@ class Events
             foreach ($paymentDescription as $languageAbbreviation => $values) {
                 $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
+                    $languageId = (int)$languageId;
                     $payment->loadInLang($languageId, $paymentId);
                     $params = [
                         'oxpayments__oxdesc' => $values['title'],
@@ -266,6 +267,7 @@ class Events
     /**
      * @param string $paymentId
      * @return void
+     * @throws \Exception
      */
     protected static function assignPaymentToActiveDeliverySets(string $paymentId): void
     {

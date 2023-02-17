@@ -74,6 +74,8 @@ class ConfigController extends AdminController
     protected function saveConfig(array $conf, string $shopId): void
     {
         if ($this->useDaoBridge()) {
+
+            /** @var ModuleConfigurationDaoBridgeInterface $oModuleConfigurationDaoBridge */
             $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(
                 ModuleConfigurationDaoBridgeInterface::class
             );

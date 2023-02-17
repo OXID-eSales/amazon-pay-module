@@ -32,8 +32,9 @@ class OrderList extends OrderList_parent
         if (!$oOrder->load($sOxId)) {
             return;
         }
-
-        if (Constants::isAmazonPayment($oOrder->getFieldData('oxpaymenttype'))) {
+        /** @var  string $paymentType */
+        $paymentType = $oOrder->getFieldData('oxpaymenttype');
+        if (Constants::isAmazonPayment($paymentType)) {
             $logger = new Logger();
             OxidServiceProvider::getAmazonService()->createRefund(
                 $sOxId,

@@ -21,7 +21,7 @@ class Address
      *
      * @var array
      */
-    protected static $possibleDBTablePrefix = [
+    protected static array $possibleDBTablePrefix = [
         'oxuser__' , 'oxaddress__'
     ];
 
@@ -30,7 +30,7 @@ class Address
      *
      * @var string
      */
-    protected static $defaultDBTablePrefix = 'oxaddress__';
+    protected static string $defaultDBTablePrefix = 'oxaddress__';
 
     /**
      * This is used as a prefilter for OXID functions below.
@@ -51,7 +51,9 @@ class Address
             (int)Registry::getLang()->getBaseLanguage(),
             $countryOxId
         );
-        $countryName = $country->oxcountry__oxtitle->value;
+        /** @var string $oxtitle */
+        $oxtitle = $country->getFieldData('oxtitle');
+        $countryName = $oxtitle;
 
         $company = '';
         $street = '';
@@ -128,7 +130,7 @@ class Address
      * @param string $DBTablePrefix
      * @return array
      */
-    public static function mapAddressToDb(array $address, $DBTablePrefix): array
+    public static function mapAddressToDb(array $address, string $DBTablePrefix): array
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
@@ -156,7 +158,7 @@ class Address
      *
      * @return array
      */
-    public static function mapAddressToView(array $address, $DBTablePrefix): array
+    public static function mapAddressToView(array $address, string $DBTablePrefix): array
     {
         $config = Registry::get(Config::class);
 
@@ -231,7 +233,7 @@ class Address
      *
      * @return string
      */
-    private static function validateDBTablePrefix($DBTablePrefix)
+    private static function validateDBTablePrefix(string $DBTablePrefix): string
     {
         return in_array($DBTablePrefix, self::$possibleDBTablePrefix) ?
             $DBTablePrefix :

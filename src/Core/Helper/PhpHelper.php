@@ -15,7 +15,9 @@ class PhpHelper
      */
     public static function jsonToArray(string $json): array
     {
-        return json_decode($json, true);
+        /** @var array $decoded */
+        $decoded = json_decode($json,true);
+        return $decoded;
     }
 
     /**
@@ -56,7 +58,9 @@ class PhpHelper
             return $_POST;
         }
 
-        $post = json_decode((string)file_get_contents('php://input'), true);
+        /** @var array $decoded */
+        $decoded = json_decode((string)file_get_contents('php://input'), true);
+        $post = $decoded;
         if (json_last_error() == JSON_ERROR_NONE) {
             return $post;
         }

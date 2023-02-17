@@ -7,7 +7,8 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
-use OxidEsales\Eshop\Core\Registry;
+
+use OxidEsales\EshopCommunity\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -36,7 +37,9 @@ class OrderArticle extends OrderArticle_parent
     private function refundAmazon(): void
     {
         // get article id
-        $sOrderArtId = (string) Registry::getConfig()->getRequestParameter('sArtID');
+        /** @var string $sOrderArtId */
+
+        $sOrderArtId = Registry::getConfig()->getRequestParameter('sArtID');
         $sOrderId = $this->getEditObjectId();
 
         $oOrderArticle = oxNew(\OxidEsales\Eshop\Application\Model\OrderArticle::class);
@@ -45,10 +48,13 @@ class OrderArticle extends OrderArticle_parent
         // order and order article exits?
         if ($oOrderArticle->load($sOrderArtId) && $oOrder->load($sOrderId)) {
             // deleting record
-            if (Constants::isAmazonPayment($oOrderArticle->getOrder()->oxorder__oxpaymenttype->value)) {
+            //if (Constants::isAmazonPayment($oOrderArticle->getOrder()->oxorder__oxpaymenttype->value)) {
+            /** @var  string $paymentType */
+            $paymentType = $oOrder->getFieldData('oxpaymenttype');
+            if(Constants::isAmazonPayment($paymentType)){
                 $logger = new Logger();
                 OxidServiceProvider::getAmazonService()->createRefund(
-                    $oOrderArticle->getOrder()->getId(),
+                    $oOrder->getId(),
                     (float)$oOrderArticle->getTotalBrutPriceFormated(),
                     $logger
                 );

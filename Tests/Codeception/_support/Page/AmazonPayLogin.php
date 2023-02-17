@@ -29,5 +29,6 @@ class AmazonPayLogin extends Page
         $I->fillField($this->amazonpayEmailInput, $_ENV['AMAZONPAY_CLIENT_USERNAME']);
         $I->fillField($this->amazonpayPasswordInput, $_ENV['AMAZONPAY_CLIENT_PASSWORD']);
         $I->click($this->signInSubmitInput);
+        $I->wait(2);
     }
 }

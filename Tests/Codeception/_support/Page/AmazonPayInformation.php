@@ -27,6 +27,7 @@ class AmazonPayInformation extends Page
         $I->waitForElement($this->continueToCheckout);
         $I->waitForElementClickable($this->continueToCheckout, 30);
         $I->click($this->continueToCheckout);
+        $I->wait(2);
     }
 
     public function cancelPayment()
@@ -35,5 +36,6 @@ class AmazonPayInformation extends Page
 
         $I->waitForElementClickable($this->cancelCheckout, 30);
         $I->click($this->cancelCheckout);
+        $I->wait(2);
     }
 }

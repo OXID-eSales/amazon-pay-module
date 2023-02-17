@@ -18,30 +18,3 @@ REPLACE INTO `oxuser` SET
     OXCREATE = '2021-02-05 14:42:42',
     OXREGISTER = '2021-02-05 14:42:42';
 
-## temp. admin account (username "admin", password "admin")
-INSERT INTO `oxuser`
-(
-    `OXID`,
-    `OXACTIVE`,
-    `OXRIGHTS`,
-    `OXSHOPID`,
-    `OXUSERNAME`,
-    `OXPASSWORD`,
-    `OXPASSSALT`,
-    `OXCREATE`,
-    `OXREGISTER`,
-    `OXBIRTHDATE`
-)
-VALUES
-(
-    'tmp_admin',
-    1,
-    'malladmin',
-    1,
-    'admin',
-    'e3a8a383819630e42d9ef90be2347ea70364b5efbb11dfc59adbf98487e196fffe4ef4b76174a7be3f2338581e507baa61c852b7d52f4378e21bd2de8c1efa5e',
-    '61646D696E61646D696E61646D696E',
-    NOW(),
-    NOW(),
-    '1999-12-31'
-);

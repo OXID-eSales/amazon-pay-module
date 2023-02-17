@@ -22,12 +22,14 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
 abstract class BaseCest
 {
+    private int $timestamp;
     private int $amount = 1;
     private AcceptanceTester $I;
     private $homePage;
 
     public function _before(AcceptanceTester $I): void
     {
+        $this->timestamp = time();
         $I->haveInDatabase(
             'oxobject2payment',
             [
@@ -126,7 +128,7 @@ abstract class BaseCest
         $homePage = $this->I->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->wait(2);
-        $this->I->makeScreenshot(time() . 'beforeLogin.png');
+        $this->_makeScreenshot('beforeLogin');
         $homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
         $this->I->wait(2);
     }
@@ -223,7 +225,7 @@ abstract class BaseCest
     protected function _checkAccountExist()
     {
         $this->I->waitForDocumentReadyState();
-        $this->I->makeScreenshot(time() . 'Account already exists');
+        $this->_makeScreenshot('AccountAlreadyExists');
         $foundModuleMessage = false;
         try {
             $this->I->waitForText(strip_tags(sprintf(
@@ -285,6 +287,8 @@ abstract class BaseCest
      */
     protected function _submitOrder()
     {
+        $this->I->executeJS('window.scrollTo(0,1600);');
+        $this->_makeScreenshot('submitOrder');
         $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
         $this->I->wait(2);
@@ -298,6 +302,7 @@ abstract class BaseCest
     {
         $this->I->wait(10);
         $thankYouPage = new ThankYou($this->I);
+        $this->_makeScreenshot('thankYouPage');
         $orderNumber = $thankYouPage->grabOrderNumber();
         return $orderNumber;
     }
@@ -364,5 +369,14 @@ abstract class BaseCest
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
         $this->I->wait(2);
+    }
+
+    protected function _makeScreenshot($suffix)
+    {
+        $class = get_class($this);
+        $arr = explode('\\', $class);
+        $className = array_pop($arr);
+        $filename = sprintf('%s_%s_%s', $this->timestamp, $className, $suffix);
+        $this->I->makeScreenshot($filename);
     }
 }

@@ -39,9 +39,9 @@ class AmazonService
     /**
      * Delivery address
      *
-     * @var stdClass
+     * @var Address
      */
-    protected stdClass $deliveryAddress;
+    protected Address $deliveryAddress;
 
     /**
      * Billing address
@@ -193,21 +193,15 @@ class AmazonService
     /**
      * Oxid formatted delivery address from Amazon
      *
-     * @return stdClass
+     * @return Address
      * @throws DatabaseConnectionException
      */
-    public function getDeliveryAddressAsObj(): stdClass
+    public function getDeliveryAddressAsObj(): Address
     {
-        if (empty($this->deliveryAddress)) {
-            $this->deliveryAddress = new stdClass();
+        if (!is_object($this->deliveryAddress)) {
             $oOrder = oxNew(Order::class);
             /** @var \OxidEsales\EshopCommunity\Application\Model\Address $deliveryAddress */
-            $deliveryAddress = $oOrder->getDelAddressInfo();
-            if (!empty($deliveryAddress)) {
-                foreach ($deliveryAddress as $key => $value) {
-                    $this->deliveryAddress->{$key} = new Field($value, FieldAlias::T_RAW);
-                }
-            }
+            $this->deliveryAddress = $oOrder->getDelAddressInfo();
         }
         return $this->deliveryAddress;
     }
@@ -398,6 +392,8 @@ class AmazonService
         }
 
         $amazonConfig = oxNew(Config::class);
+        /** @var stdClass $orderCurrency */
+        $orderCurrency = $order->getOrderCurrency();
         $body = [
             'chargeId' => $repository->findLogMessageForOrderId($orderId)[0]['OSC_AMAZON_CHARGE_ID'],
             'refundAmount' => [
@@ -406,7 +402,7 @@ class AmazonService
                     '.',
                     Registry::getLang()->formatCurrency($refundAmount)
                 ),
-                'currencyCode' => $order->getOrderCurrency()->name
+                'currencyCode' => $orderCurrency->name
             ],
             'softDescriptor' => 'AMZ*OXID'
         ];

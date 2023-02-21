@@ -205,6 +205,7 @@ class Order extends Order_parent
     /**
      * @inheritdoc
      */
+    /** TODO: check in Oxid 7 if the base methods has updated parameter typehints */
     public function delete($sOxId = null): bool
     {
         $sOxId = $sOxId ?: $this->getId();
@@ -224,7 +225,12 @@ class Order extends Order_parent
         return parent::delete($sOxId);
     }
 
-    /** @inheritdoc  */
+    /**
+     * @param $oxid
+     * @return bool
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function canDelete($oxid = null): bool
     {
         $oxid = $oxid ?: $this->getId();

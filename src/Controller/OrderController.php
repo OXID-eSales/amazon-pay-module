@@ -63,7 +63,9 @@ class OrderController extends OrderController_parent
             $this->_oViewConf = oxNew(ViewConfig::class);
         }
 
-        return $this->_oViewConf;
+        /** @var ViewConfig $conf */
+        $conf = $this->_oViewConf;
+        return $conf;
     }
 
     protected function initAmazonPay(): void
@@ -71,16 +73,15 @@ class OrderController extends OrderController_parent
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void
     {
         $user = $this->getUser();
-        $activeUser = false;
-        if (!empty($user)) {
-            $activeUser = $user->loadActiveUser();
-        }
         $amazonSession = $amazonService->getCheckoutSession();
         // Create guest user if not logged in
-        if (!$activeUser) {
+        if (!is_object($user)) {
             /** @var \OxidSolutionCatalysts\AmazonPay\Component\UserComponent $userComponent */
             $userComponent = oxNew(UserComponent::class);
             $userComponent->createGuestUser($amazonSession);
@@ -298,7 +299,8 @@ class OrderController extends OrderController_parent
 
         $actShipSet = null;
         $fallbackShipSet = null;
-        if (!$basket) {
+        $lastShipSet = null;
+        if (is_object($basket)) {
             $lastShipSet = $basket->getShippingId();
         }
 

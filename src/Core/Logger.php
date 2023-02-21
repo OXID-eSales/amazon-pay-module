@@ -15,6 +15,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Model\User;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 
@@ -51,7 +52,7 @@ class Logger extends AbstractLogger
         } else {
             $user = Registry::getSession()->getUser();
             $userId = 'guest';
-            if($user){
+            if($user instanceof User){
                 $userId = $user->getId();
             }
         }

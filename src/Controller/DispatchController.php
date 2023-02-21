@@ -19,6 +19,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\User;
 
 /**
  * Class DispatchController
@@ -133,7 +134,7 @@ class DispatchController extends FrontendController
                 $user = $this->getUser();
                 $session = Registry::getSession();
 
-                if (!empty($user)) {
+                if (!$user instanceof User) {
                     // Create guest user if not logged in
                     $userComponent = oxNew(UserComponent::class);
                     $userComponent->createGuestUser($response);

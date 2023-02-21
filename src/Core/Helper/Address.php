@@ -69,14 +69,14 @@ class Address
             if (isset($addressLines[1]) && preg_match('/^\d.{0,8}$/', $addressLines[1])) {
                 $streetTmp = $addressLines[0] . ' ' . $addressLines[1];
             // Company-Case: Company in first line Street and StreetNo in second line
-            } elseif (isset($addressLines[1]) && $addressLines[1] != '') {
+            } elseif (!empty($addressLines[1])) {
                 $streetTmp = $addressLines[1];
                 $company = $addressLines[0];
             // Normal-Case: No Company, Street & StreetNo in first line
             } else {
                 $streetTmp = $addressLines[0];
             }
-            if ($addressLines[2] != '') {
+            if (!empty($addressLines[2])) {
                 $additionalInfo = $addressLines[2];
             }
 
@@ -195,7 +195,7 @@ class Address
     {
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {
-            if (isset($address["addressLine$i"]) && $address["addressLine$i"]) {
+            if (!empty($address["addressLine$i"])) {
                 $line = $address["addressLine$i"];
                 preg_match_all('!\d+!', $line, $matches2);
                 if (!empty($matches2[0])) {

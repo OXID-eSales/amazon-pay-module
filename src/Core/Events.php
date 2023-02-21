@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
@@ -62,6 +63,10 @@ class Events
         self::updateOxpsToOscLogTable();
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     protected static function updateOxpsToOscArticleColumn(): void
     {
         $sql = 'show columns
@@ -228,6 +233,7 @@ class Events
      *
      * @psalm-param 'oxidamazon'|'oxidamazonexpress' $paymentId
      * @psalm-param array{en: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}, de: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}} $paymentDescription
+     * @throws \Exception
      */
     protected static function createPaymentMethod(string $paymentId, array $paymentDescription): void
     {
@@ -236,7 +242,7 @@ class Events
         if (!$paymentLoaded) {
             $payment->setId($paymentId);
             $params = [
-                'oxpayments__oxactive' => false,
+                'oxpayments__oxactive' => true,
                 'oxpayments__oxaddsum' => 0,
                 'oxpayments__oxaddsumtype' => 'abs',
                 'oxpayments__oxfromboni' => 0,

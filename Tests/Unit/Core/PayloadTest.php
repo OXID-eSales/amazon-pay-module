@@ -24,8 +24,8 @@ declare(strict_types=1);
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
-use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidEsales\TestingLibrary\UnitTestCase;
+use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 
 class PayloadTest extends UnitTestCase
 {

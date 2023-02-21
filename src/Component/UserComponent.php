@@ -24,6 +24,7 @@ class UserComponent extends UserComponent_parent
 {
     /**
      * @param array $amazonSession
+     * @throws \Exception
      */
     public function createGuestUser(array $amazonSession): void
     {
@@ -131,7 +132,7 @@ class UserComponent extends UserComponent_parent
      * @return array
      * @deprecated underscore prefix violates PSR12, will be renamed to "getDelAddressData" in next major
      */
-    protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+    protected function _getDelAddressData(): array // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $session = Registry::getSession();
         if (
@@ -140,12 +141,12 @@ class UserComponent extends UserComponent_parent
         ) {
             return parent::_getDelAddressData();
         }
-        $aDelAdress = [];
-        $aDeladr = (array) $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
-        if (count($aDeladr)) {
-            $aDelAdress = $aDeladr;
+        $aDelAddress = [];
+        $aSessionDelAddress = (array) $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
+        if (count($aSessionDelAddress)) {
+            $aDelAddress = $aSessionDelAddress;
         }
-        return $aDelAdress;
+        return $aDelAddress;
     }
 
     protected function _getNameFromAmazonResponse(array $amazonSession): string

@@ -34,7 +34,7 @@ class AmazonService
     /**
      * @var array
      */
-    private array $checkoutSession;
+    private array $checkoutSession = [];
 
     /**
      * Delivery address
@@ -83,14 +83,10 @@ class AmazonService
 
     /**
      * AmazonService constructor.
-     *
-     * @param AmazonClient $client
      */
-    public function __construct(AmazonClient $client)
+    public function __construct()
     {
-        $this->client = $client;
-
-        if (!empty($client)) {
+        if (empty($this->client)) {
             $factory = oxNew(ServiceFactory::class);
             $this->client = $factory->getClient();
         }
@@ -152,7 +148,7 @@ class AmazonService
     {
         /** @var string $sessionId */
         $sessionId = Registry::getSession()->getVariable(Constants::SESSION_CHECKOUT_ID);
-        return $sessionId;
+        return $sessionId ?: '';
     }
 
     /**
@@ -202,7 +198,7 @@ class AmazonService
      */
     public function getDeliveryAddressAsObj(): stdClass
     {
-        if ($this->deliveryAddress === new stdClass()) {
+        if (empty($this->deliveryAddress)) {
             $this->deliveryAddress = new stdClass();
             $oOrder = oxNew(Order::class);
             /** @var \OxidEsales\EshopCommunity\Application\Model\Address $deliveryAddress */
@@ -238,7 +234,7 @@ class AmazonService
      */
     public function getBillingAddressAsObj(): stdClass
     {
-        if ($this->billingAddress === new stdClass()) {
+        if (empty($this->billingAddress)) {
             $oUser = $this->getUser();
             $this->billingAddress = new stdClass();
             foreach ($this->billingAddressFields as $key) {
@@ -282,12 +278,11 @@ class AmazonService
      *
      */
     protected function processPayment(
-        string          $amazonSessionId,
-        Basket          $basket,
+        string $amazonSessionId,
+        Basket $basket,
         LoggerInterface $logger,
-        bool            $bl2Step = false
-    ): void
-    {
+        bool $bl2Step = false
+    ): void {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
@@ -829,8 +824,11 @@ class AmazonService
         $logger->info($response['statusDetails']['state'], $result);
     }
 
-    public function sendAlexaNotification(string $chargePermissionId, string $trackingCode = '', string $deliveryType = ''): void
-    {
+    public function sendAlexaNotification(
+        string $chargePermissionId,
+        string $trackingCode = '',
+        string $deliveryType = ''
+    ): void {
         $amazonConfig = oxNew(Config::class);
 
         $payload = [];

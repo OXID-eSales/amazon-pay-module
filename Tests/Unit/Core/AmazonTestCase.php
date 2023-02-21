@@ -62,7 +62,7 @@ class AmazonTestCase extends UnitTestCase
      */
     protected function createTestCheckoutSession(): array
     {
-        return $this->amazonClient->createCheckoutSession();
+        return $this->amazonClient->createCheckoutSession([],[]);
     }
 
     protected function createAmazonSession(): string

@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core\Repository;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -25,7 +26,7 @@ class LogRepository
      */
     public function saveLogMessage(LogMessage $logMessage): void
     {
-        $id = Registry::getUtilsObject()->generateUID();
+        $uid = Registry::getUtilsObject()->generateUID();
 
         $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (
                 `OSC_AMAZON_PAYLOGID`,
@@ -43,7 +44,7 @@ class LogRepository
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
 
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute($sql, [
-            $id,
+            $uid,
             $logMessage->getShopId(),
             $logMessage->getUserId(),
             $logMessage->getOrderId(),
@@ -96,8 +97,7 @@ class LogRepository
     public function findLogMessageForChargePermissionId(
         string $chargePermissionId,
         string $orderBy = 'OXTIMESTAMP'
-    ): array
-    {
+    ): array {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]

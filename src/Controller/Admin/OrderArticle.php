@@ -7,7 +7,6 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
-
 use OxidEsales\EshopCommunity\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
@@ -51,7 +50,7 @@ class OrderArticle extends OrderArticle_parent
             //if (Constants::isAmazonPayment($oOrderArticle->getOrder()->oxorder__oxpaymenttype->value)) {
             /** @var  string $paymentType */
             $paymentType = $oOrder->getFieldData('oxpaymenttype');
-            if(Constants::isAmazonPayment($paymentType)){
+            if (Constants::isAmazonPayment($paymentType)) {
                 $logger = new Logger();
                 OxidServiceProvider::getAmazonService()->createRefund(
                     $oOrder->getId(),

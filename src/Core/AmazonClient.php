@@ -45,17 +45,17 @@ class AmazonClient extends Client
      * @param array $payload
      * @param array $headers
      */
-    public function createCheckoutSession(array $payload = [], array $headers = []): array
+    public function createCheckoutSession($payload, $headers): array
     {
         $config = $this->getModuleConfig();
 
-        if (!empty($headers)) {
+        if (empty($headers)) {
             $headers = [
                 'x-amz-pay-Idempotency-Key' => $config->getUuid()
             ];
         }
 
-        if (!$payload) {
+        if (empty($payload)) {
             $payload = [
                 'webCheckoutDetails' => [
                     'checkoutReviewReturnUrl' => $config->checkoutReviewUrl(),

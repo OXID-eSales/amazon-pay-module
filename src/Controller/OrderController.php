@@ -71,7 +71,8 @@ class OrderController extends OrderController_parent
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
 
-    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void {
+    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void
+    {
         $user = $this->getUser();
         $activeUser = false;
         if (!empty($user)) {
@@ -295,10 +296,9 @@ class OrderController extends OrderController_parent
         $session->setVariable('paymentId', $paymentId);
         $session->setVariable('_selected_paymentid', $paymentId);
 
-
         $actShipSet = null;
         $fallbackShipSet = null;
-        if (!empty($basket)) {
+        if (!$basket) {
             $lastShipSet = $basket->getShippingId();
         }
 

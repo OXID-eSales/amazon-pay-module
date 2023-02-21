@@ -23,72 +23,72 @@ class Payload
     /**
      * @var bool
      */
-    private bool $canHandlePendingAuthorization;
+    private ?bool $canHandlePendingAuthorization = null;
 
     /**
      * @var string
      */
-    private string $merchantStoreName;
+    private string $merchantStoreName = '';
 
     /**
      * @var string
      */
-    private string $noteToBuyer;
+    private string $noteToBuyer = '';
 
     /**
      * @var string
      */
-    private string $paymentDetailsChargeAmount;
+    private string $paymentDetailsChargeAmount = '';
 
     /**
      * @var string
      */
-    private string $checkoutChargeAmount;
+    private string $checkoutChargeAmount = '';
 
     /**
      * @var string
      */
-    private string $captureAmount;
+    private string $captureAmount = '';
 
     /**
      * @var string
      */
-    private string $currencyCode;
+    private string $currencyCode = '';
 
     /**
      * @var string
      */
-    private string $softDescriptor;
+    private string $softDescriptor = '';
 
     /**
      * @var string
      */
-    private string $merchantReferenceId;
+    private string $merchantReferenceId = '';
 
     /**
      * @var string
      */
-    private string $checkoutReviewReturnUrl;
+    private string $checkoutReviewReturnUrl = '';
 
     /**
      * @var string
      */
-    private string $checkoutResultReturnUrl;
+    private string $checkoutResultReturnUrl = '';
 
     /**
      * @var string
      */
-    private string $signInReturnUrl;
+    private string $signInReturnUrl = '';
 
     /**
      * @var string
      */
-    private string $signInCancelUrl;
+    private string $signInCancelUrl = '';
 
     /**
      * @var string
      */
-    private string $storeId;
+    private string $storeId = '';
 
     /**
      * @var array
@@ -103,12 +103,12 @@ class Payload
     /**
      * @var array
      */
-    private array $addressDetails;
+    private array $addressDetails = [];
     /**
      * @var string
      */
-    private string $platformId;
-    private array $addressRestrictions;
+    private string $platformId = '';
+    private array $addressRestrictions = [];
 
     /**
      * @return array
@@ -145,25 +145,18 @@ class Payload
             $data['signInScopes'] = $this->signInScopes;
         }
 
-        if (
-            $this->canHandlePendingAuthorization === true ||
-            !empty($this->paymentIntent) ||
-            !empty($this->paymentDetailsChargeAmount)
-        ) {
-            #$data['paymentDetails'] = [];
-            if ($this->canHandlePendingAuthorization === true) {
-                $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
-            }
+        if(!empty($this->canHandlePendingAuthorization)){
+            $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
+        }
 
-            if (!empty($this->paymentIntent)) {
-                $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
-            }
+        if (!empty($this->paymentIntent)) {
+            $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
+        }
 
-            if (!empty($this->paymentDetailsChargeAmount)) {
-                $data['paymentDetails']['chargeAmount'] = [];
-                $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
-                $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
-            }
+        if (!empty($this->paymentDetailsChargeAmount)) {
+            $data['paymentDetails']['chargeAmount'] = [];
+            $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
+            $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
         }
 
         if (!empty($this->captureAmount)) {
@@ -426,7 +419,7 @@ class Payload
 
         // set mandatory standard fields
         $this->addressDetails = [
-            'name' => $oxfname. ' ' . $oxlname,
+            'name' => $oxfname . ' ' . $oxlname,
             'addressLine1' => $addressLine1,
             'postalCode' => $oxzip,
             'city' => $oxcity,

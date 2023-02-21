@@ -45,11 +45,16 @@ class Logger extends AbstractLogger
     public function logMessage(?string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
-
-        $user = Registry::getSession()->getUser();
         $basket = Registry::getSession()->getBasket();
-        $defaultUser = $user->getId() ?: 'guest';
-        $userId = !empty($context['userId']) ? $context['userId'] : $defaultUser;
+        if(!empty($context['userId'])){
+            $userId = $context['userId'];
+        } else {
+            $user = Registry::getSession()->getUser();
+            $userId = 'guest';
+            if($user){
+                $userId = $user->getId();
+            }
+        }
 
         $logMessage = new LogMessage();
         $logMessage->setUserId($userId);

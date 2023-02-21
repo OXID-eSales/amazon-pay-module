@@ -121,7 +121,6 @@ class Order extends Order_parent
     public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = []): void
     {
         if (!empty($data) && $data['chargeId']) {
-
             $this->_setFieldData('oxtransid', $data['chargeId']);
         }
 
@@ -136,7 +135,8 @@ class Order extends Order_parent
             case "AMZ_AUTH_STILL_PENDING":
                 if (is_array($data)) {
                     $this->_setFieldData(
-                        'osc_amazon_remark', 'AmazonPay Authorisation still pending: '
+                        'osc_amazon_remark',
+                        'AmazonPay Authorisation still pending: '
                         . $data['chargeAmount']
                     );
                 }
@@ -170,9 +170,9 @@ class Order extends Order_parent
             case "AMZ_2STEP_AUTH_OK":
                 if (!empty($data['chargeAmount'])) {
                     $this->_setFieldData(
-                        'osc_amazon_remark', 'AmazonPay Authorized (not Captured):' . $data['chargeAmount']
+                        'osc_amazon_remark',
+                        'AmazonPay Authorized (not Captured):' . $data['chargeAmount']
                     );
-
                 }
                 $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 $this->save();
@@ -225,7 +225,7 @@ class Order extends Order_parent
     }
 
     /** @inheritdoc  */
-    public function canDelete(string $oxid = ''): bool
+    public function canDelete($oxid = null): bool
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {
@@ -252,10 +252,9 @@ class Order extends Order_parent
             return false;
         }
 
-        if(method_exists(Order_parent::class,'canDelete')){
+        if (method_exists(Order_parent::class, 'canDelete')) {
             return parent::canDelete($oxid);
         }
         return true;
-
     }
 }

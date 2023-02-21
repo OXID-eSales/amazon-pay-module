@@ -36,7 +36,7 @@ class AmazonCheckoutController extends FrontendController
                     $sProductId,
                     1
                 );
-                // Remove flag of "new item added" to not show "Item added" popup when returning to checkout
+                // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
             } catch (\Exception $exception) {
@@ -45,7 +45,7 @@ class AmazonCheckoutController extends FrontendController
             }
         }
 
-        $result = OxidServiceProvider::getAmazonClient()->createCheckoutSession();
+        $result = OxidServiceProvider::getAmazonClient()->createCheckoutSession([], []);
 
         if ($result['status'] !== 201) {
             OxidServiceProvider::getLogger()->info('create checkout failed', $result);

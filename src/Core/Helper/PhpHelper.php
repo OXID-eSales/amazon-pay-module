@@ -16,7 +16,7 @@ class PhpHelper
     public static function jsonToArray(string $json): array
     {
         /** @var array $decoded */
-        $decoded = json_decode($json,true);
+        $decoded = json_decode($json, true);
         return $decoded;
     }
 

@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -134,7 +135,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonPaymentPossible(string $paymentId = ''): bool
     {
-        if ($paymentId !== '') {
+        if ($paymentId === '') {
             /** @var string $paymentId */
             $paymentId = Registry::getSession()->getVariable('paymentid') ?? '';
         }
@@ -297,12 +298,12 @@ class ViewConfig extends ViewConfig_parent
      * Template variable getter. Get payload in JSON Format
      *
      * @return false|string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getPayloadExpress(): false|string
+    public function getPayloadExpress(): string
     {
         /** @var string $anid */
-        $anid = Registry::getRequest()->getRequestParameter('anid');
+        $anid = Registry::getRequest()->getRequestParameter('anid') ?? '';
         $this->setArticlesId($anid);
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($this->articlesId);
@@ -322,6 +323,7 @@ class ViewConfig extends ViewConfig_parent
         $payloadData = $payload->getData();
         /** @var string $payloadJSON */
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $payloadJSON = $payloadJSON ?: '';
         $this->signature = $this->getSignature($payloadJSON);
         return $payloadJSON;
     }
@@ -329,10 +331,10 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get payload in JSON Format
      *
-     * @return false|string
-     * @throws \Exception
+     * @return string
+     * @throws Exception
      */
-    public function getPayload()
+    public function getPayload(): string
     {
         $amazonConfig = $this->getAmazonConfig();
 
@@ -367,6 +369,7 @@ class ViewConfig extends ViewConfig_parent
         $payloadData = $payload->getData();
         /** @var string $payloadJSON */
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $payloadJSON = $payloadJSON ?: '';
         $this->signature = $this->getSignature($payloadJSON);
         return $payloadJSON;
     }
@@ -374,10 +377,10 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get payload in JSON Format for Sign In
      *
-     * @return false|string
-     * @throws \Exception
+     * @return string
+     * @throws Exception
      */
-    public function getPayloadSignIn(): false|string
+    public function getPayloadSignIn(): string
     {
         $payload = new Payload();
         $payload->setSignInReturnUrl();
@@ -398,6 +401,7 @@ class ViewConfig extends ViewConfig_parent
         $payloadData = $payload->getData();
         /** @var string $payloadJSON */
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $payloadJSON = $payloadJSON ?: '';
         $this->signature = $this->getSignature($payloadJSON);
         return $payloadJSON;
     }
@@ -407,7 +411,7 @@ class ViewConfig extends ViewConfig_parent
      *
      * @param string $payload
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public function getSignature($payload): string
     {

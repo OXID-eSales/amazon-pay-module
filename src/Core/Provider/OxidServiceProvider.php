@@ -19,12 +19,12 @@ class OxidServiceProvider
     /**
      * @var OxidServiceProvider
      */
-    private static OxidServiceProvider $instance;
+    private static ?OxidServiceProvider $instance = null;
 
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface|Logger $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var AmazonClient

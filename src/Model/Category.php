@@ -22,7 +22,7 @@ class Category extends Category_parent
     {
         /** @var array $editVal */
         $editVal = Registry::getRequest()->getRequestParameter('editval');
-        $this->_setFieldData('osc_amazon_exclude',$editVal['oxcategories__osc_amazon_exclude']);
+        $this->_setFieldData('osc_amazon_exclude', $editVal['oxcategories__osc_amazon_exclude']);
         return parent::save();
     }
 }

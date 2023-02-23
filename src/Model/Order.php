@@ -7,14 +7,15 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
-use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
-use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
@@ -29,8 +30,8 @@ class Order extends Order_parent
     /**
      * Security and Cleanup before finalize order
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
-     * @param object                                     $oUser                Current User object
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
+     * @param object $oUser Current User object
      *
      * @return int|null
      *
@@ -52,9 +53,9 @@ class Order extends Order_parent
     /**
      * Order checking, processing and saving method.
      *
-     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket              Basket object
-     * @param object                                     $oUser                Current User object
-     * @param bool                                       $blRecalculatingOrder Order recalculation
+     * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket Basket object
+     * @param object $oUser Current User object
+     * @param bool $blRecalculatingOrder Order recalculation
      *
      * @return integer
      */
@@ -71,7 +72,7 @@ class Order extends Order_parent
         $paymentId = $oBasket->getPaymentId() ?? '';
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
         if (
-            $ret < 2  &&
+            $ret < 2 &&
             !$blRecalculatingOrder &&
             $isAmazonPayment
         ) {
@@ -83,9 +84,9 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
+     * @return \OxidEsales\Eshop\Application\Model\Address|null
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      *
-     * @return \OxidEsales\Eshop\Application\Model\Address|null
      */
     public function getDelAddressInfo()
     {
@@ -211,6 +212,22 @@ class Order extends Order_parent
     }
 
     /**
+     * @param string $oxid
+     * @return bool
+     */
+    public function isAmazonOrder(string $oxid = ''): bool
+    {
+        $oxid = $oxid ?: $this->getId();
+        if (!$oxid) {
+            return false;
+        }
+
+        /** @var string $paymentId */
+        $paymentId = $this->getFieldData('oxpaymentid');
+        return Constants::isAmazonPayment($paymentId);
+    }
+
+    /**
      * @inheritdoc
      */
     public function delete($sOxId = null)
@@ -220,19 +237,23 @@ class Order extends Order_parent
             return false;
         }
 
-        if (!$this->canDelete($sOxId)) {
-            return false;
+        if ($this->isAmazonOrder($sOxId)) {
+            if (!$this->canDeleteAmazonOrder($sOxId)) {
+                return false;
+            }
+
+            OxidServiceProvider::getAmazonService()->processCancel($sOxId);
+            $repository = oxNew(LogRepository::class);
+            $repository->deleteLogMessageByOrderId($sOxId);
         }
-
-        OxidServiceProvider::getAmazonService()->processCancel($sOxId);
-
-        $repository = oxNew(LogRepository::class);
-        $repository->deleteLogMessageByOrderId($sOxId);
-
-        return parent::delete($sOxId);
+        return parent::delete();
     }
 
-    public function canDelete($oxid = null)
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    private function canDeleteAmazonOrder(string $oxid = '')
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {
@@ -258,7 +279,6 @@ class Order extends Order_parent
             );
             return false;
         }
-
-        return parent::canDelete($oxid);
+        return false;
     }
 }

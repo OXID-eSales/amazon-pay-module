@@ -24,10 +24,10 @@
         "symfony/dotenv": "^5.1",
         "codeception/module-rest": "1.4.2",
         "codeception/module-phpbrowser": "^1.0.2",
-        "oxid-esales/oxideshop-ce": "^6.3"
+        "oxid-esales/oxideshop-ce": "^6.10"
     },
     "conflicts": {
-        "oxid-esales/oxideshop-ce": "<6.3 | ^7.0"
+        "oxid-esales/oxideshop-ce": "<6.10 | ^7.0"
     },
     "archive": {
         "exclude": ["/resources"]

@@ -36,7 +36,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
         $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
-        if ($error) {
+        if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
         $I->waitForElement('.alert-success', 60);
@@ -65,7 +65,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
         $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
-        if ($error) {
+        if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
         $I->waitForElement('.alert-success', 60);

@@ -15,6 +15,21 @@ final class AmazonPayExcludeCest extends BaseCest
     protected string $amazonExcludeCategoryConfig = '[name="editval[oxcategories__osc_amazon_exclude]"]:nth-child(2)';
     public string $searchForm = '#search';
 
+    public function _before(AcceptanceTester $I): void
+    {
+        parent::_before($I);
+        $excluded = Fixtures::get('amazonExclude');
+        $I->updateInDatabase(
+            'oxarticles',
+            ['OXVARSTOCK' => 10],
+            ['OXID' => $excluded['notExcludedProduct']['id']]
+        );
+        $I->updateInDatabase(
+            'oxarticles',
+            ['OXVARSTOCK' => 10],
+            ['OXID' => $excluded['productInNotExcludedCategory']['id']]
+        );
+    }
 
     /**
      * @param AcceptanceTester $I
@@ -33,8 +48,8 @@ final class AmazonPayExcludeCest extends BaseCest
         $I->checkOption('#useExclusion');
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger', $I);
-        if ($error) {
+        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
         $I->waitForElement('.alert-success', 60);
@@ -74,7 +89,7 @@ final class AmazonPayExcludeCest extends BaseCest
         $I->amOnPage($detailUrl);
         $I->waitForDocumentReadyState();
         try {
-            $I->waitForElement('#AmazonPayButtonProductMain', 60);
+            $I->waitForElement('#AmazonPayButtonProductMain', 5);
         } catch (\Exception $e) {
             $I->fail('Amazon Express is absent, but should be shown');
         }
@@ -97,8 +112,8 @@ final class AmazonPayExcludeCest extends BaseCest
         $I->checkOption('#useExclusion');
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger', $I);
-        if ($error) {
+        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
         $I->waitForElement('.alert-success', 60);

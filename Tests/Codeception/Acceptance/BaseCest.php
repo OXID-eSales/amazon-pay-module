@@ -22,12 +22,14 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
 abstract class BaseCest
 {
+    private int $timestampForScreenshot;
     private int $amount = 1;
     private AcceptanceTester $I;
     private $homePage;
 
     public function _before(AcceptanceTester $I): void
     {
+        $this->timestampForScreenshot = time();
         $I->haveInDatabase(
             'oxobject2payment',
             [
@@ -36,6 +38,18 @@ abstract class BaseCest
                 'OXPAYMENTID' => 'oxidamazon',
                 'OXTYPE' => 'oxcountry'
             ]
+        );
+
+        // make sure the payments are active
+        $I->updateInDatabase(
+            'oxpayments',
+            ['OXACTIVE' => 1],
+            ['OXID' => 'oxidamazon']
+        );
+        $I->updateInDatabase(
+            'oxpayments',
+            ['OXACTIVE' => 1],
+            ['OXID' => 'oxidamazonexpress']
         );
 
         $this->I = $I;
@@ -60,15 +74,15 @@ abstract class BaseCest
 
     /**
      * @param string $element
-     * @return false|string
+     * @return string
      */
-    protected function _grabTextFromElementWhenPresent(string $element)
+    protected function _grabTextFromElementWhenPresent(string $element): string
     {
         try {
             $this->I->seeElement($element);
             $isFound = $this->I->grabTextFrom($element);
         } catch (\Exception $e) {
-            $isFound = false;
+            $isFound = '';
         }
         return $isFound;
     }
@@ -112,7 +126,7 @@ abstract class BaseCest
         $homePage = $this->I->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->wait(5);
-        $this->I->makeScreenshot(time() . 'beforeLogin.png');
+        $this->_makeScreenshot('beforeLogin');
         $homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
         $this->I->wait(5);
     }
@@ -196,17 +210,27 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _checkAccountExist()
+    protected function _checkAccountExist(): void
     {
         $this->I->waitForDocumentReadyState();
         $this->I->makeScreenshot(time() . 'Account already exists');
-        $this->I->waitForText(strip_tags(sprintf(
-            Translator::translate('AMAZON_PAY_USEREXISTS'),
-            $_ENV['AMAZONPAY_CLIENT_USERNAME'],
-            $_ENV['AMAZONPAY_CLIENT_USERNAME']
-        )), 60);
-    }
+        $acceptableErrors = [
+            strip_tags(sprintf(
+                Translator::translate('AMAZON_PAY_USEREXISTS'),
+                $_ENV['AMAZONPAY_CLIENT_USERNAME'],
+                $_ENV['AMAZONPAY_CLIENT_USERNAME']
+            )),
+            strip_tags(sprintf(
+                Translator::translate('ERROR_MESSAGE_USER_USEREXISTS'),
+                $_ENV['AMAZONPAY_CLIENT_USERNAME']
+            ))
+        ];
 
+        $error = $this->_grabTextFromElementWhenPresent('.alert .alert-danger');
+        if (!in_array($error, $acceptableErrors)) {
+            $this->I->fail('Login issue: ' . $error);
+        }
+    }
     /**
      * @return void
      */
@@ -243,6 +267,8 @@ abstract class BaseCest
      */
     protected function _submitOrder()
     {
+        $this->I->executeJS('window.scrollTo(0,1600);');
+        $this->_makeScreenshot('submitOrder');
         $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
     }
@@ -255,6 +281,7 @@ abstract class BaseCest
     {
         $this->I->wait(10);
         $thankYouPage = new ThankYou($this->I);
+        $this->_makeScreenshot('thankYouPage');
         $orderNumber = $thankYouPage->grabOrderNumber();
         return $orderNumber;
     }
@@ -284,7 +311,7 @@ abstract class BaseCest
     protected function _openOrder(string $orderNumber): void
     {
         $this->_loginAdmin();
-        $this->I->wait(15);
+        $this->I->wait(5);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");
@@ -319,5 +346,14 @@ abstract class BaseCest
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
+    }
+
+    protected function _makeScreenshot($suffix)
+    {
+        $class = get_class($this);
+        $arr = explode('\\', $class);
+        $className = array_pop($arr);
+        $filename = sprintf('%s_%s_%s', $this->timestampForScreenshot, $className, $suffix);
+        $this->I->makeScreenshot($filename);
     }
 }

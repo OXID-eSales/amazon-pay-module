@@ -90,7 +90,6 @@ class Config
 
     /**
      * Checks if module configuration is valid
-     * @throws StandardException
      */
     public function checkHealth(): void
     {

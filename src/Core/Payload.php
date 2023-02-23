@@ -145,7 +145,7 @@ class Payload
             $data['signInScopes'] = $this->signInScopes;
         }
 
-        if(!empty($this->canHandlePendingAuthorization)){
+        if ($this->canHandlePendingAuthorization === false || $this->canHandlePendingAuthorization === true) {
             $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
         }
 
@@ -165,9 +165,9 @@ class Payload
             $data['captureAmount']['currencyCode'] = $this->currencyCode;
         }
 
-        if (!empty($this->softDescriptor)) {
-            $data['softDescriptor'] = $this->softDescriptor;
-        } else {
+
+        $data['softDescriptor'] = $this->softDescriptor ?: '';
+        if (empty($data['softDescriptor'])) {
             $data = $this->addMerchantMetaData($data);
         }
 
@@ -193,18 +193,19 @@ class Payload
 
         return $data;
     }
+
     public function setAddressRestrictions(array $allowedCountries): void
     {
         $this->addressRestrictions = $allowedCountries;
     }
 
     /**
-     * @param string $id
+     * @param string $platformId
      * @return void
      */
-    public function setPlatformId(string $id): void
+    public function setPlatformId(string $platformId): void
     {
-        $this->platformId = $id;
+        $this->platformId = $platformId;
     }
 
     /**
@@ -245,6 +246,11 @@ class Payload
     public function setCanHandlePendingAuthorization(bool $canHandlePendingAuthorization): void
     {
         $this->canHandlePendingAuthorization = $canHandlePendingAuthorization;
+    }
+
+    public function getCanHandlePendingAuthorization()
+    {
+        return $this->canHandlePendingAuthorization;
     }
 
     /**
@@ -288,6 +294,7 @@ class Payload
     }
 
     /**
+     * @param string $articlesId
      * @return void
      */
     public function setCheckoutReviewReturnUrl(string $articlesId = ''): void

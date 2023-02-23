@@ -47,7 +47,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return Config
      */
-    public function getAmazonConfig()
+    public function getAmazonConfig(): Config
     {
         return Registry::get(Config::class);
     }
@@ -57,8 +57,6 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonActive(): bool
     {
-
-
         $config = $this->getAmazonConfig();
         $blIsActive = true;
         try {
@@ -265,7 +263,7 @@ class ViewConfig extends ViewConfig_parent
      * @psalm-suppress InternalMethod
      *
      */
-    public function isThemeBasedOn(string $themeId)
+    public function isThemeBasedOn(string $themeId): bool
     {
         $result = false;
 
@@ -290,14 +288,13 @@ class ViewConfig extends ViewConfig_parent
     public function getPaymentDescriptor(): string
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
-        $paymentDescriptor = $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
-        return $paymentDescriptor;
+        return $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
     }
 
     /**
      * Template variable getter. Get payload in JSON Format
      *
-     * @return false|string
+     * @return string
      * @throws Exception
      */
     public function getPayloadExpress(): string
@@ -413,10 +410,9 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getSignature($payload): string
+    public function getSignature(string $payload): string
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
-        $signature = $amazonClient->generateButtonSignature($payload);
-        return $signature;
+        return $amazonClient->generateButtonSignature($payload);
     }
 }

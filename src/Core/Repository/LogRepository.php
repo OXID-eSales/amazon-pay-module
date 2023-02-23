@@ -7,7 +7,6 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core\Repository;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
@@ -97,7 +96,8 @@ class LogRepository
     public function findLogMessageForChargePermissionId(
         string $chargePermissionId,
         string $orderBy = 'OXTIMESTAMP'
-    ): array {
+    ): array
+    {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]
@@ -155,14 +155,19 @@ class LogRepository
     }
 
     /**
-     * @param $orderId
-     * @param $remark
-     * @param string $chargeId
+     * @param string $orderId
+     * @param string $remark
      * @param string $transStatus
+     * @param string $chargeId
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function markOrderPaid(string $orderId, string $remark, $transStatus = 'OK', $chargeId = ''): void
+    public function markOrderPaid(
+        string $orderId,
+        string $remark,
+        string $transStatus = 'OK',
+        string $chargeId = ''
+    ): void
     {
         $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OSC_AMAZON_REMARK = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(

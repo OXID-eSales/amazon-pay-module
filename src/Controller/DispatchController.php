@@ -11,7 +11,11 @@ use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\ArticleInputException;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\NoArticleException;
+use OxidEsales\Eshop\Core\Exception\OutOfStockException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -73,7 +77,9 @@ class DispatchController extends FrontendController
                         $basket,
                         $logger
                     );
-                } else {
+                }
+
+                if (!$isOneStepPayment) {
                     OxidServiceProvider::getAmazonService()->processTwoStepPayment(
                         $amazonSessionId,
                         Registry::getSession()->getBasket(),
@@ -125,6 +131,7 @@ class DispatchController extends FrontendController
 
                 $result = OxidServiceProvider::getAmazonClient()->getBuyer($buyerToken);
 
+                $response = [];
                 $response['response'] = PhpHelper::jsonToArray($result['response']);
 
                 if ($result['status'] !== 200) {
@@ -138,24 +145,26 @@ class DispatchController extends FrontendController
                     // Create guest user if not logged in
                     $userComponent = oxNew(UserComponent::class);
                     $userComponent->createGuestUser($response);
-                } else {
+                }
+
+                if ($user instanceof User) {
                     // if Amazon provides a shipping address use it
-                    if ($response['response']['shippingAddress']) {
+                    if (!empty($response['response']['shippingAddress'])) {
                         $deliveryAddress = Address::mapAddressToDb(
                             $response['response']['shippingAddress'],
                             'oxaddress__'
                         );
                         $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
-                    } else {
-                        // if amazon does not provide a shipping address and we already have an oxid user,
+                    }
+
+                    if (empty($response['response']['shippingAddress'])) {
+                        // if amazon does not provide a shipping address, and we already have an oxid user,
                         // use oxid-user-data
                         $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
                     }
                 }
 
-                Registry::getUtils()->redirect(
-                    Registry::getConfig()->getShopHomeUrl() . 'cl=user'
-                );
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
     }
@@ -170,8 +179,7 @@ class DispatchController extends FrontendController
         /** @var string $amazonSessionIdRequest */
         $amazonSessionIdRequest = Registry::getRequest()->getRequestParameter(
             Constants::CHECKOUT_REQUEST_PARAMETER_ID
-        )
-        ;
+        );
         $amazonSessionIdService = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
         return
             $amazonSessionIdRequest === $amazonSessionIdService ? $amazonSessionIdRequest : '';
@@ -182,19 +190,23 @@ class DispatchController extends FrontendController
      *
      * @return string
      * @throws DatabaseErrorException
+     * @throws ArticleInputException
+     * @throws DatabaseConnectionException
+     * @throws NoArticleException
+     * @throws OutOfStockException
      */
     protected function setRequestAmazonSessionId(): string
     {
         // add item to basket if an "anid" was provided in the url
-        /** @var string $anid */
+        /** @var bool|string $anid */
         $anid = Registry::getRequest()->getRequestParameter('anid');
-        if ($sProductId = $anid) {
+        if ($anid) {
             $database = DatabaseProvider::getDb();
             $database->startTransaction();
             try {
                 $basket = Registry::getSession()->getBasket();
                 $basket->addToBasket(
-                    $sProductId,
+                    $anid,
                     1
                 );
                 // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout

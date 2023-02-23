@@ -47,12 +47,14 @@ class AmazonCheckoutController extends FrontendController
 
         $result = OxidServiceProvider::getAmazonClient()->createCheckoutSession([], []);
 
+        if ($result['status'] === 201) {
+            OxidServiceProvider::getAmazonService()
+                ->storeAmazonSession(PhpHelper::jsonToArray($result['response'])['checkoutSessionId']);
+        }
+
         if ($result['status'] !== 201) {
             OxidServiceProvider::getLogger()->info('create checkout failed', $result);
             http_response_code(500);
-        } else {
-            OxidServiceProvider::getAmazonService()
-                ->storeAmazonSession(PhpHelper::jsonToArray($result['response'])['checkoutSessionId']);
         }
 
         Registry::getUtils()->setHeader('Content-type:application/json; charset=utf-8');

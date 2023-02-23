@@ -40,15 +40,17 @@ class AmazonInputValidator extends AmazonInputValidator_parent
 
         if ($service->isAmazonSessionActive() && $user->checkIfEmailExists($login)) {
             //if exists then we do not allow to do that
-            $oEx = oxNew(UserException::class);
 
             /** @var string $userExistsMessage */
             $userExistsMessage = Registry::getLang()->translateString('AMAZON_PAY_USEREXISTS');
-            $oEx->setMessage(sprintf(
-                $userExistsMessage,
-                $login,
-                $login
-            ));
+            $oEx = oxNew(
+                UserException::class,
+                sprintf(
+                    $userExistsMessage,
+                    $login,
+                    $login
+                )
+            );
 
             return $this->_addValidationError("oxuser__oxusername", $oEx);
         }

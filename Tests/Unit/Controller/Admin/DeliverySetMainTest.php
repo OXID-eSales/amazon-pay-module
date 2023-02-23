@@ -30,7 +30,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class DeliverySetMainTest extends UnitTestCase
 {
     /** @var DeliverySetMain */
-    private $deliverySetMain;
+    private DeliverySetMain $deliverySetMain;
 
     protected function setUp(): void
     {

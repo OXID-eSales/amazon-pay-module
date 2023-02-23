@@ -17,7 +17,7 @@ class AmazonClient extends Client
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
     /**
      * @var Config
      */
@@ -28,7 +28,7 @@ class AmazonClient extends Client
      *
      * @param array $config
      * @param Config $moduleConfig
-     * @param $logger
+     * @param LoggerInterface $logger
      *
      * @throws Exception
      */
@@ -41,7 +41,6 @@ class AmazonClient extends Client
 
 
     /**
-     * @inheritDoc
      * @param array $payload
      * @param array $headers
      */
@@ -79,7 +78,6 @@ class AmazonClient extends Client
     }
 
     /**
-     * @inheritDoc
      * @param string $checkoutSessionId
      * @param array $headers
      * @return array

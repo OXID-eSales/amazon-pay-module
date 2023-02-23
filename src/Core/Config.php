@@ -18,11 +18,11 @@ use OxidEsales\Eshop\Core\Registry;
 class Config
 {
     /**
-    * all languages supported by Amazonpay
-    *
-    * @var array
-    */
-    protected $amazonLanguages = [
+     * all languages supported by Amazonpay
+     *
+     * @var array
+     */
+    protected array $amazonLanguages = [
         'en' => 'en_GB',
         'de' => 'de_DE',
         'fr' => 'fr_FR',
@@ -31,19 +31,19 @@ class Config
     ];
 
     /**
-    * Amazonpay default language
-    *
-    * @var string
-    */
-    protected $amazonDefaultLanguage = 'de';
+     * Amazonpay default language
+     *
+     * @var string
+     */
+    protected string $amazonDefaultLanguage = 'de';
 
     /**
-    * all currencies supported by Amazonpay
-    * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
-    *
-    * @var array
-    */
-    protected $amazonCurrencies = [
+     * all currencies supported by Amazonpay
+     * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
+     *
+     * @var array
+     */
+    protected array $amazonCurrencies = [
         'AUD',
         'GBP',
         'DKK',
@@ -59,19 +59,19 @@ class Config
     ];
 
     /**
-    * Amazonpay Ledger currency
-    * @link https://developer.amazon.com/de/docs/amazon-pay-checkout/multi-currency-integration.html
-    *
-    * @var string
-    */
-    protected $amazonLedgerCurrency = 'EUR';
+     * Amazonpay Ledger currency
+     * @link https://developer.amazon.com/de/docs/amazon-pay-checkout/multi-currency-integration.html
+     *
+     * @var string
+     */
+    protected string $amazonLedgerCurrency = 'EUR';
 
     /**
-    * all allowed Amazonpay EU Addresses
-    * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
-    * @var array
-    */
-    protected $amazonEUAddresses = [
+     * all allowed Amazonpay EU Addresses
+     * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
+     * @var array
+     */
+    protected array $amazonEUAddresses = [
         'AT', 'BE', 'BG', 'HR', 'CY',
         'CZ', 'DK', 'EE', 'FI', 'FR',
         'DE', 'GR', 'HU', 'IE', 'IT',
@@ -83,14 +83,13 @@ class Config
     /**
      * returns Country.
      *
-     * @var array
+     * @var array|null
      */
-    protected $countryList = null;
+    protected ?array $countryList = null;
 
 
     /**
-     * Checks if module configurations are valid
-     *
+     * Checks if module configuration is valid
      * @throws StandardException
      */
     public function checkHealth(): void
@@ -135,9 +134,9 @@ class Config
      */
     public function getPrivateKey(): string
     {
-        /** @var string $sAmazonPayPrivKey */
-        $sAmazonPayPrivKey = Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
-        return $sAmazonPayPrivKey;
+        /** @var string $sAmazonPayPrivateKey */
+        $sAmazonPayPrivateKey = Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
+        return $sAmazonPayPrivateKey;
     }
 
     /**
@@ -185,11 +184,7 @@ class Config
     {
         $lang = Registry::getLang();
         $langAbbr = $lang->getLanguageAbbr();
-        if (isset($this->amazonLanguages[$langAbbr])) {
-            return $this->amazonLanguages[$langAbbr];
-        } else {
-            return $this->amazonLanguages[$this->amazonDefaultLanguage];
-        }
+        return $this->amazonLanguages[$langAbbr] ?? $this->amazonLanguages[$this->amazonDefaultLanguage];
     }
 
     /**
@@ -225,7 +220,7 @@ class Config
         foreach ($shopCurrencies as $shopCurrency) {
             $currencyAbbr = $shopCurrency->name;
             if (in_array($currencyAbbr, $this->amazonCurrencies)) {
-                 $result[] = $currencyAbbr;
+                $result[] = $currencyAbbr;
             }
         }
         return $result;
@@ -246,7 +241,7 @@ class Config
         $result = [];
         foreach ($this->getPossibleEUAddressesAbbr() as $isoCode) {
             if (in_array($isoCode, $this->amazonEUAddresses)) {
-                $result[$isoCode] = (object) null;
+                $result[$isoCode] = (object)null;
             }
         }
         return $result;
@@ -327,8 +322,8 @@ class Config
 
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
-                . 'index.php?cl=amazondispatch&action=review&stoken='
-                . Registry::getSession()->getSessionChallengeToken()
+            . 'index.php?cl=amazondispatch&action=review&stoken='
+            . Registry::getSession()->getSessionChallengeToken()
         );
     }
 
@@ -341,8 +336,8 @@ class Config
     {
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
-                . 'index.php?cl=amazondispatch&action=result&stoken='
-                . Registry::getSession()->getSessionChallengeToken()
+            . 'index.php?cl=amazondispatch&action=result&stoken='
+            . Registry::getSession()->getSessionChallengeToken()
         );
     }
 

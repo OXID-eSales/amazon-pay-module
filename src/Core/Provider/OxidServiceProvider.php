@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 class OxidServiceProvider
 {
     /**
-     * @var OxidServiceProvider
+     * @var OxidServiceProvider|null
      */
     private static ?OxidServiceProvider $instance = null;
 

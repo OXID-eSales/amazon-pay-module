@@ -34,7 +34,7 @@ class Address
 
     /**
      * This is used as a prefilter for OXID functions below.
-     * @param $addr
+     * @param array $address
      * @return array
      */
     public static function parseAddress(array $address): array
@@ -65,6 +65,8 @@ class Address
         $addressLines = self::getAddressLines($address);
 
         if ($countryIsoCode === 'DE' || $countryIsoCode === 'AT') {
+            // Normal-Case: No Company, Street & StreetNo in first line
+            $streetTmp = $addressLines[0];
             // special Amazon-Case: Street in first line, StreetNo in second line
             if (isset($addressLines[1]) && preg_match('/^\d.{0,8}$/', $addressLines[1])) {
                 $streetTmp = $addressLines[0] . ' ' . $addressLines[1];
@@ -73,9 +75,8 @@ class Address
                 $streetTmp = $addressLines[1];
                 $company = $addressLines[0];
             // Normal-Case: No Company, Street & StreetNo in first line
-            } else {
-                $streetTmp = $addressLines[0];
             }
+
             if (!empty($addressLines[2])) {
                 $additionalInfo = $addressLines[2];
             }
@@ -91,7 +92,9 @@ class Address
                 // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $streetTmp;
             }
-        } else {
+        }
+
+        if ($countryIsoCode !== 'DE' && $countryIsoCode !== 'AT') {
             try {
                 $addressLinesAsString = implode(', ', $addressLines);
                 $addressData = AddressSplitter::splitAddress($addressLinesAsString);
@@ -154,16 +157,10 @@ class Address
      * Maps Amazon address fields to oxid fields
      *
      * @param array $address
-     * @param string $DBTablePrefix
-     *
      * @return array
      */
-    public static function mapAddressToView(array $address, string $DBTablePrefix): array
+    public static function mapAddressToView(array $address): array
     {
-        $config = Registry::get(Config::class);
-
-        $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
-
         $parsedAddress = self::parseAddress($address);
 
         return [

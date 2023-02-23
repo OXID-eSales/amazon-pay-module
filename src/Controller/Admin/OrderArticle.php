@@ -7,7 +7,10 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\EshopCommunity\Core\Registry;
+use OxidEsales\EshopCommunity\Core\Request;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -33,12 +36,17 @@ class OrderArticle extends OrderArticle_parent
         parent::storno();
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     private function refundAmazon(): void
     {
         // get article id
         /** @var string $sOrderArtId */
 
-        $sOrderArtId = Registry::getConfig()->getRequestParameter('sArtID');
+        $request = new Request();
+        $sOrderArtId = $request->getRequestParameter('sArtID');
         $sOrderId = $this->getEditObjectId();
 
         $oOrderArticle = oxNew(\OxidEsales\Eshop\Application\Model\OrderArticle::class);

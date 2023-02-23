@@ -11,9 +11,10 @@ final class RefundCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group RefundTest
      */
-    public function checkRefundPaymentWorks(AcceptanceTester $I)
+    public function checkRefundPaymentWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test refund payment');
 

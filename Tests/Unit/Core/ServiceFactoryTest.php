@@ -32,7 +32,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class ServiceFactoryTest extends UnitTestCase
 {
     /** @var ServiceFactory */
-    private $serviceFactory;
+    private ServiceFactory $serviceFactory;
 
     protected function setUp(): void
     {

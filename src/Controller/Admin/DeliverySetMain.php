@@ -16,7 +16,7 @@ use OxidEsales\Eshop\Application\Model\DeliverySet;
  */
 class DeliverySetMain extends DeliverySetMain_parent
 {
-    public function render()
+    public function render(): string
     {
         $amazonCarriers = AmazonCarrier::getAllCarriers();
 
@@ -28,31 +28,28 @@ class DeliverySetMain extends DeliverySetMain_parent
             $deliverySet = oxNew(DeliverySet::class);
             $deliverySet->load($oxId);
             $amazonCarrier = $deliverySet->getRawFieldData('osc_amazon_carrier');
-            if ($amazonCarrier !== null) {
-                $this->addTplParam('selectedAmazonCarrier', $amazonCarrier);
-            } else {
-                // Default
-                $this->addTplParam('selectedAmazonCarrier', 'NULL');
-            }
+
+            $selectedAmazonCarrier = $amazonCarrier != null ? $amazonCarrier : 'NULL';
+            $this->addTplParam('selectedAmazonCarrier', $selectedAmazonCarrier);
         }
 
         return parent::render();
     }
 
     /**
-     * Saves deliveryset information changes.
-     *
-     * @return mixed
+     * @inheritdoc
+     * @throws \Exception
      */
-    public function save()
+    public function save(): mixed
     {
         $result = parent::save();
 
-        $id = $this->getEditObjectId();
+        $objectId = $this->getEditObjectId();
+        $aParams = [];
         $aParams['oxdeliveryset__osc_amazon_carrier'] = Registry::getRequest()
             ->getRequestParameter('editAmazonCarrier');
         $oDelSet = oxNew(DeliverySet::class);
-        if ($oDelSet->load($id)) {
+        if ($oDelSet->load($objectId)) {
             $oDelSet->assign($aParams);
             $oDelSet->save();
         }

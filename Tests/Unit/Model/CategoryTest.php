@@ -31,7 +31,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class CategoryTest extends UnitTestCase
 {
     /** @var EshopCategoryModel */
-    private $category;
+    private EshopCategoryModel $category;
 
     protected function setUp(): void
     {

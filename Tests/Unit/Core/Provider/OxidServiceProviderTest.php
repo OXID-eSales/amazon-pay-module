@@ -34,7 +34,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class OxidServiceProviderTest extends UnitTestCase
 {
     /** @var OxidServiceProvider */
-    private $oxidServiceProvider;
+    private OxidServiceProvider $oxidServiceProvider;
 
     protected function setUp(): void
     {

@@ -54,7 +54,14 @@ class Order extends Order_parent
      * @param object $oUser Current User object
      * @param bool $blRecalculatingOrder Order recalculation
      *
-     * @return integer
+     * @return int|null
+     */
+
+    /**
+     * That's an error in the base method.
+     * TODO: check in Oxid 7 if this is fixed
+     *
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): ?int
     {
@@ -81,11 +88,10 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
-     * @return \OxidEsales\Eshop\Application\Model\Address|null
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @return Address|null
      *
      */
-    public function getDelAddressInfo()
+    public function getDelAddressInfo(): ?Address
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();
@@ -109,7 +115,7 @@ class Order extends Order_parent
      *
      * @return int
      */
-    public function validateDeliveryAddress($oUser)
+    public function validateDeliveryAddress($oUser): int
     {
         if (!$this->getAmazonService()->isAmazonSessionActive()) {
             return parent::validateDeliveryAddress($oUser);
@@ -133,7 +139,7 @@ class Order extends Order_parent
                 break;
 
             case "AMZ_AUTH_STILL_PENDING":
-                if (is_array($data)) {
+                if (!empty($data)) {
                     $this->_setFieldData(
                         'osc_amazon_remark',
                         'AmazonPay Authorisation still pending: '
@@ -161,7 +167,7 @@ class Order extends Order_parent
                 }
                 $this->_setFieldData('oxpaid', \date('Y-m-d H:i:s'));
                 $this->_setFieldData('oxtransstatus', 'OK');
-                if (is_array($data)) {
+                if (!empty($data)) {
                     $this->_setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);
                 }
                 $this->save();
@@ -204,25 +210,25 @@ class Order extends Order_parent
 
     /**
      * @inheritdoc
+     * TODO: check in Oxid 7 if the base methods has updated parameter typehints
      */
-    /** TODO: check in Oxid 7 if the base methods has updated parameter typehints */
-    public function delete($sOxId = null): bool
+    public function delete($oxid = null): bool
     {
-        $sOxId = $sOxId ?: $this->getId();
-        if (!$sOxId) {
+        $oxid = $oxid ?: $this->getId();
+        if (!$oxid) {
             return false;
         }
 
-        if (!$this->canDelete($sOxId)) {
+        if (!$this->canDelete($oxid)) {
             return false;
         }
 
-        OxidServiceProvider::getAmazonService()->processCancel($sOxId);
+        OxidServiceProvider::getAmazonService()->processCancel($oxid);
 
         $repository = oxNew(LogRepository::class);
-        $repository->deleteLogMessageByOrderId($sOxId);
+        $repository->deleteLogMessageByOrderId($oxid);
 
-        return parent::delete($sOxId);
+        return parent::delete($oxid);
     }
 
     /**

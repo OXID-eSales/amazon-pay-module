@@ -67,6 +67,7 @@ class OrderOverview extends OrderOverview_parent
                     $newFilteredLog['identifier'] = 'ORDER ID:' . $orderLog['OSC_AMAZON_OXORDERID'];
                 }
 
+                $newFilteredLog['requestType'] = $orderLog['OSC_AMAZON_RESPONSE_MSG'];
                 if ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
                     $newFilteredLog['requestType'] = 'Payment captured';
                     $isCaptured = true;
@@ -84,8 +85,6 @@ class OrderOverview extends OrderOverview_parent
                 } elseif ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Refunded') {
                     $newFilteredLog['requestType'] = 'Refund Complete';
                     $isCaptured = true;
-                } else {
-                    $newFilteredLog['requestType'] = $orderLog['OSC_AMAZON_RESPONSE_MSG'];
                 }
 
                 $filteredLogs[] = $newFilteredLog;

@@ -49,9 +49,10 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group AmazonPayWithoutLoginPaymentTest
      */
-    public function checkPaymentFromBasketWorks(AcceptanceTester $I)
+    public function checkPaymentFromBasketWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test AmazonPay via Basket without login payment works');
 
@@ -72,9 +73,10 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group AmazonPayWithoutLoginPaymentTest
      */
-    public function checkPaymentFromAddressPageWorks(AcceptanceTester $I)
+    public function checkPaymentFromAddressPageWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test AmazonPay via Address Page without login payment works');
 
@@ -95,9 +97,10 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group AmazonPayWithoutLoginPaymentTest
      */
-    public function checkPaymentFromDetailWorks(AcceptanceTester $I)
+    public function checkPaymentFromDetailWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test AmazonPay via Details Page without login payment works');
 
@@ -117,10 +120,11 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group AmazonPayWithoutLoginPaymentTest
      * @group asd
      */
-    public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I)
+    public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test AmazonPay via Basket without login with return payment works');
 
@@ -143,9 +147,10 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group AmazonPayWithoutLoginPaymentTest
      */
-    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
+    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test AmazonPay via Address Page without login with return payment works');
 
@@ -168,9 +173,10 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     /**
      * @param AcceptanceTester $I
      * @return void
+     * @throws \Exception
      * @group AmazonPayWithoutLoginPaymentTest
      */
-    public function checkPaymentFromDetailWithReturnWorks(AcceptanceTester $I)
+    public function checkPaymentFromDetailWithReturnWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('Test AmazonPay via Details Page without login with return payment works');
 

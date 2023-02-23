@@ -139,7 +139,7 @@ class ConfigControllerTest extends UnitTestCase
      * @param $expected mixed Expected return value
      * @param $getterMethod string Getter method in config object
      */
-    public function testSave($conf, $expected, $getterMethod): void
+    public function testSave(array $conf, mixed $expected, string $getterMethod): void
     {
         $config = new Config();
         $configController = new ConfigController();

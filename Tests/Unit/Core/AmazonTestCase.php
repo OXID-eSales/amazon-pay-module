@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
+use Exception;
 use Mockery;
 use Mockery\MockInterface;
 use OxidEsales\TestingLibrary\UnitTestCase;
@@ -20,17 +21,20 @@ use Psr\Log\LoggerInterface;
 class AmazonTestCase extends UnitTestCase
 {
     /** @var AmazonService */
-    protected $amazonService;
+    protected AmazonService $amazonService;
 
     /** @var AmazonClient */
-    protected $amazonClient;
+    protected AmazonClient $amazonClient;
 
     /** @var Config */
-    protected $moduleConfig;
+    protected Config $moduleConfig;
 
     /** @var LoggerInterface | MockInterface */
-    protected $mockLogger;
+    protected LoggerInterface|Mockery\LegacyMockInterface|MockInterface $mockLogger;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -62,7 +66,7 @@ class AmazonTestCase extends UnitTestCase
      */
     protected function createTestCheckoutSession(): array
     {
-        return $this->amazonClient->createCheckoutSession([],[]);
+        return $this->amazonClient->createCheckoutSession([], []);
     }
 
     protected function createAmazonSession(): string

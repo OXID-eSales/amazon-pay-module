@@ -18,7 +18,7 @@ class Category extends Category_parent
     /**
      * @inheritDoc
      */
-    public function save()
+    public function save(): bool|string|null
     {
         /** @var array $editVal */
         $editVal = Registry::getRequest()->getRequestParameter('editval');

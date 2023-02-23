@@ -47,12 +47,12 @@ class Logger extends AbstractLogger
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
-        if(!empty($context['userId'])){
-            $userId = $context['userId'];
-        } else {
+        #$userId = $context['userId'] ?? Registry::getSession()->getUser();
+
+        $userId = $context['userId'] ?? 'guest';
+        if ($userId === 'guest') {
             $user = Registry::getSession()->getUser();
-            $userId = 'guest';
-            if($user instanceof User){
+            if ($user instanceof User) {
                 $userId = $user->getId();
             }
         }
@@ -74,13 +74,12 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * @param $result
+     * @param array $result
      * @return array
      */
     public function resolveLogContent(array $result): array
     {
         $context = [];
-        $response = null;
 
         if (!empty($result['response'])) {
             $response = PhpHelper::jsonToArray($result['response']);

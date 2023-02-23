@@ -30,7 +30,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class ArticleTest extends UnitTestCase
 {
     /** @var EshopArticleModel */
-    private $article;
+    private EshopArticleModel $article;
 
     protected function setUp(): void
     {

@@ -30,7 +30,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class LogMessageTest extends UnitTestCase
 {
     /** @var LogMessage */
-    private $logMessage;
+    private LogMessage $logMessage;
 
     protected function setUp(): void
     {

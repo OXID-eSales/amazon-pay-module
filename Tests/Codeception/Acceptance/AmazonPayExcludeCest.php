@@ -33,7 +33,7 @@ final class AmazonPayExcludeCest extends BaseCest
         $I->checkOption('#useExclusion');
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger', $I);
+        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
         if ($error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
@@ -97,7 +97,7 @@ final class AmazonPayExcludeCest extends BaseCest
         $I->checkOption('#useExclusion');
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger', $I);
+        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
         if ($error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }

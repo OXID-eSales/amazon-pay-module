@@ -50,6 +50,8 @@ class AmazonService
      */
     protected stdClass $billingAddress;
 
+    protected bool $isTwoStep = false;
+
     /**
      * Billing address fields
      *
@@ -77,19 +79,21 @@ class AmazonService
     /**
      * oxuser object
      *
-     * @var User
+     * @var User|null
      */
     protected ?User $actUser = null;
 
     /**
      * AmazonService constructor.
      */
-    public function __construct()
+    public function __construct(AmazonClient $client = null)
     {
-        if (empty($this->client)) {
+        if (!$client) {
             $factory = oxNew(ServiceFactory::class);
             $this->client = $factory->getClient();
+            return;
         }
+        $this->client = $client;
     }
 
     /**
@@ -183,25 +187,21 @@ class AmazonService
         $address = $checkoutSession['response']['shippingAddress'] ?? [];
 
         // map address fields only if amazon response have a shippingAddress
-        if (!empty($address)) {
-            return Address::mapAddressToView($address, 'oxaddress__');
-        } else {
-            return [];
-        }
+        return !empty($address) ? Address::mapAddressToView($address) : $address;
     }
 
     /**
      * Oxid formatted delivery address from Amazon
      *
      * @return Address
-     * @throws DatabaseConnectionException
      */
     public function getDeliveryAddressAsObj(): Address
     {
         if (!is_object($this->deliveryAddress)) {
             $oOrder = oxNew(Order::class);
-            /** @var \OxidEsales\EshopCommunity\Application\Model\Address $deliveryAddress */
-            $this->deliveryAddress = $oOrder->getDelAddressInfo();
+            /** @var Address $deliveryAddress */
+            $deliveryAddress = $oOrder->getDelAddressInfo();
+            $this->deliveryAddress = $deliveryAddress;
         }
         return $this->deliveryAddress;
     }
@@ -218,7 +218,7 @@ class AmazonService
         $buyer = $checkoutSession['response']['buyer'];
         $bill = ['oxusername' => $buyer['email']];
 
-        return array_merge($bill, Address::mapAddressToView($address, 'oxuser__'));
+        return array_merge($bill, Address::mapAddressToView($address));
     }
 
     /**
@@ -268,19 +268,16 @@ class AmazonService
      * @param string $amazonSessionId
      * @param Basket $basket Basket object
      * @param LoggerInterface $logger Logger
-     * @param bool $bl2Step
-     *
      */
     protected function processPayment(
         string $amazonSessionId,
         Basket $basket,
-        LoggerInterface $logger,
-        bool $bl2Step = false
+        LoggerInterface $logger
     ): void {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
-        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue((float)$basket->getPrice()->getBruttoPrice()));
+        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
         /** @var string $oxCompany */
@@ -301,7 +298,7 @@ class AmazonService
 
         $response = PhpHelper::jsonToArray($result['response']);
 
-        if ($response['statusDetails']['state'] === 'Completed' && !$bl2Step) {
+        if ($response['statusDetails']['state'] === 'Completed' && !$this->isTwoStep) {
             $response['statusDetails']['state'] = 'Completed & Captured';
         }
 
@@ -318,12 +315,10 @@ class AmazonService
                     "chargeAmount" => $request['chargeAmount']['amount'],
                     "chargeId" => $response['chargeId']
                 ];
-                if (!$bl2Step) {
-                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK', $data);
-                } else {
-                    $order->updateAmazonPayOrderStatus('AMZ_2STEP_AUTH_OK', $data);
-                }
+                $status = $this->isTwoStep ? 'AMZ_2STEP_AUTH_OK' : 'AMZ_AUTH_AND_CAPT_OK';
+                $order->updateAmazonPayOrderStatus($status, $data);
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false, 302);
+                return;
             } elseif ($result['status'] === 202) {
                 $data = [
                     "chargeAmount" => $request['chargeAmount']['amount'],
@@ -331,14 +326,15 @@ class AmazonService
                 ];
                 $order->updateAmazonPayOrderStatus('AMZ_AUTH_STILL_PENDING', $data);
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false, 302);
-            } else {
-                $data = [
-                    "result" => $result,
-                    "chargeId" => $response['chargeId']
-                ];
-                $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_FAILED', $data);
-                $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+                return;
             }
+
+            $data = [
+                "result" => $result,
+                "chargeId" => $response['chargeId']
+            ];
+            $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_FAILED', $data);
+            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
         }
         $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
     }
@@ -352,7 +348,7 @@ class AmazonService
      */
     public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
-        $this->processPayment($amazonSessionId, $basket, $logger, false);
+        $this->processPayment($amazonSessionId, $basket, $logger);
     }
 
     /**
@@ -364,13 +360,11 @@ class AmazonService
      */
     public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger): void
     {
-        $this->processPayment($amazonSessionId, $basket, $logger, true);
+        $this->isTwoStep = false;
+        $this->processPayment($amazonSessionId, $basket, $logger);
     }
 
     /**
-     * @param string $orderId
-     * @param LoggerInterface $logger
-     * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
@@ -496,9 +490,9 @@ class AmazonService
     }
 
     /**
-     * @param $chargeId
-     * @param $logger
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @param string $chargeId
+     * @param LoggerInterface $logger
+     * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
     public function processCharge(string $chargeId, LoggerInterface $logger): void
@@ -645,8 +639,8 @@ class AmazonService
     }
 
     /**
-     * @param $orderId
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @param string $orderId
+     * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
     public function processCancel(string $orderId): void
@@ -711,6 +705,7 @@ class AmazonService
     /**
      * @param LoggerInterface $logger
      * @param array $result
+     * @param string $orderId
      */
     protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId = ''): void
     {
@@ -857,17 +852,17 @@ class AmazonService
 
         $logger = OxidServiceProvider::getLogger();
 
+        $logMessage = 'Alexa Delivery Notification sent';
         if ($result['status'] !== 200) {
-            $logger->info('Alexa Delivery Notification failed', $result);
-        } else {
-            $logger->info('Alexa Delivery Notification sent', $result);
+            $logMessage = 'Alexa Delivery Notification failed';
         }
+        $logger->info($logMessage, $result);
     }
 
     /**
      * @param Order $order
      * @return array
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
     public function getOrderLogs(Order $order): array
@@ -882,19 +877,15 @@ class AmazonService
         }
 
         foreach ($logMessages as $logMessage) {
-            if (str_contains($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error')) {
-                $logsWithChargePermission = $repository->findLogMessageForOrderId(
-                    $logMessage['OSC_AMAZON_OXORDERID']
-                );
-            } else {
+            $logsWithChargePermission =
+                $repository->findLogMessageForOrderId($logMessage['OSC_AMAZON_OXORDERID']);
+            $error = str_contains($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error');
+            if ($error) {
+                $logsWithChargePermission =
+                    $repository->findLogMessageForChargePermissionId($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']);
                 if ($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID'] === 'null') {
-                    $logsWithChargePermission = $repository->findLogMessageForOrderId(
-                        $logMessage['OSC_AMAZON_OXORDERID']
-                    );
-                } else {
-                    $logsWithChargePermission = $repository->findLogMessageForChargePermissionId(
-                        $logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']
-                    );
+                    $logsWithChargePermission =
+                        $repository->findLogMessageForOrderId($logMessage['OSC_AMAZON_OXORDERID']);
                 }
             }
 

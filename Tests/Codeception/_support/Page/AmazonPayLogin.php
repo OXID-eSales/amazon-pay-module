@@ -13,14 +13,14 @@ use OxidEsales\Codeception\Page\Page;
 
 class AmazonPayLogin extends Page
 {
-    private $amazonpayEmailInput = "//input[@id='ap_email']";
-    private $amazonpayPasswordInput = "//input[@id='ap_password']";
-    private $signInSubmitInput = "//input[@id='signInSubmit']";
+    private string $amazonpayEmailInput = "//input[@id='ap_email']";
+    private string $amazonpayPasswordInput = "//input[@id='ap_password']";
+    private string $signInSubmitInput = "//input[@id='signInSubmit']";
 
     /**
      * @return void
      */
-    public function login()
+    public function login(): void
     {
         $I = $this->user;
 

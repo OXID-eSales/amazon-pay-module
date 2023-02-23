@@ -37,12 +37,12 @@ return [
     'SCREEN_SHOT_URL' => $screenShotPathEnv
 ];
 
-function getTestDataDumpFilePath()
+function getTestDataDumpFilePath(): string
 {
     return getShopTestPath() . '/Codeception/_data/dump.sql';
 }
 
-function getModuleTestDataDumpFilePath()
+function getModuleTestDataDumpFilePath(): string
 {
     return __DIR__ . '/../_data/dump.sql';
 }

@@ -31,10 +31,10 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 class LoggerTest extends UnitTestCase
 {
     /** @var Logger */
-    private $logger;
+    private Logger $logger;
 
     /** @var string */
-    private $mockLogFileName;
+    private string $mockLogFileName;
 
     protected function setUp(): void
     {

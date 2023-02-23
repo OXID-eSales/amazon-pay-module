@@ -35,6 +35,8 @@ class Events
     /**
      * Execute action on activate event
      * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public static function onActivate(): void
     {
@@ -53,6 +55,8 @@ class Events
 
     /**
      * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected static function updateOxpsToOsc(): void
     {
@@ -231,8 +235,6 @@ class Events
     /**
      * @param string[][] $paymentDescription
      *
-     * @psalm-param 'oxidamazon'|'oxidamazonexpress' $paymentId
-     * @psalm-param array{en: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}, de: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}} $paymentDescription
      * @throws \Exception
      */
     protected static function createPaymentMethod(string $paymentId, array $paymentDescription): void

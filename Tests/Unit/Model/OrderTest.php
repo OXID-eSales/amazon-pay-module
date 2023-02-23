@@ -32,7 +32,7 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 class OrderTest extends AmazonTestCase
 {
     /** @var EshopOrderModel */
-    private $order;
+    private EshopOrderModel $order;
 
     protected function setUp(): void
     {

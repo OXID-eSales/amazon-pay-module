@@ -31,7 +31,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class LogRepositoryTest extends UnitTestCase
 {
     /** @var LogRepository */
-    private $logRepository;
+    private LogRepository $logRepository;
 
     protected function setUp(): void
     {

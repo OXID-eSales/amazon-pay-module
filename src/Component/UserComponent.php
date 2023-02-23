@@ -66,16 +66,14 @@ class UserComponent extends UserComponent_parent
             $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
         }
 
-        if ($this->createUser() !== false) {
+        $userCreated = $this->createUser();
+        if ($userCreated) {
             $basket = $session->getBasket();
             $user = $this->getUser();
             $countryOxId = $user->getActiveCountry();
 
             $deliverySetList = Registry::get(DeliverySetList::class)
-                ->getDeliverySetList(
-                    $user,
-                    $countryOxId
-                );
+                ->getDeliverySetList($user, $countryOxId);
             $possibleDeliverySets = [];
             foreach ($deliverySetList as $deliverySet) {
                 $paymentList = Registry::get(PaymentList::class)->getPaymentList(
@@ -92,33 +90,30 @@ class UserComponent extends UserComponent_parent
                 $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
                 $basket->setShipping(reset($possibleDeliverySets));
             }
-        } else {
-            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-            Registry::getUtils()->redirect(
-                Registry::getConfig()->getShopHomeUrl() . 'cl=user',
-                false,
-                302
-            );
+            return;
         }
+
+        OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+        Registry::getUtils()->redirect(
+            Registry::getConfig()->getShopHomeUrl() . 'cl=user',
+            false,
+            302
+        );
     }
 
     /**
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameter(string $paramName, $paramValue): void
+    public function setRequestParameter(string $paramName, mixed $paramValue): void
     {
         $_POST[$paramName] = $paramValue;
     }
 
     /**
-     * Deletes user information from session:<br>
-     * "usr", "dynvalue", "paymentid"<br>
-     * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
-     * oxcmp_user::oUser, forces basket to recalculate.
-     * @return null
+     * @inheritdoc
      */
-    public function logout()
+    public function logout(): ?string
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
@@ -142,7 +137,7 @@ class UserComponent extends UserComponent_parent
             return parent::_getDelAddressData();
         }
         $aDelAddress = [];
-        $aSessionDelAddress = (array) $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
+        $aSessionDelAddress = (array)$session->getVariable(Constants::SESSION_DELIVERY_ADDR);
         if (count($aSessionDelAddress)) {
             $aDelAddress = $aSessionDelAddress;
         }

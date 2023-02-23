@@ -7,7 +7,10 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use stdClass;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Controller\UserController
@@ -31,9 +34,9 @@ class UserController extends UserController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return object
+     * @return Address
      */
-    public function getDeliveryAddressAsObj()
+    public function getDeliveryAddressAsObj(): Address
     {
         return OxidServiceProvider::getAmazonService()->getDeliveryAddressAsObj();
     }
@@ -41,9 +44,9 @@ class UserController extends UserController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return object
+     * @return stdClass
      */
-    public function getBillingAddressAsObj()
+    public function getBillingAddressAsObj(): stdClass
     {
         return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }

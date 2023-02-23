@@ -13,13 +13,13 @@ use OxidEsales\Codeception\Page\Page;
 
 class AmazonPayInformation extends Page
 {
-    private $continueToCheckout = "//input[@class='a-button-input']";
-    private $cancelCheckout = "//a[@id='return_back_to_merchant_link']";
+    private string $continueToCheckout = "//input[@class='a-button-input']";
+    private string $cancelCheckout = "//a[@id='return_back_to_merchant_link']";
 
     /**
      * @return void
      */
-    public function submitPayment()
+    public function submitPayment(): void
     {
         $I = $this->user;
 

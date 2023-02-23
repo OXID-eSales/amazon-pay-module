@@ -11,6 +11,9 @@ use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Field;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Model\BaseModel;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
@@ -209,6 +212,22 @@ class Order extends Order_parent
     }
 
     /**
+     * @param string $oxid
+     * @return bool
+     */
+    public function isAmazonOrder(string $oxid = ''): bool
+    {
+        $oxid = $oxid ?: $this->getId();
+        if (!$oxid) {
+            return false;
+        }
+
+        /** @var string $paymentId */
+        $paymentId = $this->getFieldData('oxpaymentid');
+        return Constants::isAmazonPayment($paymentId);
+    }
+
+    /**
      * @inheritdoc
      * TODO: check in Oxid 7 if the base methods has updated parameter typehints
      */
@@ -219,25 +238,23 @@ class Order extends Order_parent
             return false;
         }
 
-        if (!$this->canDelete($oxid)) {
-            return false;
+        if ($this->isAmazonOrder($oxid)) {
+            if (!$this->canDeleteAmazonOrder($oxid)) {
+                return false;
+            }
+
+            OxidServiceProvider::getAmazonService()->processCancel($sOxId);
+            $repository = oxNew(LogRepository::class);
+            $repository->deleteLogMessageByOrderId($oxid);
         }
-
-        OxidServiceProvider::getAmazonService()->processCancel($oxid);
-
-        $repository = oxNew(LogRepository::class);
-        $repository->deleteLogMessageByOrderId($oxid);
-
-        return parent::delete($oxid);
+        return parent::delete();
     }
 
     /**
-     * @param $oxid
-     * @return bool
-     * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
      */
-    public function canDelete($oxid = null): bool
+    private function canDeleteAmazonOrder(string $oxid = '')
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {
@@ -263,10 +280,6 @@ class Order extends Order_parent
             Registry::getUtilsView()->addErrorToDisplay($deleteError);
             return false;
         }
-
-        if (method_exists(Order_parent::class, 'canDelete')) {
-            return parent::canDelete($oxid);
-        }
-        return true;
+        return false;
     }
 }

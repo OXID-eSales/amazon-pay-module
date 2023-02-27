@@ -32,7 +32,6 @@ class ConfigController extends AdminController
 
     /**
      * @return string
-     * @throws StandardException
      */
     public function render(): string
     {
@@ -44,7 +43,17 @@ class ConfigController extends AdminController
         $displayPrivateKey = $config->getPrivateKey() ? $config->getFakePrivateKey() : '';
         $this->addTplParam('displayPrivateKey', $displayPrivateKey);
 
-        $config->checkHealth();
+        try {
+            $config->checkHealth();
+        } catch (StandardException $e) {
+            Registry::getUtilsView()->addErrorToDisplay(
+                $e,
+                false,
+                true,
+                'amazonpay_error'
+            );
+        }
+
 
         return $thisTemplate;
     }
@@ -79,6 +88,8 @@ class ConfigController extends AdminController
      */
     protected function saveConfig(array $conf, string $shopId): void
     {
+        $oModuleConfiguration = null;
+        $oModuleConfigurationDaoBridge = null;
         if ($this->useDaoBridge()) {
 
             /** @var ModuleConfigurationDaoBridgeInterface $oModuleConfigurationDaoBridge */
@@ -107,7 +118,7 @@ class ConfigController extends AdminController
     }
 
     /**
-     * Handles cheboxes/dropdowns
+     * Handles checkboxes/dropdowns
      *
      * @param array $conf
      *

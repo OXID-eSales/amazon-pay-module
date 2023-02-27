@@ -90,6 +90,7 @@ class Config
 
     /**
      * Checks if module configuration is valid
+     * @throws StandardException
      */
     public function checkHealth(): void
     {
@@ -100,7 +101,7 @@ class Config
             !$this->getStoreId() ||
             !$this->getPresentmentCurrency()
         ) {
-            throw oxNew(StandardException::class);
+            throw new StandardException('OSC_AMAZONPAY_ERR_CONF_INVALID');
         }
     }
 

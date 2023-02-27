@@ -22,9 +22,12 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class ConfigControllerTest extends UnitTestCase
 {
@@ -138,8 +141,11 @@ class ConfigControllerTest extends UnitTestCase
      * @param $conf array Configuration values
      * @param $expected mixed Expected return value
      * @param $getterMethod string Getter method in config object
+     * @throws ModuleSettingNotFountException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function testSave(array $conf, mixed $expected, string $getterMethod): void
+    public function testSave($conf, $expected, $getterMethod): void
     {
         $config = new Config();
         $configController = new ConfigController();

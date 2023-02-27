@@ -11,11 +11,7 @@ use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\Eshop\Core\Field;
-use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
-use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Core\Model\BaseModel;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
@@ -243,7 +239,7 @@ class Order extends Order_parent
                 return false;
             }
 
-            OxidServiceProvider::getAmazonService()->processCancel($sOxId);
+            OxidServiceProvider::getAmazonService()->processCancel($oxid);
             $repository = oxNew(LogRepository::class);
             $repository->deleteLogMessageByOrderId($oxid);
         }
@@ -251,10 +247,12 @@ class Order extends Order_parent
     }
 
     /**
-     * @throws DatabaseErrorException
+     * @param string $oxid
+     * @return bool
      * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    private function canDeleteAmazonOrder(string $oxid = '')
+    private function canDeleteAmazonOrder(string $oxid = ''): bool
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {

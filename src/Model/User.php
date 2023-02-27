@@ -69,7 +69,7 @@ class User extends User_parent
      *
      * @return UserAddressList|array
      */
-    public function getUserAddresses($sUserId = null): UserAddressList|array
+    public function getUserAddresses($sUserId = null): array|UserAddressList
     {
         $address = $this->getAmazonAddress();
 

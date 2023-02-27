@@ -61,7 +61,7 @@ class ViewConfig extends ViewConfig_parent
         $blIsActive = true;
         try {
             $config->checkHealth();
-        } catch (StandardException $e) {
+        } catch (StandardException $ex) {
             $blIsActive = false;
         }
         return $blIsActive;

@@ -60,8 +60,6 @@ class Address
         $streetNo = '';
         $additionalInfo = '';
 
-        $addressData = null;
-
         $addressLines = self::getAddressLines($address);
 
         if ($countryIsoCode === 'DE' || $countryIsoCode === 'AT') {
@@ -87,7 +85,7 @@ class Address
                 $streetNo = $addressData['houseNumber'] ?? '';
             } catch (SplittingException $e) {
                 // The Address could not be split
-                // we have an exception, bit we did not log the message because of sensible Address-Informations
+                // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();
                 // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $streetTmp;
@@ -105,7 +103,7 @@ class Address
                 $additionalInfo = $addressData['additionToAddress2'] ?? '';
             } catch (SplittingException $e) {
                 // The Address could not be split
-                // we have an exception, bit we did not log the message because of sensible Address-Informations
+                // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();
                 // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $addressLinesAsString;

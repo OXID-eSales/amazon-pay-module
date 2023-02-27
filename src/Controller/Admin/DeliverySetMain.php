@@ -39,8 +39,9 @@ class DeliverySetMain extends DeliverySetMain_parent
     /**
      * @inheritdoc
      * @throws \Exception
+     * @returns mixed
      */
-    public function save(): mixed
+    public function save()
     {
         $result = parent::save();
 

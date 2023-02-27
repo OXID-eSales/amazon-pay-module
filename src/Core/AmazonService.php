@@ -39,9 +39,9 @@ class AmazonService
     /**
      * Delivery address
      *
-     * @var Address
+     * @var ?stdClass
      */
-    protected Address $deliveryAddress;
+    protected ?stdClass $deliveryAddress = null;
 
     /**
      * Billing address
@@ -138,7 +138,7 @@ class AmazonService
     }
 
     /**
-     * Checks if Amazon Pay is selected, active and a Address would found
+     * Checks if Amazon Pay is selected, active and an address was found
      *
      * @return bool
      */
@@ -193,15 +193,19 @@ class AmazonService
     /**
      * Oxid formatted delivery address from Amazon
      *
-     * @return Address
+     * @return stdClass
      */
-    public function getDeliveryAddressAsObj(): Address
+    public function getDeliveryAddressAsObj(): stdClass
     {
-        if (!is_object($this->deliveryAddress)) {
-            $oOrder = oxNew(Order::class);
-            /** @var Address $deliveryAddress */
+        if (is_null($this->deliveryAddress)) {
+            $this->deliveryAddress = new stdClass();
+            $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $deliveryAddress = $oOrder->getDelAddressInfo();
-            $this->deliveryAddress = $deliveryAddress;
+            if ($deliveryAddress) {
+                foreach ($deliveryAddress as $key => $value) {
+                    $this->deliveryAddress->{$key} = new Field($value, FieldAlias::T_RAW);
+                }
+            }
         }
         return $this->deliveryAddress;
     }
@@ -374,20 +378,21 @@ class AmazonService
         $repository = oxNew(LogRepository::class);
         $order = new Order();
         $order->load($orderId);
+        /** @var string $orderCurrency */
+        $orderCurrencyName = $order->getOrderCurrency()->name;
 
         if (
             !(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))
         ) {
             Registry::getUtilsView()->addErrorToDisplay(
                 Registry::getLang()->translateString(("OSC_AMAZONPAY_REFUND_ANNOTATION") .
-                    $this->getMaximalRefundAmount($orderId)) . $order->getOrderCurrency()
+                    $this->getMaximalRefundAmount($orderId)) . $orderCurrencyName
             );
             return;
         }
 
         $amazonConfig = oxNew(Config::class);
-        /** @var stdClass $orderCurrency */
-        $orderCurrency = $order->getOrderCurrency();
+
         $body = [
             'chargeId' => $repository->findLogMessageForOrderId($orderId)[0]['OSC_AMAZON_CHARGE_ID'],
             'refundAmount' => [
@@ -396,7 +401,7 @@ class AmazonService
                     '.',
                     Registry::getLang()->formatCurrency($refundAmount)
                 ),
-                'currencyCode' => $orderCurrency->name
+                'currencyCode' => $orderCurrencyName
             ],
             'softDescriptor' => 'AMZ*OXID'
         ];
@@ -544,6 +549,7 @@ class AmazonService
      * @param string $orderId
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * TODO: refactor
      */
     public function checkOrderState(string $orderId): void
     {

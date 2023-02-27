@@ -23,7 +23,7 @@ class PhpHelper
     /**
      * @param string $needle
      * @param array $haystack
-     * @return bool|mixed
+     * @return mixed
      */
     public static function getArrayValue(string $needle, array $haystack): mixed
     {

@@ -30,7 +30,7 @@ class AmazonTestCase extends UnitTestCase
     protected Config $moduleConfig;
 
     /** @var LoggerInterface | MockInterface */
-    protected LoggerInterface|Mockery\LegacyMockInterface|MockInterface $mockLogger;
+    protected $mockLogger;
 
     /**
      * @throws Exception

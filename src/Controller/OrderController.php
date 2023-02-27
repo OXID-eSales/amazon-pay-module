@@ -38,27 +38,27 @@ class OrderController extends OrderController_parent
      * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @throws \Exception
      */
     public function init(): void
     {
         $session = Registry::getSession();
         $viewConfig = $this->getViewConfig();
         $exclude = $viewConfig->isAmazonExclude();
-        $amazonService = OxidServiceProvider::getAmazonService();
         $oBasket = $this->getBasket();
-        $paymentId = $oBasket->getPaymentId();
-        if ($exclude || ($paymentId && !Constants::isAmazonPayment($paymentId))) {
-            parent::init();
-            return;
-        }
+        $paymentId = $oBasket->getPaymentId() ?? '';
 
-        $amazonServiceIsActive = $amazonService->isAmazonSessionActive();
-        if ($amazonServiceIsActive) {
-            $this->initAmazonPayExpress($amazonService, $session);
-        }
+        if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
+            $amazonService = OxidServiceProvider::getAmazonService();
+            $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
+            /** TODO: check if the double if can be avoided without using else */
+            if ($isAmazonSessionActive) {
+                $this->initAmazonPayExpress($amazonService, $session);
+            }
 
-        if (!$amazonServiceIsActive) {
-            $this->initAmazonPay();
+            if (!$isAmazonSessionActive) {
+                $this->initAmazonPay();
+            }
         }
         parent::init();
     }
@@ -210,6 +210,10 @@ class OrderController extends OrderController_parent
         Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false);
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     protected function completeAmazonPaymentExpress(): void
     {
         $payload = new Payload();
@@ -245,10 +249,10 @@ class OrderController extends OrderController_parent
         }
         $payload->setPaymentIntent($paymentIntent);
         $payload->setCanHandlePendingAuthorization($canHandlePendingAuth);
-
+        $payloadData = $payload->getData();
         $result = OxidServiceProvider::getAmazonClient()->updateCheckoutSession(
             OxidServiceProvider::getAmazonService()->getCheckoutSessionId(),
-            $payload->getData()
+            $payloadData
         );
 
         if (
@@ -268,6 +272,8 @@ class OrderController extends OrderController_parent
         }
 
         Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
+        $logger = new Logger();
+        $logger->log('ERROR', $result['response']);
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         if ($oOrder->isLoaded()) {
             $oOrder->delete();
@@ -278,9 +284,9 @@ class OrderController extends OrderController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return Address
+     * @return stdClass
      */
-    public function getDeliveryAddressAsObj(): Address
+    public function getDeliveryAddressAsObj(): stdClass
     {
         return OxidServiceProvider::getAmazonService()->getDeliveryAddressAsObj();
     }

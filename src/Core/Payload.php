@@ -166,10 +166,12 @@ class Payload
         }
 
 
-        $data['softDescriptor'] = $this->softDescriptor ?: '';
-        if (empty($data['softDescriptor'])) {
+        if (!empty($this->softDescriptor)) {
+            $data['softDescriptor'] = $this->softDescriptor;
             $data = $this->addMerchantMetaData($data);
         }
+
+
 
         if (!empty($this->checkoutChargeAmount)) {
             $data['chargeAmount'] = [];
@@ -246,11 +248,6 @@ class Payload
     public function setCanHandlePendingAuthorization(bool $canHandlePendingAuthorization): void
     {
         $this->canHandlePendingAuthorization = $canHandlePendingAuthorization;
-    }
-
-    public function getCanHandlePendingAuthorization()
-    {
-        return $this->canHandlePendingAuthorization;
     }
 
     /**

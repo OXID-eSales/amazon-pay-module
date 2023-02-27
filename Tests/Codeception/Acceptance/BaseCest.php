@@ -31,7 +31,8 @@ abstract class BaseCest
     public function _before(AcceptanceTester $I): void
     {
         $this->timestampForScreenshot = time();
-        $I->haveInDatabase(
+        $this->I = $I;
+        $this->I->haveInDatabase(
             'oxobject2payment',
             [
                 'OXID' => 'testAmazonPay',
@@ -42,18 +43,16 @@ abstract class BaseCest
         );
 
         // make sure the payments are active
-        $I->updateInDatabase(
+        $this->I->updateInDatabase(
             'oxpayments',
             ['OXACTIVE' => 1],
             ['OXID' => 'oxidamazon']
         );
-        $I->updateInDatabase(
+        $this->I->updateInDatabase(
             'oxpayments',
             ['OXACTIVE' => 1],
             ['OXID' => 'oxidamazonexpress']
         );
-
-        $this->I = $I;
     }
 
     public function _after(AcceptanceTester $I): void
@@ -68,7 +67,7 @@ abstract class BaseCest
      */
     protected function _initializeTest(): void
     {
-        $this->I->openShop();
+        $this->_openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->waitForPageLoad();
     }
@@ -95,7 +94,7 @@ abstract class BaseCest
      */
     protected function _failIfTextNotSeen(string $text, string $errorMsg = ''): void
     {
-        $errorMsg = $errorMsg ?? 'Text not found: ' . $text;
+        $errorMsg = $errorMsg ?: 'Text not found: ' . $text;
         try {
             $this->I->see($text);
         } catch (\Exception $e) {
@@ -124,11 +123,11 @@ abstract class BaseCest
      */
     protected function _loginOxid(): void
     {
-        $homePage = $this->I->openShop();
+        $this->_openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->wait(5);
         $this->_makeScreenshot('beforeLogin');
-        $homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
+        $this->homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
         $this->I->wait(5);
     }
 
@@ -160,9 +159,6 @@ abstract class BaseCest
      */
     protected function _openCheckout(): void
     {
-        if (!$this->homePage instanceof Home) {
-            $this->homePage = $this->I->openShop();
-        }
         $this->homePage->openMiniBasket()->openCheckout();
     }
 
@@ -171,19 +167,11 @@ abstract class BaseCest
      */
     protected function _openBasketDisplay(): void
     {
-        if (!$this->homePage instanceof Home) {
-            $this->homePage = $this->I->openShop();
-        }
-
         $this->homePage->openMiniBasket()->openBasketDisplay();
     }
 
     protected function _openAccountMenu(): void
     {
-        if (!$this->homePage instanceof Home) {
-            $this->homePage = $this->I->openShop();
-        }
-
         $this->homePage->openAccountMenu();
     }
 
@@ -229,7 +217,7 @@ abstract class BaseCest
         ];
 
         $error = $this->_grabTextFromElementWhenPresent('.alert .alert-danger');
-        if (!in_array($error, $acceptableErrors)) {
+        if ($error !== '' && !in_array($error, $acceptableErrors)) {
             $this->I->fail('Login issue: ' . $error);
         }
     }
@@ -358,5 +346,11 @@ abstract class BaseCest
         $className = array_pop($arr);
         $filename = sprintf('%s_%s_%s', $this->timestampForScreenshot, $className, $suffix);
         $this->I->makeScreenshot($filename);
+    }
+
+    protected function _openShop()
+    {
+        $this->homePage = new Home($this->I);
+        $this->I->amOnPage($this->homePage->URL);
     }
 }

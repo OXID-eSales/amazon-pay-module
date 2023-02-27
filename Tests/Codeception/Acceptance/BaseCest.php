@@ -53,6 +53,7 @@ abstract class BaseCest
             ['OXACTIVE' => 1],
             ['OXID' => 'oxidamazonexpress']
         );
+        $this->homePage = new Home($this->I);
     }
 
     public function _after(AcceptanceTester $I): void
@@ -350,7 +351,6 @@ abstract class BaseCest
 
     protected function _openShop()
     {
-        $this->homePage = new Home($this->I);
         $this->I->amOnPage($this->homePage->URL);
     }
 }

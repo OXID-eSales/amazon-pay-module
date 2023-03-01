@@ -3,9 +3,9 @@ name: Development
 on: [ push, pull_request ]
 
 concurrency:
-  group: ${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
+#cacnel test
 env:
   PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
   MODULE_PATH: 'osc/amazonpay'

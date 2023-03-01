@@ -31,11 +31,11 @@ class OrderOverview extends OrderOverview_parent
 
         $existingItems = [];
 
+        $orderLoaded = $oOrder->load($this->getEditObjectId());
         /** @var string $paymentType */
         $paymentType = $oOrder->getFieldData('oxpaymenttype');
-        Constants::isAmazonPayment($paymentType);
         if (
-            $oOrder->load($this->getEditObjectId()) &&
+            $orderLoaded &&
             Constants::isAmazonPayment($paymentType)
         ) {
             $orderLogs = OxidServiceProvider::getAmazonService()->getOrderLogs($oOrder);
@@ -124,10 +124,11 @@ class OrderOverview extends OrderOverview_parent
         $oOrder = oxNew(Order::class);
         /** @var float $refundAmount */
         $refundAmount = Registry::getRequest()->getRequestParameter("refundAmount");
+        $orderLoaded = $oOrder->load($this->getEditObjectId());
         /** @var string $paymentType */
         $paymentType = $oOrder->getFieldData('oxpaymenttype');
         if (
-            $oOrder->load($this->getEditObjectId()) &&
+            $orderLoaded &&
             Constants::isAmazonPayment($paymentType) &&
             $oOrder->getId() !== null
         ) {

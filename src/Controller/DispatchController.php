@@ -51,7 +51,7 @@ class DispatchController extends FrontendController
                 }
                 $redirectUrl = Registry::getConfig()->getShopHomeUrl() .
                     'cl=order&stoken=' . Registry::getSession()->getSessionChallengeToken();
-                Registry::getUtils()->redirect($redirectUrl, true, 302);
+                Registry::getUtils()->redirect($redirectUrl, false);
                 break;
             case 'result':
                 /** @var string $amazonSessionId */
@@ -198,9 +198,9 @@ class DispatchController extends FrontendController
     protected function setRequestAmazonSessionId(): string
     {
         // add item to basket if an "anid" was provided in the url
-        /** @var bool|string $anid */
-        $anid = Registry::getRequest()->getRequestParameter('anid');
-        if ($anid) {
+        /** @var string $anid */
+        $anid = Registry::getRequest()->getRequestParameter('anid') ?: '';
+        if ($anid !== '') {
             $database = DatabaseProvider::getDb();
             $database->startTransaction();
             try {

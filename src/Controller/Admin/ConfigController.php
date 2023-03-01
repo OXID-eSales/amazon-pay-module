@@ -108,7 +108,7 @@ class ConfigController extends AdminController
             }
 
             Registry::getConfig()->saveShopConfVar(
-                strpos($confName, 'bl') !== false ? 'bool' : 'str',
+                str_contains($confName, 'bl') ? 'bool' : 'str',
                 $confName,
                 $value,
                 $shopId,

@@ -46,7 +46,7 @@ class OrderController extends OrderController_parent
         $viewConfig = $this->getViewConfig();
         $exclude = $viewConfig->isAmazonExclude();
         $oBasket = $this->getBasket();
-        $paymentId = $oBasket->getPaymentId() ?? '';
+        $paymentId = $oBasket->getPaymentId() ?: '';
 
         if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
             $amazonService = OxidServiceProvider::getAmazonService();
@@ -263,9 +263,9 @@ class OrderController extends OrderController_parent
             !empty((PhpHelper::getArrayValue('amazonPayRedirectUrl', PhpHelper::jsonToArray($result['response']))))
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
-            /** @var bool|string $redirectUrl */
-            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
-            if ($redirectUrl !== false) {
+            /** @var string $redirectUrl */
+            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response) ?: '';
+            if ($redirectUrl !== '') {
                 Registry::getUtils()->redirect($redirectUrl, false, 301);
             }
             return;

@@ -20,6 +20,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
     public function checkAmazonSocialLoginDeactivateWorks(AcceptanceTester $I): void
     {
         $I->wantToTest('AmazonPay Social Login Deactivate');
+        $this->_initializeTest();
         $this->_openAccountMenu();
         $I->seeElement($this->amazonSocialLoginUserMenu);
 
@@ -69,7 +70,6 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
             $I->fail('Error on saving amazon module config: ' . $error);
         }
         $I->waitForElement('.alert-success', 60);
-        $I->wait(30);
         $I->closeTab();
     }
 }

@@ -9,7 +9,6 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\EshopCommunity\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Request;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
@@ -42,12 +41,11 @@ class OrderArticle extends OrderArticle_parent
      */
     private function refundAmazon(): void
     {
+        $request = new Request();
         // get article id
         /** @var string $sOrderArtId */
-
-        $request = new Request();
-        $sOrderArtId = $request->getRequestParameter('sArtID');
-        $sOrderId = $this->getEditObjectId();
+        $sOrderArtId = $request->getRequestParameter('sArtID') ?: '';
+        $sOrderId = $this->getEditObjectId() ?: '';
 
         $oOrderArticle = oxNew(\OxidEsales\Eshop\Application\Model\OrderArticle::class);
         $oOrder = oxNew(Order::class);

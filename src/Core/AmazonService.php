@@ -184,6 +184,7 @@ class AmazonService
     public function getDeliveryAddress(): array
     {
         $checkoutSession = $this->getCheckoutSession();
+        /** @var array $address */
         $address = $checkoutSession['response']['shippingAddress'] ?? [];
 
         // map address fields only if amazon response have a shippingAddress
@@ -378,7 +379,7 @@ class AmazonService
         $repository = oxNew(LogRepository::class);
         $order = new Order();
         $order->load($orderId);
-        /** @var string $orderCurrency */
+        /** @var string $orderCurrencyName */
         $orderCurrencyName = $order->getOrderCurrency()->name;
 
         if (

@@ -307,6 +307,7 @@ jobs:
         continue-on-error: true
         run: |
           sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' styles/phpstan.report.json
+          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' styles/phpmd.report.json
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
@@ -322,5 +323,6 @@ jobs:
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.php.coverage.reportPaths=tests/coverage.xml
             -Dsonar.php.phpstan.reportPaths=styles/phpstan.report.json
+            -Dsonar.php.phpmd.reportPaths=styles/phpmd.report.json
             -Dsonar.cpd.php.minimumTokens=25
             -Dsonar.cpd.php.minimumLines=5

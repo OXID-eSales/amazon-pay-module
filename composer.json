@@ -43,8 +43,8 @@
     },
     "autoload": {
         "psr-4": {
-            "OxidSolutionCatalysts\\AmazonPay\\": "src",
-            "OxidSolutionCatalysts\\AmazonPay\\Tests\\": "tests"
+            "OxidSolutionCatalysts\\AmazonPay\\": "src/",
+            "OxidSolutionCatalysts\\AmazonPay\\Tests\\": "tests/"
         }
     },
     "scripts": {

@@ -33,12 +33,9 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class OxidServiceProviderTest extends UnitTestCase
 {
-    /** @var OxidServiceProvider */
-    private OxidServiceProvider $oxidServiceProvider;
 
     protected function setUp(): void
     {
-        $this->oxidServiceProvider = OxidServiceProvider::getInstance();
     }
 
     public function testGetInstance(): void

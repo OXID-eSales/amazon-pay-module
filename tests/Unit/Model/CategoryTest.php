@@ -39,6 +39,9 @@ class CategoryTest extends UnitTestCase
         $this->category = oxNew(EshopCategoryModel::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSave(): void
     {
         $this->category->setShopId(1);

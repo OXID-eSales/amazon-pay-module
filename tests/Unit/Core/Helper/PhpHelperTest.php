@@ -39,11 +39,11 @@ class PhpHelperTest extends UnitTestCase
 
         $array = PhpHelper::jsonToArray($json);
 
-        $this->assertEquals($array['a'], 1);
-        $this->assertEquals($array['b'], '1');
-        $this->assertEquals($array['c'][0], 1);
-        $this->assertEquals($array['c'][1], 2);
-        $this->assertEquals($array['c']['c'], 'd');
+        $this->assertEquals(1, $array['a']);
+        $this->assertEquals('1', $array['b']);
+        $this->assertEquals(1, $array['c'][0]);
+        $this->assertEquals(2, $array['c'][1]);
+        $this->assertEquals('d', $array['c']['c']);
     }
 
     public function testGetArrayValue(): void

@@ -33,20 +33,18 @@ class LoggerTest extends UnitTestCase
     /** @var Logger */
     private Logger $logger;
 
-    /** @var string */
-    private string $mockLogFileName;
-
     protected function setUp(): void
     {
-        $this->mockLogFileName = 'amazonpay-test.log';
+        $mockLogFileName = 'amazonpay-test.log';
         $this->logger = new Logger(
-            $this->mockLogFileName
+            $mockLogFileName
         );
     }
 
     public function testResolveLogContent(): void
     {
-        $content = json_decode(file_get_contents(__DIR__ . '/../../Fixtures/amazonresponse.json'), true);
+        /** @var array $content */
+        $content = json_decode(file_get_contents(__DIR__ . '/../../Fixtures/amazonresponse.json'), true) ?: [];
         $result = $this->logger->resolveLogContent($content);
 
         $this->assertSame($result['requestType'], 'IPN');

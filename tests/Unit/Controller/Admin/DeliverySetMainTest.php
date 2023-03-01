@@ -42,6 +42,9 @@ class DeliverySetMainTest extends UnitTestCase
         $this->assertSame('deliveryset_main.tpl', $this->deliverySetMain->render());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testSave(): void
     {
         $editVal = [

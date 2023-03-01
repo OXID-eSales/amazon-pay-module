@@ -37,7 +37,7 @@ return [
     'SCREEN_SHOT_URL' => $screenShotPathEnv
 ];
 
-function getTestDataDumpFilePath(): string
+function getTestDataDumpFilePath()
 {
     return getShopTestPath() . '/Codeception/_data/dump.sql';
 }
@@ -51,7 +51,7 @@ function getShopSuitePath($facts)
 {
     $testSuitePath = getenv('TEST_SUITE');
     if (!$testSuitePath) {
-        $testSuitePath = $facts->getShopRootPath() . '/tests';
+        $testSuitePath = $facts->getShopRootPath() . '/Tests';
     }
 
     return $testSuitePath;
@@ -62,7 +62,7 @@ function getShopTestPath()
     $facts = new Facts();
 
     if ($facts->isEnterprise()) {
-        $shopTestPath = $facts->getEnterpriseEditionRootPath() . '/tests';
+        $shopTestPath = $facts->getEnterpriseEditionRootPath() . '/Tests';
     } else {
         $shopTestPath = getShopSuitePath($facts);
     }

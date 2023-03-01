@@ -7,7 +7,9 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception;
 
+use Codeception\Actor;
 use OxidEsales\Codeception\Page\Home;
+use OxidEsales\Eshop\Core\Registry;
 
 /**
  * Inherited Methods
@@ -25,7 +27,7 @@ use OxidEsales\Codeception\Page\Home;
  *
  * @SuppressWarnings(PHPMD)
  */
-class AcceptanceTester extends \Codeception\Actor
+class AcceptanceTester extends Actor
 {
     use _generated\AcceptanceTesterActions;
 
@@ -35,7 +37,7 @@ class AcceptanceTester extends \Codeception\Actor
 
     public function saveShopConfVar($sVarType, $sVarName, $sVarVal, $sShopId = null, $sModule = '')
     {
-        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $config = Registry::getConfig();
         $config->saveShopConfVar($sVarType, $sVarName, $sVarVal, $sShopId, $sModule);
     }
 

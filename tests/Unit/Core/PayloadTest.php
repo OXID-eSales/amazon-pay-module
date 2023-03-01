@@ -29,12 +29,8 @@ use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 
 class PayloadTest extends UnitTestCase
 {
-    /** @var Payload */
-    private Payload $payload;
-
     protected function setUp(): void
     {
-        $this->payload = new Payload();
     }
 
     private function createPayloadData(): Payload

@@ -24,6 +24,8 @@ declare(strict_types=1);
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Repository;
 
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 use OxidEsales\TestingLibrary\UnitTestCase;
@@ -38,6 +40,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->logRepository = oxNew(LogRepository::class);
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testSaveLogMessage(): void
     {
         $logMessage = $this->prepareLogMessage();
@@ -49,6 +55,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testFindLogMessageForUserId(): void
     {
         $logMessage = $this->prepareLogMessage();
@@ -60,6 +70,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testFindLogMessageForIdentifier(): void
     {
         $logMessage = $this->prepareLogMessage();
@@ -71,6 +85,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testFindLogMessageForChargePermissionId(): void
     {
         $logMessage = $this->prepareLogMessage();
@@ -82,6 +100,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testFindLogMessageForOrderId(): void
     {
         $logMessage = $this->prepareLogMessage();
@@ -93,6 +115,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testFindLogMessageForChargeId(): void
     {
         $logMessage = $this->prepareLogMessage();
@@ -104,6 +130,10 @@ class LogRepositoryTest extends UnitTestCase
         $this->assertSame($results[0]['OSC_AMAZON_OXUSERID'], $logMessage->getUserId());
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function testFindOrderIdByChargeId(): void
     {
         $logMessage = $this->prepareLogMessage();

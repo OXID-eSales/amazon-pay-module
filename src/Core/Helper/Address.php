@@ -7,25 +7,23 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
-use OxidSolutionCatalysts\AmazonPay\Core\Logger;
-use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidEsales\Eshop\Core\Registry;
 use VIISON\AddressSplitter\AddressSplitter;
 use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class Address
 {
-     /**
+    /**
      * possible DBTable Prefix
      *
      * @var array
      */
     protected static array $possibleDBTablePrefix = [
-        'oxuser__' , 'oxaddress__'
+        'oxuser__', 'oxaddress__'
     ];
 
-     /**
+    /**
      * possible DBTable Prefix
      *
      * @var string
@@ -68,11 +66,11 @@ class Address
             // special Amazon-Case: Street in first line, StreetNo in second line
             if (isset($addressLines[1]) && preg_match('/^\d.{0,8}$/', $addressLines[1])) {
                 $streetTmp = $addressLines[0] . ' ' . $addressLines[1];
-            // Company-Case: Company in first line Street and StreetNo in second line
+                // Company-Case: Company in first line Street and StreetNo in second line
             } elseif (!empty($addressLines[1])) {
                 $streetTmp = $addressLines[1];
                 $company = $addressLines[0];
-            // Normal-Case: No Company, Street & StreetNo in first line
+                // Normal-Case: No Company, Street & StreetNo in first line
             }
 
             if (!empty($addressLines[2])) {
@@ -83,7 +81,7 @@ class Address
                 $addressData = AddressSplitter::splitAddress($streetTmp);
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
-            } catch (SplittingException $e) {
+            } catch (SplittingException) {
                 // The Address could not be split
                 // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();
@@ -101,7 +99,7 @@ class Address
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
                 $additionalInfo = $addressData['additionToAddress2'] ?? '';
-            } catch (SplittingException $e) {
+            } catch (SplittingException) {
                 // The Address could not be split
                 // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();

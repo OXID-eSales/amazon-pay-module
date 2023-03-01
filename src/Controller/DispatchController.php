@@ -9,6 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
+use Exception;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\ArticleInputException;
@@ -33,7 +34,7 @@ class DispatchController extends FrontendController
 {
     /**
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function init(): void
     {
@@ -212,7 +213,7 @@ class DispatchController extends FrontendController
                 // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $database->rollbackTransaction();
                 throw $exception;
             }

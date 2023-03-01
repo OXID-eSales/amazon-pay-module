@@ -18,6 +18,8 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
+use function date;
+
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Order
  */
@@ -164,7 +166,7 @@ class Order extends Order_parent
                 if ($this->getFieldData('oxpaid') == '0000-00-00 00:00:00') {
                     $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 }
-                $this->_setFieldData('oxpaid', \date('Y-m-d H:i:s'));
+                $this->_setFieldData('oxpaid', date('Y-m-d H:i:s'));
                 $this->_setFieldData('oxtransstatus', 'OK');
                 if (!empty($data)) {
                     $this->_setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);

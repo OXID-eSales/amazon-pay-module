@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Component;
 
+use Exception;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Core\Registry;
@@ -24,7 +25,7 @@ class UserComponent extends UserComponent_parent
 {
     /**
      * @param array $amazonSession
-     * @throws \Exception
+     * @throws Exception
      */
     public function createGuestUser(array $amazonSession): void
     {
@@ -96,8 +97,7 @@ class UserComponent extends UserComponent_parent
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         Registry::getUtils()->redirect(
             Registry::getConfig()->getShopHomeUrl() . 'cl=user',
-            false,
-            302
+            false
         );
     }
 

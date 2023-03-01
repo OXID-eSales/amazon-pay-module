@@ -7,7 +7,9 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
+use Exception;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -20,7 +22,7 @@ class AmazonCheckoutController extends FrontendController
     /**
      * Creates a new amazon checkout session
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function createCheckout(): void
     {
@@ -28,7 +30,7 @@ class AmazonCheckoutController extends FrontendController
         /** @var string $sProductId */
         $sProductId = Registry::getRequest()->getRequestParameter('anid');
         if ($sProductId) {
-            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+            $database = DatabaseProvider::getDb();
             $database->startTransaction();
             try {
                 $basket = Registry::getSession()->getBasket();
@@ -39,7 +41,7 @@ class AmazonCheckoutController extends FrontendController
                 // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $database->rollbackTransaction();
                 throw $exception;
             }

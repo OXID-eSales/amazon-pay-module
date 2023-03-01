@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
+use Exception;
 use OxidEsales\Eshop\Application\Component\UserComponent;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
@@ -38,7 +39,7 @@ class OrderController extends OrderController_parent
      * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
-     * @throws \Exception
+     * @throws Exception
      */
     public function init(): void
     {
@@ -80,7 +81,7 @@ class OrderController extends OrderController_parent
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void
     {
@@ -93,7 +94,7 @@ class OrderController extends OrderController_parent
             $userComponent->createGuestUser($amazonSession);
 
             $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID_EXPRESS);
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false, 302);
+            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false);
         }
         if ($user instanceof User) {
             // if Amazon provides a shipping address use it
@@ -278,7 +279,7 @@ class OrderController extends OrderController_parent
         if ($oOrder->isLoaded()) {
             $oOrder->delete();
         }
-        Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 302);
+        Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false);
     }
 
     /**

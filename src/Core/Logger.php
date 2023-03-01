@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger as MonoLogLogger;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -150,7 +151,7 @@ class Logger extends AbstractLogger
     /**
      * @param int $log_level
      * @return MonoLogLogger
-     * @throws \Exception
+     * @throws Exception
      */
     private function getLogger(int $log_level): LoggerInterface
     {

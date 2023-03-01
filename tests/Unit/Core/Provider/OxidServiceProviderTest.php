@@ -33,7 +33,6 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class OxidServiceProviderTest extends UnitTestCase
 {
-
     protected function setUp(): void
     {
     }

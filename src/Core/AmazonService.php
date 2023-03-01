@@ -322,7 +322,7 @@ class AmazonService
                 ];
                 $status = $this->isTwoStep ? 'AMZ_2STEP_AUTH_OK' : 'AMZ_AUTH_AND_CAPT_OK';
                 $order->updateAmazonPayOrderStatus($status, $data);
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false, 302);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false);
                 return;
             } elseif ($result['status'] === 202) {
                 $data = [
@@ -330,7 +330,7 @@ class AmazonService
                     "chargeId" => $response['chargeId']
                 ];
                 $order->updateAmazonPayOrderStatus('AMZ_AUTH_STILL_PENDING', $data);
-                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false, 302);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false);
                 return;
             }
 
@@ -752,7 +752,7 @@ class AmazonService
 
         $exception = oxNew(InputException::class, $response['message']);
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');
-        Registry::getUtils()->redirect($config->getShopHomeUrl() . 'cl=payment', true, 302);
+        Registry::getUtils()->redirect($config->getShopHomeUrl() . 'cl=payment');
     }
 
     /**

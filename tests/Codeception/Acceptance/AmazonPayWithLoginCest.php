@@ -105,6 +105,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @return void
      * @group AmazonPayWithLoginPaymentTest
      * @throws \Exception
+     * @group b
      */
     public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I): void
     {

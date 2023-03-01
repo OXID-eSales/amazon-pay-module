@@ -7,9 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
-use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use Psr\Log\LogLevel;
 use stdClass;
 
 /**
@@ -26,7 +24,13 @@ class UserController extends UserController_parent
     {
         $isAmazonSessionActive = OxidServiceProvider::getAmazonService()->isAmazonSessionActive();
         if (!$isAmazonSessionActive) {
-            return parent::showShipAddress();
+            /**
+             * parent::showShipAddress() should return bool, but can also return null
+             * TODO: check if it is fixed in Oxid 7
+             * @var bool|null $showShipAddress
+             */
+            $showShipAddress = parent::showShipAddress();
+            return $showShipAddress ?? false;
         }
 
         return true;

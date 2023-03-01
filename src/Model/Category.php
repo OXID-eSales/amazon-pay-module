@@ -7,7 +7,6 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
-use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 
 /**

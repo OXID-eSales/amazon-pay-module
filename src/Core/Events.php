@@ -7,13 +7,12 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Exception;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Model\BaseModel as EshopBaseModel;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
@@ -235,7 +234,7 @@ class Events
     /**
      * @param string[][] $paymentDescription
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function createPaymentMethod(string $paymentId, array $paymentDescription): void
     {
@@ -275,7 +274,7 @@ class Events
     /**
      * @param string $paymentId
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function assignPaymentToActiveDeliverySets(string $paymentId): void
     {
@@ -289,7 +288,7 @@ class Events
      * @param string $paymentId
      * @param string $deliverySetId
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId): void
     {

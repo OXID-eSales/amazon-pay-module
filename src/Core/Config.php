@@ -7,7 +7,10 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
+use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
@@ -378,7 +381,7 @@ class Config
 
         if ($this->countryList === null) {
             $this->countryList = [];
-            $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+            $payment = oxNew(Payment::class);
             /** TODO should be variable for any amazonpay ID */
             $payment->load(Constants::PAYMENT_ID_EXPRESS);
             foreach ($payment->getCountries() as $countryOxId) {
@@ -386,7 +389,7 @@ class Config
                 $deliverySetList = oxNew(DeliverySetList::class);
                 $deliverySetData = $deliverySetList->getDeliverySetList($activeUser, $countryOxId);
                 if (count($deliverySetData)) {
-                    $oxidCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+                    $oxidCountry = oxNew(Country::class);
                     $oxidCountry->load($countryOxId);
                     /** @var string $oxisoalpha2 */
                     $oxisoalpha2 = $oxidCountry->getFieldData('oxisoalpha2');
@@ -407,7 +410,7 @@ class Config
         try {
             // throws Exception if it was not possible to gather sufficient entropy.
             $uuid = bin2hex(random_bytes(16));
-        } catch (\Exception $e) {
+        } catch (Exception) {
             $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5((string)mt_rand()), 0, 24);
         }
         return $uuid;

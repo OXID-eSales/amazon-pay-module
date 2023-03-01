@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
+use Exception;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\AmazonCarrier;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
@@ -38,7 +39,7 @@ class DeliverySetMain extends DeliverySetMain_parent
 
     /**
      * @inheritdoc
-     * @throws \Exception
+     * @throws Exception
      * @returns mixed
      */
     public function save()

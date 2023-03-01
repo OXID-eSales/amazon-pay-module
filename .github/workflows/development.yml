@@ -287,14 +287,14 @@ jobs:
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
-          name: TestsLog-${{ matrix.php }}
+          name: TestsLog-8.0
           path: ./tests/
 
       - name: Download phpunit artifacts
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
-          name: StylesLog-${{ matrix.php }}
+          name: StylesLog-8.0
           path: ./tests/
 
       - name: Fix paths in unit logs

@@ -2,6 +2,10 @@ name: Development
 
 on: [ push, pull_request ]
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
   MODULE_PATH: 'osc/amazonpay'

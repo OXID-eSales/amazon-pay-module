@@ -17,19 +17,13 @@ use OxidSolutionCatalysts\AmazonPay\Model\Order;
 
 class OrderArticle extends OrderArticle_parent
 {
-    /**
-     * @inheritdoc
-     */
-    public function deleteThisArticle(): void
+    public function deleteThisArticle()
     {
         $this->refundAmazon();
         parent::deleteThisArticle();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function storno(): void
+    public function storno()
     {
         $this->refundAmazon();
         parent::storno();
@@ -39,7 +33,7 @@ class OrderArticle extends OrderArticle_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    private function refundAmazon(): void
+    private function refundAmazon()
     {
         $request = new Request();
         // get article id

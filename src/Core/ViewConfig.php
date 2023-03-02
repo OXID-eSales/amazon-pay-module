@@ -29,20 +29,20 @@ class ViewConfig extends ViewConfig_parent
      * is this a "Flow"-Theme Compatible Theme?
      * @var null|boolean $isFlowCompatibleTheme
      */
-    protected ?bool $isFlowCompatibleTheme = null;
+    protected $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
      * @var null|boolean $isWaveCompatibleTheme
      */
-    protected ?bool $isWaveCompatibleTheme = null;
+    protected $isWaveCompatibleTheme = null;
 
     /**
      * articlesId for the checkout review url
      */
-    protected string $articlesId = '';
+    protected $articlesId = '';
 
-    public string $signature = '';
+    public $signature = '';
 
     /**
      * @return Config
@@ -61,7 +61,7 @@ class ViewConfig extends ViewConfig_parent
         $blIsActive = true;
         try {
             $config->checkHealth();
-        } catch (StandardException) {
+        } catch (StandardException $ex) {
             $blIsActive = false;
         }
         return $blIsActive;
@@ -280,7 +280,7 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
-    public function setArticlesId(string $articlesId): void
+    public function setArticlesId(string $articlesId)
     {
         $this->articlesId = $articlesId;
     }

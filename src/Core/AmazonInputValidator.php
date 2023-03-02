@@ -63,7 +63,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
      * @param array $billingAddress  Billing address.
      * @param array $deliveryAddress Delivery address.
      */
-    public function checkRequiredFields($user, $billingAddress, $deliveryAddress): void
+    public function checkRequiredFields($user, $billingAddress, $deliveryAddress)
     {
         $service = OxidServiceProvider::getAmazonService();
 

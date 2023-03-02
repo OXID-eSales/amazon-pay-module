@@ -41,7 +41,7 @@ class OrderController extends OrderController_parent
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function init(): void
+    public function init()
     {
         $session = Registry::getSession();
         $viewConfig = $this->getViewConfig();
@@ -75,7 +75,7 @@ class OrderController extends OrderController_parent
         return $conf;
     }
 
-    protected function initAmazonPay(): void
+    protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
@@ -83,7 +83,7 @@ class OrderController extends OrderController_parent
     /**
      * @throws Exception
      */
-    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void
+    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session)
     {
         $user = $this->getUser();
         $amazonSession = $amazonService->getCheckoutSession();
@@ -167,7 +167,7 @@ class OrderController extends OrderController_parent
         return $ret;
     }
 
-    protected function completeAmazonPayment(): void
+    protected function completeAmazonPayment()
     {
 
         $payload = new Payload();
@@ -215,7 +215,7 @@ class OrderController extends OrderController_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    protected function completeAmazonPaymentExpress(): void
+    protected function completeAmazonPaymentExpress()
     {
         $payload = new Payload();
         /** @var string $orderOxId */
@@ -306,7 +306,7 @@ class OrderController extends OrderController_parent
      * @param string $paymentId
      * @return void
      */
-    protected function setAmazonPayAsPaymentMethod(string $paymentId): void
+    protected function setAmazonPayAsPaymentMethod(string $paymentId)
     {
         $basket = $this->getBasket();
         $user = $this->getUser();

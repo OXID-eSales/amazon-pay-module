@@ -25,7 +25,7 @@ use function date;
  */
 class Order extends Order_parent
 {
-    private AmazonService $amazonService;
+    private $amazonService;
 
     /**
      * Security and Cleanup before finalize order
@@ -34,7 +34,7 @@ class Order extends Order_parent
      * @return int|null
      *
      */
-    protected function prepareFinalizeOrder(Basket $oBasket): ?int
+    protected function prepareFinalizeOrder(Basket $oBasket): int
     {
         $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
@@ -64,7 +64,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): ?int
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): int
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
@@ -92,7 +92,7 @@ class Order extends Order_parent
      * @return Address|null
      *
      */
-    public function getDelAddressInfo(): ?Address
+    public function getDelAddressInfo(): Address
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();
@@ -125,7 +125,7 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = []): void
+    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
             $this->_setFieldData('oxtransid', $data['chargeId']);
@@ -204,7 +204,7 @@ class Order extends Order_parent
     /**
      * @param AmazonService $amazonService
      */
-    public function setAmazonService(AmazonService $amazonService): void
+    public function setAmazonService(AmazonService $amazonService)
     {
         $this->amazonService = $amazonService;
     }

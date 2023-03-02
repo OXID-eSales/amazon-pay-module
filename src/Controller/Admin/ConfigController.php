@@ -66,7 +66,7 @@ class ConfigController extends AdminController
      * @throws ModuleSettingNotFountException
      * @throws NotFoundExceptionInterface
      */
-    public function save(): void
+    public function save()
     {
         $confArr = (array)Registry::getRequest()->getRequestEscapedParameter('conf');
         $shopId = (string)Registry::getConfig()->getShopId();
@@ -86,7 +86,7 @@ class ConfigController extends AdminController
      * @throws ModuleSettingNotFountException
      * @throws NotFoundExceptionInterface
      */
-    protected function saveConfig(array $conf, string $shopId): void
+    protected function saveConfig(array $conf, string $shopId)
     {
         $oModuleConfiguration = null;
         $oModuleConfigurationDaoBridge = null;
@@ -108,7 +108,7 @@ class ConfigController extends AdminController
             }
 
             Registry::getConfig()->saveShopConfVar(
-                str_contains($confName, 'bl') ? 'bool' : 'str',
+                strpos($confName, 'bl') ? 'bool' : 'str',
                 $confName,
                 $value,
                 $shopId,

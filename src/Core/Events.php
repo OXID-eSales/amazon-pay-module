@@ -24,7 +24,7 @@ class Events
      *
      * @var array
      */
-    protected static array $requireSessionWithParams = [
+    protected static $requireSessionWithParams = [
         'cl' => [
             'details'        => true,
             'amazondispatch' => true
@@ -37,7 +37,7 @@ class Events
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public static function onActivate(): void
+    public static function onActivate()
     {
         self::createLogTable();
         self::updateOxpsToOsc();
@@ -57,7 +57,7 @@ class Events
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    protected static function updateOxpsToOsc(): void
+    protected static function updateOxpsToOsc()
     {
         self::updateOxpsToOscArticleColumn();
         self::updateOxpsToOscCategoryColumn();
@@ -70,7 +70,7 @@ class Events
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    protected static function updateOxpsToOscArticleColumn(): void
+    protected static function updateOxpsToOscArticleColumn()
     {
         $sql = 'show columns
                 from `oxarticles`
@@ -93,7 +93,7 @@ class Events
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    protected static function addArticleColumn(): void
+    protected static function addArticleColumn()
     {
         $sql = 'show columns
                 from `oxarticles`
@@ -112,7 +112,7 @@ class Events
         }
     }
 
-    protected static function updateOxpsToOscCategoryColumn(): void
+    protected static function updateOxpsToOscCategoryColumn()
     {
         $sql = 'show columns
                 from `oxcategories`
@@ -131,7 +131,7 @@ class Events
         }
     }
 
-    protected static function addCategoryColumn(): void
+    protected static function addCategoryColumn()
     {
         $sql = 'show columns
                 from `oxcategories`
@@ -150,7 +150,7 @@ class Events
         }
     }
 
-    protected static function updateOxpsToOscDeliverySetColumn(): void
+    protected static function updateOxpsToOscDeliverySetColumn()
     {
         $sql = 'show columns
                 from `oxdeliveryset`
@@ -167,7 +167,7 @@ class Events
     }
 
 
-    protected static function addDeliverySetColumn(): void
+    protected static function addDeliverySetColumn()
     {
         $sql = 'show columns
                 from `oxdeliveryset`
@@ -183,7 +183,7 @@ class Events
         }
     }
 
-    protected static function updateOxpsToOscOrderColumn(): void
+    protected static function updateOxpsToOscOrderColumn()
     {
         $sql = 'show columns
                 from `oxorder`
@@ -202,7 +202,7 @@ class Events
         }
     }
 
-    protected static function addOrderColumn(): void
+    protected static function addOrderColumn()
     {
         $sql = 'show columns
                 from `oxorder`
@@ -224,7 +224,7 @@ class Events
     /**
      * Add payment methods set EN and DE long descriptions
      */
-    protected static function addPaymentMethods(): void
+    protected static function addPaymentMethods()
     {
         foreach (Constants::PAYMENT_DESCRIPTIONS as $paymentId => $paymentDescription) {
             self::createPaymentMethod($paymentId, $paymentDescription);
@@ -236,7 +236,7 @@ class Events
      *
      * @throws Exception
      */
-    protected static function createPaymentMethod(string $paymentId, array $paymentDescription): void
+    protected static function createPaymentMethod(string $paymentId, array $paymentDescription)
     {
         $payment = oxNew(Payment::class);
         $paymentLoaded = $payment->load($paymentId);
@@ -276,7 +276,7 @@ class Events
      * @return void
      * @throws Exception
      */
-    protected static function assignPaymentToActiveDeliverySets(string $paymentId): void
+    protected static function assignPaymentToActiveDeliverySets(string $paymentId)
     {
         $deliverySetIds = self::getActiveDeliverySetIds();
         foreach ($deliverySetIds as $deliverySetId) {
@@ -290,7 +290,7 @@ class Events
      * @return void
      * @throws Exception
      */
-    protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId): void
+    protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId)
     {
         $object2Payment = oxNew(EshopBaseModel::class);
         $object2Payment->init('oxobject2payment');
@@ -329,7 +329,7 @@ class Events
      *
      * @return void
      */
-    public static function onDeactivate(): void
+    public static function onDeactivate()
     {
     }
 
@@ -337,7 +337,7 @@ class Events
      * add details controller to requireSession
      * @return void
      */
-    protected static function addRequireSession(): void
+    protected static function addRequireSession()
     {
         $config = Registry::getConfig();
         $cfg = $config->getConfigParam('aRequireSessionWithParams');
@@ -346,7 +346,7 @@ class Events
         $config->saveShopConfVar('arr', 'aRequireSessionWithParams', $cfg, (string)$config->getShopId());
     }
 
-    protected static function updateOxpsToOscLogTable(): void
+    protected static function updateOxpsToOscLogTable()
     {
         $sql = 'show columns
                 from `' . LogRepository::TABLE_NAME . '`
@@ -397,7 +397,7 @@ class Events
         }
     }
 
-    protected static function createLogTable(): void
+    protected static function createLogTable()
     {
         $sql = sprintf(
             'CREATE TABLE IF NOT EXISTS %s (

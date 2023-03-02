@@ -18,16 +18,15 @@
         "aws/aws-php-sns-message-validator": "^1.6"
     },
     "require-dev": {
-        "phpstan/phpstan": "^1.9.2",
         "squizlabs/php_codesniffer": "3.*",
         "phpmd/phpmd": "^2.11",
-        "symfony/dotenv": "^5.1",
+        "vlucas/phpdotenv": "*",
         "codeception/module-rest": "1.4.2",
         "codeception/module-phpbrowser": "^1.0.2",
-        "oxid-esales/oxideshop-ce": "^6.10"
+        "oxid-esales/oxideshop-ce": "^6.3"
     },
     "conflicts": {
-        "oxid-esales/oxideshop-ce": "<6.10 | ^7.0"
+        "oxid-esales/oxideshop-ce": "<6.3 | ^7.0"
     },
     "archive": {
         "exclude": ["/resources"]
@@ -51,25 +50,18 @@
         "phpcs": "phpcs --standard=tests/phpcs.xml",
         "phpcbf": "phpcbf --standard=tests/phpcs.xml",
 
-        "phpstan": "phpstan -ctests/PhpStan/phpstan.neon analyse src/",
-        "phpstan-generate-baseline": "phpstan -ctests/PhpStan/phpstan.neon analyse src/ --generate-baseline tests/PhpStan/phpstan-baseline.neon",
-        "phpstan-report": "phpstan -ctests/PhpStan/phpstan.neon analyse src/ --error-format=json > tests/reports/phpstan.report.json",
-
         "phpmd": "phpmd src ansi tests/PhpMd/standard.xml --baseline tests/PhpMd/phpmd.baseline.xml",
         "phpmd-generate-baseline": "phpmd src ansi tests/PhpMd/standard.xml --generate-baseline",
         "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json --baseline tests/PhpMd/phpmd.baseline.xml",
 
         "static": [
             "@phpcs",
-            "@phpstan",
             "@phpmd"
         ],
         "generate-reports": [
-            "@phpstan-report",
             "@phpmd-report"
         ],
         "generate-baselines": [
-            "@phpstan-generate-baseline",
             "@phpmd-generate-baseline"
         ]
     },

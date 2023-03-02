@@ -12,57 +12,57 @@ class LogMessage
     /**
      * @var string
      */
-    public string $shopId;
+    public $shopId;
 
     /**
      * @var string
      */
-    public string $userId;
+    public $userId;
 
     /**
      * @var string
      */
-    public string $orderId;
+    public $orderId;
 
     /**
      * @var string
      */
-    public string $responseMessage;
+    public $responseMessage;
 
     /**
      * @var string
      */
-    public string $statusCode;
+    public $statusCode;
 
     /**
      * @var string
      */
-    public string $requestType;
+    public $requestType;
 
     /**
      * @var string
      */
-    public string $identifier;
+    public $identifier;
 
     /**
      * @var string
      */
-    public string $chargeId;
+    public $chargeId;
 
     /**
      * @var string
      */
-    public string $chargePermissionId;
+    public $chargePermissionId;
 
     /**
      * @var string
      */
-    public string $objectId;
+    public $objectId;
 
     /**
      * @var string
      */
-    public string $objectType;
+    public $objectType;
 
     /**
      * @return string
@@ -75,7 +75,7 @@ class LogMessage
     /**
      * @param string $shopId
      */
-    public function setShopId(string $shopId): void
+    public function setShopId(string $shopId)
     {
         $this->shopId = $shopId;
     }
@@ -91,7 +91,7 @@ class LogMessage
     /**
      * @param string $userId
      */
-    public function setUserId(string $userId): void
+    public function setUserId(string $userId)
     {
         $this->userId = $userId;
     }
@@ -107,7 +107,7 @@ class LogMessage
     /**
      * @param string $orderId
      */
-    public function setOrderId(string $orderId): void
+    public function setOrderId(string $orderId)
     {
         $this->orderId = $orderId;
     }
@@ -123,7 +123,7 @@ class LogMessage
     /**
      * @param string|null $responseMessage
      */
-    public function setResponseMessage(?string $responseMessage): void
+    public function setResponseMessage(string $responseMessage)
     {
         if (!$responseMessage) {
             $responseMessage = '';
@@ -142,7 +142,7 @@ class LogMessage
     /**
      * @param string $statusCode
      */
-    public function setStatusCode(string $statusCode): void
+    public function setStatusCode(string $statusCode)
     {
         $this->statusCode = $statusCode;
     }
@@ -158,7 +158,7 @@ class LogMessage
     /**
      * @param string $requestType
      */
-    public function setRequestType(string $requestType): void
+    public function setRequestType(string $requestType)
     {
         $this->requestType = $requestType;
     }
@@ -174,7 +174,7 @@ class LogMessage
     /**
      * @param string $identifier
      */
-    public function setIdentifier(string $identifier): void
+    public function setIdentifier(string $identifier)
     {
         $this->identifier = $identifier;
     }
@@ -190,7 +190,7 @@ class LogMessage
     /**
      * @param string $chargeId
      */
-    public function setChargeId(string $chargeId): void
+    public function setChargeId(string $chargeId)
     {
         $this->chargeId = $chargeId;
     }
@@ -206,7 +206,7 @@ class LogMessage
     /**
      * @param string $chargePermissionId
      */
-    public function setChargePermissionId(string $chargePermissionId): void
+    public function setChargePermissionId(string $chargePermissionId)
     {
         $this->chargePermissionId = $chargePermissionId;
     }
@@ -222,7 +222,7 @@ class LogMessage
     /**
      * @param string $objectId
      */
-    public function setObjectId(string $objectId): void
+    public function setObjectId(string $objectId)
     {
         $this->objectId = $objectId;
     }
@@ -238,7 +238,7 @@ class LogMessage
     /**
      * @param string $objectType
      */
-    public function setObjectType(string $objectType): void
+    public function setObjectType(string $objectType)
     {
         $this->objectType = $objectType;
     }

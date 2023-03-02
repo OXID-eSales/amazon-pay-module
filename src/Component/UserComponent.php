@@ -27,7 +27,7 @@ class UserComponent extends UserComponent_parent
      * @param array $amazonSession
      * @throws Exception
      */
-    public function createGuestUser(array $amazonSession): void
+    public function createGuestUser(array $amazonSession)
     {
         $session = Registry::getSession();
         $config = new Config();
@@ -105,7 +105,7 @@ class UserComponent extends UserComponent_parent
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameter(string $paramName, mixed $paramValue): void
+    public function setRequestParameter(string $paramName, mixed $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }
@@ -113,7 +113,7 @@ class UserComponent extends UserComponent_parent
     /**
      * @inheritdoc
      */
-    public function logout(): ?string
+    public function logout(): string
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();

@@ -19,27 +19,27 @@ class OxidServiceProvider
     /**
      * @var OxidServiceProvider|null
      */
-    private static ?OxidServiceProvider $instance = null;
+    private static $instance = null;
 
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private $logger;
 
     /**
      * @var AmazonClient
      */
-    private AmazonClient $amazonClient;
+    private $amazonClient;
 
     /**
      * @var AmazonService
      */
-    private AmazonService $amazonService;
+    private $amazonService;
 
     /**
      * @var User
      */
-    private User $oxidUser;
+    private $oxidUser;
 
     private function __construct()
     {

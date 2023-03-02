@@ -25,7 +25,7 @@ class Config
      *
      * @var array
      */
-    protected array $amazonLanguages = [
+    protected $amazonLanguages = [
         'en' => 'en_GB',
         'de' => 'de_DE',
         'fr' => 'fr_FR',
@@ -38,7 +38,7 @@ class Config
      *
      * @var string
      */
-    protected string $amazonDefaultLanguage = 'de';
+    protected $amazonDefaultLanguage = 'de';
 
     /**
      * all currencies supported by Amazonpay
@@ -46,7 +46,7 @@ class Config
      *
      * @var array
      */
-    protected array $amazonCurrencies = [
+    protected $amazonCurrencies = [
         'AUD',
         'GBP',
         'DKK',
@@ -67,14 +67,14 @@ class Config
      *
      * @var string
      */
-    protected string $amazonLedgerCurrency = 'EUR';
+    protected $amazonLedgerCurrency = 'EUR';
 
     /**
      * all allowed Amazonpay EU Addresses
      * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
      * @var array
      */
-    protected array $amazonEUAddresses = [
+    protected $amazonEUAddresses = [
         'AT', 'BE', 'BG', 'HR', 'CY',
         'CZ', 'DK', 'EE', 'FI', 'FR',
         'DE', 'GR', 'HU', 'IE', 'IT',
@@ -88,14 +88,14 @@ class Config
      *
      * @var array|null
      */
-    protected ?array $countryList = null;
+    protected $countryList = null;
 
 
     /**
      * Checks if module configuration is valid
      * @throws StandardException
      */
-    public function checkHealth(): void
+    public function checkHealth()
     {
         if (
             !$this->getPrivateKey() ||
@@ -410,7 +410,7 @@ class Config
         try {
             // throws Exception if it was not possible to gather sufficient entropy.
             $uuid = bin2hex(random_bytes(16));
-        } catch (Exception) {
+        } catch (Exception $ex) {
             $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5((string)mt_rand()), 0, 24);
         }
         return $uuid;

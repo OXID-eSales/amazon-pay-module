@@ -9,7 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
 class AmazonCarrierMap
 {
-    protected static $carriers = [
+    protected static array $carriers = [
         'EX_007' => '007EX',
         'POSTSERVICE_17' => '17 Post Service',
         'GO_2' => '2GO',

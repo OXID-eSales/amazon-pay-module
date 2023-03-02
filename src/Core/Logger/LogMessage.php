@@ -12,57 +12,57 @@ class LogMessage
     /**
      * @var string
      */
-    public $shopId;
+    public string $shopId;
 
     /**
      * @var string
      */
-    public $userId;
+    public string $userId;
 
     /**
      * @var string
      */
-    public $orderId;
+    public string $orderId;
 
     /**
      * @var string
      */
-    public $responseMessage;
+    public string $responseMessage;
 
     /**
      * @var string
      */
-    public $statusCode;
+    public string $statusCode;
 
     /**
      * @var string
      */
-    public $requestType;
+    public string $requestType;
 
     /**
      * @var string
      */
-    public $identifier;
+    public string $identifier;
 
     /**
      * @var string
      */
-    public $chargeId;
+    public string $chargeId;
 
     /**
      * @var string
      */
-    public $chargePermissionId;
+    public string $chargePermissionId;
 
     /**
      * @var string
      */
-    public $objectId;
+    public string $objectId;
 
     /**
      * @var string
      */
-    public $objectType;
+    public string $objectType;
 
     /**
      * @return string

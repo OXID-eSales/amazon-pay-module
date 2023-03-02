@@ -2,6 +2,10 @@ name: Development
 
 on: [ push, pull_request ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
   MODULE_PATH: 'osc/amazonpay'
@@ -12,7 +16,7 @@ jobs:
   install_shop_with_module:
     strategy:
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '8.0', '8.1' ]
     runs-on: ubuntu-latest
     steps:
       - name: Clone testing environment v4.0.0
@@ -98,7 +102,7 @@ jobs:
           docker-compose logs
       - name: Create .env-file
         continue-on-error: true
-        working-directory: source/test-module/Tests
+        working-directory: source/test-module/tests
         run: |
           echo "${{ secrets.DOTENV }}" > .env
 
@@ -124,7 +128,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '8.0', '8.1' ]
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:
@@ -150,7 +154,7 @@ jobs:
             -e RUN_TESTS_FOR_SHOP=0 \
             -e RUN_TESTS_FOR_MODULES=0 \
             -e XDEBUG_MODE=coverage \
-            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
+            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/tests' \
             php php vendor/bin/runtests \
               --coverage-clover=/var/www/coverage.xml \
               --coverage-text \
@@ -176,7 +180,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '8.0', '8.1' ]
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:
@@ -207,7 +211,7 @@ jobs:
             -e ACTIVATE_ALL_MODULES=1 \
             -e RUN_TESTS_FOR_SHOP=0 \
             -e RUN_TESTS_FOR_MODULES=0 \
-            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
+            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/tests' \
             php php vendor/bin/runtests-codeception --steps --debug
 
       - name: Stop containers
@@ -218,16 +222,65 @@ jobs:
 
       - name: Upload log artifact
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: CodeceptionTestsLog-${{ matrix.php }}
           path: |
-            source/vendor/${{ env.PACKAGE_NAME }}/Tests/Codeception/_output/
+            source/vendor/${{ env.PACKAGE_NAME }}/tests/Codeception/_output/
             source/source/log/oxideshop.log
             source/data/php/logs/error_log.txt
+  styles:
+    strategy:
+      matrix:
+        php: [ '8.0', '8.1' ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout current module
+        uses: actions/checkout@v3
+        with:
+          path: source/test-module
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+          extensions: gd, zip
+
+      - name: Install module dependencies
+        id: dependencies
+        working-directory: source/test-module
+        run: composer install
+
+      - name: Run phpcs
+        id: phpcs
+        if: always()
+        working-directory: source/test-module
+        run: composer phpcs
+
+      - name: Run phpstan
+        id: phpstan
+        if: always()
+        working-directory: source/test-module
+        run: composer phpstan-report || composer phpstan
+
+      - name: Run phpmd
+        id: phpmd
+        if: always()
+        working-directory: source/test-module
+        run: composer phpmd-report || composer phpmd
+
+      - name: Upload log artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: StylesLog-${{ matrix.php }}
+          path: |
+            source/test-module/tests/reports/phpstan.report.json
+            source/test-module/tests/reports/phpmd.report.json
 
   sonarcloud:
-    needs: [ unit_tests ]
+    needs: [ styles, unit_tests ]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -238,14 +291,27 @@ jobs:
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
-          name: TestsLog-7.4
-          path: ./Tests/
+          name: TestsLog-8.0
+          path: ./tests/
+
+      - name: Download phpunit artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v3
+        with:
+          name: StylesLog-8.0
+          path: ./tests/
 
       - name: Fix paths in unit logs
         continue-on-error: true
         run: |
-          sed -i 's+/var/www/test-module/++' Tests/coverage.xml
-          sed -i 's+/var/www/test-module/++' Tests/phpunit.xml
+          sed -i 's+/var/www/test-module/++' tests/coverage.xml
+          sed -i 's+/var/www/test-module/++' tests/phpunit.xml
+
+      - name: Fix paths in styles logs
+        continue-on-error: true
+        run: |
+          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' styles/phpstan.report.json
+          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' styles/phpmd.report.json
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
@@ -257,8 +323,10 @@ jobs:
             -Dsonar.organization=${{ env.SONARCLOUD_ORGANIZATION }}
             -Dsonar.projectKey=${{ env.SONARCLOUD_PROJECT_KEY }}
             -Dsonar.sources=src
-            -Dsonar.tests=Tests
+            -Dsonar.tests=tests
             -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.php.coverage.reportPaths=Tests/coverage.xml
+            -Dsonar.php.coverage.reportPaths=tests/coverage.xml
+            -Dsonar.php.phpstan.reportPaths=styles/phpstan.report.json
+            -Dsonar.php.phpmd.reportPaths=styles/phpmd.report.json
             -Dsonar.cpd.php.minimumTokens=25
             -Dsonar.cpd.php.minimumLines=5

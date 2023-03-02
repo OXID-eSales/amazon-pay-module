@@ -7,34 +7,32 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
-use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Application\Model\Country;
-use OxidSolutionCatalysts\AmazonPay\Core\Logger;
-use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidEsales\Eshop\Core\Registry;
 use VIISON\AddressSplitter\AddressSplitter;
 use VIISON\AddressSplitter\Exceptions\SplittingException;
 
 class Address
 {
-     /**
+    /**
      * possible DBTable Prefix
      *
      * @var array
      */
-    protected static $possibleDBTablePrefix = [
-        'oxuser__' , 'oxaddress__'
+    protected static array $possibleDBTablePrefix = [
+        'oxuser__', 'oxaddress__'
     ];
 
-     /**
+    /**
      * possible DBTable Prefix
      *
      * @var string
      */
-    protected static $defaultDBTablePrefix = 'oxaddress__';
+    protected static string $defaultDBTablePrefix = 'oxaddress__';
 
     /**
      * This is used as a prefilter for OXID functions below.
-     * @param $addr
+     * @param array $address
      * @return array
      */
     public static function parseAddress(array $address): array
@@ -51,30 +49,31 @@ class Address
             (int)Registry::getLang()->getBaseLanguage(),
             $countryOxId
         );
-        $countryName = $country->oxcountry__oxtitle->value;
+        /** @var string $oxtitle */
+        $oxtitle = $country->getFieldData('oxtitle');
+        $countryName = $oxtitle;
 
         $company = '';
         $street = '';
         $streetNo = '';
         $additionalInfo = '';
 
-        $addressData = null;
-
         $addressLines = self::getAddressLines($address);
 
         if ($countryIsoCode === 'DE' || $countryIsoCode === 'AT') {
+            // Normal-Case: No Company, Street & StreetNo in first line
+            $streetTmp = $addressLines[0];
             // special Amazon-Case: Street in first line, StreetNo in second line
             if (isset($addressLines[1]) && preg_match('/^\d.{0,8}$/', $addressLines[1])) {
                 $streetTmp = $addressLines[0] . ' ' . $addressLines[1];
-            // Company-Case: Company in first line Street and StreetNo in second line
-            } elseif (isset($addressLines[1]) && $addressLines[1] != '') {
+                // Company-Case: Company in first line Street and StreetNo in second line
+            } elseif (!empty($addressLines[1])) {
                 $streetTmp = $addressLines[1];
                 $company = $addressLines[0];
-            // Normal-Case: No Company, Street & StreetNo in first line
-            } else {
-                $streetTmp = $addressLines[0];
+                // Normal-Case: No Company, Street & StreetNo in first line
             }
-            if ($addressLines[2] != '') {
+
+            if (!empty($addressLines[2])) {
                 $additionalInfo = $addressLines[2];
             }
 
@@ -82,14 +81,16 @@ class Address
                 $addressData = AddressSplitter::splitAddress($streetTmp);
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
-            } catch (SplittingException $e) {
+            } catch (SplittingException) {
                 // The Address could not be split
-                // we have an exception, bit we did not log the message because of sensible Address-Informations
+                // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();
                 // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $streetTmp;
             }
-        } else {
+        }
+
+        if ($countryIsoCode !== 'DE' && $countryIsoCode !== 'AT') {
             try {
                 $addressLinesAsString = implode(', ', $addressLines);
                 $addressData = AddressSplitter::splitAddress($addressLinesAsString);
@@ -98,9 +99,9 @@ class Address
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
                 $additionalInfo = $addressData['additionToAddress2'] ?? '';
-            } catch (SplittingException $e) {
+            } catch (SplittingException) {
                 // The Address could not be split
-                // we have an exception, bit we did not log the message because of sensible Address-Informations
+                // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();
                 // $logger->error($e->getMessage(), ['status' => $e->getCode()]);
                 $street = $addressLinesAsString;
@@ -128,7 +129,7 @@ class Address
      * @param string $DBTablePrefix
      * @return array
      */
-    public static function mapAddressToDb(array $address, $DBTablePrefix): array
+    public static function mapAddressToDb(array $address, string $DBTablePrefix): array
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
@@ -152,16 +153,10 @@ class Address
      * Maps Amazon address fields to oxid fields
      *
      * @param array $address
-     * @param string $DBTablePrefix
-     *
      * @return array
      */
-    public static function mapAddressToView(array $address, $DBTablePrefix): array
+    public static function mapAddressToView(array $address): array
     {
-        $config = Registry::get(Config::class);
-
-        $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
-
         $parsedAddress = self::parseAddress($address);
 
         return [
@@ -193,7 +188,7 @@ class Address
     {
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {
-            if (isset($address["addressLine$i"]) && $address["addressLine$i"]) {
+            if (!empty($address["addressLine$i"])) {
                 $line = $address["addressLine$i"];
                 preg_match_all('!\d+!', $line, $matches2);
                 if (!empty($matches2[0])) {
@@ -231,7 +226,7 @@ class Address
      *
      * @return string
      */
-    private static function validateDBTablePrefix($DBTablePrefix)
+    private static function validateDBTablePrefix(string $DBTablePrefix): string
     {
         return in_array($DBTablePrefix, self::$possibleDBTablePrefix) ?
             $DBTablePrefix :

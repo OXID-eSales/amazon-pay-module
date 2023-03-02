@@ -7,6 +7,11 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
+use OxidEsales\Eshop\Application\Model\Country;
+use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\Payment;
+use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 
@@ -16,11 +21,11 @@ use OxidEsales\Eshop\Core\Registry;
 class Config
 {
     /**
-    * all languages supported by Amazonpay
-    *
-    * @var array
-    */
-    protected $amazonLanguages = [
+     * all languages supported by Amazonpay
+     *
+     * @var array
+     */
+    protected array $amazonLanguages = [
         'en' => 'en_GB',
         'de' => 'de_DE',
         'fr' => 'fr_FR',
@@ -29,19 +34,19 @@ class Config
     ];
 
     /**
-    * Amazonpay default language
-    *
-    * @var string
-    */
-    protected $amazonDefaultLanguage = 'de';
+     * Amazonpay default language
+     *
+     * @var string
+     */
+    protected string $amazonDefaultLanguage = 'de';
 
     /**
-    * all currencies supported by Amazonpay
-    * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
-    *
-    * @var array
-    */
-    protected $amazonCurrencies = [
+     * all currencies supported by Amazonpay
+     * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/multi-currency-integration.html
+     *
+     * @var array
+     */
+    protected array $amazonCurrencies = [
         'AUD',
         'GBP',
         'DKK',
@@ -57,19 +62,19 @@ class Config
     ];
 
     /**
-    * Amazonpay Ledger currency
-    * @link https://developer.amazon.com/de/docs/amazon-pay-checkout/multi-currency-integration.html
-    *
-    * @var string
-    */
-    protected $amazonLedgerCurrency = 'EUR';
+     * Amazonpay Ledger currency
+     * @link https://developer.amazon.com/de/docs/amazon-pay-checkout/multi-currency-integration.html
+     *
+     * @var string
+     */
+    protected string $amazonLedgerCurrency = 'EUR';
 
     /**
-    * all allowed Amazonpay EU Addresses
-    * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
-    * @var array
-    */
-    protected $amazonEUAddresses = [
+     * all allowed Amazonpay EU Addresses
+     * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
+     * @var array
+     */
+    protected array $amazonEUAddresses = [
         'AT', 'BE', 'BG', 'HR', 'CY',
         'CZ', 'DK', 'EE', 'FI', 'FR',
         'DE', 'GR', 'HU', 'IE', 'IT',
@@ -81,14 +86,13 @@ class Config
     /**
      * returns Country.
      *
-     * @var array
+     * @var array|null
      */
-    protected $countryList = null;
+    protected ?array $countryList = null;
 
 
     /**
-     * Checks if module configurations are valid
-     *
+     * Checks if module configuration is valid
      * @throws StandardException
      */
     public function checkHealth(): void
@@ -100,7 +104,7 @@ class Config
             !$this->getStoreId() ||
             !$this->getPresentmentCurrency()
         ) {
-            throw oxNew(StandardException::class);
+            throw new StandardException('OSC_AMAZONPAY_ERR_CONF_INVALID');
         }
     }
 
@@ -133,7 +137,9 @@ class Config
      */
     public function getPrivateKey(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
+        /** @var string $sAmazonPayPrivateKey */
+        $sAmazonPayPrivateKey = Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
+        return $sAmazonPayPrivateKey;
     }
 
     /**
@@ -149,7 +155,9 @@ class Config
      */
     public function getPublicKeyId(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
+        /** @var string $sAmazonPayPubKeyId */
+        $sAmazonPayPubKeyId = Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
+        return $sAmazonPayPubKeyId;
     }
 
     /**
@@ -157,7 +165,9 @@ class Config
      */
     public function getMerchantId(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayMerchantId');
+        /** @var string $sAmazonPayMerchantId */
+        $sAmazonPayMerchantId = Registry::getConfig()->getConfigParam('sAmazonPayMerchantId');
+        return $sAmazonPayMerchantId;
     }
 
     /**
@@ -165,7 +175,9 @@ class Config
      */
     public function getStoreId(): string
     {
-        return Registry::getConfig()->getConfigParam('sAmazonPayStoreId');
+        /** @var string $sAmazonPayStoreId */
+        $sAmazonPayStoreId = Registry::getConfig()->getConfigParam('sAmazonPayStoreId');
+        return $sAmazonPayStoreId;
     }
 
     /**
@@ -175,19 +187,15 @@ class Config
     {
         $lang = Registry::getLang();
         $langAbbr = $lang->getLanguageAbbr();
-        if (isset($this->amazonLanguages[$langAbbr])) {
-            return $this->amazonLanguages[$langAbbr];
-        } else {
-            return $this->amazonLanguages[$this->amazonDefaultLanguage];
-        }
+        return $this->amazonLanguages[$langAbbr] ?? $this->amazonLanguages[$this->amazonDefaultLanguage];
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    public function getPresentmentCurrency(): ?string
+    public function getPresentmentCurrency(): string
     {
-        $currencyAbbr = null;
+        $currencyAbbr = '';
 
         $shopCurrency = Registry::getConfig()->getActShopCurrencyObject();
 
@@ -215,7 +223,7 @@ class Config
         foreach ($shopCurrencies as $shopCurrency) {
             $currencyAbbr = $shopCurrency->name;
             if (in_array($currencyAbbr, $this->amazonCurrencies)) {
-                 $result[] = $currencyAbbr;
+                $result[] = $currencyAbbr;
             }
         }
         return $result;
@@ -236,7 +244,7 @@ class Config
         $result = [];
         foreach ($this->getPossibleEUAddressesAbbr() as $isoCode) {
             if (in_array($isoCode, $this->amazonEUAddresses)) {
-                $result[$isoCode] = (object) null;
+                $result[$isoCode] = (object)null;
             }
         }
         return $result;
@@ -317,8 +325,8 @@ class Config
 
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
-                . 'index.php?cl=amazondispatch&action=review&stoken='
-                . Registry::getSession()->getSessionChallengeToken()
+            . 'index.php?cl=amazondispatch&action=review&stoken='
+            . Registry::getSession()->getSessionChallengeToken()
         );
     }
 
@@ -331,8 +339,8 @@ class Config
     {
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
-                . 'index.php?cl=amazondispatch&action=result&stoken='
-                . Registry::getSession()->getSessionChallengeToken()
+            . 'index.php?cl=amazondispatch&action=result&stoken='
+            . Registry::getSession()->getSessionChallengeToken()
         );
     }
 
@@ -367,25 +375,25 @@ class Config
      */
     public function getCountryList(): array
     {
-        $activeUser = false;
-        $user = oxNew(\OxidEsales\Eshop\Application\Model\User::class);
-        if ($user->loadActiveUser()) {
-            $activeUser = $user;
-        }
+        $user = oxNew(User::class);
+        $user->loadActiveUser();
+        $activeUser = $user;
 
         if ($this->countryList === null) {
             $this->countryList = [];
-            $payment = oxNew(\OxidEsales\Eshop\Application\Model\Payment::class);
+            $payment = oxNew(Payment::class);
             /** TODO should be variable for any amazonpay ID */
             $payment->load(Constants::PAYMENT_ID_EXPRESS);
             foreach ($payment->getCountries() as $countryOxId) {
                 // check deliverysets
-                $deliverySetList = oxNew(\OxidEsales\Eshop\Application\Model\DeliverySetList::class);
+                $deliverySetList = oxNew(DeliverySetList::class);
                 $deliverySetData = $deliverySetList->getDeliverySetList($activeUser, $countryOxId);
                 if (count($deliverySetData)) {
-                    $oxidCountry = oxNew(\OxidEsales\Eshop\Application\Model\Country::class);
+                    $oxidCountry = oxNew(Country::class);
                     $oxidCountry->load($countryOxId);
-                    $this->countryList[$countryOxId] = $oxidCountry->oxcountry__oxisoalpha2->value;
+                    /** @var string $oxisoalpha2 */
+                    $oxisoalpha2 = $oxidCountry->getFieldData('oxisoalpha2');
+                    $this->countryList[$countryOxId] = $oxisoalpha2;
                 }
             }
         }
@@ -402,7 +410,7 @@ class Config
         try {
             // throws Exception if it was not possible to gather sufficient entropy.
             $uuid = bin2hex(random_bytes(16));
-        } catch (\Exception $e) {
+        } catch (Exception) {
             $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5((string)mt_rand()), 0, 24);
         }
         return $uuid;

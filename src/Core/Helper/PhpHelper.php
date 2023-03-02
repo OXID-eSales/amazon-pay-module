@@ -15,15 +15,17 @@ class PhpHelper
      */
     public static function jsonToArray(string $json): array
     {
-        return json_decode($json, true);
+        /** @var array $decoded */
+        $decoded = json_decode($json, true);
+        return $decoded;
     }
 
     /**
      * @param string $needle
      * @param array $haystack
-     * @return bool|mixed
+     * @return mixed
      */
-    public static function getArrayValue(string $needle, array $haystack)
+    public static function getArrayValue(string $needle, array $haystack): mixed
     {
         foreach ($haystack as $key => $value) {
             if ($key === $needle) {
@@ -48,15 +50,17 @@ class PhpHelper
 
     /**
      * Get POST from $_POST or php://input if set
-     * @return array|mixed
+     * @return array
      */
-    public static function getPost()
+    public static function getPost(): array
     {
         if (!empty($_POST)) {
             return $_POST;
         }
 
-        $post = json_decode(file_get_contents('php://input'), true);
+        /** @var array $decoded */
+        $decoded = json_decode((string)file_get_contents('php://input'), true);
+        $post = $decoded;
         if (json_last_error() == JSON_ERROR_NONE) {
             return $post;
         }

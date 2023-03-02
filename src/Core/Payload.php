@@ -18,97 +18,97 @@ class Payload
     /**
      * @var string
      */
-    private $paymentIntent;
+    private string $paymentIntent;
 
     /**
      * @var bool
      */
-    private $canHandlePendingAuthorization;
+    private ?bool $canHandlePendingAuthorization = null;
 
     /**
      * @var string
      */
-    private $merchantStoreName;
+    private string $merchantStoreName = '';
 
     /**
      * @var string
      */
-    private $noteToBuyer;
+    private string $noteToBuyer = '';
 
     /**
      * @var string
      */
-    private $paymentDetailsChargeAmount;
+    private string $paymentDetailsChargeAmount = '';
 
     /**
      * @var string
      */
-    private $checkoutChargeAmount;
+    private string $checkoutChargeAmount = '';
 
     /**
      * @var string
      */
-    private $captureAmount;
+    private string $captureAmount = '';
 
     /**
      * @var string
      */
-    private $currencyCode;
+    private string $currencyCode = '';
 
     /**
      * @var string
      */
-    private $softDescriptor;
+    private string $softDescriptor = '';
 
     /**
      * @var string
      */
-    private $merchantReferenceId;
+    private string $merchantReferenceId = '';
 
     /**
      * @var string
      */
-    private $checkoutReviewReturnUrl;
+    private string $checkoutReviewReturnUrl = '';
 
     /**
      * @var string
      */
-    private $checkoutResultReturnUrl;
+    private string $checkoutResultReturnUrl = '';
 
     /**
      * @var string
      */
-    private $signInReturnUrl;
+    private string $signInReturnUrl = '';
 
     /**
      * @var string
      */
-    private $signInCancelUrl;
+    private string $signInCancelUrl = '';
 
     /**
      * @var string
      */
-    private $storeId;
+    private string $storeId = '';
 
     /**
      * @var array
      */
-    private $scopes = [];
+    private array $scopes = [];
 
     /**
      * @var array
      */
-    private $signInScopes = [];
+    private array $signInScopes = [];
 
     /**
      * @var array
      */
-    private array $addressDetails;
+    private array $addressDetails = [];
     /**
      * @var string
      */
-    private string $platformId;
-    private array $addressRestrictions;
+    private string $platformId = '';
+    private array $addressRestrictions = [];
 
     /**
      * @return array
@@ -145,25 +145,18 @@ class Payload
             $data['signInScopes'] = $this->signInScopes;
         }
 
-        if (
-            is_bool($this->canHandlePendingAuthorization) ||
-            !empty($this->paymentIntent) ||
-            !empty($this->paymentDetailsChargeAmount)
-        ) {
-            #$data['paymentDetails'] = [];
-            if (is_bool($this->canHandlePendingAuthorization)) {
-                $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
-            }
+        if ($this->canHandlePendingAuthorization === false || $this->canHandlePendingAuthorization === true) {
+            $data['paymentDetails']['canHandlePendingAuthorization'] = $this->canHandlePendingAuthorization;
+        }
 
-            if (!empty($this->paymentIntent)) {
-                $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
-            }
+        if (!empty($this->paymentIntent)) {
+            $data['paymentDetails']['paymentIntent'] = $this->paymentIntent;
+        }
 
-            if (!empty($this->paymentDetailsChargeAmount)) {
-                $data['paymentDetails']['chargeAmount'] = [];
-                $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
-                $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
-            }
+        if (!empty($this->paymentDetailsChargeAmount)) {
+            $data['paymentDetails']['chargeAmount'] = [];
+            $data['paymentDetails']['chargeAmount']['amount'] = $this->paymentDetailsChargeAmount;
+            $data['paymentDetails']['chargeAmount']['currencyCode'] = $this->currencyCode;
         }
 
         if (!empty($this->captureAmount)) {
@@ -172,11 +165,13 @@ class Payload
             $data['captureAmount']['currencyCode'] = $this->currencyCode;
         }
 
+
         if (!empty($this->softDescriptor)) {
             $data['softDescriptor'] = $this->softDescriptor;
-        } else {
             $data = $this->addMerchantMetaData($data);
         }
+
+
 
         if (!empty($this->checkoutChargeAmount)) {
             $data['chargeAmount'] = [];
@@ -200,24 +195,25 @@ class Payload
 
         return $data;
     }
+
     public function setAddressRestrictions(array $allowedCountries): void
     {
         $this->addressRestrictions = $allowedCountries;
     }
 
     /**
-     * @param string $id
+     * @param string $platformId
      * @return void
      */
-    public function setPlatformId(string $id)
+    public function setPlatformId(string $platformId): void
     {
-        $this->platformId = $id;
+        $this->platformId = $platformId;
     }
 
     /**
      * @param string $paymentIntent
      */
-    public function setPaymentIntent($paymentIntent): void
+    public function setPaymentIntent(string $paymentIntent): void
     {
         $this->paymentIntent = $paymentIntent;
     }
@@ -225,7 +221,7 @@ class Payload
     /**
      * @param string $merchantStoreName
      */
-    public function setMerchantStoreName($merchantStoreName): void
+    public function setMerchantStoreName(string $merchantStoreName): void
     {
         $this->merchantStoreName = $merchantStoreName;
     }
@@ -233,7 +229,7 @@ class Payload
     /**
      * @param string $noteToBuyer
      */
-    public function setNoteToBuyer($noteToBuyer): void
+    public function setNoteToBuyer(string $noteToBuyer): void
     {
         $this->noteToBuyer = $noteToBuyer;
     }
@@ -241,7 +237,7 @@ class Payload
     /**
      * @param string $currencyCode
      */
-    public function setCurrencyCode($currencyCode): void
+    public function setCurrencyCode(string $currencyCode): void
     {
         $this->currencyCode = $currencyCode;
     }
@@ -249,7 +245,7 @@ class Payload
     /**
      * @param bool $canHandlePendingAuthorization
      */
-    public function setCanHandlePendingAuthorization($canHandlePendingAuthorization): void
+    public function setCanHandlePendingAuthorization(bool $canHandlePendingAuthorization): void
     {
         $this->canHandlePendingAuthorization = $canHandlePendingAuthorization;
     }
@@ -257,7 +253,7 @@ class Payload
     /**
      * @param string $paymentDetailsChargeAmount
      */
-    public function setPaymentDetailsChargeAmount($paymentDetailsChargeAmount): void
+    public function setPaymentDetailsChargeAmount(string $paymentDetailsChargeAmount): void
     {
         $this->paymentDetailsChargeAmount = PhpHelper::getMoneyValue((float)$paymentDetailsChargeAmount);
     }
@@ -265,7 +261,7 @@ class Payload
     /**
      * @param string $merchantReferenceId
      */
-    public function setMerchantReferenceId($merchantReferenceId): void
+    public function setMerchantReferenceId(string $merchantReferenceId): void
     {
         $this->merchantReferenceId = $merchantReferenceId;
     }
@@ -273,7 +269,7 @@ class Payload
     /**
      * @param string $softDescriptor
      */
-    public function setSoftDescriptor($softDescriptor): void
+    public function setSoftDescriptor(string $softDescriptor): void
     {
         $this->softDescriptor = $softDescriptor;
     }
@@ -281,7 +277,7 @@ class Payload
     /**
      * @param string $captureAmount
      */
-    public function setCaptureAmount($captureAmount): void
+    public function setCaptureAmount(string $captureAmount): void
     {
         $this->captureAmount = PhpHelper::getMoneyValue((float)$captureAmount);
     }
@@ -289,19 +285,20 @@ class Payload
     /**
      * @param string $checkoutChargeAmount
      */
-    public function setCheckoutChargeAmount($checkoutChargeAmount): void
+    public function setCheckoutChargeAmount(string $checkoutChargeAmount): void
     {
         $this->checkoutChargeAmount = $checkoutChargeAmount;
     }
 
     /**
+     * @param string $articlesId
      * @return void
      */
-    public function setCheckoutReviewReturnUrl($articlesId = null): void
+    public function setCheckoutReviewReturnUrl(string $articlesId = ''): void
     {
         $this->checkoutReviewReturnUrl =
             OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutReviewUrl() .
-            (is_null($articlesId) ? '' : ('&anid=' . $articlesId));
+            ($articlesId !== '' ? '&anid=' . $articlesId : '');
     }
 
     /**
@@ -391,35 +388,57 @@ class Payload
      */
     public function setAddressDetails(User $user): Payload
     {
+        /** @var string $oxstreet */
+        $oxstreet = $user->getFieldData('oxstreet');
+        /** @var string $oxstreetnr */
+        $oxstreetnr = $user->getFieldData('oxstreetnr');
+        /** @var string $oxfname */
+        $oxfname = $user->getFieldData('oxfname');
+        /** @var string $oxlname */
+        $oxlname = $user->getFieldData('oxlname');
+        /** @var string $oxzip */
+        $oxzip = $user->getFieldData('oxzip');
+        /** @var string $oxcity */
+        $oxcity = $user->getFieldData('oxcity');
+        /** @var string $oxfon */
+        $oxfon = $user->getFieldData('oxfon');
+        /** @var string $oxprivfon */
+        $oxprivfon = $user->getFieldData('oxprivfon');
+        /** @var string $oxmobfon */
+        $oxmobfon = $user->getFieldData('oxmobfon');
+
         $addressLine1 = sprintf(
             '%s %s',
-            $user->oxuser__oxstreet,
-            $user->oxuser__oxstreetnr,
+            $oxstreet,
+            $oxstreetnr,
         );
 
+        /** @var string $oxcountryid */
+        $oxcountryid = $user->getFieldData('oxcountryid');
         $oCountry = oxNew(Country::class);
-        $oCountry->load($user->oxuser__oxcountryid);
-        $sCountryCode = $oCountry->oxcountry__oxisoalpha2->value;
+        $oCountry->load($oxcountryid);
+        $oxisoalpha2 = $oCountry->getFieldData('oxisoalpha2');
+        $sCountryCode = $oxisoalpha2;
 
 
         // set mandatory standard fields
         $this->addressDetails = [
-            'name' => $user->oxuser__oxfname->value . ' ' . $user->oxuser__oxlname->value,
+            'name' => $oxfname . ' ' . $oxlname,
             'addressLine1' => $addressLine1,
-            'postalCode' => $user->oxuser__oxzip->value,
-            'city' => $user->oxuser__oxcity->value,
+            'postalCode' => $oxzip,
+            'city' => $oxcity,
             'countryCode' => $sCountryCode
         ];
 
         // check for additional fields
         // check for phone number
         $phoneNumber = null;
-        if (!empty($user->oxuser__oxfon->value)) { // phone number
-            $phoneNumber = $user->oxuser__oxfon->value;
-        } elseif (!empty($user->oxuser__oxprivfon->value)) { // phone number (private)
-            $phoneNumber = $user->oxuser__oxprivfon->value;
-        } elseif (!empty($user->oxuser__oxmobfon->value)) { // phone number (private)
-            $phoneNumber = $user->oxuser__oxmobfon->value;
+        if (!empty($oxfon)) { // phone number
+            $phoneNumber = $oxfon;
+        } elseif (!empty($oxprivfon)) { // phone number (private)
+            $phoneNumber = $oxprivfon;
+        } elseif (!empty($oxmobfon)) { // phone number (private)
+            $phoneNumber = $oxmobfon;
         }
         /** TODO Change default number to  0 */
         $this->addressDetails['phoneNumber'] = $phoneNumber ?? '0'; // when no number was provided, Amazon accepts '0'

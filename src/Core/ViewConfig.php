@@ -7,11 +7,16 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\User;
 
 /**
  * Amazon Pay getters for templates
@@ -22,29 +27,29 @@ class ViewConfig extends ViewConfig_parent
 {
     /**
      * is this a "Flow"-Theme Compatible Theme?
-     * @param boolean
+     * @var null|boolean $isFlowCompatibleTheme
      */
-    protected $isFlowCompatibleTheme = null;
+    protected ?bool $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
-     * @param boolean
+     * @var null|boolean $isWaveCompatibleTheme
      */
-    protected $isWaveCompatibleTheme = null;
+    protected ?bool $isWaveCompatibleTheme = null;
 
     /**
      * articlesId for the checkout review url
      */
-    protected $articlesId = null;
+    protected string $articlesId = '';
 
     public string $signature = '';
 
     /**
-     * @return object|Config
+     * @return Config
      */
-    public function getAmazonConfig()
+    public function getAmazonConfig(): Config
     {
-        return Registry::get(\OxidSolutionCatalysts\AmazonPay\Core\Config::class);
+        return Registry::get(Config::class);
     }
 
     /**
@@ -56,7 +61,7 @@ class ViewConfig extends ViewConfig_parent
         $blIsActive = true;
         try {
             $config->checkHealth();
-        } catch (StandardException $e) {
+        } catch (StandardException) {
             $blIsActive = false;
         }
         return $blIsActive;
@@ -123,12 +128,13 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template getter isAmazonPaymentPossible
      *
-     * @param null $paymentId
+     * @param string $paymentId
      * @return boolean
      */
-    public function isAmazonPaymentPossible($paymentId = null): bool
+    public function isAmazonPaymentPossible(string $paymentId = ''): bool
     {
-        if (!$paymentId) {
+        if ($paymentId === '') {
+            /** @var string $paymentId */
             $paymentId = Registry::getSession()->getVariable('paymentid') ?? '';
         }
         return (
@@ -152,23 +158,23 @@ class ViewConfig extends ViewConfig_parent
         return Constants::PAYMENT_ID_EXPRESS;
     }
 
-    public function isAmazonPaymentId($paymentId): bool
+    public function isAmazonPaymentId(string $paymentId): bool
     {
         return Constants::isAmazonPayment($paymentId);
     }
 
-    public function getMaximalRefundAmount($paymentId): float
+    public function getMaximalRefundAmount(string $orderId): float
     {
-        return OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($paymentId);
+        return OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId);
     }
 
     /**
-     * @param null $oxid
+     * @param string $oxid
      * @return bool
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    public function isAmazonExclude($oxid = null): bool
+    public function isAmazonExclude(string $oxid = ''): bool
     {
         if (!$this->useExclusion()) {
             return false;
@@ -184,7 +190,7 @@ class ViewConfig extends ViewConfig_parent
             $productIds[] = $product->getProductId();
         }
 
-        if (!empty($oxid)) {
+        if ($oxid !== '') {
             $productIds[] = $oxid;
         }
 
@@ -225,7 +231,7 @@ class ViewConfig extends ViewConfig_parent
      *
      * @return boolean
      */
-    public function isFlowCompatibleTheme()
+    public function isFlowCompatibleTheme(): bool
     {
         if (is_null($this->isFlowCompatibleTheme)) {
             $this->isFlowCompatibleTheme = $this->isThemeBasedOn('flow');
@@ -238,7 +244,7 @@ class ViewConfig extends ViewConfig_parent
      *
      * @return boolean
      */
-    public function isWaveCompatibleTheme()
+    public function isWaveCompatibleTheme(): bool
     {
         if (is_null($this->isWaveCompatibleTheme)) {
             $this->isWaveCompatibleTheme = $this->isThemeBasedOn('wave');
@@ -257,44 +263,45 @@ class ViewConfig extends ViewConfig_parent
      * @psalm-suppress InternalMethod
      *
      */
-    public function isThemeBasedOn(string $themeId)
+    public function isThemeBasedOn(string $themeId): bool
     {
         $result = false;
-        if ($themeId) {
-            $theme = oxNew(\OxidEsales\Eshop\Core\Theme::class);
-            $theme->load($theme->getActiveThemeId());
-            // check active theme or parent theme
-            if (
-                $theme->getActiveThemeId() == $themeId ||
-                $theme->getInfo('parentTheme') == $themeId
-            ) {
-                $result = true;
-            }
+
+        $theme = oxNew(Theme::class);
+        $theme->load($theme->getActiveThemeId());
+        // check active theme or parent theme
+        if (
+            $theme->getActiveThemeId() == $themeId ||
+            $theme->getInfo('parentTheme') == $themeId
+        ) {
+            $result = true;
         }
+
         return $result;
     }
 
-    public function setArticlesId($articlesId): void
+    public function setArticlesId(string $articlesId): void
     {
         $this->articlesId = $articlesId;
     }
 
-    public function getPaymentDescriptor()
+    public function getPaymentDescriptor(): string
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
-        $paymentDescriptor = $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
-        return $paymentDescriptor;
+        return $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
     }
 
     /**
      * Template variable getter. Get payload in JSON Format
      *
-     * @return false|string
-     * @throws \Exception
+     * @return string
+     * @throws Exception
      */
-    public function getPayloadExpress()
+    public function getPayloadExpress(): string
     {
-        $this->setArticlesId(Registry::getRequest()->getRequestParameter('anid'));
+        /** @var string $anid */
+        $anid = Registry::getRequest()->getRequestParameter('anid') ?? '';
+        $this->setArticlesId($anid);
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($this->articlesId);
         $payload->setCheckoutResultReturnUrlExpress();
@@ -311,7 +318,9 @@ class ViewConfig extends ViewConfig_parent
         $payload->setPlatformId($amazonConfig->getPlatformId());
 
         $payloadData = $payload->getData();
+        /** @var string $payloadJSON */
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $payloadJSON = $payloadJSON ?: '';
         $this->signature = $this->getSignature($payloadJSON);
         return $payloadJSON;
     }
@@ -319,13 +328,14 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get payload in JSON Format
      *
-     * @return false|string
-     * @throws \Exception
+     * @return string
+     * @throws Exception
      */
-    public function getPayload()
+    public function getPayload(): string
     {
         $amazonConfig = $this->getAmazonConfig();
 
+        /** @var User $user */
         $user = $this->getUser();
         $payload = new Payload();
         $payload->setCheckoutResultReturnUrl();
@@ -344,15 +354,19 @@ class ViewConfig extends ViewConfig_parent
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
         $session = Registry::getSession();
         $basket = $session->getBasket();
-        $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue(
-            (float)$basket->getPrice()->getBruttoPrice()
-        ));
+        $payload->setPaymentDetailsChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
 
         $activeShop = Registry::getConfig()->getActiveShop();
-        $payload->setMerchantStoreName($activeShop->oxshops__oxcompany->value);
-        $payload->setNoteToBuyer($activeShop->oxshops__oxordersubject->value);
+        /** @var string $oxcompany */
+        $oxcompany = $activeShop->getFieldData('oxcompany');
+        /** @var string $oxordersubject */
+        $oxordersubject = $activeShop->getFieldData('oxordersubject');
+        $payload->setMerchantStoreName($oxcompany);
+        $payload->setNoteToBuyer($oxordersubject);
         $payloadData = $payload->getData();
+        /** @var string $payloadJSON */
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $payloadJSON = $payloadJSON ?: '';
         $this->signature = $this->getSignature($payloadJSON);
         return $payloadJSON;
     }
@@ -360,9 +374,10 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get payload in JSON Format for Sign In
      *
-     * @return false|string
+     * @return string
+     * @throws Exception
      */
-    public function getPayloadSignIn()
+    public function getPayloadSignIn(): string
     {
         $payload = new Payload();
         $payload->setSignInReturnUrl();
@@ -381,7 +396,9 @@ class ViewConfig extends ViewConfig_parent
         $payload->setPlatformId($amazonConfig->getPlatformId());
 
         $payloadData = $payload->getData();
+        /** @var string $payloadJSON */
         $payloadJSON = json_encode($payloadData, JSON_UNESCAPED_UNICODE);
+        $payloadJSON = $payloadJSON ?: '';
         $this->signature = $this->getSignature($payloadJSON);
         return $payloadJSON;
     }
@@ -389,14 +406,13 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get Signature for Payload
      *
-     * @param string $type
+     * @param string $payload
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getSignature($payload): string
+    public function getSignature(string $payload): string
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
-        $signature = $amazonClient->generateButtonSignature($payload);
-        return $signature;
+        return $amazonClient->generateButtonSignature($payload);
     }
 }

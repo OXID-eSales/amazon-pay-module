@@ -7,13 +7,16 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
+use OxidSolutionCatalysts\AmazonPay\Model\Article;
+
 /**
  * @mixin \OxidEsales\Eshop\Application\Controller\ArticleDetailsController
  */
 class ArticleDetailsController extends ArticleDetailsController_parent
 {
-    public function render()
+    public function render(): string
     {
+        /** @var Article $article */
         $article = $this->getProduct();
         $this->addTplParam('amazonExclude', $article->isAmazonExclude());
 

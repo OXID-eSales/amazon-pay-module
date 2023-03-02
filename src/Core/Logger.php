@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger as MonoLogLogger;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
@@ -15,6 +16,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
+use OxidSolutionCatalysts\AmazonPay\Model\User;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 
@@ -23,14 +25,14 @@ class Logger extends AbstractLogger
     /**
      * @var LogRepository
      */
-    private $repository;
+    private LogRepository $repository;
 
     /**
      * @var string
      */
-    private $logFileName;
+    private string $logFileName;
 
-    public function __construct($logFileName = 'amazonpay.log')
+    public function __construct(string $logFileName = 'amazonpay.log')
     {
         $this->logFileName = $logFileName;
         $this->repository = oxNew(LogRepository::class);
@@ -45,36 +47,40 @@ class Logger extends AbstractLogger
     public function logMessage(?string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
-
-        $user = Registry::getSession()->getUser();
         $basket = Registry::getSession()->getBasket();
-        $defaultUser = $user !== false ? $user->getId() : 'guest';
-        $userId = !empty($context['userId']) ? $context['userId'] : $defaultUser;
+        #$userId = $context['userId'] ?? Registry::getSession()->getUser();
+
+        $userId = $context['userId'] ?? 'guest';
+        if ($userId === 'guest') {
+            $user = Registry::getSession()->getUser();
+            if ($user instanceof User) {
+                $userId = $user->getId();
+            }
+        }
 
         $logMessage = new LogMessage();
         $logMessage->setUserId($userId);
-        $logMessage->setOrderId($context['orderId'] ?? $basket->getOrderId() ?? 'no basket');
-        $logMessage->setShopId($context['shopId'] ?? Registry::getConfig()->getShopId());
+        $logMessage->setOrderId($context['orderId'] ?: $basket->getOrderId() ?: 'no basket');
+        $logMessage->setShopId($context['shopId'] ?: Registry::getConfig()->getShopId());
         $logMessage->setRequestType($context['requestType'] ?? 'amazonpay');
         $logMessage->setResponseMessage($message);
-        $logMessage->setStatusCode($context['statusCode'] ?? '200');
-        $logMessage->setIdentifier($context['identifier'] ?? $context['orderId'] ?? $userId);
-        $logMessage->setChargeId($context['chargeId'] ?? 'null');
-        $logMessage->setChargePermissionId($context['chargePermissionId'] ?? 'null');
-        $logMessage->setObjectId($context['objectId'] ?? 'null');
-        $logMessage->setObjectType($context['objectType'] ?? 'null');
+        $logMessage->setStatusCode($context['statusCode'] ?: '200');
+        $logMessage->setIdentifier($context['identifier'] ?: $context['orderId'] ?: $userId);
+        $logMessage->setChargeId($context['chargeId'] ?: 'null');
+        $logMessage->setChargePermissionId($context['chargePermissionId'] ?: 'null');
+        $logMessage->setObjectId($context['objectId'] ?: 'null');
+        $logMessage->setObjectType($context['objectType'] ?: 'null');
 
         $this->repository->saveLogMessage($logMessage);
     }
 
     /**
-     * @param $result
+     * @param array $result
      * @return array
      */
     public function resolveLogContent(array $result): array
     {
         $context = [];
-        $response = null;
 
         if (!empty($result['response'])) {
             $response = PhpHelper::jsonToArray($result['response']);
@@ -145,7 +151,7 @@ class Logger extends AbstractLogger
     /**
      * @param int $log_level
      * @return MonoLogLogger
-     * @throws \Exception
+     * @throws Exception
      */
     private function getLogger(int $log_level): LoggerInterface
     {

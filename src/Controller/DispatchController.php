@@ -9,8 +9,14 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use Aws\Sns\Message;
 use Aws\Sns\MessageValidator;
+use Exception;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
-use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\ArticleInputException;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\NoArticleException;
+use OxidEsales\Eshop\Core\Exception\OutOfStockException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -18,6 +24,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\User;
 
 /**
  * Class DispatchController
@@ -27,6 +34,7 @@ class DispatchController extends FrontendController
 {
     /**
      * @return void
+     * @throws Exception
      */
     public function init(): void
     {
@@ -37,21 +45,23 @@ class DispatchController extends FrontendController
 
         switch ($action) {
             case 'review':
+                /** @var string $amazonSessionId */
                 $amazonSessionId = $this->setRequestAmazonSessionId();
-                if (!$amazonSessionId) {
+                if ($amazonSessionId === '') {
                     return;
                 }
                 $redirectUrl = Registry::getConfig()->getShopHomeUrl() .
                     'cl=order&stoken=' . Registry::getSession()->getSessionChallengeToken();
-                Registry::getUtils()->redirect($redirectUrl, true, 302);
+                Registry::getUtils()->redirect($redirectUrl, false);
                 break;
             case 'result':
+                /** @var string $amazonSessionId */
                 $amazonSessionId = $this->getRequestAmazonSessionId();
-                if (!$amazonSessionId) {
+                if ($amazonSessionId === '') {
                     $amazonSessionId = $this->setRequestAmazonSessionId();
                 }
 
-                if (!$amazonSessionId) {
+                if ($amazonSessionId === '') {
                     return;
                 }
 
@@ -68,7 +78,9 @@ class DispatchController extends FrontendController
                         $basket,
                         $logger
                     );
-                } else {
+                }
+
+                if (!$isOneStepPayment) {
                     OxidServiceProvider::getAmazonService()->processTwoStepPayment(
                         $amazonSessionId,
                         Registry::getSession()->getBasket(),
@@ -107,6 +119,7 @@ class DispatchController extends FrontendController
                 break;
 
             case 'poll':
+                /** @var string $orderId */
                 $orderId = Registry::getRequest()->getRequestParameter('orderId');
 
                 OxidServiceProvider::getAmazonService()->checkOrderState($orderId);
@@ -119,38 +132,40 @@ class DispatchController extends FrontendController
 
                 $result = OxidServiceProvider::getAmazonClient()->getBuyer($buyerToken);
 
+                $response = [];
                 $response['response'] = PhpHelper::jsonToArray($result['response']);
 
                 if ($result['status'] !== 200) {
                     return;
                 }
 
-                /** @var User $user */
                 $user = $this->getUser();
                 $session = Registry::getSession();
 
-                if (!$user) {
+                if (!$user instanceof User) {
                     // Create guest user if not logged in
                     $userComponent = oxNew(UserComponent::class);
                     $userComponent->createGuestUser($response);
-                } else {
+                }
+
+                if ($user instanceof User) {
                     // if Amazon provides a shipping address use it
-                    if ($response['response']['shippingAddress']) {
+                    if (!empty($response['response']['shippingAddress'])) {
                         $deliveryAddress = Address::mapAddressToDb(
                             $response['response']['shippingAddress'],
                             'oxaddress__'
                         );
                         $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
-                    } else {
-                        // if amazon does not provide a shipping address and we already have an oxid user,
+                    }
+
+                    if (empty($response['response']['shippingAddress'])) {
+                        // if amazon does not provide a shipping address, and we already have an oxid user,
                         // use oxid-user-data
                         $session->deleteVariable(Constants::SESSION_DELIVERY_ADDR);
                     }
                 }
 
-                Registry::getUtils()->redirect(
-                    Registry::getConfig()->getShopHomeUrl() . 'cl=user'
-                );
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
     }
@@ -158,48 +173,57 @@ class DispatchController extends FrontendController
     /**
      * get Amazon Session ID and validate it
      *
-     * @return mixed
+     * @return string
      */
-    protected function getRequestAmazonSessionId()
+    protected function getRequestAmazonSessionId(): string
     {
-        $amazonSessionIdRequest = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+        /** @var string $amazonSessionIdRequest */
+        $amazonSessionIdRequest = Registry::getRequest()->getRequestParameter(
+            Constants::CHECKOUT_REQUEST_PARAMETER_ID
+        );
         $amazonSessionIdService = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
         return
-            $amazonSessionIdRequest === $amazonSessionIdService ?
-                $amazonSessionIdRequest :
-                false;
+            $amazonSessionIdRequest === $amazonSessionIdService ? $amazonSessionIdRequest : '';
     }
 
     /**
      * set Amazon Session ID and validate it
      *
-     * @return mixed
+     * @return string
+     * @throws DatabaseErrorException
+     * @throws ArticleInputException
+     * @throws DatabaseConnectionException
+     * @throws NoArticleException
+     * @throws OutOfStockException
      */
-    protected function setRequestAmazonSessionId()
+    protected function setRequestAmazonSessionId(): string
     {
-
         // add item to basket if an "anid" was provided in the url
-        if ($sProductId = Registry::getRequest()->getRequestParameter('anid')) {
-            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        /** @var string $anid */
+        $anid = Registry::getRequest()->getRequestParameter('anid') ?: '';
+        if ($anid !== '') {
+            $database = DatabaseProvider::getDb();
             $database->startTransaction();
             try {
                 $basket = Registry::getSession()->getBasket();
                 $basket->addToBasket(
-                    $sProductId,
+                    $anid,
                     1
                 );
-                // Remove flag of "new item added" to not show "Item added" popup when returning to checkout
+                // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $database->rollbackTransaction();
                 throw $exception;
             }
         }
 
-        $amazonSessionId = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
+        /** @var string $amazonSessionId */
+        $amazonSessionId =
+            Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
 
-        if (is_null(OxidServiceProvider::getAmazonService()->getCheckoutSessionId())) {
+        if (OxidServiceProvider::getAmazonService()->getCheckoutSessionId() === '') {
             OxidServiceProvider::getAmazonService()->storeAmazonSession($amazonSessionId);
             return $amazonSessionId;
         }

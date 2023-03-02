@@ -7,6 +7,8 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -20,6 +22,8 @@ class OrderList extends OrderList_parent
 {
     /**
      * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public function cancelOrder(): void
     {
@@ -32,8 +36,9 @@ class OrderList extends OrderList_parent
         if (!$oOrder->load($sOxId)) {
             return;
         }
-
-        if (Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value)) {
+        /** @var  string $paymentType */
+        $paymentType = $oOrder->getFieldData('oxpaymenttype');
+        if (Constants::isAmazonPayment($paymentType)) {
             $logger = new Logger();
             OxidServiceProvider::getAmazonService()->createRefund(
                 $sOxId,

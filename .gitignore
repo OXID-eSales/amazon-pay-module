@@ -3,5 +3,9 @@
 /vendor/
 /var/
 /composer.lock
-/Tests/.phpunit.result.cache
-/Tests/.env
+/tests/.phpunit.result.cache
+/tests/.env
+/tests/Codeception/_output/*
+!tests/Codeception/_output/.gitkeep
+/tests/reports/*
+!tests/reports/.gitkeep

@@ -8,15 +8,22 @@
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 class OrderOverview extends OrderOverview_parent
 {
-    public function render()
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    public function render(): string
     {
-        $oOrder = oxNew(Order::class);
+        $oOrder = oxNew(\OxidSolutionCatalysts\AmazonPay\Model\Order::class);
         $filteredLogs = [];
         $ipnLogs = [];
         $isCaptured = false;
@@ -24,9 +31,12 @@ class OrderOverview extends OrderOverview_parent
 
         $existingItems = [];
 
+        $orderLoaded = $oOrder->load($this->getEditObjectId());
+        /** @var string $paymentType */
+        $paymentType = $oOrder->getFieldData('oxpaymenttype');
         if (
-            $oOrder->load($this->getEditObjectId()) &&
-            Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value)
+            $orderLoaded &&
+            Constants::isAmazonPayment($paymentType)
         ) {
             $orderLogs = OxidServiceProvider::getAmazonService()->getOrderLogs($oOrder);
 
@@ -52,11 +62,12 @@ class OrderOverview extends OrderOverview_parent
                 $newFilteredLog['identifier'] = $orderLog['OSC_AMAZON_IDENTIFIER'];
                 $newFilteredLog['statusCode'] = $orderLog['OSC_AMAZON_STATUS_CODE'] === '200' ? 'success' : 'error';
 
-                if (strpos($orderLog['OSC_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
+                if (str_contains($orderLog['OSC_AMAZON_REQUEST_TYPE'], 'Error')) {
                     $newFilteredLog['statusCode'] = 'error';
                     $newFilteredLog['identifier'] = 'ORDER ID:' . $orderLog['OSC_AMAZON_OXORDERID'];
                 }
 
+                $newFilteredLog['requestType'] = $orderLog['OSC_AMAZON_RESPONSE_MSG'];
                 if ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
                     $newFilteredLog['requestType'] = 'Payment captured';
                     $isCaptured = true;
@@ -74,34 +85,28 @@ class OrderOverview extends OrderOverview_parent
                 } elseif ($orderLog['OSC_AMAZON_RESPONSE_MSG'] === 'Refunded') {
                     $newFilteredLog['requestType'] = 'Refund Complete';
                     $isCaptured = true;
-                } else {
-                    $newFilteredLog['requestType'] = $orderLog['OSC_AMAZON_RESPONSE_MSG'];
                 }
 
                 $filteredLogs[] = $newFilteredLog;
             }
 
-            if (!empty($orderLogs)) {
-                $this->addTplParam('orderLogs', $filteredLogs);
-            } else {
+            if (empty($orderLogs)) {
                 $filteredLog = [];
                 $filteredLog['time'] = 'no data';
                 $filteredLog['identifier'] = 'no data';
                 $filteredLog['requestType'] = 'no data';
                 $filteredLogs[] = $filteredLog;
-                $this->addTplParam('orderLogs', $filteredLogs);
             }
+            $this->addTplParam('orderLogs', $filteredLogs);
 
-            if (!empty($ipnLogs)) {
-                $this->addTplParam('ipnLogs', $ipnLogs);
-            } else {
+            if (empty($ipnLogs)) {
                 $ipnLog = [];
                 $ipnLog['time'] = 'no data';
                 $ipnLog['identifier'] = 'no data';
                 $ipnLog['requestType'] = 'no data';
                 $ipnLogs[] = $ipnLog;
-                $this->addTplParam('ipnLogs', $ipnLogs);
             }
+            $this->addTplParam('ipnLogs', $ipnLogs);
         }
 
         $this->addtplParam('isOneStepCapture', $isOneStepCapture);
@@ -110,14 +115,21 @@ class OrderOverview extends OrderOverview_parent
         return parent::render();
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     public function refundpayment(): void
     {
         $oOrder = oxNew(Order::class);
-        $refundAmount = \OxidEsales\Eshop\Core\Registry::getRequest()->getRequestParameter("refundAmount");
-
+        /** @var float $refundAmount */
+        $refundAmount = Registry::getRequest()->getRequestParameter("refundAmount");
+        $orderLoaded = $oOrder->load($this->getEditObjectId());
+        /** @var string $paymentType */
+        $paymentType = $oOrder->getFieldData('oxpaymenttype');
         if (
-            $oOrder->load($this->getEditObjectId()) &&
-            Constants::isAmazonPayment($oOrder->oxorder__oxpaymenttype->value) &&
+            $orderLoaded &&
+            Constants::isAmazonPayment($paymentType) &&
             $oOrder->getId() !== null
         ) {
             $logger = new Logger();

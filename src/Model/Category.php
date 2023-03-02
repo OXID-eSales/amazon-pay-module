@@ -7,7 +7,6 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
-use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 
 /**
@@ -17,11 +16,13 @@ class Category extends Category_parent
 {
     /**
      * @inheritDoc
+     * @return string|bool
      */
-    public function save()
+    public function save(): bool|string
     {
+        /** @var array $editVal */
         $editVal = Registry::getRequest()->getRequestParameter('editval');
-        $this->oxcategories__osc_amazon_exclude = new Field($editVal['oxcategories__osc_amazon_exclude']);
+        $this->_setFieldData('osc_amazon_exclude', $editVal['oxcategories__osc_amazon_exclude']);
         return parent::save();
     }
 }

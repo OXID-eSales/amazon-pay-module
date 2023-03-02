@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
+use Exception;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\AmazonCarrier;
 use OxidEsales\Eshop\Application\Model\DeliverySet;
@@ -16,7 +17,7 @@ use OxidEsales\Eshop\Application\Model\DeliverySet;
  */
 class DeliverySetMain extends DeliverySetMain_parent
 {
-    public function render()
+    public function render(): string
     {
         $amazonCarriers = AmazonCarrier::getAllCarriers();
 
@@ -27,32 +28,30 @@ class DeliverySetMain extends DeliverySetMain_parent
         if ($oxId !== -1) {
             $deliverySet = oxNew(DeliverySet::class);
             $deliverySet->load($oxId);
+            $amazonCarrier = $deliverySet->getRawFieldData('osc_amazon_carrier');
 
-            if ($deliverySet->oxdeliveryset__osc_amazon_carrier->rawValue !== null) {
-                $this->addTplParam('selectedAmazonCarrier', $deliverySet->oxdeliveryset__osc_amazon_carrier);
-            } else {
-                // Default
-                $this->addTplParam('selectedAmazonCarrier', 'NULL');
-            }
+            $selectedAmazonCarrier = $amazonCarrier != null ? $amazonCarrier : 'NULL';
+            $this->addTplParam('selectedAmazonCarrier', $selectedAmazonCarrier);
         }
 
         return parent::render();
     }
 
     /**
-     * Saves deliveryset information changes.
-     *
-     * @return mixed
+     * @inheritdoc
+     * @throws Exception
+     * @returns mixed
      */
     public function save()
     {
         $result = parent::save();
 
-        $id = $this->getEditObjectId();
+        $objectId = $this->getEditObjectId();
+        $aParams = [];
         $aParams['oxdeliveryset__osc_amazon_carrier'] = Registry::getRequest()
             ->getRequestParameter('editAmazonCarrier');
         $oDelSet = oxNew(DeliverySet::class);
-        if ($oDelSet->load($id)) {
+        if ($oDelSet->load($objectId)) {
             $oDelSet->assign($aParams);
             $oDelSet->save();
         }

@@ -10,10 +10,13 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 use OxidEsales\Eshop\Application\Controller\Admin\AdminController;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Controller for admin > Amazon Pay/Configuration page
@@ -30,7 +33,7 @@ class ConfigController extends AdminController
     /**
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $thisTemplate = parent::render();
 
@@ -43,8 +46,14 @@ class ConfigController extends AdminController
         try {
             $config->checkHealth();
         } catch (StandardException $e) {
-            Registry::getUtilsView()->addErrorToDisplay($e, false, true, 'amazonpay_error');
+            Registry::getUtilsView()->addErrorToDisplay(
+                $e,
+                false,
+                true,
+                'amazonpay_error'
+            );
         }
+
 
         return $thisTemplate;
     }
@@ -53,10 +62,13 @@ class ConfigController extends AdminController
      * Saves configuration values
      *
      * @return void
+     * @throws ContainerExceptionInterface
+     * @throws ModuleSettingNotFountException
+     * @throws NotFoundExceptionInterface
      */
-    public function save()
+    public function save(): void
     {
-        $confArr = Registry::getRequest()->getRequestEscapedParameter('conf');
+        $confArr = (array)Registry::getRequest()->getRequestEscapedParameter('conf');
         $shopId = (string)Registry::getConfig()->getShopId();
 
         $confArr = $this->handleSpecialFields($confArr);
@@ -70,10 +82,17 @@ class ConfigController extends AdminController
      *
      * @param array $conf
      * @param string $shopId
+     * @throws ContainerExceptionInterface
+     * @throws ModuleSettingNotFountException
+     * @throws NotFoundExceptionInterface
      */
     protected function saveConfig(array $conf, string $shopId): void
     {
+        $oModuleConfiguration = null;
+        $oModuleConfigurationDaoBridge = null;
         if ($this->useDaoBridge()) {
+
+            /** @var ModuleConfigurationDaoBridgeInterface $oModuleConfigurationDaoBridge */
             $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(
                 ModuleConfigurationDaoBridgeInterface::class
             );
@@ -89,7 +108,7 @@ class ConfigController extends AdminController
             }
 
             Registry::getConfig()->saveShopConfVar(
-                strpos($confName, 'bl') !== false ? 'bool' : 'str',
+                str_contains($confName, 'bl') ? 'bool' : 'str',
                 $confName,
                 $value,
                 $shopId,
@@ -99,7 +118,7 @@ class ConfigController extends AdminController
     }
 
     /**
-     * Handles cheboxes/dropdowns
+     * Handles checkboxes/dropdowns
      *
      * @param array $conf
      *
@@ -108,18 +127,10 @@ class ConfigController extends AdminController
     protected function handleSpecialFields(array $conf): array
     {
         $config = new Config();
-
-        if ($conf['blAmazonPaySandboxMode'] === 'sandbox') {
-            $conf['blAmazonPaySandboxMode'] = 1;
-        } else {
-            $conf['blAmazonPaySandboxMode'] = 0;
-        }
+        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? 1 : 0;
 
         // remove FakePrivateKeys before save
-        if (
-            $conf['sAmazonPayPrivKey'] === '' ||
-            $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()
-        ) {
+        if ($conf['sAmazonPayPrivKey'] === '' || $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()) {
             unset($conf['sAmazonPayPrivKey']);
         }
 
@@ -131,8 +142,8 @@ class ConfigController extends AdminController
             $conf['blAmazonPayExpressPDP'] = 0;
         }
 
-        if (!isset($conf['blDeactivateSocialLogin'])) {
-            $conf['blAmazonPayExpressPDP'] = 0;
+        if (!isset($conf['blAmazonSocialLoginDeactivated'])) {
+            $conf['blAmazonSocialLoginDeactivated'] = 0;
         }
 
         if (!isset($conf['blAmazonPayExpressMinicartAndModal'])) {
@@ -143,11 +154,11 @@ class ConfigController extends AdminController
     }
 
     /**
-    * check if using DaoBridge is possible
-    *
-    * @return boolean
-    */
-    protected function useDaoBridge()
+     * check if using DaoBridge is possible
+     *
+     * @return boolean
+     */
+    protected function useDaoBridge(): bool
     {
         return class_exists(
             '\OxidEsales\EshopCommunity\Internal\Container\ContainerFactory'

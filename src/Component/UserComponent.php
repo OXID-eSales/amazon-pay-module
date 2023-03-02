@@ -7,9 +7,10 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Component;
 
-use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\Eshop\Application\Model\PaymentList;
+use Exception;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
+use OxidEsales\Eshop\Application\Model\PaymentList;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Application\Controller\RegisterController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -24,6 +25,7 @@ class UserComponent extends UserComponent_parent
 {
     /**
      * @param array $amazonSession
+     * @throws Exception
      */
     public function createGuestUser(array $amazonSession): void
     {
@@ -65,16 +67,14 @@ class UserComponent extends UserComponent_parent
             $session->setVariable(Constants::SESSION_DELIVERY_ADDR, $deliveryAddress);
         }
 
-        if ($this->createUser() !== false) {
+        $userCreated = $this->createUser();
+        if ($userCreated) {
             $basket = $session->getBasket();
             $user = $this->getUser();
             $countryOxId = $user->getActiveCountry();
 
             $deliverySetList = Registry::get(DeliverySetList::class)
-            ->getDeliverySetList(
-                $user,
-                $countryOxId
-            );
+                ->getDeliverySetList($user, $countryOxId);
             $possibleDeliverySets = [];
             foreach ($deliverySetList as $deliverySet) {
                 $paymentList = Registry::get(PaymentList::class)->getPaymentList(
@@ -91,37 +91,33 @@ class UserComponent extends UserComponent_parent
                 $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
                 $basket->setShipping(reset($possibleDeliverySets));
             }
-        } else {
-            OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-            Registry::getUtils()->redirect(
-                Registry::getConfig()->getShopHomeUrl() . 'cl=user',
-                false,
-                302
-            );
+            return;
         }
+
+        OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+        Registry::getUtils()->redirect(
+            Registry::getConfig()->getShopHomeUrl() . 'cl=user',
+            false
+        );
     }
 
     /**
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameter(string $paramName, $paramValue): void
+    public function setRequestParameter(string $paramName, mixed $paramValue): void
     {
         $_POST[$paramName] = $paramValue;
     }
 
     /**
-     * Deletes user information from session:<br>
-     * "usr", "dynvalue", "paymentid"<br>
-     * also deletes cookie, unsets \OxidEsales\Eshop\Core\Config::oUser,
-     * oxcmp_user::oUser, forces basket to recalculate.
-     * @return void
+     * @inheritdoc
      */
-    public function logout(): void
+    public function logout(): ?string
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        parent::logout();
+        return parent::logout();
     }
 
     /**
@@ -131,7 +127,7 @@ class UserComponent extends UserComponent_parent
      * @return array
      * @deprecated underscore prefix violates PSR12, will be renamed to "getDelAddressData" in next major
      */
-    protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+    protected function _getDelAddressData(): array // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $session = Registry::getSession();
         if (
@@ -140,12 +136,12 @@ class UserComponent extends UserComponent_parent
         ) {
             return parent::_getDelAddressData();
         }
-        $aDelAdress = [];
-        $aDeladr = $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
-        if (count($aDeladr)) {
-            $aDelAdress = $aDeladr;
+        $aDelAddress = [];
+        $aSessionDelAddress = (array)$session->getVariable(Constants::SESSION_DELIVERY_ADDR);
+        if (count($aSessionDelAddress)) {
+            $aDelAddress = $aSessionDelAddress;
         }
-        return $aDelAdress;
+        return $aDelAddress;
     }
 
     protected function _getNameFromAmazonResponse(array $amazonSession): string
@@ -157,7 +153,7 @@ class UserComponent extends UserComponent_parent
         return $amazonSession['response']['name'];
     }
 
-    protected function _getEMailFromAmazonResponse(array $amazonSession)
+    protected function _getEMailFromAmazonResponse(array $amazonSession): string
     {
         if (array_key_exists('buyer', $amazonSession['response'])) {
             return $amazonSession['response']['buyer']['email'];

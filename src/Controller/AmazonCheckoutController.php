@@ -7,7 +7,9 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
+use Exception;
 use OxidEsales\Eshop\Application\Controller\FrontendController;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -20,13 +22,15 @@ class AmazonCheckoutController extends FrontendController
     /**
      * Creates a new amazon checkout session
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function createCheckout(): void
     {
         // if an article is given, we put it in the shopping cart
-        if ($sProductId = Registry::getRequest()->getRequestParameter('anid')) {
-            $database = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
+        /** @var string $sProductId */
+        $sProductId = Registry::getRequest()->getRequestParameter('anid');
+        if ($sProductId) {
+            $database = DatabaseProvider::getDb();
             $database->startTransaction();
             try {
                 $basket = Registry::getSession()->getBasket();
@@ -34,23 +38,25 @@ class AmazonCheckoutController extends FrontendController
                     $sProductId,
                     1
                 );
-                // Remove flag of "new item added" to not show "Item added" popup when returning to checkout
+                // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);
-            } catch (\Exception $exception) {
+            } catch (Exception $exception) {
                 $database->rollbackTransaction();
                 throw $exception;
             }
         }
 
-        $result = OxidServiceProvider::getAmazonClient()->createCheckoutSession();
+        $result = OxidServiceProvider::getAmazonClient()->createCheckoutSession([], []);
+
+        if ($result['status'] === 201) {
+            OxidServiceProvider::getAmazonService()
+                ->storeAmazonSession(PhpHelper::jsonToArray($result['response'])['checkoutSessionId']);
+        }
 
         if ($result['status'] !== 201) {
             OxidServiceProvider::getLogger()->info('create checkout failed', $result);
             http_response_code(500);
-        } else {
-            OxidServiceProvider::getAmazonService()
-                ->storeAmazonSession(PhpHelper::jsonToArray($result['response'])['checkoutSessionId']);
         }
 
         Registry::getUtils()->setHeader('Content-type:application/json; charset=utf-8');

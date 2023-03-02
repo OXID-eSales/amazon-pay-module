@@ -17,29 +17,29 @@ use Psr\Log\LoggerInterface;
 class OxidServiceProvider
 {
     /**
-     * @var OxidServiceProvider
+     * @var OxidServiceProvider|null
      */
-    private static $instance;
+    private static ?OxidServiceProvider $instance = null;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
     /**
      * @var AmazonClient
      */
-    private $amazonClient;
+    private AmazonClient $amazonClient;
 
     /**
      * @var AmazonService
      */
-    private $amazonService;
+    private AmazonService $amazonService;
 
     /**
      * @var User
      */
-    private $oxidUser;
+    private User $oxidUser;
 
     private function __construct()
     {
@@ -54,7 +54,7 @@ class OxidServiceProvider
      */
     public static function getInstance(): OxidServiceProvider
     {
-        if (self::$instance === null) {
+        if (self::$instance == null) {
             self::$instance = new self();
         }
 

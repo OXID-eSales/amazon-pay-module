@@ -8,6 +8,8 @@
 namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Model\Order;
+use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
+use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
@@ -20,8 +22,10 @@ class OrderMain extends OrderMain_parent
 {
     /**
      * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
-    protected function onOrderSend()
+    protected function onOrderSend(): void
     {
         parent::onOrderSend();
 
@@ -31,14 +35,14 @@ class OrderMain extends OrderMain_parent
             $chargeId = $this->getOrderChargeId($order);
 
             if (!OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
-                if ($chargeId === null || $chargeId === -1) {
+                if ($chargeId === '-1') {
                     return;
                 }
 
                 $amazonConfig = oxNew(Config::class);
                 $currencyCode = $order->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
 
-                if ($order->oxorder__oxtransstatus->rawValue !== 'OK') {
+                if ($order->getRawFieldData('oxtransstatus') !== 'OK') {
                     OxidServiceProvider::getAmazonService()
                         ->capturePaymentForOrder(
                             $chargeId,
@@ -47,16 +51,24 @@ class OrderMain extends OrderMain_parent
                         );
                 }
 
+                /** @var string $oxtrackcode */
+                $oxtrackcode = $order->getRawFieldData('oxtrackcode');
+                /** @var string $oxdeltype */
+                $oxdeltype = $order->getRawFieldData('oxdeltype');
                 OxidServiceProvider::getAmazonService()->sendAlexaNotification(
                     $this->getOrderChargePermissionId($order),
-                    $order->oxorder__oxtrackcode->rawValue,
-                    $order->oxorder__oxdeltype->rawValue
+                    $oxtrackcode,
+                    $oxdeltype
                 );
             }
         }
     }
 
-    protected function getOrderChargePermissionId(Order $oOrder)
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    protected function getOrderChargePermissionId(Order $oOrder): string
     {
         $chargePermissionId = null;
 
@@ -81,10 +93,15 @@ class OrderMain extends OrderMain_parent
         return $chargePermissionId;
     }
 
-
-    protected function getOrderChargeId(Order $oOrder)
+    /**
+     * @param Order $oOrder
+     * @return string
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    protected function getOrderChargeId(Order $oOrder): string
     {
-        $chargeId = null;
+        $chargeId = '';
 
         if ($oOrder->load($this->getEditObjectId())) {
             $repository = oxNew(LogRepository::class);
@@ -96,10 +113,9 @@ class OrderMain extends OrderMain_parent
                     );
                     foreach ($logsWithChargePermission as $logWithChargePermission) {
                         if ($logWithChargePermission['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
-                            return -1;
+                            return '-1';
                         }
                         $chargeIdSet = isset($logWithChargePermission['OSC_AMAZON_CHARGE_ID'])
-                            && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== null
                             && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== 'null';
                         if ($chargeIdSet) {
                             $chargeId = $logWithChargePermission['OSC_AMAZON_CHARGE_ID'];

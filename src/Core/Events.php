@@ -7,12 +7,12 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use Exception;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\DbMetaDataHandler;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Model\BaseModel as EshopBaseModel;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
@@ -24,7 +24,7 @@ class Events
      *
      * @var array
      */
-    protected static $requireSessionWithParams = [
+    protected static array $requireSessionWithParams = [
         'cl' => [
             'details'        => true,
             'amazondispatch' => true
@@ -34,6 +34,8 @@ class Events
     /**
      * Execute action on activate event
      * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     public static function onActivate(): void
     {
@@ -52,6 +54,8 @@ class Events
 
     /**
      * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
      */
     protected static function updateOxpsToOsc(): void
     {
@@ -62,6 +66,10 @@ class Events
         self::updateOxpsToOscLogTable();
     }
 
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
     protected static function updateOxpsToOscArticleColumn(): void
     {
         $sql = 'show columns
@@ -226,8 +234,7 @@ class Events
     /**
      * @param string[][] $paymentDescription
      *
-     * @psalm-param 'oxidamazon'|'oxidamazonexpress' $paymentId
-     * @psalm-param array{en: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}, de: array{title: 'AmazonPay Express'|'AmazonPay', desc: '<div>AmazonPay Express</div>'|'<div>AmazonPay</div>'}} $paymentDescription
+     * @throws Exception
      */
     protected static function createPaymentMethod(string $paymentId, array $paymentDescription): void
     {
@@ -236,7 +243,7 @@ class Events
         if (!$paymentLoaded) {
             $payment->setId($paymentId);
             $params = [
-                'oxpayments__oxactive' => false,
+                'oxpayments__oxactive' => true,
                 'oxpayments__oxaddsum' => 0,
                 'oxpayments__oxaddsumtype' => 'abs',
                 'oxpayments__oxfromboni' => 0,
@@ -251,6 +258,7 @@ class Events
             foreach ($paymentDescription as $languageAbbreviation => $values) {
                 $languageId = array_search($languageAbbreviation, $languages, true);
                 if ($languageId !== false) {
+                    $languageId = (int)$languageId;
                     $payment->loadInLang($languageId, $paymentId);
                     $params = [
                         'oxpayments__oxdesc' => $values['title'],
@@ -266,6 +274,7 @@ class Events
     /**
      * @param string $paymentId
      * @return void
+     * @throws Exception
      */
     protected static function assignPaymentToActiveDeliverySets(string $paymentId): void
     {
@@ -279,7 +288,7 @@ class Events
      * @param string $paymentId
      * @param string $deliverySetId
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId): void
     {

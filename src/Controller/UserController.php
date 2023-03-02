@@ -8,6 +8,7 @@
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use stdClass;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Controller\UserController
@@ -19,10 +20,17 @@ class UserController extends UserController_parent
      *
      * @return bool
      */
-    public function showShipAddress()
+    public function showShipAddress(): bool
     {
-        if (!OxidServiceProvider::getAmazonService()->isAmazonSessionActive()) {
-            return parent::showShipAddress();
+        $isAmazonSessionActive = OxidServiceProvider::getAmazonService()->isAmazonSessionActive();
+        if (!$isAmazonSessionActive) {
+            /**
+             * parent::showShipAddress() should return bool, but can also return null
+             * TODO: check if it is fixed in Oxid 7
+             * @var bool|null $showShipAddress
+             */
+            $showShipAddress = parent::showShipAddress();
+            return $showShipAddress ?? false;
         }
 
         return true;
@@ -31,9 +39,9 @@ class UserController extends UserController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return object
+     * @return stdClass
      */
-    public function getDeliveryAddressAsObj()
+    public function getDeliveryAddressAsObj(): stdClass
     {
         return OxidServiceProvider::getAmazonService()->getDeliveryAddressAsObj();
     }
@@ -41,9 +49,9 @@ class UserController extends UserController_parent
     /**
      * Template getter for amazon bill address
      *
-     * @return object
+     * @return stdClass
      */
-    public function getBillingAddressAsObj()
+    public function getBillingAddressAsObj(): stdClass
     {
         return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }

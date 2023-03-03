@@ -110,7 +110,8 @@ class UserComponent extends UserComponent_parent
         $_POST[$paramName] = $paramValue;
     }
 
-    public function setRequestParameterArray(string $paramName, array $paramValue){
+    public function setRequestParameterArray(string $paramName, array $paramValue)
+    {
         $_POST[$paramName] = $paramValue;
     }
 

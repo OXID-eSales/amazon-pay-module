@@ -74,19 +74,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: source/test-module
-
       - name: Install module
         run: |
           docker-compose exec -T \
-            php composer config repositories.${{ env.PACKAGE_NAME }} \
+            php composer1 config repositories.${{ env.PACKAGE_NAME }} \
             --json '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
           docker-compose exec -T \
-            php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
+            php composer1 require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
 
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer require vlucas/phpdotenv --no-update --no-interaction --dev
-          docker-compose exec -T php composer update --no-interaction
+          docker-compose exec -T php composer1 require vlucas/phpdotenv --no-update --no-interaction --dev
+          docker-compose exec -T php composer1 update --no-interaction
           docker-compose exec -T php php vendor/bin/reset-shop
 
       - name: Put module settings
@@ -197,19 +196,19 @@ jobs:
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer install
+        run: composer1install
 
       - name: Run phpcs
         id: phpcs
         if: always()
         working-directory: source/test-module
-        run: composer phpcs
+        run: composer1phpcs
 
       - name: Run phpmd
         id: phpmd
         if: always()
         working-directory: source/test-module
-        run: composer phpmd-report || composer phpmd
+        run: composer1phpmd-report || composer1phpmd
 
       - name: Upload log artifact
         if: always()

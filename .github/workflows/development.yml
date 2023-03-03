@@ -72,6 +72,7 @@ jobs:
 
       - name: Install Composer 1
         run: |
+          which composer
           docker-compose exec php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
           docker-compose exec php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
       - name: Checkout current module
@@ -82,7 +83,7 @@ jobs:
         run: |
           docker-compose exec -T \
             php composer config repositories.${{ env.PACKAGE_NAME }} \
-            --json '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
+            '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
           docker-compose exec -T \
             php composer config repositories.${{ env.PACKAGE_NAME }} \
             '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'

@@ -70,6 +70,10 @@ jobs:
           make up
           sleep 2
 
+      - name: Install Composer 1
+        run: |
+          docker-compose exec php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker-compose exec php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
       - name: Checkout current module
         uses: actions/checkout@v3
         with:
@@ -77,15 +81,15 @@ jobs:
       - name: Install module
         run: |
           docker-compose exec -T \
-            php composer1 config repositories.${{ env.PACKAGE_NAME }} \
+            php composer config repositories.${{ env.PACKAGE_NAME }} \
             --json '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
           docker-compose exec -T \
-            php composer1 require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
+            php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
 
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer1 require vlucas/phpdotenv --no-update --no-interaction --dev
-          docker-compose exec -T php composer1 update --no-interaction
+          docker-compose exec -T php composer require vlucas/phpdotenv --no-update --no-interaction --dev
+          docker-compose exec -T php composer update --no-interaction
           docker-compose exec -T php php vendor/bin/reset-shop
 
       - name: Put module settings
@@ -196,19 +200,19 @@ jobs:
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer1 install
+        run: composer install
 
       - name: Run phpcs
         id: phpcs
         if: always()
         working-directory: source/test-module
-        run: composer1 phpcs
+        run: composer phpcs
 
       - name: Run phpmd
         id: phpmd
         if: always()
         working-directory: source/test-module
-        run: composer1 phpmd-report || composer1 phpmd
+        run: composer phpmd-report || composer phpmd
 
       - name: Upload log artifact
         if: always()

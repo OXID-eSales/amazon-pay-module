@@ -34,14 +34,14 @@ class UserComponent extends UserComponent_parent
 
         $this->setParent(oxNew(RegisterController::class));
 
-        $this->setRequestParameter('userLoginName', $this->_getNameFromAmazonResponse($amazonSession));
-        $this->setRequestParameter('lgn_usr', $this->_getEMailFromAmazonResponse($amazonSession));
+        $this->setRequestParameterString('userLoginName', $this->_getNameFromAmazonResponse($amazonSession));
+        $this->setRequestParameterString('lgn_usr', $this->_getEMailFromAmazonResponse($amazonSession));
 
         // Guest users have a blank password
         $password = '';
-        $this->setRequestParameter('lgn_pwd', $password);
-        $this->setRequestParameter('lgn_pwd2', $password);
-        $this->setRequestParameter('lgn_pwd2', $password);
+        $this->setRequestParameterString('lgn_pwd', $password);
+        $this->setRequestParameterString('lgn_pwd2', $password);
+        $this->setRequestParameterString('lgn_pwd2', $password);
 
         $amazonBillingAddress = $amazonSession['response']['billingAddress'];
         $amazonShippingAddress = $amazonSession['response']['shippingAddress'];
@@ -59,7 +59,7 @@ class UserComponent extends UserComponent_parent
 
         // handle billing address
         $billingAddress = Address::mapAddressToDb($amazonBillingAddress, 'oxuser__');
-        $this->setRequestParameter('invadr', $billingAddress);
+        $this->setRequestParameterArray('invadr', $billingAddress);
 
         // handle shipping address (if provided by amazon)
         if ($amazonShippingAddress) {

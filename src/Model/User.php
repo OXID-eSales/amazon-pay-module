@@ -24,6 +24,7 @@ class User extends User_parent
      * @inherit doc
      *
      * @param array $aDelAddress address data array
+     * TODO: check if typehint can be used in Oxid 7
      */
     protected function _assignAddress($aDelAddress)
     {
@@ -68,6 +69,7 @@ class User extends User_parent
      * @param string|null $sUserId
      *
      * @return UserAddressList|array
+     * TODO: check if typehint can be used in Oxid 7
      */
     public function getUserAddresses($sUserId = null): UserAddressList
     {

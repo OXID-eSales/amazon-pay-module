@@ -26,7 +26,6 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Core\ViewConfig;
 use stdClass;
 
 /**
@@ -44,8 +43,7 @@ class OrderController extends OrderController_parent
     public function init()
     {
         $session = Registry::getSession();
-        $viewConfig = $this->getViewConfig();
-        $exclude = $viewConfig->isAmazonExclude();
+        $exclude = $this->getViewConfig()->isAmazonExclude();
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
 
@@ -62,17 +60,6 @@ class OrderController extends OrderController_parent
             }
         }
         parent::init();
-    }
-
-    public function getViewConfig(): ViewConfig
-    {
-        if ($this->_oViewConf === null) {
-            $this->_oViewConf = oxNew(ViewConfig::class);
-        }
-
-        /** @var ViewConfig $conf */
-        $conf = $this->_oViewConf;
-        return $conf;
     }
 
     protected function initAmazonPay()
@@ -118,6 +105,7 @@ class OrderController extends OrderController_parent
     {
         $basket = Registry::getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
+
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 

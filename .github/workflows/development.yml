@@ -197,6 +197,11 @@ jobs:
           coverage: xdebug
           extensions: gd, zip
 
+      - name: Install Composer 1
+        run: |
+          docker-compose exec php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker-compose exec php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
+
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module

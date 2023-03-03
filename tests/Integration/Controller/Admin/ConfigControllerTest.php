@@ -31,7 +31,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class ConfigControllerTest extends UnitTestCase
 {
-    public function testRender(): void
+    public function testRender()
     {
         $c = new ConfigController();
         $this->assertSame('amazonpay/amazonconfig.tpl', $c->render());
@@ -145,7 +145,7 @@ class ConfigControllerTest extends UnitTestCase
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testSave($conf, $expected, $getterMethod): void
+    public function testSave($conf, $expected, $getterMethod)
     {
         $config = new Config();
         $configController = new ConfigController();

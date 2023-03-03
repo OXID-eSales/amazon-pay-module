@@ -23,9 +23,9 @@ class PhpHelper
     /**
      * @param string $needle
      * @param array $haystack
-     * @return mixed
+     * @return string|array
      */
-    public static function getArrayValue(string $needle, array $haystack): mixed
+    public static function getArrayValue(string $needle, array $haystack): string
     {
         foreach ($haystack as $key => $value) {
             if ($key === $needle) {

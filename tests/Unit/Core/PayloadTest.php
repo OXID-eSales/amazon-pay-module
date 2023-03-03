@@ -29,7 +29,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 
 class PayloadTest extends UnitTestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
     }
 
@@ -51,7 +51,7 @@ class PayloadTest extends UnitTestCase
         return $payload;
     }
 
-    public function testGetData(): void
+    public function testGetData()
     {
         $payload = $this->createPayloadData();
         $data = $payload->getData();
@@ -66,7 +66,7 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('softDescriptor', $data['softDescriptor']);
     }
 
-    public function testSetPaymentIntent(): void
+    public function testSetPaymentIntent()
     {
         $payload = new Payload();
         $payload->setPaymentIntent('somethingRandom');
@@ -74,7 +74,7 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('somethingRandom', $data['paymentDetails']['paymentIntent']);
     }
 
-    public function testSetCanHandlePendingAuthorization(): void
+    public function testSetCanHandlePendingAuthorization()
     {
         $payload = new Payload();
         $payload->setCanHandlePendingAuthorization(false);
@@ -82,7 +82,7 @@ class PayloadTest extends UnitTestCase
         $this->assertFalse($data['paymentDetails']['canHandlePendingAuthorization']);
     }
 
-    public function testSetPaymentDetailsChargeAmount(): void
+    public function testSetPaymentDetailsChargeAmount()
     {
         $payload = new Payload();
         $payload->setPaymentDetailsChargeAmount('3456.78');
@@ -92,7 +92,7 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('EUR', $data['paymentDetails']['chargeAmount']['currencyCode']);
     }
 
-    public function testSetSoftDescriptor(): void
+    public function testSetSoftDescriptor()
     {
         $payload = new Payload();
         $payload->setSoftDescriptor('softDescriptor');
@@ -100,7 +100,7 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('softDescriptor', $data['softDescriptor']);
     }
 
-    public function testSetCaptureAmount(): void
+    public function testSetCaptureAmount()
     {
         $payload = new Payload();
         $payload->setCaptureAmount('1234.56');
@@ -108,7 +108,7 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('1234.56', $data['captureAmount']['amount']);
     }
 
-    public function testSetCheckoutChargeAmount(): void
+    public function testSetCheckoutChargeAmount()
     {
         $payload = new Payload();
         $payload->setCheckoutChargeAmount('2345.67');
@@ -118,7 +118,7 @@ class PayloadTest extends UnitTestCase
         $this->assertSame('EUR', $data['chargeAmount']['currencyCode']);
     }
 
-    public function testRemoveMerchantMetadata(): void
+    public function testRemoveMerchantMetadata()
     {
         $payload = $this->createPayloadData();
         $data = $payload->removeMerchantMetadata($payload->getData());

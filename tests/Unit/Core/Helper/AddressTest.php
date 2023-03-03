@@ -54,7 +54,7 @@ class AddressTest extends UnitTestCase
      * @param string $key
      * @param string $value
      */
-    public function testParseAddress(array $address, string $key, string $value): void
+    public function testParseAddress(array $address, string $key, string $value)
     {
         $result = Address::parseAddress($address);
         $this->assertSame($result[$key], $value);
@@ -83,7 +83,7 @@ class AddressTest extends UnitTestCase
      * @param string $key
      * @param string $value
      */
-    public function testMapBillingAddressToDb(array $address, string $key, string $value): void
+    public function testMapBillingAddressToDb(array $address, string $key, string $value)
     {
         $result = Address::mapAddressToDb($address, 'oxuser__');
         $this->assertSame($result[$key], $value);
@@ -112,7 +112,7 @@ class AddressTest extends UnitTestCase
      * @param string $key
      * @param string $value
      */
-    public function testMapShippingAddressToDb(array $address, string $key, string $value): void
+    public function testMapShippingAddressToDb(array $address, string $key, string $value)
     {
         $result = Address::mapAddressToDb($address, 'oxaddress__');
         $this->assertSame($result[$key], $value);
@@ -146,7 +146,7 @@ class AddressTest extends UnitTestCase
      * @param string $key
      * @param string $value
      */
-    public function testMapAddressToView(array $address, string $key, string $value): void
+    public function testMapAddressToView(array $address, string $key, string $value)
     {
         $result = Address::mapAddressToView($address);
         $this->assertSame($result[$key], $value);

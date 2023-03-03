@@ -33,31 +33,31 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class OxidServiceProviderTest extends UnitTestCase
 {
-    protected function setUp(): void
+    protected function setUp()
     {
     }
 
-    public function testGetInstance(): void
+    public function testGetInstance()
     {
         $this->assertInstanceOf(OxidServiceProvider::class, OxidServiceProvider::getInstance());
     }
 
-    public function testGetAmazonClient(): void
+    public function testGetAmazonClient()
     {
         $this->assertInstanceOf(AmazonClient::class, OxidServiceProvider::getAmazonClient());
     }
 
-    public function testGetAmazonService(): void
+    public function testGetAmazonService()
     {
         $this->assertInstanceOf(AmazonService::class, OxidServiceProvider::getAmazonService());
     }
 
-    public function testGetOxidUser(): void
+    public function testGetOxidUser()
     {
         $this->assertInstanceOf(User::class, OxidServiceProvider::getOxidUser());
     }
 
-    public function testGetLogger(): void
+    public function testGetLogger()
     {
         $this->assertInstanceOf(Logger::class, OxidServiceProvider::getLogger());
     }

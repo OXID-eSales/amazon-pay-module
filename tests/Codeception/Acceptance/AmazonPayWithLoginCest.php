@@ -19,7 +19,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @throws \Exception
      * @group AmazonPayWithLoginPaymentTest
      */
-    public function checkPaymentFromBasketWorks(AcceptanceTester $I): void
+    public function checkPaymentFromBasketWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay via Basket with login payment works');
 
@@ -42,7 +42,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @group AmazonPayWithLoginPaymentTest
      * @throws \Exception
      */
-    public function checkPaymentFromAddressPageWorks(AcceptanceTester $I): void
+    public function checkPaymentFromAddressPageWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay via Address Page with login payment works');
 
@@ -63,7 +63,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @throws \Exception
      * @group AmazonPayWithLoginPaymentTest
      */
-    public function checkPaymentFromDetailWorks(AcceptanceTester $I): void
+    public function checkPaymentFromDetailWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay via Details Page with login payment works');
 
@@ -83,7 +83,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @throws \Exception
      * @group AmazonPayWithLoginPaymentTest
      */
-    public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I): void
+    public function checkPaymentFromBasketWithReturnWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay via Basket with login and return payment works');
 
@@ -107,7 +107,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @throws \Exception
      * @group b
      */
-    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I): void
+    public function checkPaymentFromAddressPageWithReturnWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay via Address Page with login and return payment works');
 
@@ -130,7 +130,7 @@ final class AmazonPayWithLoginCest extends BaseCest
      * @throws \Exception
      * @group AmazonPayWithLoginPaymentTest
      */
-    public function checkPaymentFromDetailWithReturnWorks(AcceptanceTester $I): void
+    public function checkPaymentFromDetailWithReturnWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test AmazonPay via Details Page with login and return payment works');
 

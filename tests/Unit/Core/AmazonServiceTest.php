@@ -29,7 +29,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 class AmazonServiceTest extends AmazonTestCase
 {
-    public function testGetCheckoutSessionId(): void
+    public function testGetCheckoutSessionId()
     {
         Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);
         $this->assertFalse($this->amazonService->isAmazonSessionActive());

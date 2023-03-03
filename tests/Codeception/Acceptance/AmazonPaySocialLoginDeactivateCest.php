@@ -6,9 +6,9 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
 final class AmazonPaySocialLoginDeactivateCest extends BaseCest
 {
-    protected string $amazonSocialLoginDeactivated = '#amazonSocialLoginDeactivated';
-    protected string $amazonSocialLoginUserMenu = '#AmazonPayWidgetCheckoutUser';
-    protected string $amazonSocialLoginCheckoutPage = '#AmazonPayButtonCheckoutUser';
+    protected $amazonSocialLoginDeactivated = '#amazonSocialLoginDeactivated';
+    protected $amazonSocialLoginUserMenu = '#AmazonPayWidgetCheckoutUser';
+    protected $amazonSocialLoginCheckoutPage = '#AmazonPayButtonCheckoutUser';
 
 
     /**
@@ -17,7 +17,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
      * @group AmazonPaySocialLoginDeactivate
      * @throws \Exception
      */
-    public function checkAmazonSocialLoginDeactivateWorks(AcceptanceTester $I): void
+    public function checkAmazonSocialLoginDeactivateWorks(AcceptanceTester $I)
     {
         $I->wantToTest('AmazonPay Social Login Deactivate');
         $this->_initializeTest();

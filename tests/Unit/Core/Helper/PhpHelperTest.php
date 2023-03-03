@@ -29,7 +29,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class PhpHelperTest extends UnitTestCase
 {
-    public function testJsonToArray(): void
+    public function testJsonToArray()
     {
         $json = json_encode([
             'a' => 1,
@@ -46,7 +46,7 @@ class PhpHelperTest extends UnitTestCase
         $this->assertEquals('d', $array['c']['c']);
     }
 
-    public function testGetArrayValue(): void
+    public function testGetArrayValue()
     {
         $testArray = [
             'a' => 'b',
@@ -82,7 +82,7 @@ class PhpHelperTest extends UnitTestCase
      * @param $testValue
      * @param $expectedResult
      */
-    public function testGetMoneyValue($testValue, $expectedResult): void
+    public function testGetMoneyValue($testValue, $expectedResult)
     {
         $this->assertEquals($expectedResult, PhpHelper::getMoneyValue($testValue));
     }

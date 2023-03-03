@@ -29,7 +29,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class AmazonCarrierTest extends UnitTestCase
 {
-    public function testGetAllCarriers(): void
+    public function testGetAllCarriers()
     {
         $this->assertCount(474, AmazonCarrier::getAllCarriers());
     }

@@ -30,9 +30,9 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class LogMessageTest extends UnitTestCase
 {
     /** @var LogMessage */
-    private LogMessage $logMessage;
+    private $logMessage;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->logMessage = new LogMessage();
 
@@ -49,122 +49,122 @@ class LogMessageTest extends UnitTestCase
         $this->logMessage->setRequestType('PhpUnitRequestType');
     }
 
-    public function testGetShopId(): void
+    public function testGetShopId()
     {
         $this->assertEquals('PhpUnitTestShopId', $this->logMessage->getShopId());
     }
 
-    public function testSetShopId(): void
+    public function testSetShopId()
     {
         $this->logMessage->setShopId('PhpUnitTestShopId2');
         $this->assertEquals('PhpUnitTestShopId2', $this->logMessage->getShopId());
     }
 
-    public function testGetUserId(): void
+    public function testGetUserId()
     {
         $this->assertEquals('PhpUnitTestUserId', $this->logMessage->getUserId());
     }
 
-    public function testSetUserId(): void
+    public function testSetUserId()
     {
         $this->logMessage->setUserId('PhpUnitTestUserId2');
         $this->assertEquals('PhpUnitTestUserId2', $this->logMessage->getUserId());
     }
 
-    public function testGetOrderId(): void
+    public function testGetOrderId()
     {
         $this->assertEquals('PhpUnitTestOrderId', $this->logMessage->getOrderId());
     }
 
-    public function testSetOrderId(): void
+    public function testSetOrderId()
     {
         $this->logMessage->setOrderId('PhpUnitTestOrderId2');
         $this->assertEquals('PhpUnitTestOrderId2', $this->logMessage->getOrderId());
     }
 
-    public function testGetResponseMessage(): void
+    public function testGetResponseMessage()
     {
         $this->assertEquals('PhpUnitTestResponseMessage', $this->logMessage->getResponseMessage());
     }
 
-    public function testSetResponseMessage(): void
+    public function testSetResponseMessage()
     {
         $this->logMessage->setResponseMessage('PhpUnitTestResponseMessage2');
         $this->assertEquals('PhpUnitTestResponseMessage2', $this->logMessage->getResponseMessage());
     }
 
-    public function testGetStatusCode(): void
+    public function testGetStatusCode()
     {
         $this->assertEquals('PhpUnitTestStatusCode', $this->logMessage->getStatusCode());
     }
 
-    public function testSetStatusCode(): void
+    public function testSetStatusCode()
     {
         $this->logMessage->setStatusCode('PhpUnitTestStatusCode2');
         $this->assertEquals('PhpUnitTestStatusCode2', $this->logMessage->getStatusCode());
     }
 
-    public function testGetRequestType(): void
+    public function testGetRequestType()
     {
         $this->assertEquals('PhpUnitRequestType', $this->logMessage->getRequestType());
     }
 
-    public function testSetRequestType(): void
+    public function testSetRequestType()
     {
         $this->logMessage->setRequestType('PhpUnitRequestType2');
         $this->assertEquals('PhpUnitRequestType2', $this->logMessage->getRequestType());
     }
 
-    public function testGetIdentifier(): void
+    public function testGetIdentifier()
     {
         $this->assertEquals('PhpUnitTestIdentifier', $this->logMessage->getIdentifier());
     }
 
-    public function testSetIdentifier(): void
+    public function testSetIdentifier()
     {
         $this->logMessage->setIdentifier('PhpUnitTestIdentifier2');
         $this->assertEquals('PhpUnitTestIdentifier2', $this->logMessage->getIdentifier());
     }
 
-    public function testGetChargeId(): void
+    public function testGetChargeId()
     {
         $this->assertEquals('PhpUnitTestChargeId', $this->logMessage->getChargeId());
     }
 
-    public function testSetChargeId(): void
+    public function testSetChargeId()
     {
         $this->logMessage->setChargeId('PhpUnitTestChargeId2');
         $this->assertEquals('PhpUnitTestChargeId2', $this->logMessage->getChargeId());
     }
 
-    public function testGetChargePermissionId(): void
+    public function testGetChargePermissionId()
     {
         $this->assertEquals('PhpUnitTestChargePermissionId', $this->logMessage->getChargePermissionId());
     }
 
-    public function testSetChargePermissionId(): void
+    public function testSetChargePermissionId()
     {
         $this->logMessage->setChargePermissionId('PhpUnitTestChargePermissionId2');
         $this->assertEquals('PhpUnitTestChargePermissionId2', $this->logMessage->getChargePermissionId());
     }
 
-    public function testGetObjectId(): void
+    public function testGetObjectId()
     {
         $this->assertEquals('PhpUnitTestObjectIdentifier', $this->logMessage->getObjectId());
     }
 
-    public function testSetObjectId(): void
+    public function testSetObjectId()
     {
         $this->logMessage->setObjectId('PhpUnitTestObjectIdentifier2');
         $this->assertEquals('PhpUnitTestObjectIdentifier2', $this->logMessage->getObjectId());
     }
 
-    public function testGetObjectType(): void
+    public function testGetObjectType()
     {
         $this->assertEquals('PhpUnitTest', $this->logMessage->getObjectType());
     }
 
-    public function testSetObjectType(): void
+    public function testSetObjectType()
     {
         $this->logMessage->setObjectType('PhpUnitTest2');
         $this->assertEquals('PhpUnitTest2', $this->logMessage->getObjectType());

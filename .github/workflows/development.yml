@@ -73,8 +73,8 @@ jobs:
       - name: Install Composer 1
         run: |
           which composer
-          docker-compose exec php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          docker-compose exec php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
+          docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
       - name: Checkout current module
         uses: actions/checkout@v3
         with:
@@ -203,8 +203,8 @@ jobs:
 
       - name: Install Composer 1
         run: |
-          docker-compose exec php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          docker-compose exec php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
+          docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
 
       - name: Install module dependencies
         id: dependencies

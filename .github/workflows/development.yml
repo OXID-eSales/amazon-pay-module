@@ -204,8 +204,8 @@ jobs:
       - name: Install Composer 1
         run: |
           ls -l /usr/bin | grep "composer" && \
-          docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
+          docker-compose exec -T php php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+          docker-compose exec -T php php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
 
       - name: Install module dependencies
         id: dependencies

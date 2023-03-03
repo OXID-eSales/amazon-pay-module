@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <ruleset name="Oxid Coding Standard">
     <description>Oxid Coding Standard</description>
+    <config name="testVersion" value="7.0"/>
 
     <!-- Paths to check -->
     <file>../src/</file>
@@ -35,6 +36,10 @@
 
     <!-- ignore method declaration rules for tests -->
     <rule ref="PSR2.Methods.MethodDeclaration">
+        <exclude-pattern>./</exclude-pattern>
+    </rule>
+
+    <rule ref="PSR12.Properties.ConstantVisibility.NotFound">
         <exclude-pattern>./</exclude-pattern>
     </rule>
 </ruleset>

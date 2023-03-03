@@ -13,175 +13,174 @@ env:
   SONARCLOUD_PROJECT_KEY: 'OXID-eSales_amazon-pay-module'
 
 jobs:
-#  install_shop_with_module:
-#    strategy:
-#      matrix:
-#        php: [ '7.0' ]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Clone testing environment v4.0.0
-#        run: git clone https://github.com/OXID-eSales/docker-eshop-sdk.git .
-#
-#      - name: Clone the shop
-#        run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-6.1.x --single-branch source
-#
-#      - name: Cache current installation
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#            ./*
-#          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
-#
-#      - name: Prepare container configuration
-#        run: |
-#          make setup
-#          make addbasicservices
-#          make file=services/selenium-chrome.yml addservice
-#          perl -pi\
-#            -e "s#PHP_VERSION=.*#PHP_VERSION='${{ matrix.php }}'#g;"\
-#            .env
-#
-#          perl -pi\
-#            -e 's#display_errors =.*#display_errors = false#g;'\
-#            -e 'print "xdebug.max_nesting_level=1000\nxdebug.mode=coverage\n\n"'\
-#            containers/php/custom.ini
-#
-#          perl -pi\
-#            -e 's#/var/www/#/var/www/source/#g;'\
-#            containers/httpd/project.conf
-#
-#      - name: Prepare shop configuration
-#        run: |
-#          cp source/source/config.inc.php.dist source/source/config.inc.php
-#          sed -i "1s+^+SetEnvIf Authorization "\(.*\)" HTTP_AUTHORIZATION=\$1\n\n+" source/source/.htaccess
-#          sed -i -e 's/<dbHost>/mysql/'\
-#                 -e 's/<dbUser>/root/'\
-#                 -e 's/<dbName>/example/'\
-#                 -e 's/<dbPwd>/root/'\
-#                 -e 's/<dbPort>/3306/'\
-#                 -e 's/<sShopURL>/https:\/\/localhost.local\//'\
-#                 -e 's/<sSSLShopURL>/https:\/\/localhost.local\//'\
-#                 -e 's/<sShopDir>/\/var\/www\/source\//'\
-#                 -e 's/<sCompileDir>/\/var\/www\/source\/tmp\//'\
-#              source/source/config.inc.php
-#
-#      - name: Start containers
-#        run: |
-#          make up
-#          sleep 2
-#
-#      - name: Install Composer 1
-#        run: |
-#          which composer
-#          docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
-#      - name: Checkout current module
-#        uses: actions/checkout@v3
-#        with:
-#          path: source/test-module
-#      - name: Install module
-#        run: |
-#          docker-compose exec -T \
-#            php composer config repositories.${{ env.PACKAGE_NAME }} \
-#            '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
-#          docker-compose exec -T \
-#            php composer config repositories.${{ env.PACKAGE_NAME }} \
-#            '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
-#          docker-compose exec -T \
-#            php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
-#
-#      - name: Install dependencies and reset shop
-#        run: |
-#          docker-compose exec -T php composer require vlucas/phpdotenv --no-update --no-interaction --dev
-#          docker-compose exec -T php composer update --no-interaction
-#          docker-compose exec -T php php vendor/bin/reset-shop
-#
-#      - name: Put module settings
-#        continue-on-error: true
-#        run: |
-#          mkdir -p source/var/configuration/environment/
-#          echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/environment/1.yaml
-#          docker-compose exec -T php bin/oe-console oe:module:apply-configuration
-#
-#      - name: Show docker log
-#        if: always()
-#        run: |
-#          docker-compose logs
-#      - name: Create .env-file
-#        continue-on-error: true
-#        working-directory: source/test-module/tests
-#        run: |
-#          echo "${{ secrets.DOTENV }}" > .env
-#
-#      - name: Stop containers
-#        if: always()
-#        run: |
-#          docker-compose down
-#          sleep 2
-#
-#      - name: Upload configuration artifacts
-#        if: always()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: Configs-${{ matrix.php }}
-#          path: |
-#            docker-compose.yml
-#            source/composer.json
-#            source/composer.lock
-#            source/config.inc.php
-#            data/php/logs/error_log.txt
-#
-#  unit_tests:
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        php: [ '7.0' ]
-#    needs: [ install_shop_with_module ]
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Load current installation from cache
-#        uses: actions/cache@v3
-#        with:
-#          path: |
-#            ./*
-#          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
-#          restore-keys: |
-#            development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
-#
-#      - name: Start containers
-#        run: |
-#          make up
-#          sleep 2
-#
-#      - name: Run tests
-#        run: |
-#          docker-compose exec -T \
-#            -e PARTIAL_MODULE_PATHS=${{ env.MODULE_PATH }} \
-#            -e ACTIVATE_ALL_MODULES=1 \
-#            -e RUN_TESTS_FOR_SHOP=0 \
-#            -e RUN_TESTS_FOR_MODULES=0 \
-#            -e XDEBUG_MODE=coverage \
-#            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/tests' \
-#            php php vendor/bin/runtests \
-#              --coverage-clover=/var/www/coverage.xml \
-#              --coverage-text \
-#              --log-junit=/var/www/phpunit.xml \
-#              AllTestsUnit
-#
-#      - name: Stop containers
-#        if: always()
-#        run: |
-#          docker-compose down
-#          sleep 2
-#
-#      - name: Upload log artifact
-#        if: always()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: TestsLog-${{ matrix.php }}
-#          path: |
-#            source/coverage.xml
-#            source/phpunit.xml
+  install_shop_with_module:
+    strategy:
+      matrix:
+        php: [ '7.0' ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone testing environment v4.0.0
+        run: git clone https://github.com/OXID-eSales/docker-eshop-sdk.git .
+
+      - name: Clone the shop
+        run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-6.1.x --single-branch source
+
+      - name: Cache current installation
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./*
+          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+
+      - name: Prepare container configuration
+        run: |
+          make setup
+          make addbasicservices
+          make file=services/selenium-chrome.yml addservice
+          perl -pi\
+            -e "s#PHP_VERSION=.*#PHP_VERSION='${{ matrix.php }}'#g;"\
+            .env
+
+          perl -pi\
+            -e 's#display_errors =.*#display_errors = false#g;'\
+            -e 'print "xdebug.max_nesting_level=1000\nxdebug.mode=coverage\n\n"'\
+            containers/php/custom.ini
+
+          perl -pi\
+            -e 's#/var/www/#/var/www/source/#g;'\
+            containers/httpd/project.conf
+
+      - name: Prepare shop configuration
+        run: |
+          cp source/source/config.inc.php.dist source/source/config.inc.php
+          sed -i "1s+^+SetEnvIf Authorization "\(.*\)" HTTP_AUTHORIZATION=\$1\n\n+" source/source/.htaccess
+          sed -i -e 's/<dbHost>/mysql/'\
+                 -e 's/<dbUser>/root/'\
+                 -e 's/<dbName>/example/'\
+                 -e 's/<dbPwd>/root/'\
+                 -e 's/<dbPort>/3306/'\
+                 -e 's/<sShopURL>/https:\/\/localhost.local\//'\
+                 -e 's/<sSSLShopURL>/https:\/\/localhost.local\//'\
+                 -e 's/<sShopDir>/\/var\/www\/source\//'\
+                 -e 's/<sCompileDir>/\/var\/www\/source\/tmp\//'\
+              source/source/config.inc.php
+
+      - name: Start containers
+        run: |
+          make up
+          sleep 2
+
+      - name: Downgrade Composer to Version 1
+        run: |
+          composer self-update --1
+
+      - name: Checkout current module
+        uses: actions/checkout@v3
+        with:
+          path: source/test-module
+      - name: Install module
+        run: |
+          docker-compose exec -T \
+            php composer config repositories.${{ env.PACKAGE_NAME }} \
+            '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
+          docker-compose exec -T \
+            php composer config repositories.${{ env.PACKAGE_NAME }} \
+            '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
+          docker-compose exec -T \
+            php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
+
+      - name: Install dependencies and reset shop
+        run: |
+          docker-compose exec -T php composer require vlucas/phpdotenv --no-update --no-interaction --dev
+          docker-compose exec -T php composer update --no-interaction
+          docker-compose exec -T php php vendor/bin/reset-shop
+
+      - name: Put module settings
+        continue-on-error: true
+        run: |
+          mkdir -p source/var/configuration/environment/
+          echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/environment/1.yaml
+          docker-compose exec -T php bin/oe-console oe:module:apply-configuration
+
+      - name: Show docker log
+        if: always()
+        run: |
+          docker-compose logs
+      - name: Create .env-file
+        continue-on-error: true
+        working-directory: source/test-module/tests
+        run: |
+          echo "${{ secrets.DOTENV }}" > .env
+
+      - name: Stop containers
+        if: always()
+        run: |
+          docker-compose down
+          sleep 2
+
+      - name: Upload configuration artifacts
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Configs-${{ matrix.php }}
+          path: |
+            docker-compose.yml
+            source/composer.json
+            source/composer.lock
+            source/config.inc.php
+            data/php/logs/error_log.txt
+
+  unit_tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.0' ]
+    needs: [ install_shop_with_module ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load current installation from cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./*
+          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+          restore-keys: |
+            development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+
+      - name: Start containers
+        run: |
+          make up
+          sleep 2
+
+      - name: Run tests
+        run: |
+          docker-compose exec -T \
+            -e PARTIAL_MODULE_PATHS=${{ env.MODULE_PATH }} \
+            -e ACTIVATE_ALL_MODULES=1 \
+            -e RUN_TESTS_FOR_SHOP=0 \
+            -e RUN_TESTS_FOR_MODULES=0 \
+            -e XDEBUG_MODE=coverage \
+            -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/tests' \
+            php php vendor/bin/runtests \
+              --coverage-clover=/var/www/coverage.xml \
+              --coverage-text \
+              --log-junit=/var/www/phpunit.xml \
+              AllTestsUnit
+
+      - name: Stop containers
+        if: always()
+        run: |
+          docker-compose down
+          sleep 2
+
+      - name: Upload log artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestsLog-${{ matrix.php }}
+          path: |
+            source/coverage.xml
+            source/phpunit.xml
 
   styles:
     strategy:
@@ -201,7 +200,7 @@ jobs:
           coverage: xdebug
           extensions: gd, zip
 
-      - name: Install Composer 1
+      - name: Downgrade Composer to Version 1
         run: |
           composer self-update --1
 

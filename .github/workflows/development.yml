@@ -196,19 +196,19 @@ jobs:
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer1install
+        run: composer1 install
 
       - name: Run phpcs
         id: phpcs
         if: always()
         working-directory: source/test-module
-        run: composer1phpcs
+        run: composer1 phpcs
 
       - name: Run phpmd
         id: phpmd
         if: always()
         working-directory: source/test-module
-        run: composer1phpmd-report || composer1phpmd
+        run: composer1 phpmd-report || composer1 phpmd
 
       - name: Upload log artifact
         if: always()

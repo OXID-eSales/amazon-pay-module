@@ -205,24 +205,24 @@ jobs:
         run: |
           ls -l /usr/bin | grep "composer"
           docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer --1
+          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
 
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer install
+        run: composer1 install
 
       - name: Run phpcs
         id: phpcs
         if: always()
         working-directory: source/test-module
-        run: composer phpcs
+        run: composer1 phpcs
 
       - name: Run phpmd
         id: phpmd
         if: always()
         working-directory: source/test-module
-        run: composer phpmd-report || composer phpmd
+        run: composer1 phpmd-report || composer phpmd
 
       - name: Upload log artifact
         if: always()

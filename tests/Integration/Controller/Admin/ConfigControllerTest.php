@@ -136,12 +136,11 @@ class ConfigControllerTest extends UnitTestCase
 
     /**
      * @dataProvider configValueProvider
-     * @covers       ConfigController::handleSpecialFields
+     * @covers \OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController::handleSpecialFields
      *
      * @param $conf array Configuration values
      * @param $expected mixed Expected return value
      * @param $getterMethod string Getter method in config object
-     * @throws ModuleSettingNotFountException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */

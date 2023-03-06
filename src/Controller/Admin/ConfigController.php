@@ -83,7 +83,6 @@ class ConfigController extends AdminController
      * @param array $conf
      * @param string $shopId
      * @throws ContainerExceptionInterface
-     * @throws ModuleSettingNotFountException
      * @throws NotFoundExceptionInterface
      */
     protected function saveConfig(array $conf, string $shopId)

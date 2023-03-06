@@ -244,14 +244,14 @@ jobs:
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
-          name: TestsLog-8.0
+          name: TestsLog-7.0
           path: ./tests/
 
       - name: Download phpunit artifacts
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
-          name: StylesLog-8.0
+          name: StylesLog-7.0
           path: ./tests/
 
       - name: Fix paths in unit logs

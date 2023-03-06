@@ -70,9 +70,10 @@ jobs:
           make up
           sleep 2
 
-      - name: Downgrade Composer to Version 1
+      - name: Downgrade composer1 to Version 1
         run: |
-          composer self-update --1
+          docker-compose exec php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker-compose exec php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
 
       - name: Checkout current module
         uses: actions/checkout@v3
@@ -81,18 +82,18 @@ jobs:
       - name: Install module
         run: |
           docker-compose exec -T \
-            php composer config repositories.${{ env.PACKAGE_NAME }} \
+            php composer1 config repositories.${{ env.PACKAGE_NAME }} \
             '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
           docker-compose exec -T \
-            php composer config repositories.${{ env.PACKAGE_NAME }} \
+            php composer1 config repositories.${{ env.PACKAGE_NAME }} \
             '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
           docker-compose exec -T \
-            php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
+            php composer1 require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
 
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer require vlucas/phpdotenv --no-update --no-interaction --dev
-          docker-compose exec -T php composer update --no-interaction
+          docker-compose exec -T php composer1 require vlucas/phpdotenv --no-update --no-interaction --dev
+          docker-compose exec -T php composer1 update --no-interaction
           docker-compose exec -T php php vendor/bin/reset-shop
 
       - name: Put module settings
@@ -200,26 +201,26 @@ jobs:
           coverage: xdebug
           extensions: gd, zip
 
-      - name: Downgrade Composer to Version 1
+      - name: Downgrade composer1 to Version 1
         run: |
-          composer self-update --1
+          composer1 self-update --1
 
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer install
+        run: composer1 install
 
       - name: Run phpcs
         id: phpcs
         if: always()
         working-directory: source/test-module
-        run: composer phpcs
+        run: composer1 phpcs
 
       - name: Run phpmd
         id: phpmd
         if: always()
         working-directory: source/test-module
-        run: composer phpmd-report || composer phpmd
+        run: composer1 phpmd-report || composer1 phpmd
 
       - name: Upload log artifact
         if: always()

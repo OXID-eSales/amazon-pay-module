@@ -239,6 +239,8 @@ jobs:
     steps:
       - name: Checkout current module
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Download unit_tests artifacts
         continue-on-error: true
@@ -278,6 +280,6 @@ jobs:
             -Dsonar.tests=tests
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.php.coverage.reportPaths=tests/coverage.xml
-            -Dsonar.php.phpmd.reportPaths=styles/phpmd.report.json
+            -Dsonar.php.phpmd.reportPaths=tests/phpmd.report.json
             -Dsonar.cpd.php.minimumTokens=25
             -Dsonar.cpd.php.minimumLines=5

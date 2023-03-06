@@ -111,7 +111,9 @@ jobs:
         continue-on-error: true
         working-directory: source/test-module/tests
         run: |
-          echo "${{ secrets.DOTENV }}" > .env
+          cat <<EOT > .env
+          ${{ secrets.DOTENV }}
+          EOT
 
       - name: Stop containers
         if: always()
@@ -130,6 +132,7 @@ jobs:
             source/composer.lock
             source/config.inc.php
             data/php/logs/error_log.txt
+            source/test-module/tests/.env
 
   unit_tests:
     strategy:

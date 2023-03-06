@@ -203,7 +203,8 @@ jobs:
 
       - name: Downgrade composer1 to Version 1
         run: |
-          composer1 self-update --1
+          docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
 
       - name: Install module dependencies
         id: dependencies

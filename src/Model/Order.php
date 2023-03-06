@@ -89,10 +89,12 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
+     * Needs to return Address|Null, is not possible in PHP
+     * TODO: check if in Oxid 7 the return type ?Address can be provided
      * @return Address|null
      *
      */
-    public function getDelAddressInfo(): Address
+    public function getDelAddressInfo()
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();

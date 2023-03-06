@@ -240,14 +240,14 @@ jobs:
       - name: Checkout current module
         uses: actions/checkout@v3
 
-      - name: Download phpunit artifacts
+      - name: Download unit_tests artifacts
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
           name: TestsLog-7.0
           path: ./tests/
 
-      - name: Download phpunit artifacts
+      - name: Download styles artifacts
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
@@ -263,7 +263,7 @@ jobs:
       - name: Fix paths in styles logs
         continue-on-error: true
         run: |
-          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' styles/phpmd.report.json
+          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' tests/phpmd.report.json
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master

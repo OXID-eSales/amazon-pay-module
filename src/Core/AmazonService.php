@@ -256,6 +256,13 @@ class AmazonService
 
         $orderAmount = (float)$order->getTotalOrderSum();
         $compensation = min(75, 0.15 * $orderAmount);
+        /**
+         * There is no trustful method to round down numbers with precision,
+         * so we cut off everything after the second decimal
+         */
+        $decimal = strpos($compensation, '.');
+        $decimal += 3;
+        $compensation = (float)substr($compensation, 0, $decimal);
 
         return min(150000, $orderAmount + $compensation);
     }
@@ -386,7 +393,7 @@ class AmazonService
             !(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))
         ) {
             Registry::getUtilsView()->addErrorToDisplay(
-                Registry::getLang()->translateString(("OSC_AMAZONPAY_REFUND_ANNOTATION") .
+                Registry::getLang()->translateString("OSC_AMAZONPAY_REFUND_ANNOTATION" . " " .
                     $this->getMaximalRefundAmount($orderId)) . $orderCurrencyName
             );
             return;

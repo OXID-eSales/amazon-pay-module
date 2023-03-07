@@ -223,7 +223,7 @@ class Order extends Order_parent
         }
 
         /** @var string $paymentId */
-        $paymentId = $this->getFieldData('oxpaymentid');
+        $paymentId = $this->getFieldData('oxpaymenttype');
         return Constants::isAmazonPayment($paymentId);
     }
 
@@ -234,7 +234,7 @@ class Order extends Order_parent
     public function delete($oxid = null): bool
     {
         $oxid = $oxid ?: $this->getId();
-        if (!$oxid) {
+        if (!$oxid || !$this->load($oxid)) {
             return false;
         }
 

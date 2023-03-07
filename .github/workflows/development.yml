@@ -247,20 +247,20 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: TestsLog-7.0
-          path: ./tests/
+          path: ./tests/reports/
 
       - name: Download styles artifacts
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:
           name: StylesLog-7.0
-          path: ./tests/
+          path: ./tests/reports/
 
       - name: Fix paths in unit logs
         continue-on-error: true
         run: |
-          sed -i 's+/var/www/test-module/++' tests/coverage.xml
-          sed -i 's+/var/www/test-module/++' tests/phpunit.xml
+          sed -i 's+/var/www/test-module/++' tests/reports/coverage.xml
+          sed -i 's+/var/www/test-module/++' tests/reports/phpunit.xml
 
       - name: Fix paths in styles logs
         continue-on-error: true
@@ -279,7 +279,7 @@ jobs:
             -Dsonar.sources=src
             -Dsonar.tests=tests
             -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.php.coverage.reportPaths=tests/coverage.xml
-            -Dsonar.php.phpmd.reportPaths=tests/phpmd.report.json
+            -Dsonar.php.coverage.reportPaths=tests/reports/coverage.xml
+            -Dsonar.php.phpmd.reportPaths=tests/reports/phpmd.report.json
             -Dsonar.cpd.php.minimumTokens=25
             -Dsonar.cpd.php.minimumLines=5

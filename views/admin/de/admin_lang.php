@@ -44,9 +44,10 @@ $aLang = [
     'OSC_AMAZONPAY_MINICART_AND_MODAL' => 'Warenkorb + Warenkorb-PopUp',
     'OSC_AMAZONPAY_PERFORMANCE'        => 'Performance',
     'OSC_AMAZONPAY_EXCLUSION'          => '"AmazonPay ausschließen" nutzen',
+    'HELP_OSC_AMAZONPAY_EXCLUSION'     => 'Es können Produkte und Kategorien von AmazonPay ausgeschlossen werden. Wenn Sie das nicht tun, können Sie das Feature aus Performancegründen generell deaktivieren',
     'OSC_AMAZONPAY_SOCIAL_LOGIN'        => 'Amazon Social Login',
     'OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'        => 'Amazon Social Login deaktivieren',
-    'HELP_OSC_AMAZONPAY_EXCLUSION'     => 'Es können Produkte und Kategorien von AmazonPay ausgeschlossen werden. Wenn Sie das nicht tun, können Sie das Feature aus Performancegründen generell deaktivieren',
+    'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'Es besteht die Möglichkeit, sich im Shop mit einem Amazon-Kundenkonto anzumelden. Dabei werden die Adressdaten von Amazon übernommen. Die Anmeldung ist nur dann möglich, wenn noch kein Konto im Shop mit der gleichen Amazon-EMail-Adresse existiert.<br>Wenn Sie diese Funktion nicht Ihren Kunden anbieten wollen, können sie diese hier deaktivieren.',
     'OSC_AMAZONPAY_SAVE'               => 'Speichern',
     'OSC_AMAZONPAY_ERR_CONF_INVALID'   =>
         'Ein oder mehrere Konfigurationswerte sind entweder nicht festgelegt oder falsch. Bitte überprüfen Sie sie noch einmal.<br>

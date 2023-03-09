@@ -27,7 +27,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class DeliverySetMainControllerTest extends UnitTestCase
 {
-    public function testRender(): void
+    public function testRender()
     {
         $controller = new DeliverySetMain();
         $this->assertSame('deliveryset_main.tpl', $controller->render());

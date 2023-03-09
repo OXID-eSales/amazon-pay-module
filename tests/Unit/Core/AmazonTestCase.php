@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
+use Dotenv\Dotenv;
 use Exception;
 use Mockery;
 use Mockery\MockInterface;
@@ -21,29 +22,51 @@ use Psr\Log\LoggerInterface;
 class AmazonTestCase extends UnitTestCase
 {
     /** @var AmazonService */
-    protected AmazonService $amazonService;
+    protected $amazonService;
 
     /** @var AmazonClient */
-    protected AmazonClient $amazonClient;
+    protected $amazonClient;
 
     /** @var Config */
-    protected Config $moduleConfig;
+    protected $moduleConfig;
 
     /** @var LoggerInterface | MockInterface */
     protected $mockLogger;
+    public static $modulConfig = [];
 
     /**
      * @throws Exception
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
 
         $this->moduleConfig = oxNew(Config::class);
 
+
+        if (empty(self::$modulConfig)) {
+            /**
+             * On a second run of this method, $_ENV won't have the .env-files content.
+             * That's why we store the data from the first run in a static attribute.
+             */
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+            $dotenv->load();
+            self::$modulConfig = [
+                'sAmazonPayStoreId' => $_ENV['MODULE_AMAZON_PAY_STORE_ID'],
+                'sAmazonPayMerchantId' => $_ENV['MODULE_AMAZON_PAY_MERCHANT_ID'],
+                'sAmazonPayPubKeyId' => $_ENV['MODULE_AMAZON_PAY_PUB_KEY_ID'],
+                'sAmazonPayPrivKey' => $_ENV['MODULE_AMAZON_PAY_PRIV_KEY']
+            ];
+        }
+
+        $this->setConfigParam('sAmazonPayStoreId', self::$modulConfig['sAmazonPayStoreId']);
+        $this->setConfigParam('sAmazonPayMerchantId', self::$modulConfig['sAmazonPayMerchantId']);
+        $this->setConfigParam('sAmazonPayPubKeyId', self::$modulConfig['sAmazonPayPubKeyId']);
+        $this->setConfigParam('sAmazonPayPrivKey', self::$modulConfig['sAmazonPayPrivKey']);
+
         $configurations = [
-            'public_key_id' => $this->moduleConfig->getPublicKeyId(),
-            'private_key' => $this->moduleConfig->getPrivateKey(),
+            'public_key_id' => self::$modulConfig['sAmazonPayPubKeyId'],
+            'private_key' => self::$modulConfig['sAmazonPayPrivKey'],
             'region' => $this->moduleConfig->getPaymentRegion(),
             'sandbox' => true
         ];

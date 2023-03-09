@@ -10,12 +10,12 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
 final class AmazonPayExcludeCest extends BaseCest
 {
-    protected array $excluded;
-    protected string $amazonExcludeProductConfig = '[name="editval[oxarticles__osc_amazon_exclude]"]:nth-child(2)';
-    protected string $amazonExcludeCategoryConfig = '[name="editval[oxcategories__osc_amazon_exclude]"]:nth-child(2)';
-    public string $searchForm = '#search';
+    protected $excluded;
+    protected $amazonExcludeProductConfig = '[name="editval[oxarticles__osc_amazon_exclude]"]:nth-child(2)';
+    protected $amazonExcludeCategoryConfig = '[name="editval[oxcategories__osc_amazon_exclude]"]:nth-child(2)';
+    public $searchForm = '#search';
 
-    public function _before(AcceptanceTester $I): void
+    public function _before(AcceptanceTester $I)
     {
         parent::_before($I);
         $excluded = Fixtures::get('amazonExclude');
@@ -37,7 +37,7 @@ final class AmazonPayExcludeCest extends BaseCest
      * @group AmazonPayExcludeTest
      * @throws \Exception
      */
-    public function checkAmazonPayExcludeProductWorks(AcceptanceTester $I): void
+    public function checkAmazonPayExcludeProductWorks(AcceptanceTester $I)
     {
 
         $this->excluded = Fixtures::get('amazonExclude');
@@ -102,7 +102,7 @@ final class AmazonPayExcludeCest extends BaseCest
      * @group b
      * @throws \Exception
      */
-    public function checkAmazonPayExcludeCategoryWorks(AcceptanceTester $I): void
+    public function checkAmazonPayExcludeCategoryWorks(AcceptanceTester $I)
     {
         $this->excluded = Fixtures::get('amazonExclude');
         $I->wantToTest('AmazonPay Exclude Option for categories is  working');

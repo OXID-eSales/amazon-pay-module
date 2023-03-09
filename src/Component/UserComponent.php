@@ -27,21 +27,21 @@ class UserComponent extends UserComponent_parent
      * @param array $amazonSession
      * @throws Exception
      */
-    public function createGuestUser(array $amazonSession): void
+    public function createGuestUser(array $amazonSession)
     {
         $session = Registry::getSession();
         $config = new Config();
 
         $this->setParent(oxNew(RegisterController::class));
 
-        $this->setRequestParameter('userLoginName', $this->_getNameFromAmazonResponse($amazonSession));
-        $this->setRequestParameter('lgn_usr', $this->_getEMailFromAmazonResponse($amazonSession));
+        $this->setRequestParameterString('userLoginName', $this->_getNameFromAmazonResponse($amazonSession));
+        $this->setRequestParameterString('lgn_usr', $this->_getEMailFromAmazonResponse($amazonSession));
 
         // Guest users have a blank password
         $password = '';
-        $this->setRequestParameter('lgn_pwd', $password);
-        $this->setRequestParameter('lgn_pwd2', $password);
-        $this->setRequestParameter('lgn_pwd2', $password);
+        $this->setRequestParameterString('lgn_pwd', $password);
+        $this->setRequestParameterString('lgn_pwd2', $password);
+        $this->setRequestParameterString('lgn_pwd2', $password);
 
         $amazonBillingAddress = $amazonSession['response']['billingAddress'];
         $amazonShippingAddress = $amazonSession['response']['shippingAddress'];
@@ -59,7 +59,7 @@ class UserComponent extends UserComponent_parent
 
         // handle billing address
         $billingAddress = Address::mapAddressToDb($amazonBillingAddress, 'oxuser__');
-        $this->setRequestParameter('invadr', $billingAddress);
+        $this->setRequestParameterArray('invadr', $billingAddress);
 
         // handle shipping address (if provided by amazon)
         if ($amazonShippingAddress) {
@@ -105,7 +105,12 @@ class UserComponent extends UserComponent_parent
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameter(string $paramName, mixed $paramValue): void
+    public function setRequestParameterString(string $paramName, string $paramValue)
+    {
+        $_POST[$paramName] = $paramValue;
+    }
+
+    public function setRequestParameterArray(string $paramName, array $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }
@@ -113,7 +118,7 @@ class UserComponent extends UserComponent_parent
     /**
      * @inheritdoc
      */
-    public function logout(): ?string
+    public function logout(): string
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();

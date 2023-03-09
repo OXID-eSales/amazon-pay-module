@@ -18,14 +18,15 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class User extends User_parent
 {
-    private ?Address $amazonAddress = null;
+    private $amazonAddress = null;
 
     /**
      * @inherit doc
      *
      * @param array $aDelAddress address data array
+     * TODO: check if typehint can be used in Oxid 7
      */
-    protected function _assignAddress($aDelAddress): void
+    protected function _assignAddress($aDelAddress)
     {
         $session = Registry::getSession();
         if (
@@ -42,7 +43,7 @@ class User extends User_parent
      *
      * @return Address|null
      */
-    private function getAmazonAddress(): ?Address
+    private function getAmazonAddress(): Address
     {
         if ($this->amazonAddress === null) {
             $service = OxidServiceProvider::getAmazonService();
@@ -68,8 +69,9 @@ class User extends User_parent
      * @param string|null $sUserId
      *
      * @return UserAddressList|array
+     * TODO: check if typehint can be used in Oxid 7
      */
-    public function getUserAddresses($sUserId = null): array|UserAddressList
+    public function getUserAddresses($sUserId = null): UserAddressList
     {
         $address = $this->getAmazonAddress();
 
@@ -88,7 +90,7 @@ class User extends User_parent
      *
      * @return string|null
      */
-    public function getSelectedAddressId(): ?string
+    public function getSelectedAddressId(): string
     {
         $address = $this->getAmazonAddress();
 

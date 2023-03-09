@@ -26,7 +26,6 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Core\ViewConfig;
 use stdClass;
 
 /**
@@ -41,11 +40,10 @@ class OrderController extends OrderController_parent
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function init(): void
+    public function init()
     {
         $session = Registry::getSession();
-        $viewConfig = $this->getViewConfig();
-        $exclude = $viewConfig->isAmazonExclude();
+        $exclude = $this->getViewConfig()->isAmazonExclude();
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
 
@@ -64,18 +62,7 @@ class OrderController extends OrderController_parent
         parent::init();
     }
 
-    public function getViewConfig(): ViewConfig
-    {
-        if ($this->_oViewConf === null) {
-            $this->_oViewConf = oxNew(ViewConfig::class);
-        }
-
-        /** @var ViewConfig $conf */
-        $conf = $this->_oViewConf;
-        return $conf;
-    }
-
-    protected function initAmazonPay(): void
+    protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
@@ -83,7 +70,7 @@ class OrderController extends OrderController_parent
     /**
      * @throws Exception
      */
-    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void
+    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session)
     {
         $user = $this->getUser();
         $amazonSession = $amazonService->getCheckoutSession();
@@ -118,6 +105,7 @@ class OrderController extends OrderController_parent
     {
         $basket = Registry::getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
+
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
@@ -167,7 +155,7 @@ class OrderController extends OrderController_parent
         return $ret;
     }
 
-    protected function completeAmazonPayment(): void
+    protected function completeAmazonPayment()
     {
 
         $payload = new Payload();
@@ -215,7 +203,7 @@ class OrderController extends OrderController_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    protected function completeAmazonPaymentExpress(): void
+    protected function completeAmazonPaymentExpress()
     {
         $payload = new Payload();
         /** @var string $orderOxId */
@@ -306,7 +294,7 @@ class OrderController extends OrderController_parent
      * @param string $paymentId
      * @return void
      */
-    protected function setAmazonPayAsPaymentMethod(string $paymentId): void
+    protected function setAmazonPayAsPaymentMethod(string $paymentId)
     {
         $basket = $this->getBasket();
         $user = $this->getUser();

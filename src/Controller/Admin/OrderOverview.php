@@ -62,7 +62,7 @@ class OrderOverview extends OrderOverview_parent
                 $newFilteredLog['identifier'] = $orderLog['OSC_AMAZON_IDENTIFIER'];
                 $newFilteredLog['statusCode'] = $orderLog['OSC_AMAZON_STATUS_CODE'] === '200' ? 'success' : 'error';
 
-                if (str_contains($orderLog['OSC_AMAZON_REQUEST_TYPE'], 'Error')) {
+                if (strpos($orderLog['OSC_AMAZON_REQUEST_TYPE'], 'Error') !== false) {
                     $newFilteredLog['statusCode'] = 'error';
                     $newFilteredLog['identifier'] = 'ORDER ID:' . $orderLog['OSC_AMAZON_OXORDERID'];
                 }
@@ -119,7 +119,7 @@ class OrderOverview extends OrderOverview_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function refundpayment(): void
+    public function refundpayment()
     {
         $oOrder = oxNew(Order::class);
         /** @var float $refundAmount */

@@ -25,7 +25,7 @@ use function date;
  */
 class Order extends Order_parent
 {
-    private AmazonService $amazonService;
+    private $amazonService;
 
     /**
      * Security and Cleanup before finalize order
@@ -34,7 +34,7 @@ class Order extends Order_parent
      * @return int|null
      *
      */
-    protected function prepareFinalizeOrder(Basket $oBasket): ?int
+    protected function prepareFinalizeOrder(Basket $oBasket): int
     {
         $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
@@ -64,7 +64,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): ?int
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): int
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
@@ -89,10 +89,12 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
+     * Needs to return Address|Null, is not possible in PHP
+     * TODO: check if in Oxid 7 the return type ?Address can be provided
      * @return Address|null
      *
      */
-    public function getDelAddressInfo(): ?Address
+    public function getDelAddressInfo()
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();
@@ -125,7 +127,7 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = []): void
+    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
             $this->_setFieldData('oxtransid', $data['chargeId']);
@@ -204,7 +206,7 @@ class Order extends Order_parent
     /**
      * @param AmazonService $amazonService
      */
-    public function setAmazonService(AmazonService $amazonService): void
+    public function setAmazonService(AmazonService $amazonService)
     {
         $this->amazonService = $amazonService;
     }
@@ -221,7 +223,7 @@ class Order extends Order_parent
         }
 
         /** @var string $paymentId */
-        $paymentId = $this->getFieldData('oxpaymentid');
+        $paymentId = $this->getFieldData('oxpaymenttype');
         return Constants::isAmazonPayment($paymentId);
     }
 
@@ -232,7 +234,7 @@ class Order extends Order_parent
     public function delete($oxid = null): bool
     {
         $oxid = $oxid ?: $this->getId();
-        if (!$oxid) {
+        if (!$oxid || !$this->load($oxid)) {
             return false;
         }
 

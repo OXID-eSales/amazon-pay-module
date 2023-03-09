@@ -30,14 +30,14 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class DeliverySetMainTest extends UnitTestCase
 {
     /** @var DeliverySetMain */
-    private DeliverySetMain $deliverySetMain;
+    private $deliverySetMain;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->deliverySetMain = oxNew(DeliverySetMain::class);
     }
 
-    public function testRender(): void
+    public function testRender()
     {
         $this->assertSame('deliveryset_main.tpl', $this->deliverySetMain->render());
     }
@@ -45,7 +45,7 @@ class DeliverySetMainTest extends UnitTestCase
     /**
      * @throws \Exception
      */
-    public function testSave(): void
+    public function testSave()
     {
         $editVal = [
             'oxdeliveryset__oxid' => 'oxidstandard',

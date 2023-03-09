@@ -13,14 +13,14 @@ use OxidEsales\Codeception\Page\Page;
 
 class AcceptSSLCertificate extends Page
 {
-    private string $markerString = "Your connection is not private";
-    private string $advancedButton = "//button[@id='details-button']";
-    private string $proceedLink = "//a[@id='proceed-link']";
+    private $markerString = "Your connection is not private";
+    private $advancedButton = "//button[@id='details-button']";
+    private $proceedLink = "//a[@id='proceed-link']";
 
     /**
      * @return void
      */
-    public function acceptCertificate(): void
+    public function acceptCertificate()
     {
         $I = $this->user;
 

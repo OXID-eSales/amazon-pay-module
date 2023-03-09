@@ -25,7 +25,7 @@ class OrderList extends OrderList_parent
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function cancelOrder(): void
+    public function cancelOrder()
     {
         $sOxId = $this->getEditObjectId();
         if (!$sOxId) {

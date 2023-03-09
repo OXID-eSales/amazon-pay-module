@@ -36,7 +36,7 @@ class DispatchController extends FrontendController
      * @return void
      * @throws Exception
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 

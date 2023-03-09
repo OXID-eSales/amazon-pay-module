@@ -141,7 +141,7 @@
                         </label>
                     </div>
                 </div>
-                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_EXCLUSION"}]</span>
+                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED"}]</span>
             </div>
         </div>
 

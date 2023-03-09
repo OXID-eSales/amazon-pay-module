@@ -31,9 +31,9 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 class LoggerTest extends UnitTestCase
 {
     /** @var Logger */
-    private Logger $logger;
+    private $logger;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $mockLogFileName = 'amazonpay-test.log';
         $this->logger = new Logger(
@@ -41,19 +41,19 @@ class LoggerTest extends UnitTestCase
         );
     }
 
-    public function testResolveLogContent(): void
+    public function testResolveLogContent()
     {
         /** @var array $content */
         $content = json_decode(file_get_contents(__DIR__ . '/../../Fixtures/amazonresponse.json'), true) ?: [];
         $result = $this->logger->resolveLogContent($content);
 
-        $this->assertSame($result['requestType'], 'IPN');
-        $this->assertSame($result['chargePermissionId'], $content['ChargePermissionId']);
-        $this->assertSame($result['identifier'], $content['ChargePermissionId']);
-        $this->assertSame($result['objectId'], $content['ObjectId']);
+        $this->assertSame('IPN', $result['requestType']);
+        $this->assertSame($content['chargePermissionId'], $result['ChargePermissionId']);
+        $this->assertSame($content['identifier'], $result['ChargePermissionId']);
+        $this->assertSame($content['objectId'], $result['ObjectId']);
     }
 
-    public function testGetRepository(): void
+    public function testGetRepository()
     {
         $this->assertInstanceOf(LogRepository::class, $this->logger->getRepository());
     }

@@ -15,7 +15,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 
 class LogRepository
 {
-    public const TABLE_NAME = 'amazonpaylog';
+    const TABLE_NAME = 'amazonpaylog';
 
     /**
      * @param LogMessage $logMessage
@@ -23,7 +23,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @psalm-suppress InternalMethod
      */
-    public function saveLogMessage(LogMessage $logMessage): void
+    public function saveLogMessage(LogMessage $logMessage)
     {
         $uid = Registry::getUtilsObject()->generateUID();
 
@@ -166,7 +166,7 @@ class LogRepository
         string $remark,
         string $transStatus = 'OK',
         string $chargeId = ''
-    ): void {
+    ) {
         $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OSC_AMAZON_REMARK = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
             $sql,
@@ -187,7 +187,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function updateOrderStatus(string $orderId, string $transStatus = 'OK', string $chargeId = ''): void
+    public function updateOrderStatus(string $orderId, string $transStatus = 'OK', string $chargeId = '')
     {
         $sql = 'UPDATE oxorder SET OXTRANSSTATUS = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
@@ -206,7 +206,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function deleteLogMessageByOrderId(string $orderId): void
+    public function deleteLogMessageByOrderId(string $orderId)
     {
         $sql = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID =' . $orderId;
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(

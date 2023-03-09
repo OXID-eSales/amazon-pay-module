@@ -8,8 +8,9 @@ name: Docker
 on:
   schedule:
     - cron: '16 6 * * *'
+  workflow_dispatch:
   push:
-    branches: [ b-6.2.x ]
+    branches: [ b-6.1.x ]
   repository_dispatch:
     types: [docker-build]
 

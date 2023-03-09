@@ -8,7 +8,6 @@
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 use Exception;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
@@ -29,20 +28,20 @@ class ViewConfig extends ViewConfig_parent
      * is this a "Flow"-Theme Compatible Theme?
      * @var null|boolean $isFlowCompatibleTheme
      */
-    protected ?bool $isFlowCompatibleTheme = null;
+    protected $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
      * @var null|boolean $isWaveCompatibleTheme
      */
-    protected ?bool $isWaveCompatibleTheme = null;
+    protected $isWaveCompatibleTheme = null;
 
     /**
      * articlesId for the checkout review url
      */
-    protected string $articlesId = '';
+    protected $articlesId = '';
 
-    public string $signature = '';
+    public $signature = '';
 
     /**
      * @return Config
@@ -61,7 +60,7 @@ class ViewConfig extends ViewConfig_parent
         $blIsActive = true;
         try {
             $config->checkHealth();
-        } catch (StandardException) {
+        } catch (StandardException $ex) {
             $blIsActive = false;
         }
         return $blIsActive;
@@ -73,14 +72,6 @@ class ViewConfig extends ViewConfig_parent
     public function displayExpressInPDP(): bool
     {
         return $this->getAmazonConfig()->displayExpressInPDP();
-    }
-
-    /**
-     * @return bool
-     */
-    public function useExclusion(): bool
-    {
-        return $this->getAmazonConfig()->useExclusion();
     }
 
     /**
@@ -176,54 +167,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonExclude(string $oxid = ''): bool
     {
-        if (!$this->useExclusion()) {
-            return false;
-        }
-
-        $session = Registry::getSession();
-
-        $basket = $session->getBasket();
-
-        $productIds = [];
-
-        foreach ($basket->getContents() as $product) {
-            $productIds[] = $product->getProductId();
-        }
-
-        if ($oxid !== '') {
-            $productIds[] = $oxid;
-        }
-
-        $productIds = array_unique($productIds);
-
-        if (count(array_filter($productIds)) < 1) {
-            return false;
-        }
-
-        // generates the string "?,?,?,?," for an array with count() = 4 and strips the trailing comma
-        $questionMarks = trim(
-            str_pad("", count($productIds) * 2, '?,'),
-            ','
-        );
-        $sql = "SELECT oa.OSC_AMAZON_EXCLUDE as excludeArticle,
-               oc.OSC_AMAZON_EXCLUDE as excludeCategory
-          FROM oxarticles oa
-          JOIN oxobject2category o2c
-            ON (o2c.OXOBJECTID = oa.OXID)
-          JOIN oxcategories oc
-            ON (oc.OXID = o2c.OXCATNID)
-         WHERE oa.OXID in (" . $questionMarks . ")";
-
-        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIds);
-
-        foreach ($results as $result) {
-            if ($result['excludeArticle'] === '1' || $result['excludeCategory'] === '1') {
-                OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-                return true;
-            }
-        }
-
-        return false;
+        return $this->getAmazonConfig()->isAmazonExcluded($oxid);
     }
 
     /**
@@ -280,7 +224,7 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
-    public function setArticlesId(string $articlesId): void
+    public function setArticlesId(string $articlesId)
     {
         $this->articlesId = $articlesId;
     }

@@ -32,15 +32,15 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 class OrderTest extends AmazonTestCase
 {
     /** @var EshopOrderModel */
-    private EshopOrderModel $order;
+    private $order;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->order = oxNew(EshopOrderModel::class);
     }
 
-    public function testGetDelAddressInfo(): void
+    public function testGetDelAddressInfo()
     {
         $amazonServiceMock = Mockery::mock(AmazonService::class);
         $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
@@ -63,7 +63,7 @@ class OrderTest extends AmazonTestCase
         $this->assertSame('BW', $delAddressInfo->oxaddress__stateorregion->rawValue);
     }
 
-    public function testValidateDeliveryAddress(): void
+    public function testValidateDeliveryAddress()
     {
         $amazonServiceMock = $this->mockLogger = Mockery::mock(AmazonService::class);
         $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
@@ -72,7 +72,7 @@ class OrderTest extends AmazonTestCase
         $this->assertSame(0, $this->order->validateDeliveryAddress(null));
     }
 
-    public function testUpdateAmazonPayOrderStatus(): void
+    public function testUpdateAmazonPayOrderStatus()
     {
         $this->order->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
         $this->assertSame('NOT_FINISHED', $this->order->getFieldData('oxtransstatus'));

@@ -30,34 +30,34 @@ class AmazonService
     /**
      * @var AmazonClient
      */
-    private AmazonClient $client;
+    private $client;
     /**
      * @var array
      */
-    private array $checkoutSession = [];
+    private $checkoutSession = [];
 
     /**
      * Delivery address
      *
      * @var ?stdClass
      */
-    protected ?stdClass $deliveryAddress = null;
+    protected $deliveryAddress = null;
 
     /**
      * Billing address
      *
      * @var stdClass
      */
-    protected stdClass $billingAddress;
+    protected $billingAddress;
 
-    protected bool $isTwoStep = false;
+    protected $isTwoStep = false;
 
     /**
      * Billing address fields
      *
      * @var array
      */
-    protected array $billingAddressFields = [
+    protected $billingAddressFields = [
         'oxuser__oxcompany',
         'oxuser__oxusername',
         'oxuser__oxsal',
@@ -81,7 +81,7 @@ class AmazonService
      *
      * @var User|null
      */
-    protected ?User $actUser = null;
+    protected $actUser = null;
 
     /**
      * AmazonService constructor.
@@ -99,7 +99,7 @@ class AmazonService
     /**
      * @param string $checkoutSessionId
      */
-    public function storeAmazonSession(string $checkoutSessionId): void
+    public function storeAmazonSession(string $checkoutSessionId)
     {
         Registry::getSession()->setVariable(
             Constants::SESSION_CHECKOUT_ID,
@@ -256,11 +256,18 @@ class AmazonService
 
         $orderAmount = (float)$order->getTotalOrderSum();
         $compensation = min(75, 0.15 * $orderAmount);
+        /**
+         * There is no trustful method to round down numbers with precision,
+         * so we cut off everything after the second decimal
+         */
+        $decimal = strpos($compensation, '.');
+        $decimal += 3;
+        $compensation = (float)substr($compensation, 0, $decimal);
 
         return min(150000, $orderAmount + $compensation);
     }
 
-    public function unsetPaymentMethod(): void
+    public function unsetPaymentMethod()
     {
         $session = Registry::getSession();
         $session->deleteVariable(Constants::SESSION_CHECKOUT_ID);
@@ -278,7 +285,7 @@ class AmazonService
         string $amazonSessionId,
         Basket $basket,
         LoggerInterface $logger
-    ): void {
+    ) {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
@@ -351,7 +358,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger): void
+    public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->processPayment($amazonSessionId, $basket, $logger);
     }
@@ -363,7 +370,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger): void
+    public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->isTwoStep = false;
         $this->processPayment($amazonSessionId, $basket, $logger);
@@ -374,7 +381,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund(string $orderId, float $refundAmount, LoggerInterface $logger): void
+    public function createRefund(string $orderId, float $refundAmount, LoggerInterface $logger)
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
@@ -386,7 +393,7 @@ class AmazonService
             !(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))
         ) {
             Registry::getUtilsView()->addErrorToDisplay(
-                Registry::getLang()->translateString(("OSC_AMAZONPAY_REFUND_ANNOTATION") .
+                Registry::getLang()->translateString("OSC_AMAZONPAY_REFUND_ANNOTATION" . " " .
                     $this->getMaximalRefundAmount($orderId)) . $orderCurrencyName
             );
             return;
@@ -447,7 +454,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processRefund(string $refundId, LoggerInterface $logger): void
+    public function processRefund(string $refundId, LoggerInterface $logger)
     {
         $logger->info("Start processRefund");
         $amazonConfig = oxNew(Config::class);
@@ -501,7 +508,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processCharge(string $chargeId, LoggerInterface $logger): void
+    public function processCharge(string $chargeId, LoggerInterface $logger)
     {
         $amazonConfig = oxNew(Config::class);
 
@@ -552,7 +559,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * TODO: refactor
      */
-    public function checkOrderState(string $orderId): void
+    public function checkOrderState(string $orderId)
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
@@ -650,7 +657,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processCancel(string $orderId): void
+    public function processCancel(string $orderId)
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
@@ -714,7 +721,7 @@ class AmazonService
      * @param array $result
      * @param string $orderId
      */
-    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId = ''): void
+    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId = '')
     {
         $response = PhpHelper::jsonToArray($result['response']);
 
@@ -762,7 +769,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function capturePaymentForOrder(string $chargeId, string $amount, string $currencyCode): void
+    public function capturePaymentForOrder(string $chargeId, string $amount, string $currencyCode)
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();
@@ -826,7 +833,7 @@ class AmazonService
         string $chargePermissionId,
         string $trackingCode = '',
         string $deliveryType = ''
-    ): void {
+    ) {
         $amazonConfig = oxNew(Config::class);
 
         $payload = [];
@@ -886,8 +893,8 @@ class AmazonService
         foreach ($logMessages as $logMessage) {
             $logsWithChargePermission =
                 $repository->findLogMessageForOrderId($logMessage['OSC_AMAZON_OXORDERID']);
-            $error = str_contains($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error');
-            if ($error) {
+            $error = strpos($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error');
+            if ($error !== false) {
                 $logsWithChargePermission =
                     $repository->findLogMessageForChargePermissionId($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']);
                 if ($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID'] === 'null') {

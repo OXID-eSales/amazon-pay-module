@@ -261,8 +261,10 @@ class AmazonService
          * so we cut off everything after the second decimal
          */
         $decimal = strpos($compensation, '.');
-        $decimal += 3;
-        $compensation = (float)substr($compensation, 0, $decimal);
+        if ($decimal !== false) {
+            $decimal += 3;
+            $compensation = (float)substr($compensation, 0, $decimal);
+        }
 
         return min(150000, $orderAmount + $compensation);
     }
@@ -282,10 +284,11 @@ class AmazonService
      * @param LoggerInterface $logger Logger
      */
     protected function processPayment(
-        string $amazonSessionId,
-        Basket $basket,
+        string          $amazonSessionId,
+        Basket          $basket,
         LoggerInterface $logger
-    ) {
+    )
+    {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
@@ -389,12 +392,12 @@ class AmazonService
         /** @var string $orderCurrencyName */
         $orderCurrencyName = $order->getOrderCurrency()->name;
 
-        if (
-            !(0 < $refundAmount && $refundAmount < $this->getMaximalRefundAmount($orderId))
-        ) {
+        if ($refundAmount < 0 || $refundAmount > $this->getMaximalRefundAmount($orderId)) {
             Registry::getUtilsView()->addErrorToDisplay(
-                Registry::getLang()->translateString("OSC_AMAZONPAY_REFUND_ANNOTATION" . " " .
-                    $this->getMaximalRefundAmount($orderId)) . $orderCurrencyName
+                Registry::getLang()->translateString(
+                    "OSC_AMAZONPAY_REFUND_ANNOTATION"
+                ) .
+                PhpHelper::getMoneyValue($this->getMaximalRefundAmount($orderId)) . " " . $orderCurrencyName
             );
             return;
         }
@@ -833,7 +836,8 @@ class AmazonService
         string $chargePermissionId,
         string $trackingCode = '',
         string $deliveryType = ''
-    ) {
+    )
+    {
         $amazonConfig = oxNew(Config::class);
 
         $payload = [];

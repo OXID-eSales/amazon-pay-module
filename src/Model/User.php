@@ -43,7 +43,7 @@ class User extends User_parent
      *
      * @return Address|null
      */
-    private function getAmazonAddress(): Address
+    private function getAmazonAddress()
     {
         if ($this->amazonAddress === null) {
             $service = OxidServiceProvider::getAmazonService();
@@ -71,7 +71,7 @@ class User extends User_parent
      * @return UserAddressList|array
      * TODO: check if typehint can be used in Oxid 7
      */
-    public function getUserAddresses($sUserId = null): UserAddressList
+    public function getUserAddresses($sUserId = null)
     {
         $address = $this->getAmazonAddress();
 
@@ -90,7 +90,7 @@ class User extends User_parent
      *
      * @return string|null
      */
-    public function getSelectedAddressId(): string
+    public function getSelectedAddressId()
     {
         $address = $this->getAmazonAddress();
 

@@ -88,7 +88,7 @@ class User extends User_parent
     /**
      * Return the amazon address id if set.
      *
-     * @return string|null
+     * @return string
      */
     public function getSelectedAddressId()
     {

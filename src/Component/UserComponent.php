@@ -118,11 +118,11 @@ class UserComponent extends UserComponent_parent
     /**
      * @inheritdoc
      */
-    public function logout(): string
+    public function logout(): void
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        return parent::logout();
+        parent::logout();
     }
 
     /**

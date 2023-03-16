@@ -284,11 +284,10 @@ class AmazonService
      * @param LoggerInterface $logger Logger
      */
     protected function processPayment(
-        string          $amazonSessionId,
-        Basket          $basket,
+        string $amazonSessionId,
+        Basket $basket,
         LoggerInterface $logger
-    )
-    {
+    ) {
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
@@ -836,8 +835,7 @@ class AmazonService
         string $chargePermissionId,
         string $trackingCode = '',
         string $deliveryType = ''
-    )
-    {
+    ) {
         $amazonConfig = oxNew(Config::class);
 
         $payload = [];

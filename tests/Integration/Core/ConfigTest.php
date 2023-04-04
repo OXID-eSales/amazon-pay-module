@@ -28,6 +28,23 @@ use OxidSolutionCatalysts\AmazonPay\Core\Config;
 
 class ConfigTest extends UnitTestCase
 {
+    /**
+     * This method exists to cover differences in the used
+     * phpunit versions in Oxid 6.1 va 6.4
+     * @param $exceptionName
+     * @return void
+     */
+    public function assertException($exceptionName)
+    {
+        if (method_exists(get_parent_class($this), 'setExpectedException')) {
+            $this->setExpectedException($exceptionName);
+        }
+
+        if (method_exists(get_parent_class($this), 'expectException')) {
+            $this->expectExeption($exceptionName);
+        }
+    }
+
     public function testIsSandbox()
     {
         $config = new Config();
@@ -108,7 +125,7 @@ class ConfigTest extends UnitTestCase
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
-        $this->setExpectedException(StandardException::class);
+        $this->assertException(StandardException::class);
         $config->checkHealth();
         $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
@@ -123,7 +140,7 @@ class ConfigTest extends UnitTestCase
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
-        $this->setExpectedException(StandardException::class);
+        $this->assertException(StandardException::class);
         $config->checkHealth();
         $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
@@ -138,7 +155,7 @@ class ConfigTest extends UnitTestCase
         $this->setConfigParam('sAmazonPayMerchantId', '');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
-        $this->setExpectedException(StandardException::class);
+        $this->assertException(StandardException::class);
         $config->checkHealth();
         $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
@@ -153,7 +170,7 @@ class ConfigTest extends UnitTestCase
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', '');
         $config = new Config();
-        $this->setExpectedException(StandardException::class);
+        $this->assertException(StandardException::class);
         $config->checkHealth();
         $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }

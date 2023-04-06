@@ -40,6 +40,8 @@ use OxidSolutionCatalysts\AmazonPay\Model\Basket as ModuleBasket;
 use OxidSolutionCatalysts\AmazonPay\Model\Category as ModuleCategory;
 use OxidSolutionCatalysts\AmazonPay\Model\Order as ModuleOrder;
 use OxidSolutionCatalysts\AmazonPay\Model\User as ModuleUser;
+use OxidSolutionCatalysts\AmazonPay\Controller\PaymentController;
+use OxidEsales\Eshop\Application\Controller\PaymentController as CorePaymentController;
 
 $sMetadataVersion = '2.1';
 
@@ -65,6 +67,7 @@ $aModule = [
         CoreViewConfig::class => ViewConfig::class,
         CoreUserController::class => UserController::class,
         CoreOrderController::class => OrderController::class,
+        CorePaymentController::class => PaymentController::class,
         CoreArticleDetailsController::class => ArticleDetailsController::class,
         CoreOrderOverviewmodel::class => ModuleOrderOverview::class,
         CoreOrderArticleModel::class => ModuleOrderArticle::class,

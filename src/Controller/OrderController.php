@@ -26,7 +26,9 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Service\DeliveryAddressService;
 use stdClass;
+use OxidEsales\Eshop\Application\Model\Address as CoreAddress;
 
 /**
  * Class OrderController
@@ -153,6 +155,19 @@ class OrderController extends OrderController_parent
             $ret = parent::execute();
         }
         return $ret;
+    }
+
+    /**
+     * @return CoreAddress
+     */
+    public function getDelAddress()
+    {
+        $deliveryAddressService = new DeliveryAddressService();
+        if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
+            return $deliveryAddressService->getTempDeliveryAddressAddress();
+        }
+
+        return parent::getDelAddress();
     }
 
     protected function completeAmazonPayment()

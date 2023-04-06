@@ -35,7 +35,6 @@ class User extends User_parent
         ) {
             parent::_assignAddress($aDelAddress);
         }
-        Registry::getSession()->setVariable('deladrid', null);
     }
 
     /**

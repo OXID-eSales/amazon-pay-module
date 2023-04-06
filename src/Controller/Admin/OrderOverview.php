@@ -21,7 +21,7 @@ class OrderOverview extends OrderOverview_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function render(): string
+    public function render()
     {
         $oOrder = oxNew(\OxidSolutionCatalysts\AmazonPay\Model\Order::class);
         $filteredLogs = [];

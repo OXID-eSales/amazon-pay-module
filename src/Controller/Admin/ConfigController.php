@@ -33,7 +33,7 @@ class ConfigController extends AdminController
     /**
      * @return string
      */
-    public function render(): string
+    public function render()
     {
         $thisTemplate = parent::render();
 

@@ -17,7 +17,7 @@ use OxidEsales\Eshop\Application\Model\DeliverySet;
  */
 class DeliverySetMain extends DeliverySetMain_parent
 {
-    public function render(): string
+    public function render()
     {
         $amazonCarriers = AmazonCarrier::getAllCarriers();
 

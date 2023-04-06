@@ -20,7 +20,7 @@ class UserController extends UserController_parent
      *
      * @return bool
      */
-    public function showShipAddress(): bool
+    public function showShipAddress()
     {
         $isAmazonSessionActive = OxidServiceProvider::getAmazonService()->isAmazonSessionActive();
         if (!$isAmazonSessionActive) {

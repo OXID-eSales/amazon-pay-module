@@ -132,7 +132,7 @@ class UserComponent extends UserComponent_parent
      * @return array
      * @deprecated underscore prefix violates PSR12, will be renamed to "getDelAddressData" in next major
      */
-    protected function _getDelAddressData(): array // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+    protected function _getDelAddressData() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $session = Registry::getSession();
         if (

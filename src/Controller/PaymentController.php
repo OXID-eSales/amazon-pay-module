@@ -21,9 +21,9 @@ class PaymentController extends PaymentController_parent
     {
         $returnValue = parent::validatePayment();
 
-        $deliveryAddressService = new DeliveryAddressService();
-        if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
-            $deliveryAddressService->moveInSession();
+        $addressService = new DeliveryAddressService();
+        if ($addressService->isPaymentInSessionIsAmazonPay()) {
+            $addressService->moveInSession();
         }
 
         return $returnValue;

@@ -28,7 +28,7 @@ class DeliveryAddressService
      */
     public function isPaymentInSessionIsAmazonPay()
     {
-        $paymentId = Registry::getSession()->getVariable('paymentid');
+        $paymentId = $this->getSession()->getVariable('paymentid');
 
         return $paymentId === Constants::PAYMENT_ID;
     }
@@ -45,6 +45,7 @@ class DeliveryAddressService
     }
 
     /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
      * @return Session
      */
     protected function getSession()

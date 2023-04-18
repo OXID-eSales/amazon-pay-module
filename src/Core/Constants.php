@@ -33,6 +33,11 @@ class Constants
     const SESSION_CHECKOUT_ID = 'amzn-checkout-sess';
 
     /**
+     * @var string temp amazon delivery address id used to display delivery address in checkout
+     */
+    const SESSION_TEMP_DELIVERY_ADDRESS_ID = 'amazondeladrid';
+
+    /**
      * @var string Amazon checkout session param name deliveryaddr
      */
     const SESSION_DELIVERY_ADDR = 'amazondeladr';

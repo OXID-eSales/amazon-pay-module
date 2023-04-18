@@ -64,7 +64,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): int
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
@@ -231,7 +231,7 @@ class Order extends Order_parent
      * @inheritdoc
      * TODO: check in Oxid 7 if the base methods has updated parameter typehints
      */
-    public function delete($oxid = null): bool
+    public function delete($oxid = null)
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid || !$this->load($oxid)) {

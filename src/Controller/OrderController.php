@@ -18,6 +18,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Service\TermsAndConditionService;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -155,6 +156,23 @@ class OrderController extends OrderController_parent
             $ret = parent::execute();
         }
         return $ret;
+    }
+
+    public function confirmAGB()
+    {
+        $termsAndConditionService = new TermsAndConditionService();
+        $termsAndConditionService->setConfirmFromRequestToSession();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _validateTermsAndConditions()
+    {
+        if ((new TermsAndConditionService())->getConfirmFromSession()) {
+            $_GET['ord_agb'] = 1;
+        }
+        return parent::_validateTermsAndConditions();
     }
 
     /**

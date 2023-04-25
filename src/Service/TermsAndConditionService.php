@@ -38,4 +38,11 @@ class TermsAndConditionService
     {
         return (bool) $this->session->getVariable(self::SESSION_VAR_NAME_CONFIRM_AGB);
     }
+
+    public function resetConfirmOnGet()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $this->session->deleteVariable(self::SESSION_VAR_NAME_CONFIRM_AGB);
+        }
+    }
 }

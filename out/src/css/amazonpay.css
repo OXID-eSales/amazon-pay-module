@@ -10,3 +10,6 @@
     width: 250px; }
   .amazonpay-button-or.small {
     width: 200px; }
+
+#confirm-agb-error-container {
+  display: none; }

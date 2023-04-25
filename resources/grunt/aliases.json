@@ -2,7 +2,8 @@
     "production": [
         "sass:moduleproduction",
         "postcss",
-        "cssmin"
+        "cssmin",
+        "uglify:moduleproduction"
     ],
     "default": [
         "production"

@@ -65,6 +65,14 @@ class OrderController extends OrderController_parent
         parent::init();
     }
 
+    public function render()
+    {
+        $service = new TermsAndConditionService();
+        $service->resetConfirmOnGet();
+
+        return parent::render();
+    }
+
     protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
@@ -156,12 +164,6 @@ class OrderController extends OrderController_parent
             $ret = parent::execute();
         }
         return $ret;
-    }
-
-    public function confirmAGB()
-    {
-        $termsAndConditionService = new TermsAndConditionService();
-        $termsAndConditionService->setConfirmFromRequestToSession();
     }
 
     /**

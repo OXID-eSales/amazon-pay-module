@@ -8,7 +8,8 @@
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use OxidEsales\Eshop\Application\Controller\FrontendController;
-use OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Service\TermsAndConditionService;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidSolutionCatalysts\AmazonPay\Service\TermsAndConditionService;
 
 /**
  * handles amazon checkout ajax calls
@@ -17,8 +18,8 @@ class AmazonCheckoutAjaxController extends FrontendController
 {
     public function confirmAGB()
     {
-        $termsAndConditionService = new TermsAndConditionService();
-        $termsAndConditionService->setConfirmFromRequestToSession();
+        $conditionsService = ContainerFactory::getInstance()->getContainer()->get(TermsAndConditionService::class);
+        $conditionsService->setConfirmFromRequestToSession();
 
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }

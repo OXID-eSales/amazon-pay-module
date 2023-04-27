@@ -1,6 +1,6 @@
 <?php
 
-namespace OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Service;
+namespace OxidSolutionCatalysts\AmazonPay\Service;
 
 use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Core\Registry;
@@ -22,6 +22,9 @@ class TermsAndConditionService
     /** @var object|Session */
     private $request;
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function __construct()
     {
         $this->request = Registry::getRequest();

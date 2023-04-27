@@ -316,7 +316,7 @@ class OrderController extends OrderController_parent
         $session = Registry::getSession();
         $countryOxId = $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
-        $session->setVariable('paymentId', $paymentId);
+        $session->setVariable('paymentid', $paymentId);
         $session->setVariable('_selected_paymentid', $paymentId);
 
         $actShipSet = null;

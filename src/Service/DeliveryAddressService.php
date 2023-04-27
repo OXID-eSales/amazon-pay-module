@@ -39,7 +39,11 @@ class DeliveryAddressService
     public function getTempDeliveryAddressAddress()
     {
         $deliveryAddress = oxNew(Address::class);
-        $deliveryAddress->load($this->getSession()->getVariable(Constants::SESSION_TEMP_DELIVERY_ADDRESS_ID));
+        $delAddressId = $this->getSession()->getVariable(Constants::SESSION_TEMP_DELIVERY_ADDRESS_ID);
+        if (!$delAddressId) {
+            $delAddressId = $this->getSession()->getVariable('deladrid');
+        }
+        $deliveryAddress->load($delAddressId);
 
         return $deliveryAddress;
     }

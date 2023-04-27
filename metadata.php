@@ -42,6 +42,7 @@ use OxidSolutionCatalysts\AmazonPay\Model\Order as ModuleOrder;
 use OxidSolutionCatalysts\AmazonPay\Model\User as ModuleUser;
 use OxidSolutionCatalysts\AmazonPay\Controller\PaymentController;
 use OxidEsales\Eshop\Application\Controller\PaymentController as CorePaymentController;
+use OxidSolutionCatalysts\AmazonPay\Controller\AmazonCheckoutAjaxController;
 
 $sMetadataVersion = '2.1';
 
@@ -85,7 +86,8 @@ $aModule = [
     'controllers' => [
         'amazonconfig' => ConfigController::class,
         'amazoncheckout' => AmazonCheckoutController::class,
-        'amazondispatch' => DispatchController::class
+        'amazondispatch' => DispatchController::class,
+        'amazoncheckoutajax' => AmazonCheckoutAjaxController::class,
     ],
     'templates' => [
         'amazonpay/amazonconfig.tpl' => 'osc/amazonpay/views/admin/tpl/amazonconfig.tpl',
@@ -120,8 +122,9 @@ $aModule = [
             'osc/amazonpay/views/elements/details_productmain_tobasket.tpl',
         'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl' =>
             'osc/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl',
-       'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
+        'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
             'osc/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl',
+        'amazonpay/json.tpl' => 'osc/amazonpay/views/json.tpl',
     ],
     'events' => [
         'onActivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onActivate',

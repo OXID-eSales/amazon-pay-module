@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Service\DeliveryAddressService;
 
 /**
@@ -21,7 +22,7 @@ class PaymentController extends PaymentController_parent
     {
         $returnValue = parent::validatePayment();
 
-        $addressService = new DeliveryAddressService();
+        $addressService = ContainerFactory::getInstance()->getContainer()->get(DeliveryAddressService::class);
         if ($addressService->isPaymentInSessionIsAmazonPay()) {
             $addressService->moveInSession();
         }

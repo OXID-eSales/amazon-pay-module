@@ -41,6 +41,17 @@ Warning: Running tests will reset the shop.
     * Use OXID official [docker sdk configuration](https://github.com/OXID-eSales/docker-eshop-sdk).
     * Use other preconfigured containers, example: ``image: 'selenium/standalone-chrome-debug:3.141.59'``
 
+#### Develop javascript
+- we are using grunt
+- currently grunt is not installed in php container
+- so install it on your host system: https://gruntjs.com/getting-started
+  - `sudo npm install -g grunt-cli`
+  - `cd source/modules/osc/amazonpay/resources`
+  - npm install grunt --save-dev
+- using: grunt
+- `cd source/modules/osc/amazonpay/resources`
+- `grunt` # this command compiles the sass => out/src/css/* and the out/src/js/*
+
 #### Run
 
 Running phpunit tests:

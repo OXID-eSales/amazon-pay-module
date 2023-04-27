@@ -18,6 +18,8 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidSolutionCatalysts\AmazonPay\Service\TermsAndConditionService;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -62,6 +64,14 @@ class OrderController extends OrderController_parent
             }
         }
         parent::init();
+    }
+
+    public function render()
+    {
+        $service = ContainerFactory::getInstance()->getContainer()->get(TermsAndConditionService::class);
+        $service->resetConfirmOnGet();
+
+        return parent::render();
     }
 
     protected function initAmazonPay()
@@ -158,11 +168,22 @@ class OrderController extends OrderController_parent
     }
 
     /**
+     * @return bool
+     */
+    protected function _validateTermsAndConditions()
+    {
+        if ((new TermsAndConditionService())->getConfirmFromSession()) {
+            $_GET['ord_agb'] = 1;
+        }
+        return parent::_validateTermsAndConditions();
+    }
+
+    /**
      * @return CoreAddress
      */
     public function getDelAddress()
     {
-        $deliveryAddressService = new DeliveryAddressService();
+        $deliveryAddressService = ContainerFactory::getInstance()->getContainer()->get(DeliveryAddressService::class);
         if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
             return $deliveryAddressService->getTempDeliveryAddressAddress();
         }

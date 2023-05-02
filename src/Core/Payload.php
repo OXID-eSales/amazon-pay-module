@@ -366,7 +366,7 @@ class Payload
     protected function addMerchantMetaData(array $data): array
     {
         $data['merchantMetadata'] = [];
-        //$data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
+        $data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
         $data['merchantMetadata']['merchantStoreName'] = $this->merchantStoreName;
         $data['merchantMetadata']['noteToBuyer'] = $this->noteToBuyer;
         return $data;

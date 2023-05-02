@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 * Fix bug showing of maintenance mode in admin panel after refund
+* [0007462](https://bugs.oxid-esales.com/view.php?id=7462) mandatory Confirm General Terms and Conditions field
+* [0007463](https://bugs.oxid-esales.com/view.php?id=7463) reAdd missing MerchantReferenceId
 * [0007350](https://bugs.oxid-esales.com/view.php?id=7350) OXTRANSID contains authorize status codes
 
 ## [2.0.1] - Release 

@@ -22,7 +22,9 @@ class AmazonCheckoutAjaxController extends FrontendController
     public function __construct()
     {
         parent::__construct();
-        $this->conditionsService = ContainerFactory::getInstance()->getContainer()->get(TermsAndConditionService::class);
+        $this->conditionsService = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(TermsAndConditionService::class);
     }
     public function confirmAGB()
     {

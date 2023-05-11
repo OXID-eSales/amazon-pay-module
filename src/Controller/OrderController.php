@@ -172,44 +172,70 @@ class OrderController extends OrderController_parent
      */
     protected function _validateTermsAndConditions()
     {
-        $blValid = parent::_validateTermsAndConditions();
+        $valid = parent::_validateTermsAndConditions();
 
-        if (!$blValid) {
-            $blValid = $this->validateTermsAndConditionsByAmazon();
-        }
-        return $blValid;
+        return $valid ?: $this->validateTermsAndConditionsByAmazon();
     }
 
     protected function validateTermsAndConditionsByAmazon(): bool
     {
-        $valid = true;
-
-        $config = Registry::getConfig();
         $basket = $this->getBasket();
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
-        if ($isAmazonPayment) {
+        if (!$isAmazonPayment) {
+            return true;
+        }
+
+        $valid = $this->confirmAGBbyAmazon();
+        if (
+            $valid &&
+            !$this->confirmIntangibleProdAgreementbyAmazon()
+        ) {
+            $valid = false;
+        }
+
+        return $valid;
+    }
+
+    protected function confirmAGBbyAmazon(): bool
+    {
+        $valid = true;
+
+        $confirmAGB = Registry::getConfig()->getConfigParam('blConfirmAGB');
+
+        $termsAndConditionService = new TermsAndConditionService();
+        if (
+            $confirmAGB &&
+            !$termsAndConditionService->getAGBConfirmFromSession()
+        ) {
+            $valid = false;
+        }
+        return $valid;
+    }
+
+    protected function confirmIntangibleProdAgreementbyAmazon(): bool
+    {
+        $valid = true;
+
+        $basket = $this->getBasket();
+        $confirmIPA = Registry::getConfig()->getConfigParam('blEnableIntangibleProdAgreement');
+
+        if ($confirmIPA) {
             $termsAndConditionService = new TermsAndConditionService();
-            if ($config->getConfigParam('blConfirmAGB') && !$termsAndConditionService->getAGBConfirmFromSession()) {
+
+            if (
+                $basket->hasArticlesWithDownloadableAgreement() &&
+                !$termsAndConditionService->getDPAConfirmFromSession()
+            ) {
                 $valid = false;
             }
-
-            if ($config->getConfigParam('blEnableIntangibleProdAgreement')) {
-                if (
-                    $valid &&
-                    $basket->hasArticlesWithDownloadableAgreement() &&
-                    !$termsAndConditionService->getDPAConfirmFromSession()
-                ) {
-                    $valid = false;
-                }
-                if (
-                    $valid &&
-                    $basket->hasArticlesWithIntangibleAgreement() &&
-                    !$termsAndConditionService->getSPAConfirmFromSession()
-                ) {
-                    $valid = false;
-                }
+            if (
+                $valid &&
+                $basket->hasArticlesWithIntangibleAgreement() &&
+                !$termsAndConditionService->getSPAConfirmFromSession()
+            ) {
+                $valid = false;
             }
         }
         return $valid;

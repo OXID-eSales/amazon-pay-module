@@ -172,10 +172,47 @@ class OrderController extends OrderController_parent
      */
     protected function _validateTermsAndConditions()
     {
-        if ((new TermsAndConditionService())->getConfirmFromSession()) {
-            $_GET['ord_agb'] = 1;
+        $blValid = parent::_validateTermsAndConditions();
+
+        if (!$blValid) {
+            $blValid = $this->validateTermsAndConditionsByAmazon();
         }
-        return parent::_validateTermsAndConditions();
+        return $blValid;
+    }
+
+    protected function validateTermsAndConditionsByAmazon(): bool
+    {
+        $valid = true;
+
+        $config = Registry::getConfig();
+        $basket = $this->getBasket();
+        $paymentId = $basket->getPaymentId();
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+
+        if ($isAmazonPayment) {
+            $termsAndConditionService = new TermsAndConditionService();
+            if ($config->getConfigParam('blConfirmAGB') && !$termsAndConditionService->getAGBConfirmFromSession()) {
+                $valid = false;
+            }
+
+            if ($config->getConfigParam('blEnableIntangibleProdAgreement')) {
+                if (
+                    $valid &&
+                    $basket->hasArticlesWithDownloadableAgreement() &&
+                    !$termsAndConditionService->getDPAConfirmFromSession()
+                ) {
+                    $valid = false;
+                }
+                if (
+                    $valid &&
+                    $basket->hasArticlesWithIntangibleAgreement() &&
+                    !$termsAndConditionService->getSPAConfirmFromSession()
+                ) {
+                    $valid = false;
+                }
+            }
+        }
+        return $valid;
     }
 
     /**

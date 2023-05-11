@@ -18,14 +18,18 @@
         },
 
         payButtonClickHandler: function () {
-            if (!this.forceConfirmAGB() || OSCAmazonPayCheckoutAGBComponent.isAgbConfirmed()) {
+            if (
+                (!this.forceConfirmAGB() || OSCAmazonPayCheckoutAGBComponent.isAgbConfirmed()) &&
+                (!this.forceConfirmDPA() || OSCAmazonPayCheckoutAGBComponent.isDpaConfirmed()) &&
+                (!this.forceConfirmSPA() || OSCAmazonPayCheckoutAGBComponent.isSpaConfirmed())
+            ) {
                 this.amazonPayButton.initCheckout({
                     createCheckoutSessionConfig: {
                         payloadJSON: this.payloadJSON,
                         signature: this.signature,
                     }
                 });
-            } else if(this.forceConfirmAGB()) {
+            } else if(this.forceConfirmAGB() || this.forceConfirmDPA() || this.forceConfirmSPA()) {
                 $('#confirm-agb-error-container').css('display', 'block');
                 $('.agbConfirmation').addClass('alert-danger');
             }
@@ -37,6 +41,14 @@
 
         forceConfirmAGB: function () {
             return $('#confirm-agb-error-container').data('oxidAgbForceConfirm');
+        },
+
+        forceConfirmDPA: function () {
+            return $('#confirm-agb-error-container').data('oxidDpaForceConfirm');
+        },
+
+        forceConfirmSPA: function () {
+            return $('#confirm-agb-error-container').data('oxidSpaForceConfirm');
         }
     };
 })()

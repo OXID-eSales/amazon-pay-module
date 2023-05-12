@@ -16,13 +16,34 @@ use OxidSolutionCatalysts\AmazonPay\Service\TermsAndConditionService;
  */
 class AmazonCheckoutAjaxController extends FrontendController
 {
+    /** @var TermsAndConditionService */
+    private $conditionsService;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->conditionsService = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(TermsAndConditionService::class);
+    }
     public function confirmAGB()
     {
-        $conditionsService = ContainerFactory::getInstance()->getContainer()->get(TermsAndConditionService::class);
-        $conditionsService->setConfirmFromRequestToSession();
-
+        $this->conditionsService->setAGBConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
+
+    public function confirmDPA()
+    {
+        $this->conditionsService->setDPAConfirmFromRequestToSession();
+        $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
+    }
+
+    public function confirmSPA()
+    {
+        $this->conditionsService->setSPAConfirmFromRequestToSession();
+        $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
+    }
+
 
     public function render()
     {

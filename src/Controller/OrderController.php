@@ -54,12 +54,12 @@ class OrderController extends OrderController_parent
         if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
             $amazonService = OxidServiceProvider::getAmazonService();
             $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
-            /** TODO: check if the double if can be avoided without using else */
+
             if ($isAmazonSessionActive) {
                 $this->initAmazonPayExpress($amazonService, $session);
             }
 
-            if (!$isAmazonSessionActive) {
+            if (!$isAmazonSessionActive && Constants::isAmazonPayment($paymentId)) {
                 $this->initAmazonPay();
             }
         }

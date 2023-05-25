@@ -4,48 +4,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.3.0] - New Feature
-
-* improved tests and static code analysis
-* sending tracking id to paypal
-* improvement of eligibility check
-* improvement of payment method configuration
-
-# Fixed
-
-* [0007468](https://bugs.oxid-esales.com/view.php?id=7468): Javascript Error - in checkout step 3 for the English language
-* [0007465](https://bugs.oxid-esales.com/view.php?id=7465): Creditcard input fields are not available in english language
-* [0007470](https://bugs.oxid-esales.com/view.php?id=7470): PayPal Express buttons are missing in english language
-* [0007467](https://bugs.oxid-esales.com/view.php?id=7467): Javascript Error - not clickable payment button
-* [0007466](https://bugs.oxid-esales.com/view.php?id=7466): SEPA / CC Fallback - Same name for different payment methods
-* [0007384](https://bugs.oxid-esales.com/view.php?id=7384): Order and Mail for rejected credit card payment
-* [0007394](https://bugs.oxid-esales.com/view.php?id=7394): Price reduction by payment method blocks order
-* [0007422](https://bugs.oxid-esales.com/view.php?id=7422): Same state/county IDs may lead to wrong display on PayPal page
-* [0007448](https://bugs.oxid-esales.com/view.php?id=7448): In case of full refund the value will be refunded according to the full euro
-* [0007449](https://bugs.oxid-esales.com/view.php?id=7449): Surcharges with negative Discounts are not forseen
-* [0007450](https://bugs.oxid-esales.com/view.php?id=7450): Mandatory tac field is ignored
-* [0007451](https://bugs.oxid-esales.com/view.php?id=7451): Creditcard payment works without CVV and Name
-* [0007417](https://bugs.oxid-esales.com/view.php?id=7417): It is therefore not possible to order this intangible item
-* [0007464](https://bugs.oxid-esales.com/view.php?id=7464): Pending GiroPay payment leads to maintenance mode, after doing a log in
-* [0007470](https://bugs.oxid-esales.com/view.php?id=7470): PayPal Express buttons are missing in english language
-* [0007466](https://bugs.oxid-esales.com/view.php?id=7466): SEPA / CC Fallback - Same name for different payment methods
-* [0007390](https://bugs.oxid-esales.com/view.php?id=7390): New Installation - Save Configuration not possible
-* [0007465](https://bugs.oxid-esales.com/view.php?id=7465): Creditcard input fields are not available in english language
-* [0007465](https://bugs.oxid-esales.com/view.php?id=7465): Creditcard input fields are not available in english language
-* remove an issue with having installed unzer module in parallel
-
-## [2.2.3]
-
-# Fixed
-
-* [0007431](https://bugs.oxid-esales.com/view.php?id=7431): Paypal orders are marked as paid even though the capture request fails.
-
-## [2.2.2]
-
-# Fixed
-
-* [0007427](https://bugs.oxid-esales.com/view.php?id=7427): Overwrite oxpayments table on apply-configuration
-
 ## [2.1.1] - Release
 
 ### Fixed

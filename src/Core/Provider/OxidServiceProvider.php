@@ -10,8 +10,10 @@ namespace OxidSolutionCatalysts\AmazonPay\Core\Provider;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\DeliveryAddressService;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\ServiceFactory;
+use OxidSolutionCatalysts\AmazonPay\Core\TermsAndConditionService;
 use Psr\Log\LoggerInterface;
 
 class OxidServiceProvider
@@ -37,6 +39,16 @@ class OxidServiceProvider
     private $amazonService;
 
     /**
+     * @var DeliveryAddressService
+     */
+    private $deliveryAddressService;
+
+    /**
+     * @var TermsAndConditionService
+     */
+    private $termsAndConditionService;
+
+    /**
      * @var User
      */
     private $oxidUser;
@@ -46,6 +58,8 @@ class OxidServiceProvider
         $this->logger = new Logger();
         $this->amazonClient = oxNew(ServiceFactory::class)->getClient();
         $this->amazonService = oxNew(ServiceFactory::class)->getService();
+        $this->deliveryAddressService = oxNew(ServiceFactory::class)->getDeliveryAddress();
+        $this->termsAndConditionService = oxNew(ServiceFactory::class)->getTermsAndCondition();
         $this->oxidUser = oxNew(User::class);
     }
 
@@ -54,7 +68,7 @@ class OxidServiceProvider
      */
     public static function getInstance(): OxidServiceProvider
     {
-        if (self::$instance == null) {
+        if (self::$instance === null) {
             self::$instance = new self();
         }
 
@@ -91,5 +105,15 @@ class OxidServiceProvider
     public static function getLogger(): LoggerInterface
     {
         return self::getInstance()->logger;
+    }
+
+    public static function getDeliveryAddressService(): DeliveryAddressService
+    {
+        return self::getInstance()->deliveryAddressService;
+    }
+
+    public static function getTermsAndConditionService(): TermsAndConditionService
+    {
+        return self::getInstance()->termsAndConditionService;
     }
 }

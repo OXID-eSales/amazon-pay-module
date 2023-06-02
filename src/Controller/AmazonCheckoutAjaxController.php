@@ -8,43 +8,31 @@
 namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use OxidEsales\Eshop\Application\Controller\FrontendController;
-use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidSolutionCatalysts\AmazonPay\Service\TermsAndConditionService;
+use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
  * handles amazon checkout ajax calls
  */
 class AmazonCheckoutAjaxController extends FrontendController
 {
-    /** @var TermsAndConditionService */
-    private $conditionsService;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->conditionsService = ContainerFactory::getInstance()
-            ->getContainer()
-            ->get(TermsAndConditionService::class);
-    }
     public function confirmAGB()
     {
-        $this->conditionsService->setAGBConfirmFromRequestToSession();
+        $conditionsService = OxidServiceProvider::getTermsAndConditionService();
+        $conditionsService->setAGBConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
-
     public function confirmDPA()
     {
-        $this->conditionsService->setDPAConfirmFromRequestToSession();
+        $conditionsService = OxidServiceProvider::getTermsAndConditionService();
+        $conditionsService->setDPAConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
-
     public function confirmSPA()
     {
-        $this->conditionsService->setSPAConfirmFromRequestToSession();
+        $conditionsService = OxidServiceProvider::getTermsAndConditionService();
+        $conditionsService->setSPAConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
-
-
     public function render()
     {
         return 'amazonpay/json.tpl';

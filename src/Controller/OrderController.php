@@ -9,6 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use Exception;
 use OxidEsales\Eshop\Application\Component\UserComponent;
+use OxidEsales\Eshop\Application\Model\Address as CoreAddress;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -18,8 +19,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
-use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
-use OxidSolutionCatalysts\AmazonPay\Service\TermsAndConditionService;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
@@ -28,9 +27,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Service\DeliveryAddressService;
 use stdClass;
-use OxidEsales\Eshop\Application\Model\Address as CoreAddress;
 
 /**
  * Class OrderController
@@ -68,7 +65,7 @@ class OrderController extends OrderController_parent
 
     public function render()
     {
-        $service = ContainerFactory::getInstance()->getContainer()->get(TermsAndConditionService::class);
+        $service = OxidServiceProvider::getTermsAndConditionService();
         $service->resetConfirmOnGet();
 
         return parent::render();
@@ -172,21 +169,15 @@ class OrderController extends OrderController_parent
      */
     protected function _validateTermsAndConditions()
     {
-        $valid = parent::_validateTermsAndConditions();
-
-        return $valid ?: $this->validateTermsAndConditionsByAmazon();
-    }
-
-    protected function validateTermsAndConditionsByAmazon(): bool
-    {
         $basket = $this->getBasket();
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
-        if (!$isAmazonPayment) {
-            return true;
-        }
+        return $isAmazonPayment ? $this->validateTermsAndConditionsByAmazon() : parent::_validateTermsAndConditions();
+    }
 
+    protected function validateTermsAndConditionsByAmazon(): bool
+    {
         $valid = $this->confirmAGBbyAmazon();
         if (
             $valid &&
@@ -204,7 +195,7 @@ class OrderController extends OrderController_parent
 
         $confirmAGB = Registry::getConfig()->getConfigParam('blConfirmAGB');
 
-        $termsAndConditionService = new TermsAndConditionService();
+        $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
         if (
             $confirmAGB &&
             !$termsAndConditionService->getAGBConfirmFromSession()
@@ -222,8 +213,7 @@ class OrderController extends OrderController_parent
         $confirmIPA = Registry::getConfig()->getConfigParam('blEnableIntangibleProdAgreement');
 
         if ($confirmIPA) {
-            $termsAndConditionService = new TermsAndConditionService();
-
+            $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
             if (
                 $basket->hasArticlesWithDownloadableAgreement() &&
                 !$termsAndConditionService->getDPAConfirmFromSession()
@@ -246,7 +236,7 @@ class OrderController extends OrderController_parent
      */
     public function getDelAddress()
     {
-        $deliveryAddressService = ContainerFactory::getInstance()->getContainer()->get(DeliveryAddressService::class);
+        $deliveryAddressService = OxidServiceProvider::getDeliveryAddressService();
         if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
             return $deliveryAddressService->getTempDeliveryAddressAddress();
         }
@@ -276,10 +266,7 @@ class OrderController extends OrderController_parent
         );
 
         if (
-            isset($result['response']) &&
-            isset($result['status']) &&
-            $result['status'] === 200 &&
-            $isOrderLoaded
+            isset($result['response'], $result['status']) && $result['status'] === 200 && $isOrderLoaded
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
             /** @var string $redirectUrl */
@@ -428,7 +415,7 @@ class OrderController extends OrderController_parent
                     if (is_null($fallbackShipSet)) {
                         $fallbackShipSet = $shipSetId;
                     }
-                    if ($shipSetId == $lastShipSet) {
+                    if ($shipSetId === $lastShipSet) {
                         $actShipSet = (string)$lastShipSet;
                     }
                 }

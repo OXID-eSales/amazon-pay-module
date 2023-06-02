@@ -42,4 +42,15 @@ class ServiceFactory
     {
         return oxNew(AmazonService::class);
     }
+
+    public function getDeliveryAddress(): DeliveryAddressService
+    {
+        return oxNew(DeliveryAddressService::class);
+    }
+
+    public function getTermsAndCondition(): TermsAndConditionService
+    {
+        return oxNew(TermsAndConditionService::class);
+    }
+
 }

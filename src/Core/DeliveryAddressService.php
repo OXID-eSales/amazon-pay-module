@@ -1,11 +1,10 @@
 <?php
 
-namespace OxidSolutionCatalysts\AmazonPay\Service;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
-use OxidEsales\Eshop\Core\Registry;
-use OxidSolutionCatalysts\AmazonPay\Core\Constants;
-use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Application\Model\Address;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 
 class DeliveryAddressService
 {

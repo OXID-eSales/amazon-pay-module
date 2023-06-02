@@ -18,11 +18,21 @@ class AmazonCheckoutAjaxController extends FrontendController
     public function confirmAGB()
     {
         $conditionsService = OxidServiceProvider::getTermsAndConditionService();
-        $conditionsService->setConfirmFromRequestToSession();
-
+        $conditionsService->setAGBConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
-
+    public function confirmDPA()
+    {
+        $conditionsService = OxidServiceProvider::getTermsAndConditionService();
+        $conditionsService->setDPAConfirmFromRequestToSession();
+        $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
+    }
+    public function confirmSPA()
+    {
+        $conditionsService = OxidServiceProvider::getTermsAndConditionService();
+        $conditionsService->setSPAConfirmFromRequestToSession();
+        $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
+    }
     public function render()
     {
         return 'amazonpay/json.tpl';

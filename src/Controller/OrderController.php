@@ -51,12 +51,12 @@ class OrderController extends OrderController_parent
         if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
             $amazonService = OxidServiceProvider::getAmazonService();
             $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
-            /** TODO: check if the double if can be avoided without using else */
+
             if ($isAmazonSessionActive) {
                 $this->initAmazonPayExpress($amazonService, $session);
             }
 
-            if (!$isAmazonSessionActive) {
+            if (!$isAmazonSessionActive && Constants::isAmazonPayment($paymentId)) {
                 $this->initAmazonPay();
             }
         }
@@ -169,11 +169,72 @@ class OrderController extends OrderController_parent
      */
     protected function _validateTermsAndConditions()
     {
-        $service = OxidServiceProvider::getTermsAndConditionService();
-        if ($service->getConfirmFromSession()) {
-            $_GET['ord_agb'] = 1;
+        $valid = parent::_validateTermsAndConditions();
+
+        return $valid ?: $this->validateTermsAndConditionsByAmazon();
+    }
+
+    protected function validateTermsAndConditionsByAmazon(): bool
+    {
+        $basket = $this->getBasket();
+        $paymentId = $basket->getPaymentId();
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+
+        if (!$isAmazonPayment) {
+            return true;
         }
-        return parent::_validateTermsAndConditions();
+
+        $valid = $this->confirmAGBbyAmazon();
+        if (
+            $valid &&
+            !$this->confirmIntangibleProdAgreementbyAmazon()
+        ) {
+            $valid = false;
+        }
+
+        return $valid;
+    }
+
+    protected function confirmAGBbyAmazon(): bool
+    {
+        $valid = true;
+
+        $confirmAGB = Registry::getConfig()->getConfigParam('blConfirmAGB');
+
+        $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
+        if (
+            $confirmAGB &&
+            !$termsAndConditionService->getAGBConfirmFromSession()
+        ) {
+            $valid = false;
+        }
+        return $valid;
+    }
+
+    protected function confirmIntangibleProdAgreementbyAmazon(): bool
+    {
+        $valid = true;
+
+        $basket = $this->getBasket();
+        $confirmIPA = Registry::getConfig()->getConfigParam('blEnableIntangibleProdAgreement');
+
+        if ($confirmIPA) {
+            $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
+            if (
+                $basket->hasArticlesWithDownloadableAgreement() &&
+                !$termsAndConditionService->getDPAConfirmFromSession()
+            ) {
+                $valid = false;
+            }
+            if (
+                $valid &&
+                $basket->hasArticlesWithIntangibleAgreement() &&
+                !$termsAndConditionService->getSPAConfirmFromSession()
+            ) {
+                $valid = false;
+            }
+        }
+        return $valid;
     }
 
     /**
@@ -211,10 +272,7 @@ class OrderController extends OrderController_parent
         );
 
         if (
-            isset($result['response']) &&
-            isset($result['status']) &&
-            $result['status'] === 200 &&
-            $isOrderLoaded
+            isset($result['response'], $result['status']) && $result['status'] === 200 && $isOrderLoaded
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
             /** @var string $redirectUrl */
@@ -363,7 +421,7 @@ class OrderController extends OrderController_parent
                     if (is_null($fallbackShipSet)) {
                         $fallbackShipSet = $shipSetId;
                     }
-                    if ($shipSetId == $lastShipSet) {
+                    if ($shipSetId === $lastShipSet) {
                         $actShipSet = (string)$lastShipSet;
                     }
                 }

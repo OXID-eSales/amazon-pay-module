@@ -169,21 +169,15 @@ class OrderController extends OrderController_parent
      */
     protected function _validateTermsAndConditions()
     {
-        $valid = parent::_validateTermsAndConditions();
-
-        return $valid ?: $this->validateTermsAndConditionsByAmazon();
-    }
-
-    protected function validateTermsAndConditionsByAmazon(): bool
-    {
         $basket = $this->getBasket();
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
-        if (!$isAmazonPayment) {
-            return true;
-        }
+        return $isAmazonPayment ? $this->validateTermsAndConditionsByAmazon() : parent::_validateTermsAndConditions();
+    }
 
+    protected function validateTermsAndConditionsByAmazon(): bool
+    {
         $valid = $this->confirmAGBbyAmazon();
         if (
             $valid &&

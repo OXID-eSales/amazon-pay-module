@@ -10,7 +10,7 @@
     [{if $confirmIPA && $oxcmp_basket->hasArticlesWithIntangibleAgreement()}]
         [{assign var="confirmSPA" value=true}]
     [{/if}]
-    [{oxscript include=$oViewConf->getModuleUrl('osc_amazonpay', 'out/src/js/amazonpay.min.js')}]
+    [{oxscript include=$oViewConf->getModuleUrl('osc_amazonpay', 'out/src/js/amazonpay.min.js') priority=10}]
     <p class="alert alert-danger" id="confirm-agb-error-container"
        [{if $confirmAGB eq 1}] data-oxid-agb-force-confirm="1"[{/if}]
        [{if $confirmDPA eq 1}] data-oxid-dpa-force-confirm="1"[{/if}]

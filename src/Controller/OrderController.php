@@ -18,7 +18,6 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
-use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Service\TermsAndConditionService;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
@@ -68,8 +67,7 @@ class OrderController extends OrderController_parent
 
     public function render()
     {
-        $service = ContainerFactory::getInstance()->getContainer()->get(TermsAndConditionService::class);
-        $service->resetConfirmOnGet();
+        (new TermsAndConditionService())->resetConfirmOnGet();
 
         return parent::render();
     }
@@ -246,7 +244,7 @@ class OrderController extends OrderController_parent
      */
     public function getDelAddress()
     {
-        $deliveryAddressService = ContainerFactory::getInstance()->getContainer()->get(DeliveryAddressService::class);
+        $deliveryAddressService = new DeliveryAddressService();
         if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
             return $deliveryAddressService->getTempDeliveryAddressAddress();
         }

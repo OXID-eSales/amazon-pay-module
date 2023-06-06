@@ -5,7 +5,7 @@
     [{/if}]
 [{else}]
     [{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && !$oViewConf->isAmazonSessionActive() && $oViewConf->displayExpressInMiniCartAndModal()}]
-        [{include file="amazonpay/wave_basket_btn_next_bottom_wave.tpl"}]
+        [{include file="amazonpay/basket_btn_next_bottom_wave.tpl"}]
     [{/if}]
     [{$smarty.block.parent}]
 [{/if}]

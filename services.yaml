@@ -1,9 +1,0 @@
-services:
-
-  _defaults:
-    public: false
-    autowire: true
-
-  OxidSolutionCatalysts\AmazonPay\Service\:
-    resource: 'src/Service/*'
-    public: true

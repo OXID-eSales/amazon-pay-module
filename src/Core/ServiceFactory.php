@@ -52,5 +52,4 @@ class ServiceFactory
     {
         return oxNew(TermsAndConditionService::class);
     }
-
 }

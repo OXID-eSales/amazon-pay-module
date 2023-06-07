@@ -118,7 +118,7 @@ class Order extends Order_parent
      *
      * @return int
      */
-    public function validateDeliveryAddress($oUser): int
+    public function validateDeliveryAddress($oUser)
     {
         if (!$this->getAmazonService()->isAmazonSessionActive()) {
             return parent::validateDeliveryAddress($oUser);

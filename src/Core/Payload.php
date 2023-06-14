@@ -7,6 +7,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
@@ -415,6 +416,69 @@ class Payload
 
         /** @var string $oxcountryid */
         $oxcountryid = $user->getFieldData('oxcountryid');
+        $oCountry = oxNew(Country::class);
+        $oCountry->load($oxcountryid);
+        $oxisoalpha2 = $oCountry->getFieldData('oxisoalpha2');
+        $sCountryCode = $oxisoalpha2;
+
+
+        // set mandatory standard fields
+        $this->addressDetails = [
+            'name' => $oxfname . ' ' . $oxlname,
+            'addressLine1' => $addressLine1,
+            'postalCode' => $oxzip,
+            'city' => $oxcity,
+            'countryCode' => $sCountryCode
+        ];
+
+        // check for additional fields
+        // check for phone number
+        $phoneNumber = null;
+        if (!empty($oxfon)) { // phone number
+            $phoneNumber = $oxfon;
+        } elseif (!empty($oxprivfon)) { // phone number (private)
+            $phoneNumber = $oxprivfon;
+        } elseif (!empty($oxmobfon)) { // phone number (private)
+            $phoneNumber = $oxmobfon;
+        }
+        /** TODO Change default number to  0 */
+        $this->addressDetails['phoneNumber'] = $phoneNumber ?? '0'; // when no number was provided, Amazon accepts '0'
+        return $this;
+    }
+
+    /**
+     * @param Address $address
+     * @return Payload
+     */
+    public function setAddressDetailsFromDeliveryAddress(Address $address)
+    {
+        /** @var string $oxstreet */
+        $oxstreet = $address->getFieldData('oxstreet');
+        /** @var string $oxstreetnr */
+        $oxstreetnr = $address->getFieldData('oxstreetnr');
+        /** @var string $oxfname */
+        $oxfname = $address->getFieldData('oxfname');
+        /** @var string $oxlname */
+        $oxlname = $address->getFieldData('oxlname');
+        /** @var string $oxzip */
+        $oxzip = $address->getFieldData('oxzip');
+        /** @var string $oxcity */
+        $oxcity = $address->getFieldData('oxcity');
+        /** @var string $oxfon */
+        $oxfon = $address->getFieldData('oxfon');
+        /** @var string $oxprivfon */
+        $oxprivfon = $address->getFieldData('oxprivfon');
+        /** @var string $oxmobfon */
+        $oxmobfon = $address->getFieldData('oxmobfon');
+
+        $addressLine1 = sprintf(
+            '%s %s',
+            $oxstreet,
+            $oxstreetnr
+        );
+
+        /** @var string $oxcountryid */
+        $oxcountryid = $address->getFieldData('oxcountryid');
         $oCountry = oxNew(Country::class);
         $oCountry->load($oxcountryid);
         $oxisoalpha2 = $oCountry->getFieldData('oxisoalpha2');

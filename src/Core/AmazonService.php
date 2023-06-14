@@ -121,7 +121,7 @@ class AmazonService
             $paymentId = $session->getVariable('paymentid') ?? '';
             $isAmazonPayment = Constants::isAmazonPayment($paymentId);
             if ($isAmazonPayment) {
-                self::unsetPaymentMethod();
+                //self::unsetPaymentMethod();
             }
             return false;
         }

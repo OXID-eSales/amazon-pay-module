@@ -291,7 +291,14 @@ class ViewConfig extends ViewConfig_parent
             "billingAddress"
         ]);
         $payload->setPaymentIntent('AuthorizeWithCapture');
-        $payload->setAddressDetails($user);
+
+        $delAddress = OxidServiceProvider::getDeliveryAddressService();
+        $address = $delAddress->getTempDeliveryAddressAddress();
+        if ($address->getId()) {
+            $payload->setAddressDetailsFromDeliveryAddress($address);
+        } else {
+            $payload->setAddressDetails($user);
+        }
 
         $payload->setPlatformId($amazonConfig->getPlatformId());
 

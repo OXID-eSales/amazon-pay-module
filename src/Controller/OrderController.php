@@ -238,7 +238,10 @@ class OrderController extends OrderController_parent
     {
         $deliveryAddressService = OxidServiceProvider::getDeliveryAddressService();
         if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
-            return $deliveryAddressService->getTempDeliveryAddressAddress();
+            $delAddress = $deliveryAddressService->getTempDeliveryAddressAddress();
+            if ($delAddress->getId()) {
+                return $delAddress;
+            }
         }
 
         return parent::getDelAddress();

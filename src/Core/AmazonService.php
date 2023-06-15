@@ -892,10 +892,14 @@ class AmazonService
             return [];
         }
 
+        $amazonObjIds = [];
         foreach ($logMessages as $logMessage) {
             $logsWithChargePermission =
                 $repository->findLogMessageForOrderId($logMessage['OSC_AMAZON_OXORDERID']);
             $error = strpos($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error');
+            if (!empty($logMessage['OSC_AMAZON_CHARGE_ID'])) {
+                $amazonObjIds[$logMessage['OSC_AMAZON_CHARGE_ID']] = 1;
+            }
             if ($error !== false) {
                 $logsWithChargePermission =
                     $repository->findLogMessageForChargePermissionId($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']);
@@ -908,6 +912,14 @@ class AmazonService
             foreach ($logsWithChargePermission as $logsWithPermission) {
                 $orderLogs[] = $logsWithPermission;
             }
+        }
+        // IPN logs refer the "chargeId" in OSC_AMAZON_OBJECT_ID field
+        foreach(array_keys($amazonObjIds) as $objId) {
+            $logsIPN = $repository->findLogMessageForAmazonObjectId($objId);
+            if (!empty($logsIPN)) {
+                $orderLogs = array_merge($orderLogs, $logsIPN);
+            }
+
         }
 
         return $orderLogs;

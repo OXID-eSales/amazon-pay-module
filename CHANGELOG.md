@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 * Delivery address was not send to Amazon
 * Fixed IPN history list in adminarea
+* Change requirement for PHP7.0 compatibility
 
 ## [2.1.2] - Release
 

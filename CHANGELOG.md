@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 * Delivery address was not send to Amazon
+* Fixed IPN history list in adminarea
 
 ## [2.1.2] - Release
 

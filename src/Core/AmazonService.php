@@ -914,12 +914,11 @@ class AmazonService
             }
         }
         // IPN logs refer the "chargeId" in OSC_AMAZON_OBJECT_ID field
-        foreach(array_keys($amazonObjIds) as $objId) {
+        foreach (array_keys($amazonObjIds) as $objId) {
             $logsIPN = $repository->findLogMessageForAmazonObjectId($objId);
             if (!empty($logsIPN)) {
                 $orderLogs = array_merge($orderLogs, $logsIPN);
             }
-
         }
 
         return $orderLogs;

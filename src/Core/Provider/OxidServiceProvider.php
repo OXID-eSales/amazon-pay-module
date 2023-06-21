@@ -41,12 +41,12 @@ class OxidServiceProvider
     /**
      * @var DeliveryAddressService
      */
-    private $deliveryAddressService;
+    private $deliveryAddress;
 
     /**
      * @var TermsAndConditionService
      */
-    private $termsAndConditionService;
+    private $termsAndCondition;
 
     /**
      * @var User
@@ -58,8 +58,8 @@ class OxidServiceProvider
         $this->logger = new Logger();
         $this->amazonClient = oxNew(ServiceFactory::class)->getClient();
         $this->amazonService = oxNew(ServiceFactory::class)->getService();
-        $this->deliveryAddressService = oxNew(ServiceFactory::class)->getDeliveryAddress();
-        $this->termsAndConditionService = oxNew(ServiceFactory::class)->getTermsAndCondition();
+        $this->deliveryAddress = oxNew(ServiceFactory::class)->getDeliveryAddress();
+        $this->termsAndCondition = oxNew(ServiceFactory::class)->getTermsAndCondition();
         $this->oxidUser = oxNew(User::class);
     }
 
@@ -109,11 +109,11 @@ class OxidServiceProvider
 
     public static function getDeliveryAddressService(): DeliveryAddressService
     {
-        return self::getInstance()->deliveryAddressService;
+        return self::getInstance()->deliveryAddress;
     }
 
     public static function getTermsAndConditionService(): TermsAndConditionService
     {
-        return self::getInstance()->termsAndConditionService;
+        return self::getInstance()->termsAndCondition;
     }
 }

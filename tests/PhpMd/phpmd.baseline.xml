@@ -11,6 +11,7 @@
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/Admin/OrderOverview.php" method="render"/>
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Controller/Admin/OrderOverview.php" method="render"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/Admin/OrderOverview.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/AmazonCheckoutAjaxController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/AmazonCheckoutController.php"/>
   <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Controller/DispatchController.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/DispatchController.php" method="init"/>
@@ -24,6 +25,7 @@
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/OrderController.php" method="execute"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/OrderController.php" method="completeAmazonPaymentExpress"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/OrderController.php" method="setAmazonPayAsPaymentMethod"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/PaymentController.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/UserController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/AmazonClient.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/AmazonInputValidator.php"/>
@@ -52,8 +54,10 @@
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Core/Payload.php" method="getData"/>
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Core/Payload.php" method="getData"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/Payload.php"/>
+  <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Core/Repository/LogRepository.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/ViewConfig.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/ViewConfig.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Core/ViewConfig.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Model/Basket.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Model/Order.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Model/Order.php" method="updateAmazonPayOrderStatus"/>

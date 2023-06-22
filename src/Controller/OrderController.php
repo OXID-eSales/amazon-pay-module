@@ -172,8 +172,10 @@ class OrderController extends OrderController_parent
         $basket = $this->getBasket();
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+        $isAmazonExpress = Constants::isAmazonExpressPayment($paymentId);
 
-        return $isAmazonPayment ? $this->validateTermsAndConditionsByAmazon() : parent::_validateTermsAndConditions();
+        // check T&C only for regular amazon (with express, some certain steps are skipped)
+        return ($isAmazonPayment && !$isAmazonExpress) ? $this->validateTermsAndConditionsByAmazon() : parent::_validateTermsAndConditions();
     }
 
     protected function validateTermsAndConditionsByAmazon(): bool

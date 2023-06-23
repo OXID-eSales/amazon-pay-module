@@ -330,7 +330,6 @@ class Config
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
             . 'index.php?cl=amazondispatch&action=review'
-            //. '&stoken=' . Registry::getSession()->getSessionChallengeToken()
         );
     }
 
@@ -344,7 +343,6 @@ class Config
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
             . 'index.php?cl=amazondispatch&action=result'
-            //. '&stoken=' . Registry::getSession()->getSessionChallengeToken()
         );
     }
 
@@ -368,7 +366,6 @@ class Config
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
             . 'index.php?cl=user'
-            //. '&stoken=' . Registry::getSession()->getSessionChallengeToken()
         );
     }
 

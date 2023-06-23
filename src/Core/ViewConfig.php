@@ -48,6 +48,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getAmazonConfig(): Config
     {
+        /** @var Config $config */
         $config = Registry::get(Config::class);
         return $config;
     }
@@ -413,8 +414,8 @@ class ViewConfig extends ViewConfig_parent
                 $cache['cache'] = [];
             }
         }
-        // TODO: use better method than md5
-        $cacheKey = md5($payload);
+        // sha256 has 64 byte key length
+        $cacheKey = hash('sha256', $payload);
         if (!isset($cache['cache'][$cacheKey])) {
             // no cache key found, we must create a new signature and cache it
             // TODO: writing the global cache must be protected against race condition
@@ -437,6 +438,6 @@ class ViewConfig extends ViewConfig_parent
     private function createSignature(string $payload): string
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
-        return  $amazonClient->generateButtonSignature($payload);
+        return $amazonClient->generateButtonSignature($payload);
     }
 }

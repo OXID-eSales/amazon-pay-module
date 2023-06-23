@@ -48,7 +48,8 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getAmazonConfig(): Config
     {
-        return Registry::get(Config::class);
+        $config = Registry::get(Config::class);
+        return $config;
     }
 
     /**
@@ -363,7 +364,79 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getSignature(string $payload): string
     {
+        return $this->getCachedSignature($payload);
+    }
+
+    private function getCachedSignature(string $payload): string
+    {
+        // TODO: add configuration to make whole functionality optional
+
+        $cacheName = 'amzn_signature_cache.json';
+        $session = Registry::getSession();
+        $config = Registry::getConfig();
+        $token = '';
+
+        // personal url means, the payload contain an URL with a "stoken" parameter.
+        // These are only cacheable within the session of the user, and the cache
+        // will be reset upon user login/logout.
+        $isPersonalUrl = false;
+        if ((strstr($payload, '&stoken='))) {
+            if (preg_match('/stoken=([A-Z0-9]+)/', $payload, $matches) && isset($matches[1])) {
+                $token = $matches[1];
+                if (!empty($token)) {
+                    $isPersonalUrl = true;
+                }
+            }
+        }
+        // empty cache
+        $cache = [
+            'meta' => ['token' => $token,],
+            'cache' => [],
+        ];
+
+        // path to global cache file
+        $compileDir = $config->getConfigParam('sCompileDir');
+        $signatureCache = Registry::getUtilsFile()->normalizeDir($compileDir) . $cacheName;
+
+        // load either global (tmp file) or local cache (session)
+        if ($isPersonalUrl) {
+            $cacheContent = $session->getVariable($cacheName);
+
+        } else {
+            $cacheContent = file_get_contents($signatureCache);
+        }
+
+        if ($cacheContent) {
+            $cache = json_decode($cacheContent, true);
+            // reset cache on token change, eg. the user changed the login status
+            if ($cache['meta']['token'] != $token) {
+                $cache['cache'] = [];
+            }
+        }
+        // TODO: use better method than md5
+        $cacheKey = md5($payload);
+        if (!isset($cache['cache'][$cacheKey])) {
+            // no cache key found, we must create a new signature and cache it
+            // TODO: writing the global cache must be protected against race condition
+            $signature = $this->createSignature($payload);
+            $cache['cache'][$cacheKey] = $signature;
+            if ($isPersonalUrl) {
+                $session->setVariable($cacheName, json_encode($cache));
+            } else {
+                file_put_contents($signatureCache, json_encode($cache));
+            }
+        }
+        else {
+            // found a cached signature.. congrats: we saved 1-2 seconds computing time
+            $signature = $cache['cache'][$cacheKey];
+        }
+
+        return $signature;
+    }
+
+    private function createSignature(string $payload): string
+    {
         $amazonClient = OxidServiceProvider::getAmazonClient();
-        return $amazonClient->generateButtonSignature($payload);
+        return  $amazonClient->generateButtonSignature($payload);
     }
 }

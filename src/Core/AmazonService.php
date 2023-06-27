@@ -312,6 +312,12 @@ class AmazonService
 
         $response = PhpHelper::jsonToArray($result['response']);
 
+        // in case of error, the resulting structure is different...
+        if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
+            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+            return;
+        }
+
         if ($response['statusDetails']['state'] === 'Completed' && !$this->isTwoStep) {
             $response['statusDetails']['state'] = 'Completed & Captured';
         }

@@ -389,8 +389,9 @@ class Config
             $payment = oxNew(Payment::class);
             /** TODO should be variable for any amazonpay ID */
             $payment->load(Constants::PAYMENT_ID_EXPRESS);
+            $allowedCountries = $payment->getCountries();
             // fallback if countries are not restricted by Paymentmethod ...
-            if (!$allowedCountries = $payment->getCountries()) {
+            if (!$allowedCountries) {
                 $allowedCountries = [];
                 $countries = oxNew(CountryList::class);
                 $countries->loadActiveCountries();

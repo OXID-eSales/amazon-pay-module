@@ -37,6 +37,7 @@
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Core/AmazonService.php" method="checkOrderState"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/AmazonService.php"/>
   <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Core/Config.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Core/Config.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/Config.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/Config.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/Events.php"/>

@@ -17,6 +17,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Application\Model\CountryList;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -388,7 +389,17 @@ class Config
             $payment = oxNew(Payment::class);
             /** TODO should be variable for any amazonpay ID */
             $payment->load(Constants::PAYMENT_ID_EXPRESS);
-            foreach ($payment->getCountries() as $countryOxId) {
+            $allowedCountries = $payment->getCountries();
+            // fallback if countries are not restricted by Paymentmethod ...
+            if (!$allowedCountries) {
+                $allowedCountries = [];
+                $countries = oxNew(CountryList::class);
+                $countries->loadActiveCountries();
+                foreach ($countries as $allowedCountry) {
+                    $allowedCountries[] = $allowedCountry->getId();
+                }
+            }
+            foreach ($allowedCountries as $countryOxId) {
                 // check deliverysets
                 $deliverySetList = oxNew(DeliverySetList::class);
                 $deliverySetData = $deliverySetList->getDeliverySetList($activeUser, $countryOxId);

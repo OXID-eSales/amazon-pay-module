@@ -166,23 +166,11 @@ class Payload
             $data['captureAmount']['currencyCode'] = $this->currencyCode;
         }
 
-        // why this condition? the official docs https://developer.amazon.com/docs/amazon-pay-api-v2/checkout-session.html#OLS9CAGyE7P
-        // says Description shown on the buyer payment instrument statement. You can only use this parameter if
-        // paymentIntent is set to AuthorizeWithCapture
-        //
-        // so why adding addMerchantMetaData is bound to the condition that softDescriptor is not empty???
-        // to the reviewer: please have a look at this commit: 8f009cbe, in my eyes it seems that the condition was
-        // changed accidentally in intention to only fix code style issues?
-        // this change reverts the logic before the commit 8f009cbe, so if you think this is correct just remove this
-        // long comment and merge to 6.1 branch, this fix is for normal payment express payment still need a fix for
-        // sending merchantReferenceId
         $data['softDescriptor'] = $this->softDescriptor;
         if (empty($data['softDescriptor'])) {
             $data['softDescriptor'] = '';
             $data = $this->addMerchantMetaData($data);
         }
-
-
 
         if (!empty($this->checkoutChargeAmount)) {
             $data['chargeAmount'] = [];

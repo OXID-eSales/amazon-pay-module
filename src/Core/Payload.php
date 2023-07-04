@@ -168,7 +168,7 @@ class Payload
 
         $data['softDescriptor'] = $this->softDescriptor;
         if (empty($data['softDescriptor'])) {
-            $data['softDescriptor'] = '';
+            unset($data['softDescriptor']);
             $data = $this->addMerchantMetaData($data);
         }
 

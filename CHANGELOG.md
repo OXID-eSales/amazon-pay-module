@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * Fixed IPN history list in adminarea
 * Change requirement for PHP7.0 compatibility
 * In addition to the country restrictions on the payment method, also check the country restrictions of the shop.
+* Send orderNr as ReferenceMerchantId to Amazon
 
 ## [2.1.2] - Release
 

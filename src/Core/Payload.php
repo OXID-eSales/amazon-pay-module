@@ -166,10 +166,10 @@ class Payload
             $data['captureAmount']['currencyCode'] = $this->currencyCode;
         }
 
+
         $data['softDescriptor'] = $this->softDescriptor;
         if (empty($data['softDescriptor'])) {
             unset($data['softDescriptor']);
-            $data = $this->addMerchantMetaData($data);
         }
 
         if (!empty($this->checkoutChargeAmount)) {
@@ -369,6 +369,12 @@ class Payload
         $data['merchantMetadata']['merchantStoreName'] = $this->merchantStoreName;
         $data['merchantMetadata']['noteToBuyer'] = $this->noteToBuyer;
         return $data;
+    }
+
+    public function getMerchantMetaData(): array
+    {
+        $data = $this->getData();
+        return $data['merchantMetadata'];
     }
 
     /**

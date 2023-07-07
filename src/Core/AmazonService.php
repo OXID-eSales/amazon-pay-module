@@ -202,6 +202,7 @@ class AmazonService
             $this->deliveryAddress = new stdClass();
             $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $deliveryAddress = $oOrder->getDelAddressInfo();
+
             if ($deliveryAddress) {
                 foreach ($deliveryAddress as $key => $value) {
                     $this->deliveryAddress->{$key} = new Field($value, FieldAlias::T_RAW);
@@ -293,13 +294,6 @@ class AmazonService
         $payload = new Payload();
         $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
 
-        $activeShop = Registry::getConfig()->getActiveShop();
-        /** @var string $oxCompany */
-        $oxCompany = $activeShop->getFieldData('oxcompany');
-        $payload->setMerchantStoreName($oxCompany);
-        /** @var string $oxOrderSubject */
-        $oxOrderSubject = $activeShop->getFieldData('oxordersubject');
-        $payload->setNoteToBuyer($oxOrderSubject);
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
@@ -309,14 +303,9 @@ class AmazonService
             $amazonSessionId,
             $data
         );
-
-        $response = PhpHelper::jsonToArray($result['response']);
-
-        // in case of error, the resulting structure is different...
-        if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
-            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
-            return;
-        }
+        $response = $this->checkAmazonResult($result, $basket, $logger);
+        // fiddle in the merchant meta data update
+        $this->updateMerchantReferenceId($response['chargePermissionId'], $basket, $logger);
 
         if ($response['statusDetails']['state'] === 'Completed' && !$this->isTwoStep) {
             $response['statusDetails']['state'] = 'Completed & Captured';
@@ -357,6 +346,46 @@ class AmazonService
             $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
         }
         $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+    }
+
+    protected function checkAmazonResult(array $result, Basket $basket, LoggerInterface $logger): array
+    {
+        $response = PhpHelper::jsonToArray($result['response']);
+
+        // in case of error, the resulting structure is different...
+        if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
+            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+        }
+
+        return $response;
+    }
+
+    protected function updateMerchantReferenceId(string $chargePermissionId, Basket $basket, LoggerInterface $logger)
+    {
+        /** @var string $orderOxId */
+        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        if ($oOrder->load($orderOxId) && !empty($chargePermissionId)) {
+            $activeShop = Registry::getConfig()->getActiveShop();
+            /** @var string $oxCompany */
+            $oxCompany = $activeShop->getFieldData('oxcompany');
+            /** @var string $oxOrderSubject */
+            $oxOrderSubject = $activeShop->getFieldData('oxordersubject');
+            /** @var string $oxOrderNr */
+            $oxOrderNr = $oOrder->getFieldData('oxordernr');
+
+            $result = OxidServiceProvider::getAmazonClient()->updateChargePermission(
+                $chargePermissionId,
+                [
+                    'merchantMetadata' => [
+                        'merchantStoreName' => $oxCompany,
+                        'merchantReferenceId' => $oxOrderNr,
+                        'noteToBuyer' => $oxOrderSubject
+                    ]
+                ]
+            );
+            $this->checkAmazonResult($result, $basket, $logger);
+        }
     }
 
     /**

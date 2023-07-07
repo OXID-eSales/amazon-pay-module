@@ -329,7 +329,7 @@ class AmazonService
 
         /** @var Order $order */
         $order = oxNew(Order::class);
-        if ($order->load($basket->getOrderId())) {
+        if ($order->load(Registry::getSession()->getVariable('sess_challenge'))) {
             if ($result['status'] === 200) {
                 $data = [
                     "chargeAmount" => $request['chargeAmount']['amount'],

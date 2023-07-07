@@ -371,12 +371,6 @@ class Payload
         return $data;
     }
 
-    public function getMerchantMetaData(): array
-    {
-        $data = $this->getData();
-        return $data['merchantMetadata'];
-    }
-
     /**
      * @param array $data
      * @return array

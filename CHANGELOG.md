@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * Change requirement for PHP7.0 compatibility
 * In addition to the country restrictions on the payment method, also check the country restrictions of the shop.
 * Send orderNr as ReferenceMerchantId to Amazon
+* calculate AmazonPayExpress-Deliverycosts based on provided Country from Amazon
 
 ## [2.1.2] - Release
 
@@ -29,12 +30,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007471](https://bugs.oxid-esales.com/view.php?id=7471) Module throws an exception in case the button Sign off is used during the checkout
 * [0007455](https://bugs.oxid-esales.com/view.php?id=7455) if Amazon Pay module is active, then the shipping address is ignored for all payment methods
 * [0007462](https://bugs.oxid-esales.com/view.php?id=7462) if mandatory Confirm General Terms and Conditions field is activated -> you go round in circles
-* compatibility issues with core or other payment-modules 
+* compatibility issues with core or other payment-modules
 
 ## [2.1.0] - Release
 
 ### Added
- 
+
 * added additional payment button
 * If the order or individual items are canceled or deleted, Amazon will issue a refund or cancel
 * Added log in via Amazon
@@ -47,7 +48,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007463](https://bugs.oxid-esales.com/view.php?id=7463) reAdd missing MerchantReferenceId
 * [0007350](https://bugs.oxid-esales.com/view.php?id=7350) OXTRANSID contains authorize status codes
 
-## [2.0.1] - Release 
+## [2.0.1] - Release
 
 ### Added
 

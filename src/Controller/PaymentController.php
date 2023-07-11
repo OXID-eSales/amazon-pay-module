@@ -22,7 +22,7 @@ class PaymentController extends PaymentController_parent
         $returnValue = parent::validatePayment();
 
         $addressService = OxidServiceProvider::getDeliveryAddressService();
-        if ($addressService->isPaymentInSessionIsAmazonPay()) {
+        if ($addressService->isPaymentInSessionIsAmazonPayExpress()) {
             $addressService->moveInSession();
         }
 

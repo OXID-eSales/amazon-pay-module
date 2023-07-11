@@ -25,11 +25,11 @@ class DeliveryAddressService
     /**
      * @return bool
      */
-    public function isPaymentInSessionIsAmazonPay()
+    public function isPaymentInSessionIsAmazonPayExpress()
     {
         $paymentId = $this->getSession()->getVariable('paymentid');
 
-        return $paymentId === Constants::PAYMENT_ID;
+        return $paymentId === Constants::PAYMENT_ID_EXPRESS;
     }
 
     /**

@@ -77,6 +77,14 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
+    public function useExclusion(): bool
+    {
+        return $this->getAmazonConfig()->useExclusion();
+    }
+
+    /**
+     * @return bool
+     */
     public function socialLoginDeactivated(): bool
     {
         return $this->getAmazonConfig()->socialLoginDeactivated();

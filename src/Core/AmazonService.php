@@ -441,11 +441,7 @@ class AmazonService
         $body = [
             'chargeId' => $repository->findLogMessageForOrderId($orderId)[0]['OSC_AMAZON_CHARGE_ID'],
             'refundAmount' => [
-                'amount' => str_replace(
-                    ',',
-                    '.',
-                    Registry::getLang()->formatCurrency($refundAmount)
-                ),
+                'amount' => $refundAmount,
                 'currencyCode' => $orderCurrencyName
             ],
             'softDescriptor' => 'AMZ*OXID'

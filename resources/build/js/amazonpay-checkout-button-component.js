@@ -19,17 +19,18 @@
 
         payButtonClickHandler: function () {
             if (
-                (!this.forceConfirmAGB() || OSCAmazonPayCheckoutAGBComponent.isAgbConfirmed()) &&
+                (!this.forceConfirmAGB() || OSCAmazonPayCheckoutAGBComponent.isAgbConfirmed()) // &&
                 (!this.forceConfirmDPA() || OSCAmazonPayCheckoutAGBComponent.isDpaConfirmed()) &&
                 (!this.forceConfirmSPA() || OSCAmazonPayCheckoutAGBComponent.isSpaConfirmed())
             ) {
+
                 this.amazonPayButton.initCheckout({
                     createCheckoutSessionConfig: {
                         payloadJSON: this.payloadJSON,
                         signature: this.signature,
                     }
                 });
-            } else if(this.forceConfirmAGB() || this.forceConfirmDPA() || this.forceConfirmSPA()) {
+            } else if( this.forceConfirmAGB() || this.forceConfirmDPA() || this.forceConfirmSPA()) {
                 $('#confirm-agb-error-container').css('display', 'block');
                 $('.agbConfirmation').addClass('alert-danger');
             }

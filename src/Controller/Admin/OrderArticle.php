@@ -54,7 +54,7 @@ class OrderArticle extends OrderArticle_parent
                 $logger = new Logger();
                 OxidServiceProvider::getAmazonService()->createRefund(
                     $oOrder->getId(),
-                    (float)$oOrderArticle->getTotalBrutPriceFormated(),
+                    (float)$oOrderArticle->getFieldData('oxbrutprice'),
                     $logger
                 );
             }

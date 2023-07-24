@@ -16,6 +16,8 @@ use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Model\User;
+use OxidSolutionCatalysts\AmazonPay\Traits\ServiceContainer;
+use OxidSolutionCatalysts\AmazonPay\Service\ModuleSettings;
 
 /**
  * Amazon Pay getters for templates
@@ -365,5 +367,31 @@ class ViewConfig extends ViewConfig_parent
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
         return $amazonClient->generateButtonSignature($payload);
+    }
+
+    /**
+     * Note: added this because of missing method error in article templates
+     * @return bool
+     */
+    public function useExclusion(): bool
+    {
+        return $this->getAmazonConfig()->useExclusion();
+    }
+
+    /**
+     * Note: added because of missing method error in article templates
+     * @return string
+     */
+    public function getSessionChallengeToken(): string
+    {
+        return Registry::getSession()->getSessionChallengeToken();
+    }
+
+    /**
+     * Note added because of missing method error in article templates
+     */
+    public function getConfig()
+    {
+        return Registry::getConfig();
     }
 }

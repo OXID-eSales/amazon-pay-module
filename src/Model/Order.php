@@ -130,20 +130,20 @@ class Order extends Order_parent
     public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
-            $this->_setFieldData('oxtransid', $data['chargeId']);
+            $this->setFieldData('oxtransid', $data['chargeId']);
         }
 
         switch ($amazonPayStatus) {
             case "AMZ_PAYMENT_PENDING":
-                $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');
-                $this->_setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
-                $this->_setFieldData('osc_amazon_remark', 'AmazonPay Authorisation pending');
+                $this->setFieldData('oxtransstatus', 'NOT_FINISHED');
+                $this->setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
+                $this->setFieldData('osc_amazon_remark', 'AmazonPay Authorisation pending');
                 $this->save();
                 break;
 
             case "AMZ_AUTH_STILL_PENDING":
                 if (!empty($data)) {
-                    $this->_setFieldData(
+                    $this->setFieldData(
                         'osc_amazon_remark',
                         'AmazonPay Authorisation still pending: '
                         . $data['chargeAmount']
@@ -159,31 +159,31 @@ class Order extends Order_parent
                     $remark = 'AmazonPay ERROR: ' . $response['reasonCode'];
                 }
 
-                $this->_setFieldData('osc_amazon_remark', $remark);
+                $this->setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
 
             case "AMZ_AUTH_AND_CAPT_OK":
                 // we move the order only if the oxtransstatus not OK before
                 if ($this->getFieldData('oxpaid') == '0000-00-00 00:00:00') {
-                    $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
+                    $this->setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 }
-                $this->_setFieldData('oxpaid', date('Y-m-d H:i:s'));
-                $this->_setFieldData('oxtransstatus', 'OK');
+                $this->setFieldData('oxpaid', date('Y-m-d H:i:s'));
+                $this->setFieldData('oxtransstatus', 'OK');
                 if (!empty($data)) {
-                    $this->_setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);
+                    $this->setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);
                 }
                 $this->save();
                 break;
 
             case "AMZ_2STEP_AUTH_OK":
                 if (!empty($data['chargeAmount'])) {
-                    $this->_setFieldData(
+                    $this->setFieldData(
                         'osc_amazon_remark',
                         'AmazonPay Authorized (not Captured):' . $data['chargeAmount']
                     );
                 }
-                $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
+                $this->setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 $this->save();
                 break;
         }

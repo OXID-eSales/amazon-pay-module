@@ -168,6 +168,9 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
+        // prevent missing template error
+        http_response_code(200);
+        exit();
     }
 
     /**

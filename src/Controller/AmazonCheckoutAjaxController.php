@@ -35,6 +35,6 @@ class AmazonCheckoutAjaxController extends FrontendController
     }
     public function render()
     {
-        return 'amazonpay/json.tpl';
+        return '@osc_amazonpay/json';
     }
 }

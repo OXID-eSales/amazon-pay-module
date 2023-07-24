@@ -17,7 +17,9 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleSettingBridgeInterface;
 
 /**
  * Class Config
@@ -117,7 +119,20 @@ class Config
      */
     public function isSandbox(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPaySandboxMode');
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $blAmazonPaySandboxMode */
+        $blAmazonPaySandboxMode = $moduleSettingBridge->get('blAmazonPaySandboxMode', AmazonPayModule::MODULE_ID);
+        return (bool) $blAmazonPaySandboxMode;
+    }
+
+    public function setSandbox($value): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('blAmazonPaySandboxMode',$value, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -125,7 +140,12 @@ class Config
      */
     public function isOneStepCapture(): bool
     {
-        return Registry::getConfig()->getConfigParam('amazonPayCapType') === '1';
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $amazonPayCapType */
+        $amazonPayCapType = $moduleSettingBridge->get('amazonPayCapType', AmazonPayModule::MODULE_ID);
+        return $amazonPayCapType === '1';
     }
 
     /**
@@ -133,7 +153,12 @@ class Config
      */
     public function isTwoStepCapture(): bool
     {
-        return Registry::getConfig()->getConfigParam('amazonPayCapType') === '2';
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $amazonPayCapType */
+        $amazonPayCapType = $moduleSettingBridge->get('amazonPayCapType', AmazonPayModule::MODULE_ID);
+        return  $amazonPayCapType === '2';
     }
 
     /**
@@ -141,9 +166,20 @@ class Config
      */
     public function getPrivateKey(): string
     {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
         /** @var string $sAmazonPayPrivateKey */
-        $sAmazonPayPrivateKey = Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
+        $sAmazonPayPrivateKey = $moduleSettingBridge->get('sAmazonPayPrivKey', AmazonPayModule::MODULE_ID);
         return $sAmazonPayPrivateKey;
+    }
+
+    public function setPrivateKey($key): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('sAmazonPayPrivKey', $key, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -159,9 +195,20 @@ class Config
      */
     public function getPublicKeyId(): string
     {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
         /** @var string $sAmazonPayPubKeyId */
-        $sAmazonPayPubKeyId = Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
+        $sAmazonPayPubKeyId = $moduleSettingBridge->get('sAmazonPayPubKeyId', AmazonPayModule::MODULE_ID);
         return $sAmazonPayPubKeyId;
+    }
+
+    public function setPublicKeyId($key): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('sAmazonPayPubKeyId', $key, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -169,9 +216,20 @@ class Config
      */
     public function getMerchantId(): string
     {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+        ->getContainer()
+        ->get(ModuleSettingBridgeInterface::class);
         /** @var string $sAmazonPayMerchantId */
-        $sAmazonPayMerchantId = Registry::getConfig()->getConfigParam('sAmazonPayMerchantId');
+        $sAmazonPayMerchantId = $moduleSettingBridge->get('sAmazonPayMerchantId', AmazonPayModule::MODULE_ID);
         return $sAmazonPayMerchantId;
+    }
+
+    public function setMerchantId($key): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('sAmazonPayMerchantId', $key, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -179,10 +237,22 @@ class Config
      */
     public function getStoreId(): string
     {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
         /** @var string $sAmazonPayStoreId */
-        $sAmazonPayStoreId = Registry::getConfig()->getConfigParam('sAmazonPayStoreId');
+        $sAmazonPayStoreId = $moduleSettingBridge->get('sAmazonPayStoreId', AmazonPayModule::MODULE_ID);
         return $sAmazonPayStoreId;
     }
+
+    public function setStoreId($key): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('sAmazonPayStoreId', $key, AmazonPayModule::MODULE_ID);
+    }
+
 
     /**
      * @return string
@@ -292,7 +362,20 @@ class Config
      */
     public function displayExpressInPDP(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressPDP');
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $blAmazonPayExpressPDP */
+        $blAmazonPayExpressPDP = $moduleSettingBridge->get('blAmazonPayExpressPDP', AmazonPayModule::MODULE_ID);
+        return (bool) $blAmazonPayExpressPDP;
+    }
+
+    public function setDisplayExpressInPDP($value): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('blAmazonPayExpressPDP', $value, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -300,7 +383,20 @@ class Config
      */
     public function useExclusion(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayUseExclusion');
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $blAmazonSocialLoginDeactivated */
+        $blAmazonPayUseExclusion = $moduleSettingBridge->get('blAmazonPayUseExclusion', AmazonPayModule::MODULE_ID);
+        return (bool) $blAmazonPayUseExclusion;
+    }
+
+    public function setUseExclusion($value): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('blAmazonPayUseExclusion', $value, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -308,7 +404,12 @@ class Config
      */
     public function socialLoginDeactivated(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonSocialLoginDeactivated');
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $blAmazonSocialLoginDeactivated */
+        $blAmazonSocialLoginDeactivated = $moduleSettingBridge->get('blAmazonSocialLoginDeactivated', AmazonPayModule::MODULE_ID);
+        return (bool) $blAmazonSocialLoginDeactivated;
     }
 
     /**
@@ -316,7 +417,20 @@ class Config
      */
     public function displayExpressInMiniCartAndModal(): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressMinicartAndModal');
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        /** @var string $blAmazonPayExpressMinicartAndModal */
+        $blAmazonPayExpressMinicartAndModal = $moduleSettingBridge->get('blAmazonPayExpressMinicartAndModal', AmazonPayModule::MODULE_ID);
+        return (bool) $blAmazonPayExpressMinicartAndModal;
+    }
+
+    public function setDisplayExpressInMiniCartAndModal($value): void
+    {
+        $moduleSettingBridge = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(ModuleSettingBridgeInterface::class);
+        $moduleSettingBridge->save('blAmazonPayExpressMinicartAndModal', $value, AmazonPayModule::MODULE_ID);
     }
 
     /**

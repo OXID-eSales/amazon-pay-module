@@ -1,0 +1,15 @@
+.amazonpay-button {
+  width: 250px;
+  display: block; }
+  .amazonpay-button.small {
+    width: 200px; }
+
+.amazonpay-button-or {
+  padding: 10px; }
+  .amazonpay-button-or.large {
+    width: 250px; }
+  .amazonpay-button-or.small {
+    width: 200px; }
+
+#confirm-agb-error-container {
+  display: none; }

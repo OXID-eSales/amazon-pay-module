@@ -1,0 +1,24 @@
+.amazonpay-config {
+  width: 600px;
+  margin: 5em auto; }
+  .amazonpay-config fieldset {
+    padding-left: 10px;
+    border-left: 1px dotted #eee; }
+  .amazonpay-config .expandable > legend:after {
+    padding-left: 10px;
+    content: "\25B6";
+    color: gray; }
+  .amazonpay-config .expanded > legend:after {
+    padding-left: 10px;
+    content: "\25BC";
+    color: gray; }
+  .amazonpay-config .helpbox {
+    margin-top: 10px;
+    background-color: khaki;
+    color: gray;
+    padding: 5px 10px; }
+  .amazonpay-config .form-group textarea {
+    height: 150px;
+    width: 100%; }
+  .amazonpay-config .bottom-space {
+    margin-bottom: 2.5rem; }

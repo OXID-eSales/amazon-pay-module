@@ -1,0 +1,10 @@
+{% extends "headitem.html.twig" %}
+
+{% block admin_headitem_inccss %}
+    {% if title|lower == "amazonpay" %}
+        <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="{{ oViewConf.getModuleUrl('osc_amazonpay', 'css/amazonpay_backend.min.css') }}" />
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

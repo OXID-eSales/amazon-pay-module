@@ -1,0 +1,67 @@
+{% capture assign = "amazonpay_script_checkout_order" %}
+    /* console.log('amazonpay_script_checkout_order checkout_order_address');
+    console.log('SessionId: ' + '{{ oViewConf.getAmazonSessionId() }}');
+    */
+    $('#amznChangeAddress').click(function (e) {
+        e.preventDefault();
+    });
+    amazon.Pay.bindChangeAction('#amznChangeAddress', {
+        amazonCheckoutSessionId: '{{ oViewConf.getAmazonSessionId() }}',
+        changeAction: 'changeAddress'
+    });
+{% endcapture %}
+{% set oDeliveryAddress = oView.getDeliveryAddressAsObj() %}
+{% set oBillingAddress = oView.getBillingAddressAsObj() %}
+{{ script({ add: amazonpay_script_checkout_order, dynamic: __oxid_include_dynamic }) }}
+<div id="orderAddress" class="row">
+    <div class="col-xs-12 col-md-6">
+        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post">
+            <div class="hidden">
+                {{ oViewConf.getHiddenSid()|raw }}
+                <input type="hidden" name="cl" value="user">
+                <input type="hidden" name="fnc" value="">
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ translate({ ident: "BILLING_ADDRESS" }) }}
+                        <button type="submit" class="btn btn-xs btn-warning pull-right submitButton largeButton" title="{{ translate({ ident: "EDIT" }) }}">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {% include "@osc_amazonpay/amazonpay/filtered_billing_address" with {billadr: oBillingAddress} %}
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-xs-12 col-md-6">
+        <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post">
+            <div class="hidden">
+                {{ oViewConf.getHiddenSid()|raw }}
+                <input type="hidden" name="cl" value="user">
+                <input type="hidden" name="fnc" value="">
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {{ translate({ ident: "SHIPPING_ADDRESS" }) }}
+                        <button type="submit" id="amznChangeAddress" class="btn btn-xs btn-warning pull-right submitButton largeButton" title="{{ translate({ ident: "EDIT" }) }}">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {% if oDeliveryAddress %}
+                        {% include "@osc_amazonpay/amazonpay/filtered_delivery_address" with {delivadr: oDeliveryAddress} %}
+                    {% else %}
+                        {% include "@osc_amazonpay/amazonpay/filtered_billing_address" with {billadr: oBillingAddress} %}
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

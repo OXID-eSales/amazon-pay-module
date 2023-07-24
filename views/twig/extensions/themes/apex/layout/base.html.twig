@@ -1,0 +1,16 @@
+{% extends "layout/base.html.twig" %}
+
+{% block base_js %}
+    {% if oViewConf.isAmazonActive() %}
+        {{ parent() }}
+        {{ script({ include: "https://static-eu.payments-amazon.com/checkout.js", priority: 1, dynamic: __oxid_include_dynamic }) }}
+    {% endif %}
+{% endblock %}
+
+{% block base_style %}
+    <!-- TODO  check why min is unavailable -->
+    {% if oViewConf.isAmazonActive() %}
+        {{ parent() }}
+        {{ style({ include: oViewConf.getModuleUrl('osc_amazonpay', 'css/amazonpay.css')}) }}
+    {% endif %}
+{% endblock %}

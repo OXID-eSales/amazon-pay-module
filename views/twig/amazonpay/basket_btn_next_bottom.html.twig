@@ -1,0 +1,6 @@
+<div class="amazonpay-button-or pull-right">
+    {{ "OR"|translate|upper }}
+</div>
+<div class="amazonpay-button small pull-right">
+    {% include "@osc_amazonpay/amazonpay/amazonexpressbutton" with {buttonId: "AmazonPayButtonNextCartbasket_bottom", buttonclass: "small", placement: "Cart"} %}
+</div>

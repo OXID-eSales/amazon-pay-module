@@ -1,0 +1,17 @@
+{% extends "article_main.html.twig" %}
+
+{% block admin_article_main_extended %}
+    {{ parent() }}
+    {% if oViewConf.useExclusion() is defined and oViewConf.useExclusion() %}
+        <tr>
+            <td class="edittext" width="120">
+                {{ translate({ ident: "OSC_AMAZONPAY_EXCLUDED" }) }}
+            </td>
+            <td class="edittext">
+                <input type="hidden" name="editval[oxarticles__osc_amazon_exclude]" value="0">
+                <input class="edittext" type="checkbox" name="editval[oxarticles__osc_amazon_exclude]" value='1' {% if edit.oxarticles__osc_amazon_exclude.value == 1 %}checked{% endif %} {{ readonly }}>
+                {% include "inputhelp.html.twig" with {'sHelpId': help_id("HELP_ARTICLE_MAIN_ACTIVE"), 'sHelpText': help_text("HELP_ARTICLE_MAIN_ACTIVE")} %}
+            </td>
+        </tr>
+    {% endif %}
+{% endblock %}

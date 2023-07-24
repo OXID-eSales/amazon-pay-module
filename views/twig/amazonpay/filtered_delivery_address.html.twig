@@ -1,0 +1,15 @@
+{% if delivadr %}
+    <div id="shippingAddress" class="col-lg-9 offset-lg-3">
+        {% if delivadr.oxaddress__oxcompany.value != '' %} <strong>{{ delivadr.oxaddress__oxcompany.value }}</strong><br />{% endif %}
+        {% if delivadr.oxaddress__oxaddinfo.value != '' %} {{ delivadr.oxaddress__oxaddinfo.value }}<br />{% endif %}
+        {% if delivadr.oxaddress__oxfname.value != '' or delivadr.oxaddress__oxlname.value != '' %}
+            {% if delivadr.oxaddress__oxsal.value  != '' %}{{ delivadr.oxaddress__oxsal.value|translate_salutation }}&nbsp;{% endif %}{{ delivadr.oxaddress__oxfname.value }} {{ delivadr.oxaddress__oxlname.value }}<br />
+        {% endif %}
+        {% if delivadr.oxaddress__oxstreet.value  != '' or delivadr.oxaddress__oxstreetnr.value != '' %}{{ delivadr.oxaddress__oxstreet.value }}&nbsp;{{ delivadr.oxaddress__oxstreetnr.value }}<br />{% endif %}
+        {% if delivadr.oxaddress__oxstateid.value != '' %}{{ delivadr.oxaddress__oxstateid.value }} {% endif %}
+        {% if delivadr.oxaddress__oxzip.value  != '' or delivadr.oxaddress__oxcity.value != '' %}{{ delivadr.oxaddress__oxzip.value }}&nbsp;{{ delivadr.oxaddress__oxcity.value }}<br />{% endif %}
+        {% if delivadr.oxaddress__oxcountry.value != '' %}{{ delivadr.oxaddress__oxcountry.value }}<br /><br />{% endif %}
+        {% if delivadr.oxaddress__oxfon.value != '' %}<strong>{{ translate({ ident: "PHONE" }) }}</strong> {{ delivadr.oxaddress__oxfon.value }}<br />{% endif %}
+        {% if delivadr.oxaddress__oxfax.value != '' %}<strong>{{ translate({ ident: "FAX" }) }}</strong> {{ delivadr.oxaddress__oxfax.value }}<br />{% endif %}
+    </div>
+{% endif %}

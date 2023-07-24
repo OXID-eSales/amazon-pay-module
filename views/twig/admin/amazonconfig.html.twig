@@ -1,0 +1,168 @@
+{% include "headitem.html.twig" with {title: "amazonpay"} %}
+
+<div id="content" class="amazonpay-config">
+    <h1>{{ translate({ ident: "amazonpay" }) }} {{ translate({ ident: "OSC_AMAZONPAY_CONFIG" }) }}</h1>
+    <div class="alert alert-{% if Errors.amazonpay_error %}danger{% else %}success{% endif %}" role="alert">
+        {% if Errors.amazonpay_error %}
+            {{ translate({ ident: "OSC_AMAZONPAY_ERR_CONF_INVALID" }) }}
+        {% else %}
+            {{ translate({ ident: "OSC_AMAZONPAY_CONF_VALID" }) }}
+        {% endif %}
+    </div>
+
+    <form action="{{ oViewConf.getSelfLink()|raw }}" method="post">
+        {{ oViewConf.getHiddenSid()|raw }}
+        <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+        <input type="hidden" name="fnc" value="save">
+
+        <div class="form-group jsonform-error-paymentRegion">
+            <label for="opmode">{{ translate({ ident: "OSC_AMAZONPAY_OPMODE" }) }}</label>
+            <div class="controls">
+                <select name="conf[blAmazonPaySandboxMode]" id="opmode" class="form-control">
+                    <option value="sandbox" {% if config.isSandbox() %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_OPMODE_SANDBOX" }) }}
+                    </option>
+                    <option value="prod" {% if not config.isSandbox() %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_OPMODE_PROD" }) }}
+                    </option>
+                </select>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_OPMODE" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="privkey">{{ translate({ ident: "OSC_AMAZONPAY_PRIVKEY"}) }}*</label>
+            <div class="controls">
+                <textarea id="privkey" name="conf[sAmazonPayPrivKey]">{{ displayPrivateKey }}</textarea>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_PRIVKEY" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="privkeyid">{{ translate({ ident: "OSC_AMAZONPAY_PUBKEYID"}) }}*</label>
+            <div class="controls">
+                <input type="text" class="form-control" name="conf[sAmazonPayPubKeyId]" value="{{ config.getPublicKeyId() }}" id="privkeyid">
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_PUBKEYID" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="merchantId">{{ translate({ ident: "OSC_AMAZONPAY_MERCHANTID"}) }}*</label>
+            <div class="controls">
+                <input type="text" class="form-control" name="conf[sAmazonPayMerchantId]" value="{{ config.getMerchantId() }}" id="merchantId">
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_MERCHANTID" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="storeId">{{ translate({ ident: "OSC_AMAZONPAY_STOREID"}) }}*</label>
+            <div class="controls">
+                <input type="text" class="form-control" name="conf[sAmazonPayStoreId]" value="{{ config.getStoreId() }}" id="storeId">
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_STOREID" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="payRegion">{{ translate({ ident: "OSC_AMAZONPAY_PAYREGION" }) }}</label>
+            <div class="controls">
+                {% set currenciesAbbr = config.getPossiblePresentmentCurrenciesAbbr() %}
+                <span id="payRegion">{{ currenciesAbbr|join(",") }}</span>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_PAYREGION" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="payRegion">{{ translate({ ident: "OSC_AMAZONPAY_DELREGION" }) }}</label>
+            <div class="controls">
+                {% set deliveryAbbr = config.getPossibleEUAddressesAbbr() %}
+                <span id="delRegion">{{ deliveryAbbr|join(",") }}</span>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_DELREGION" }) }}</span>
+            </div>
+        </div>
+
+        <h3>{{ translate({ ident: "OSC_AMAZONPAY_SELLER" }) }}</h3>
+
+        <div class="form-group">
+            <label for="ipnUrl">{{ translate({ ident: "OSC_AMAZONPAY_IPN" }) }}</label>
+            <div class="controls">
+                <input type="text" class="form-control" value="{{ config.getIPNUrl() }}" id="ipnUrl" readonly="readonly">
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_IPN" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="button-placement">{{ translate({ ident: "OSC_AMAZONPAYEXPRESS_PLACEMENT" }) }}</label>
+            <div class="controls">
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonPayExpressPDP]" value="0" />
+                            <input id="placementDetailPage" type="checkbox" name="conf[blAmazonPayExpressPDP]" {% if config.displayExpressInPDP() %}checked{% endif %} value="1" />
+                            {{ translate({ ident: "OSC_AMAZONPAY_PDP" }) }}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonPayExpressMinicartAndModal]" value="0" />
+                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayExpressMinicartAndModal]" {% if config.displayExpressInMiniCartAndModal() %}checked{% endif %} value="1" />
+                            {{ translate({ ident: "OSC_AMAZONPAY_MINICART_AND_MODAL" }) }}
+                        </label>
+                    </div>
+                </div>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAYEXPRESS_PLACEMENT" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="button-placement">{{ translate({ ident: "OSC_AMAZONPAY_PERFORMANCE" }) }}</label>
+            <div class="controls">
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonPayUseExclusion]" value="0" />
+                            <input id="useExclusion" type="checkbox" name="conf[blAmazonPayUseExclusion]" {% if config.useExclusion() %}checked{% endif %} value="1" />
+                            {{ translate({ ident: "OSC_AMAZONPAY_EXCLUSION" }) }}
+                        </label>
+                    </div>
+                </div>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_EXCLUSION" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="button-placement">{{ translate({ ident: "OSC_AMAZONPAY_SOCIAL_LOGIN" }) }}</label>
+            <div class="controls">
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonSocialLoginDeactivated]" value="0" />
+                            <input id="amazonSocialLoginDeactivated" type="checkbox" name="conf[blAmazonSocialLoginDeactivated]" {% if config.socialLoginDeactivated() %}checked{% endif %} value="1" />
+                            {{ translate({ ident: "OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED" }) }}
+                        </label>
+                    </div>
+                </div>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group jsonform-error-captureType">
+            <label for="captype">{{ translate({ ident: "OSC_AMAZONPAY_CAPTYPE" }) }}</label>
+            <div class="controls">
+                <select name="conf[amazonPayCapType]" id="captype" class="form-control" required>
+                    <option value="1" {% if config.isOneStepCapture() %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_CAPTYPE_ONE_STEP" }) }}
+                    </option>
+                    <option value="2" {% if config.isTwoStepCapture() %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_CAPTYPE_TWO_STEP" }) }}
+                    </option>
+                </select>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_CAPTYPE" }) }}</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default bottom-space">{{ translate({ ident: "OSC_AMAZONPAY_SAVE" }) }}</button>
+        </div>
+    </form>
+
+</div>
+{% include "bottomitem.html.twig" %}

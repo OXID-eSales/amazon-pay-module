@@ -41,6 +41,9 @@ class ViewConfig extends ViewConfig_parent
      */
     protected $articlesId = '';
 
+    /** @var string $amazonServiceErrorMessage */
+    private $amazonServiceErrorMessage = '';
+
     public $signature = '';
 
     /**
@@ -373,5 +376,15 @@ class ViewConfig extends ViewConfig_parent
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
         return $amazonClient->generateButtonSignature($payload);
+    }
+
+    public function setAmazonServiceErrorMessage(string $amazonServiceErrorMessage)
+    {
+        $this->amazonServiceErrorMessage = $amazonServiceErrorMessage;
+    }
+
+    public function getAmazonServiceErrorMessage(): string
+    {
+        return $this->amazonServiceErrorMessage;
     }
 }

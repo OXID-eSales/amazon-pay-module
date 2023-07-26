@@ -133,11 +133,15 @@ class OrderOverview extends OrderOverview_parent
             $oOrder->getId() !== null
         ) {
             $logger = new Logger();
-            OxidServiceProvider::getAmazonService()->createRefund(
+            $errorMessage = OxidServiceProvider::getAmazonService()->createRefund(
                 $oOrder->getId(),
                 $refundAmount,
                 $logger
             );
+
+            if (is_string($errorMessage)) {
+                $this->_aViewData["oViewConf"]->setAmazonServiceErrorMessage($errorMessage);
+            }
         }
     }
 }

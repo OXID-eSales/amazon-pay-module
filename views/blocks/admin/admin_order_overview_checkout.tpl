@@ -15,7 +15,10 @@
         <tr>
             <td>
                 <form name="refundpayment" id="refundpayment" action="[{$oViewConf->getSelfLink()}]" >
-                    [{$oViewConf->getHiddenSid()}] 
+                    [{$oViewConf->getHiddenSid()}]
+                    [{if ($oViewConf->getAmazonServiceErrorMessage())}]
+                        <div style="color: darkred">[{$oViewConf->getAmazonServiceErrorMessage()}]</div>
+                    [{/if}]
                     <input type="text" name="refundAmount" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                     <input type="button" name="refundButton" value="[{oxmultilang ident="OSC_AMAZONPAY_REFUND"}]" onclick="document.refundpayment.submit()" />
                     <input type="hidden" name="oxid" value="[{$oxid}]">

@@ -17,6 +17,7 @@ use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Field as FieldAlias;
+use OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Core\AmazonResponseService;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -457,6 +458,11 @@ class AmazonService
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
+
+        $responseService = oxNew(AmazonResponseService::class);
+        if ($responseService->isRequestError($result)) {
+            return $responseService->getRequestErrorMessage($result);
+        }
 
         if ($result['status'] !== 201) {
             return;

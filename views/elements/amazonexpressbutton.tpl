@@ -1,9 +1,8 @@
 [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
-[{assign var="aPayload" value=$oViewConf->getPayloadExpress()}]
+[{assign var="aPayload" value=$oViewConf->getPayloadExpress($oxArticlesId)}]
 <div class="amazonpay-button [{$buttonclass}] express" id="[{$buttonId}]"></div>
 
-[{if $oxArticlesId}][{$oViewConf->setArticlesId($oxArticlesId)}][{/if}]
 [{capture name="amazonpay_script"}]
     amazon.Pay.renderButton('#[{$buttonId}]', {
         merchantId: '[{$amazonConfig->getMerchantId()}]',

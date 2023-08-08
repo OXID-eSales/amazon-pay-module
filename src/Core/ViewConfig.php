@@ -36,11 +36,6 @@ class ViewConfig extends ViewConfig_parent
      */
     protected $isWaveCompatibleTheme = null;
 
-    /**
-     * articlesId for the checkout review url
-     */
-    protected $articlesId = '';
-
     /** @var string $amazonServiceErrorMessage */
     private $amazonServiceErrorMessage = '';
 
@@ -235,11 +230,6 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
-    public function setArticlesId(string $articlesId)
-    {
-        $this->articlesId = $articlesId;
-    }
-
     public function getPaymentDescriptor(): string
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
@@ -252,13 +242,12 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress(): string
+    public function getPayloadExpress(string $anid = ''): string
     {
         /** @var string $anid */
-        $anid = Registry::getRequest()->getRequestParameter('anid') ?? '';
-        $this->setArticlesId($anid);
+        $anid = !empty($anid) ? $anid : (string)Registry::getRequest()->getRequestParameter('anid');
         $payload = new Payload();
-        $payload->setCheckoutReviewReturnUrl($this->articlesId);
+        $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();
         $payload->setStoreId();
         $payload->addScopes([

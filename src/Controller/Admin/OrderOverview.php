@@ -140,7 +140,7 @@ class OrderOverview extends OrderOverview_parent
             );
 
             if (is_string($errorMessage)) {
-                $this->_aViewData["oViewConf"]->setAmazonServiceErrorMessage($errorMessage);
+                $this->addTplParam('amazonServiceErrorMessage', $errorMessage);
             }
         }
     }

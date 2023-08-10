@@ -157,11 +157,6 @@ class ViewConfig extends ViewConfig_parent
         return Constants::isAmazonPayment($paymentId);
     }
 
-    public function getMaximalRefundAmount(string $orderId): float
-    {
-        return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId));
-    }
-
     /**
      * @param string $oxid
      * @return bool

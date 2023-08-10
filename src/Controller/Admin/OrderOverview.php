@@ -12,6 +12,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
@@ -113,6 +114,11 @@ class OrderOverview extends OrderOverview_parent
         $this->addTplParam('isCaptured', $isCaptured);
 
         return parent::render();
+    }
+
+    public function getAmazonMaximalRefundAmount(): float
+    {
+        return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($this->getEditObjectId()));
     }
 
     /**

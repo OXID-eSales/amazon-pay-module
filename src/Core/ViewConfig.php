@@ -36,9 +36,6 @@ class ViewConfig extends ViewConfig_parent
      */
     protected $isWaveCompatibleTheme = null;
 
-    /** @var string $amazonServiceErrorMessage */
-    private $amazonServiceErrorMessage = '';
-
     public $signature = '';
 
     /**

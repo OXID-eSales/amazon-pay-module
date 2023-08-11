@@ -13,6 +13,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -118,6 +119,20 @@ class OrderOverview extends OrderOverview_parent
         return parent::render();
     }
 
+    public function getAmazonMaximalRefundAmount(): float
+    {
+        return PhpHelper::getMoneyValue(
+            OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($this->getEditObjectId())
+        );
+    }
+
+    public function getAmazonMaximalCaptureAmount(): float
+    {
+        $order = new Order();
+        $order->load($this->getEditObjectId());
+        return PhpHelper::getMoneyValue($order->getTotalOrderSum());
+    }
+
     /**
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
@@ -143,18 +158,18 @@ class OrderOverview extends OrderOverview_parent
             );
 
             if (is_string($errorMessage)) {
-                $this->_aViewData["oViewConf"]->setAmazonServiceErrorMessage($errorMessage);
+                $this->addTplParam('amazonServiceErrorMessage', $errorMessage);
             }
         }
     }
 
-    public function makecharge()
+    public function makeCharge()
     {
         $oOrder = oxNew(Order::class);
         /** @var float $captureAmount */
         $captureAmount = Registry::getRequest()->getRequestParameter("captureAmount");
         $amazonConfig = oxNew(Config::class);
-        $currencyCode = $order->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
+        $currencyCode = $oOrder->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
         $orderLoaded = $oOrder->load($this->getEditObjectId());
         /** @var string $paymentType */
         $paymentType = $oOrder->getFieldData('oxpaymenttype');
@@ -170,17 +185,17 @@ class OrderOverview extends OrderOverview_parent
             $logMessages = $repository->findLogMessageForOrderId($this->getEditObjectId());
             if (!empty($logMessages)) {
                 foreach ($logMessages as $logMessage) {
-                    $logsWithChargePermission = $repository->findLogMessageForChargePermissionId(
+                    $logs = $repository->findLogMessageForChargePermissionId(
                         $logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']
                     );
-                    foreach ($logsWithChargePermission as $logWithChargePermission) {
-                        if ($logWithChargePermission['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
+                    foreach ($logs as $charchelog) {
+                        if ($charchelog['OSC_AMAZON_RESPONSE_MSG'] === 'Captured') {
                             return '-1';
                         }
-                        $chargeIdSet = isset($logWithChargePermission['OSC_AMAZON_CHARGE_ID'])
-                            && $logWithChargePermission['OSC_AMAZON_CHARGE_ID'] !== 'null';
+                        $chargeIdSet = isset($charchelog['OSC_AMAZON_CHARGE_ID'])
+                            && $charchelog['OSC_AMAZON_CHARGE_ID'] !== 'null';
                         if ($chargeIdSet) {
-                            $chargeId = $logWithChargePermission['OSC_AMAZON_CHARGE_ID'];
+                            $chargeId = $charchelog['OSC_AMAZON_CHARGE_ID'];
                             break;
                         }
                     }

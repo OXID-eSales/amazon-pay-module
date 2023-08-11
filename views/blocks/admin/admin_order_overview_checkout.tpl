@@ -8,7 +8,7 @@
         <tr>
             <td class="edittext">
                 [{oxmultilang ident="OSC_AMAZONPAY_CAPTURE_ANNOTATION"}]
-                [{$oViewConf->getAmazonMaximalCaptureAmount($oxid)}]
+                [{$oView->getAmazonMaximalCaptureAmount()}]
                 [{$edit->oxorder__oxcurrency->value}]
             </td>
         </tr>
@@ -20,7 +20,7 @@
                     <input type="button" name="captureButton" value="[{oxmultilang ident="OSC_AMAZONPAY_CAPTURE"}]" onclick="document.makecharge.submit()" />
                     <input type="hidden" name="oxid" value="[{$oxid}]">
                     <input type="hidden" name="cl" value="order_overview">
-                    <input type="hidden" name="fnc" value="makecharge">
+                    <input type="hidden" name="fnc" value="makeCharge">
                 </form>
             </td>
         </tr>
@@ -29,7 +29,7 @@
         <tr>
             <td class="edittext">
                 [{oxmultilang ident="OSC_AMAZONPAY_REFUND_ANNOTATION"}]
-                [{$oViewConf->getAmazonMaximalRefundAmount($oxid)}]
+                [{$oView->getAmazonMaximalRefundAmount()}]
                 [{$edit->oxorder__oxcurrency->value}]
             </td>
         </tr>
@@ -37,8 +37,8 @@
             <td>
                 <form name="refundpayment" id="refundpayment" action="[{$oViewConf->getSelfLink()}]" >
                     [{$oViewConf->getHiddenSid()}]
-                    [{if ($oViewConf->getAmazonServiceErrorMessage())}]
-                        <div style="color: darkred">[{$oViewConf->getAmazonServiceErrorMessage()}]</div>
+                    [{if ($amazonServiceErrorMessage)}]
+                        <div style="color: darkred">[{$amazonServiceErrorMessage}]</div>
                     [{/if}]
                     <input type="text" name="refundAmount" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
                     <input type="button" name="refundButton" value="[{oxmultilang ident="OSC_AMAZONPAY_REFUND"}]" onclick="document.refundpayment.submit()" />

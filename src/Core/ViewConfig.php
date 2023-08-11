@@ -37,9 +37,6 @@ class ViewConfig extends ViewConfig_parent
      */
     protected $isWaveCompatibleTheme = null;
 
-    /** @var string $amazonServiceErrorMessage */
-    private $amazonServiceErrorMessage = '';
-
     public $signature = '';
 
     /**
@@ -159,19 +156,6 @@ class ViewConfig extends ViewConfig_parent
     public function isAmazonPaymentId(string $paymentId): bool
     {
         return Constants::isAmazonPayment($paymentId);
-    }
-
-    public function getAmazonMaximalRefundAmount(string $orderId): float
-    {
-        return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId));
-    }
-
-    public function getAmazonMaximalCaptureAmount(string $orderId): float
-    {
-        $order = new Order();
-        $order->load($orderId);
-
-        return PhpHelper::getMoneyValue($order->getTotalOrderSum());
     }
 
     /**
@@ -374,15 +358,5 @@ class ViewConfig extends ViewConfig_parent
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
         return $amazonClient->generateButtonSignature($payload);
-    }
-
-    public function setAmazonServiceErrorMessage(string $amazonServiceErrorMessage)
-    {
-        $this->amazonServiceErrorMessage = $amazonServiceErrorMessage;
-    }
-
-    public function getAmazonServiceErrorMessage(): string
-    {
-        return $this->amazonServiceErrorMessage;
     }
 }

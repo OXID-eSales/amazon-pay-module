@@ -1,5 +1,8 @@
 [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
+[{if !$oxArticlesId}]
+    [{assign var="oxArticlesId" value=""}]
+[{/if}]
 [{assign var="aPayload" value=$oViewConf->getPayloadExpress($oxArticlesId)}]
 <div class="amazonpay-button [{$buttonclass}] express" id="[{$buttonId}]"></div>
 

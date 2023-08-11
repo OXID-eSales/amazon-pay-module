@@ -115,8 +115,23 @@ class OrderOverview extends OrderOverview_parent
 
         $this->addtplParam('isOneStepCapture', $isOneStepCapture);
         $this->addTplParam('isCaptured', $isCaptured);
-
+        $this->getAmazonAPIOrderStatus();
         return parent::render();
+    }
+
+    public function getAmazonAPIOrderStatus()
+    {
+        $repository = oxNew(LogRepository::class);
+        $orderId = $this->getEditObjectId();
+        $order = oxNew(Order::class);
+        $order->load($orderId);
+        $transId = $order->getFieldData('oxtransid');
+
+        //$logMessage = $repository->findLogMessageForOrderId($orderId);
+        //$chargeId = $logMessage[0]['OSC_AMAZON_CHARGE_ID'];
+        //$identifier = $logMessage[0]['OSC_AMAZON_IDENTIFIER'];
+
+        $result1 = OxidServiceProvider::getAmazonClient()->getCheckoutSession($transId);
     }
 
     public function getAmazonMaximalRefundAmount(): float

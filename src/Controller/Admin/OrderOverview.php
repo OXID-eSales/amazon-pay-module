@@ -124,6 +124,13 @@ class OrderOverview extends OrderOverview_parent
         return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($this->getEditObjectId()));
     }
 
+    public function getAmazonMaximalCaptureAmount(): float
+    {
+        $order = new Order();
+        $order->load($this->getEditObjectId());
+        return PhpHelper::getMoneyValue($order->getTotalOrderSum());
+    }
+
     /**
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException

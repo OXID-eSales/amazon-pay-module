@@ -8,7 +8,7 @@
         <tr>
             <td class="edittext">
                 [{oxmultilang ident="OSC_AMAZONPAY_CAPTURE_ANNOTATION"}]
-                [{$oViewConf->getAmazonMaximalCaptureAmount($oxid)}]
+                [{$oView->getAmazonMaximalCaptureAmount()}]
                 [{$edit->oxorder__oxcurrency->value}]
             </td>
         </tr>
@@ -29,7 +29,7 @@
         <tr>
             <td class="edittext">
                 [{oxmultilang ident="OSC_AMAZONPAY_REFUND_ANNOTATION"}]
-                [{$oViewConf->getAmazonMaximalRefundAmount($oxid)}]
+                [{$oView->getAmazonMaximalRefundAmount()}]
                 [{$edit->oxorder__oxcurrency->value}]
             </td>
         </tr>

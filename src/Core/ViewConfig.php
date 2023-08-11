@@ -15,6 +15,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\Order;
 use OxidSolutionCatalysts\AmazonPay\Model\User;
 
 /**
@@ -160,9 +161,17 @@ class ViewConfig extends ViewConfig_parent
         return Constants::isAmazonPayment($paymentId);
     }
 
-    public function getMaximalRefundAmount(string $orderId): float
+    public function getAmazonMaximalRefundAmount(string $orderId): float
     {
         return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId));
+    }
+
+    public function getAmazonMaximalCaptureAmount(string $orderId): float
+    {
+        $order = new Order();
+        $order->load($orderId);
+
+        return PhpHelper::getMoneyValue($order->getTotalOrderSum());
     }
 
     /**

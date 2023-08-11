@@ -72,4 +72,6 @@ $aLang = [
     'OSC_AMAZONPAY_REFUND'                  => 'Refund',
     'OSC_AMAZONPAY_REFUND_ANNOTATION'       => 'Make a refund of up to ',
     'OSC_AMAZONPAY_DELETE_ERROR'            => 'Order cannot be deleted because money has already been transferred between the shop and Amazon.',
+    'OSC_AMAZONPAY_CAPTURE_ANNOTATION'      => 'Make a charge of up to ',
+    'OSC_AMAZONPAY_CAPTURE'                 => 'Charge',
 ];

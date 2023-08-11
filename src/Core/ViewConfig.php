@@ -15,6 +15,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\Order;
 use OxidSolutionCatalysts\AmazonPay\Model\User;
 
 /**
@@ -155,6 +156,8 @@ class ViewConfig extends ViewConfig_parent
     public function isAmazonPaymentId(string $paymentId): bool
     {
         return Constants::isAmazonPayment($paymentId);
+    }
+
     }
 
     /**

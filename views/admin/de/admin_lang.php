@@ -73,4 +73,6 @@ $aLang = [
     'OSC_AMAZONPAY_REFUND'                  => 'Erstatten',
     'OSC_AMAZONPAY_REFUND_ANNOTATION'       => 'Machen Sie eine Rückerstattung von bis zu ',
     'OSC_AMAZONPAY_DELETE_ERROR'            => 'Bestellung kann nicht gelöscht werden, da bereits Geld zwischen dem Shop und Amazon transferiert wurde.',
+    'OSC_AMAZONPAY_CAPTURE_ANNOTATION'      => 'Machen Sie eine Gebühr von bis zu ',
+    'OSC_AMAZONPAY_CAPTURE'                 => 'Abbuchung',
 ];

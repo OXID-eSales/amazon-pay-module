@@ -36,9 +36,9 @@ class DispatchController extends FrontendController
      * @return void
      * @throws Exception
      */
-    public function init()
+    public function render()
     {
-        parent::init();
+        parent::render();
 
         $logger = new Logger();
         $action = Registry::getRequest()->getRequestParameter('action');
@@ -168,6 +168,7 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
+        Registry::getUtils()->showMessageAndExit('');
     }
 
     /**

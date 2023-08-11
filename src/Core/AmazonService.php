@@ -410,7 +410,7 @@ class AmazonService
      */
     public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
-        $this->isTwoStep = false;
+        $this->isTwoStep = true;
         $this->processPayment($amazonSessionId, $basket, $logger);
     }
 

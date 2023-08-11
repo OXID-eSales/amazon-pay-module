@@ -158,8 +158,6 @@ class ViewConfig extends ViewConfig_parent
         return Constants::isAmazonPayment($paymentId);
     }
 
-    }
-
     /**
      * @param string $oxid
      * @return bool

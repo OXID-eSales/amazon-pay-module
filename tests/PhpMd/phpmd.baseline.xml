@@ -11,11 +11,12 @@
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/Admin/OrderOverview.php" method="render"/>
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Controller/Admin/OrderOverview.php" method="render"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/Admin/OrderOverview.php"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/Admin/OrderOverview.php" method="makeCharge"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/AmazonCheckoutAjaxController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/AmazonCheckoutController.php"/>
   <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Controller/DispatchController.php"/>
-  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/DispatchController.php" method="init"/>
-  <violation rule="PHPMD\Rule\Design\LongMethod" file="src/Controller/DispatchController.php" method="init"/>
+  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/DispatchController.php" method="render"/>
+  <violation rule="PHPMD\Rule\Design\LongMethod" file="src/Controller/DispatchController.php" method="render"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/DispatchController.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/DispatchController.php"/>
   <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Controller/OrderController.php"/>

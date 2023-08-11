@@ -20,7 +20,7 @@
                     <input type="button" name="captureButton" value="[{oxmultilang ident="OSC_AMAZONPAY_CAPTURE"}]" onclick="document.makecharge.submit()" />
                     <input type="hidden" name="oxid" value="[{$oxid}]">
                     <input type="hidden" name="cl" value="order_overview">
-                    <input type="hidden" name="fnc" value="makecharge">
+                    <input type="hidden" name="fnc" value="makeCharge">
                 </form>
             </td>
         </tr>

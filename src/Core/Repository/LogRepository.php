@@ -27,7 +27,7 @@ class LogRepository
     {
         $uid = Registry::getUtilsObject()->generateUID();
 
-        $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (
+        $sql = 'INSERT IGNORE INTO ' . self::TABLE_NAME . ' (
                 `OSC_AMAZON_PAYLOGID`,
                 `OSC_AMAZON_OXSHOPID`,
                 `OSC_AMAZON_OXUSERID`,

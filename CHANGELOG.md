@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * Send orderNr as ReferenceMerchantId to Amazon
 * calculate AmazonPayExpress-Deliverycosts based on provided Country from Amazon
 * [0007379](https://bugs.oxid-esales.com/view.php?id=7379) Fix Error messages from the DispatchController spam the log
+* Do not duplicate IPN and transaction history entries in order backend
 
 ## [2.1.2] - Release
 

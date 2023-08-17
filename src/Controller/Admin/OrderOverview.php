@@ -21,6 +21,8 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 class OrderOverview extends OrderOverview_parent
 {
+    protected $captureStatus = null;
+
     /**
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
@@ -115,23 +117,28 @@ class OrderOverview extends OrderOverview_parent
 
         $this->addtplParam('isOneStepCapture', $isOneStepCapture);
         $this->addTplParam('isCaptured', $isCaptured);
-        $this->getAmazonAPIOrderStatus();
+
         return parent::render();
     }
 
-    public function getAmazonAPIOrderStatus()
+    public function getAmazonAPIOrderStatus(): string
     {
-        $repository = oxNew(LogRepository::class);
-        $orderId = $this->getEditObjectId();
-        $order = oxNew(Order::class);
-        $order->load($orderId);
-        $transId = $order->getFieldData('oxtransid');
-
-        //$logMessage = $repository->findLogMessageForOrderId($orderId);
-        //$chargeId = $logMessage[0]['OSC_AMAZON_CHARGE_ID'];
-        //$identifier = $logMessage[0]['OSC_AMAZON_IDENTIFIER'];
-
-        $result1 = OxidServiceProvider::getAmazonClient()->getCheckoutSession($transId);
+        if (is_null($this->captureStatus)) {
+            $this->captureStatus = '';
+            $orderId = $this->getEditObjectId();
+            if ($orderId !== '-1') {
+                $repository = oxNew(LogRepository::class);
+                $order = oxNew(Order::class);
+                $order->load($orderId);
+                $logMessage = $repository->findLogMessageForOrderId($orderId);
+                $chargePermissionId = $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'];
+                if ($chargePermissionId) {
+                    $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
+                    $this->captureStatus = $amzData['response']['statusDetails']['state'] ?? '';
+                }
+            }
+        }
+        return $this->captureStatus;
     }
 
     public function getAmazonMaximalRefundAmount(): float

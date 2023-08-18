@@ -173,6 +173,15 @@
                         </label>
                     </div>
                 </div>
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonAutomatedCancelActivated]" value="0" />
+                            <input id="amazonSocialLoginDeactivated" type="checkbox" name="conf[blAmazonAutomatedCancelActivated]" [{if $config->automatedCancelActivated()}]checked[{/if}] value="1" />
+                            [{oxmultilang ident="OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED"}]
+                        </label>
+                    </div>
+                </div>
                 <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_AUTOMATED_REFUND"}]</span>
             </div>
         </div>

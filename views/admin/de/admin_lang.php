@@ -48,9 +48,10 @@ $aLang = [
     'OSC_AMAZONPAY_SOCIAL_LOGIN'       => 'Amazon Social Login',
     'OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'        => 'Amazon Social Login deaktivieren',
     'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'Es besteht die Möglichkeit, sich im Shop mit einem Amazon-Kundenkonto anzumelden. Dabei werden die Adressdaten von Amazon übernommen. Die Anmeldung ist nur dann möglich, wenn noch kein Konto im Shop mit der gleichen Amazon-EMail-Adresse existiert.<br>Wenn Sie diese Funktion nicht Ihren Kunden anbieten wollen, können sie diese hier deaktivieren.',
-    'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatische Rückerstattung',
-    'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Amazon automatische Rückerstattung aktivieren',
-    'HELP_OSC_AMAZONPAY_AUTOMATED_REFUND'           => 'Wenn Artikel einer Amazonbestellung entfernt werden, oder die ganze Bestellung gelöscht wird, kann automatisch ein Amazon-Geldrückerstattung durchgeführt werden.',
+    'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatische Geld-Rückerstattung und Bestellrückabwicklung',
+    'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Amazon automatische Geld Rückerstattung aktivieren (Bestellpostions- oder Bestell-Storno)',
+    'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Amazon automatische Bestellrückabwicklung aktivieren (Bestelllöschung)',
+    'HELP_OSC_AMAZONPAY_AUTOMATED_REFUND'           => 'Wenn Artikel einer Amazonbestellung entfernt werden, oder die Bestellung storniert wird, oder die ganze Bestellung gelöscht wird, kann automatisch ein Amazon-Geldrückerstattung bzw. -Bestellrückabwicklung durchgeführt werden.',
     'OSC_AMAZONPAY_SAVE'               => 'Speichern',
     'OSC_AMAZONPAY_ERR_CONF_INVALID'   =>
         'Ein oder mehrere Konfigurationswerte sind entweder nicht festgelegt oder falsch. Bitte überprüfen Sie sie noch einmal.<br>

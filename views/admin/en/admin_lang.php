@@ -47,9 +47,10 @@ $aLang = [
     'OSC_AMAZONPAY_SOCIAL_LOGIN'        => 'Amazon Social Login',
     'OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'        => 'deactivate Amazon Social Login',
     'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'It is possible to register in the shop with an Amazon customer account. The address data will be taken over from Amazon. Registration is only possible if there is no account in the shop with the same Amazon email address.<br>If you do not want to offer this function to your customers, you can deactivate it here.',
-    'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatic refund',
-    'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Activate Amazon automatic refund',
-    'HELP_OSC_AMAZONPAY_AUTOMATED_REFUND'           => 'If items are removed from an Amazon order, or the entire order is deleted, an Amazon money refund can be carried out automatically.',
+    'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatic refund & cancel',
+    'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Activate Amazon automatic refund (order and orderpostion storno)',
+    'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Activate Amazon automatic cancel (order deletion)',
+    'HELP_OSC_AMAZONPAY_AUTOMATED_REFUND'           => 'If items are removed from an Amazon order, or order is canceled, or the entire order is deleted, an Amazon money refund or cancel can be carried out automatically.',
     'OSC_AMAZONPAY_SAVE'               => 'Save',
     'OSC_AMAZONPAY_ERR_CONF_INVALID'   =>
         'One or more configuration values are either not set or incorrect. Please double check them.<br>

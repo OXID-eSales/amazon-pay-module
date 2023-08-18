@@ -136,11 +136,9 @@ class OrderOverview extends OrderOverview_parent
                 $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
-                    $captureStatus = strtoupper($amzData['response']['statusDetails']['state'] ?? '');
-                    $captureStatus = $lang->translateString('OSC_AMAZONPAY_LIVESTATUS_' . $captureStatus);
-                    if ($lang->isTranslated()) {
-                        $this->captureStatus = $captureStatus;
-                    }
+                    $captureStatusRaw = $amzData['response']['statusDetails']['state'] ?? '';
+                    $captureStatus = $lang->translateString('OSC_AMAZONPAY_LIVESTATUS_' . strtoupper($captureStatusRaw));
+                    $this->captureStatus = $lang->isTranslated() ? $captureStatus : $captureStatusRaw;
                 }
             }
         }

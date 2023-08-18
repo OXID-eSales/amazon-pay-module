@@ -6,7 +6,7 @@
     </tr>
     <tr>
         <td class="edittext"><b>[{oxmultilang ident="OSC_AMAZONPAY_LIVESTATUS" suffix="COLON"}]</b></td>
-        <td class="edittext">[{if $oView->getAmazonAPIOrderStatus()}][{$oView->getAmazonAPIOrderStatus()}][{else}][{oxmultilang ident="OSC_AMAZONPAY_NOLIVESTATUS"}][{/if}]<br></td>
+        <td class="edittext">[{$oView->getAmazonAPIOrderStatus()}]<br></td>
     </tr>
     [{if $edit->oxorder__oxtransstatus->value == 'NOT_FINISHED' && $oViewConf->isAmazonActive()}]
         <tr>

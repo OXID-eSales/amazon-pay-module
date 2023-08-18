@@ -127,14 +127,20 @@ class OrderOverview extends OrderOverview_parent
             $this->captureStatus = '';
             $orderId = $this->getEditObjectId();
             if ($orderId !== '-1') {
+                $lang = Registry::getLang();
                 $repository = oxNew(LogRepository::class);
                 $order = oxNew(Order::class);
                 $order->load($orderId);
                 $logMessage = $repository->findLogMessageForOrderId($orderId);
                 $chargePermissionId = $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'];
+                $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
-                    $this->captureStatus = $amzData['response']['statusDetails']['state'] ?? '';
+                    $captureStatus = strtoupper($amzData['response']['statusDetails']['state'] ?? '');
+                    $captureStatus = $lang->translateString('OSC_AMAZONPAY_LIVESTATUS_' . $captureStatus);
+                    if ($lang->isTranslated()) {
+                        $this->captureStatus = $captureStatus;
+                    }
                 }
             }
         }

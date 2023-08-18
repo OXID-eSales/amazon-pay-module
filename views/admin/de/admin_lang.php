@@ -70,6 +70,7 @@ $aLang = [
     'OSC_AMAZONPAY_RESULT'                  => 'Ergebnis',
     'OSC_AMAZONPAY_REMARK'                  => 'Amazon Pay Mitteilung',
     'OSC_AMAZONPAY_LIVESTATUS'              => 'Amazon Pay-Gelderfassungsstatus (über API)',
+    'OSC_AMAZONPAY_LIVESTATUS_CLOSED'       => 'Geschlossen - vollständig abgebucht',
     'OSC_AMAZONPAY_NOLIVESTATUS'            => 'nicht verfügbar',
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'AmazonPay ausschließen',
     'OSC_AMAZONPAY_REFUND'                  => 'Erstatten',

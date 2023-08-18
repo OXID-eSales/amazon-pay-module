@@ -69,6 +69,7 @@ $aLang = [
     'OSC_AMAZONPAY_RESULT'                  => 'Result',
     'OSC_AMAZONPAY_REMARK'                  => 'Amazon Pay notice',
     'OSC_AMAZONPAY_LIVESTATUS'              => 'Amazon Pay money capture status (via API)',
+    'OSC_AMAZONPAY_LIVESTATUS_CLOSED'       => 'Closed - fully charged',
     'OSC_AMAZONPAY_NOLIVESTATUS'            => 'not available',
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'Exclude AmazonPay',
     'OSC_AMAZONPAY_REFUND'                  => 'Refund',

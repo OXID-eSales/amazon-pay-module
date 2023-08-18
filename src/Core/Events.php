@@ -418,7 +418,6 @@ class Events
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
         if (!count($result)) {
-
             $sql = sprintf(
                 'DELETE FROM %s
                 WHERE

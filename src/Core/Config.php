@@ -315,6 +315,22 @@ class Config
     /**
      * @return bool
      */
+    public function automatedRefundActivated(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedRefundActivated');
+    }
+
+    /**
+     * @return bool
+     */
+    public function automatedCancelActivated(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedCancelActivated');
+    }
+
+    /**
+     * @return bool
+     */
     public function displayExpressInMiniCartAndModal(): bool
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressMinicartAndModal');

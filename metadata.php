@@ -284,6 +284,8 @@ $aModule = [
         ['name' => 'blAmazonPayExpressMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
         ['name' => 'blAmazonSocialLoginDeactivated', 'type' => 'bool', 'value' => 'false', 'group' => null],
+        ['name' => 'blAmazonAutomatedRefundActivated', 'type' => 'bool', 'value' => 'true', 'group' => null],
+        ['name' => 'blAmazonAutomatedCancelActivated', 'type' => 'bool', 'value' => 'true', 'group' => null],
         ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
     ]
 ];

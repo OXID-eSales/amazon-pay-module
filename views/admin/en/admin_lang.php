@@ -70,6 +70,8 @@ $aLang = [
     'OSC_AMAZONPAY_REMARK'                  => 'Amazon Pay notice',
     'OSC_AMAZONPAY_LIVESTATUS'              => 'Amazon Pay money capture status (via API)',
     'OSC_AMAZONPAY_LIVESTATUS_CLOSED'       => 'Closed - fully charged',
+    'OSC_AMAZONPAY_LIVESTATUS_CHARGEABLE'   => 'Order is ready for charge',
+    'OSC_AMAZONPAY_LIVESTATUS_NONCHARGEABLE'=> 'Order cannot be charged (<a href="https://developer.amazon.com/it/docs/amazon-pay-api-v2/charge-permission.html#states-and-reason-codes" target="_blank">List of possible reasons</a>)',
     'OSC_AMAZONPAY_NOLIVESTATUS'            => 'not available',
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'Exclude AmazonPay',
     'OSC_AMAZONPAY_REFUND'                  => 'Refund',

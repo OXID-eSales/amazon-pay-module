@@ -355,7 +355,7 @@ class AmazonService
 
         // in case of error, the resulting structure is different...
         if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
-            $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+            $this->showErrorOnRedirect($logger, $result, (string)$basket->getOrderId());
         }
 
         return $response;

@@ -15,12 +15,12 @@ use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
-use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 class OrderOverview extends OrderOverview_parent
 {
+    /** @var null|string $captureStatus */
     protected $captureStatus = null;
 
     /**
@@ -132,7 +132,7 @@ class OrderOverview extends OrderOverview_parent
                 $order = oxNew(Order::class);
                 $order->load($orderId);
                 $logMessage = $repository->findLogMessageForOrderId($orderId);
-                $chargePermissionId = $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'];
+                $chargePermissionId = $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'] ?? null;
                 $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);

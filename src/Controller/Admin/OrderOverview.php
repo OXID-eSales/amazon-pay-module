@@ -21,6 +21,8 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 class OrderOverview extends OrderOverview_parent
 {
+    protected $captureStatus = null;
+
     /**
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
@@ -117,6 +119,32 @@ class OrderOverview extends OrderOverview_parent
         $this->addTplParam('isCaptured', $isCaptured);
 
         return parent::render();
+    }
+
+    public function getAmazonAPIOrderStatus(): string
+    {
+        if (is_null($this->captureStatus)) {
+            $this->captureStatus = '';
+            $orderId = $this->getEditObjectId();
+            if ($orderId !== '-1') {
+                $lang = Registry::getLang();
+                $repository = oxNew(LogRepository::class);
+                $order = oxNew(Order::class);
+                $order->load($orderId);
+                $logMessage = $repository->findLogMessageForOrderId($orderId);
+                $chargePermissionId = $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'];
+                $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
+                if ($chargePermissionId) {
+                    $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
+                    $captureStatusRaw = $amzData['response']['statusDetails']['state'] ?? '';
+                    $captureStatus = $lang->translateString(
+                        'OSC_AMAZONPAY_LIVESTATUS_' . strtoupper($captureStatusRaw)
+                    );
+                    $this->captureStatus = $lang->isTranslated() ? $captureStatus : $captureStatusRaw;
+                }
+            }
+        }
+        return $this->captureStatus;
     }
 
     public function getAmazonMaximalRefundAmount(): float

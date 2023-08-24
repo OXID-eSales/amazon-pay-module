@@ -90,8 +90,13 @@ class ConfigController extends AdminController
     {
         $oModuleConfiguration = null;
         $oModuleConfigurationDaoBridge = null;
+        $oModuleActivationBridge = null;
         if ($this->useDaoBridge()) {
-            ContainerFactory::getInstance()->getContainer()->get(ModuleActivationBridgeInterface::class)->deactivate(Constants::MODULE_ID, $shopId);
+            /** @var ModuleActivationBridgeInterface $oModuleActivationBridge */
+            $oModuleActivationBridge = ContainerFactory::getInstance()->getContainer()->get(
+                ModuleActivationBridgeInterface::class
+            );
+            $oModuleActivationBridge->deactivate(Constants::MODULE_ID, $shopId);
 
             /** @var ModuleConfigurationDaoBridgeInterface $oModuleConfigurationDaoBridge */
             $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(
@@ -107,7 +112,7 @@ class ConfigController extends AdminController
                 $value = $oModuleSetting->getType() === 'bool' ? filter_var($value, FILTER_VALIDATE_BOOLEAN) : $value;
                 $oModuleSetting->setValue($value);
             }
-            else {
+            if (!$this->useDaoBridge()) {
                 Registry::getConfig()->saveShopConfVar(
                     strpos($confName, 'bl') ? 'bool' : 'str',
                     $confName,
@@ -119,7 +124,7 @@ class ConfigController extends AdminController
         }
         if ($this->useDaoBridge()) {
             $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
-            ContainerFactory::getInstance()->getContainer()->get(ModuleActivationBridgeInterface::class)->activate(Constants::MODULE_ID, $shopId);
+            $oModuleActivationBridge->activate(Constants::MODULE_ID, $shopId);
         }
     }
 

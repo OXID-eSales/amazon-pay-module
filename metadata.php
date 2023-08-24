@@ -60,7 +60,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'out/img/amazon-pay-logo.png',
-    'version' => '2.1.3-rc.9',
+    'version' => '2.1.3-rc.10',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',
     'email' => 'info@oxid-esales.com',
@@ -275,17 +275,17 @@ $aModule = [
         ],
     ],
     'settings' => [
-        ['name' => 'blAmazonPaySandboxMode', 'type' => 'bool', 'value' => 'false', 'group' => null],
+        ['name' => 'blAmazonPaySandboxMode', 'type' => 'bool', 'value' => false, 'group' => null],
         ['name' => 'sAmazonPayPrivKey', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayPubKeyId', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayMerchantId', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayStoreId', 'type' => 'str', 'value' => '', 'group' => null],
-        ['name' => 'blAmazonPayExpressPDP', 'type' => 'bool', 'value' => 'true', 'group' => null],
-        ['name' => 'blAmazonPayExpressMinicartAndModal', 'type' => 'bool', 'value' => 'true', 'group' => null],
-        ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => 'false', 'group' => null],
-        ['name' => 'blAmazonSocialLoginDeactivated', 'type' => 'bool', 'value' => 'false', 'group' => null],
-        ['name' => 'blAmazonAutomatedRefundActivated', 'type' => 'bool', 'value' => 'true', 'group' => null],
-        ['name' => 'blAmazonAutomatedCancelActivated', 'type' => 'bool', 'value' => 'true', 'group' => null],
+        ['name' => 'blAmazonPayExpressPDP', 'type' => 'bool', 'value' => true, 'group' => null],
+        ['name' => 'blAmazonPayExpressMinicartAndModal', 'type' => 'bool', 'value' => true, 'group' => null],
+        ['name' => 'blAmazonPayUseExclusion', 'type' => 'bool', 'value' => false, 'group' => null],
+        ['name' => 'blAmazonSocialLoginDeactivated', 'type' => 'bool', 'value' => false, 'group' => null],
+        ['name' => 'blAmazonAutomatedRefundActivated', 'type' => 'bool', 'value' => true, 'group' => null],
+        ['name' => 'blAmazonAutomatedCancelActivated', 'type' => 'bool', 'value' => true, 'group' => null],
         ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
     ]
 ];

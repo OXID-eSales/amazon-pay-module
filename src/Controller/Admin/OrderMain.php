@@ -25,7 +25,7 @@ class OrderMain extends OrderMain_parent
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    protected function onOrderSend(): void
+    protected function onOrderSend()
     {
         parent::onOrderSend();
 

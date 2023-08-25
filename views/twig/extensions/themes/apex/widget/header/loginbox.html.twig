@@ -1,0 +1,11 @@
+{% extends "widget/header/loginbox.html.twig" %}
+
+{% block thirdparty_login %}
+    {% if not oxcmp_user and oViewConf.isAmazonActive() and not oViewConf.isAmazonSessionActive() and not oViewConf.socialLoginDeactivated() %}
+        <div>
+            <div class="text-center amazonpay-button-or small">{{ "OR"|translate|upper }}</div>
+            {% include "@osc_amazonpay/amazonpay/amazonloginbutton" with {buttonId: "AmazonPayWidgetCheckoutUser", buttonclass: "small"} %}
+        </div>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}

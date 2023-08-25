@@ -17,7 +17,7 @@ use OxidEsales\Eshop\Application\Model\DeliverySet;
  */
 class DeliverySetMain extends DeliverySetMain_parent
 {
-    public function render(): string
+    public function render()
     {
         $amazonCarriers = AmazonCarrier::getAllCarriers();
 
@@ -28,7 +28,7 @@ class DeliverySetMain extends DeliverySetMain_parent
         if ($oxId !== -1) {
             $deliverySet = oxNew(DeliverySet::class);
             $deliverySet->load($oxId);
-            $amazonCarrier = $deliverySet->getRawFieldData('osc_amazon_carrier');
+            $amazonCarrier = $deliverySet->getFieldData('osc_amazon_carrier');
 
             $selectedAmazonCarrier = $amazonCarrier != null ? $amazonCarrier : 'NULL';
             $this->addTplParam('selectedAmazonCarrier', $selectedAmazonCarrier);

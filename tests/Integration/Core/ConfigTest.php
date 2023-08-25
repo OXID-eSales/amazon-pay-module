@@ -28,7 +28,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Config;
 
 class ConfigTest extends UnitTestCase
 {
-    public function testIsSandbox(): void
+    public function testIsSandbox()
     {
         $config = new Config();
         $this->setConfigParam('blAmazonPaySandboxMode', true);
@@ -37,41 +37,41 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->isSandbox());
     }
 
-    public function testGetPrivateKey(): void
+    public function testGetPrivateKey()
     {
         $config = new Config();
         $this->setConfigParam('sAmazonPayPrivKey', 'someKey1234');
         $this->assertSame('someKey1234', $config->getPrivateKey());
     }
 
-    public function testGetPublicKeyId(): void
+    public function testGetPublicKeyId()
     {
         $config = new Config();
         $this->setConfigParam('sAmazonPayPubKeyId', 'keyid');
         $this->assertSame('keyid', $config->getPublicKeyId());
     }
 
-    public function testGetMerchantId(): void
+    public function testGetMerchantId()
     {
         $config = new Config();
         $this->setConfigParam('sAmazonPayMerchantId', 'merchid');
         $this->assertSame('merchid', $config->getMerchantId());
     }
 
-    public function testGetStoreId(): void
+    public function testGetStoreId()
     {
         $config = new Config();
         $this->setConfigParam('sAmazonPayStoreId', 'storeid');
         $this->assertSame('storeid', $config->getStoreId());
     }
 
-    public function testGetIPNUrl(): void
+    public function testGetIPNUrl()
     {
         $config = new Config();
-        $this->assertStringContainsString('cl=amazondispatch&action=ipn', $config->getIPNUrl());
+        $this->assertContains('cl=amazondispatch&action=ipn', $config->getIPNUrl());
     }
 
-    public function testDisplayExpressInPDP(): void
+    public function testDisplayExpressInPDP()
     {
         $config = new Config();
         $this->setConfigParam('blAmazonPayExpressPDP', true);
@@ -80,7 +80,7 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->displayExpressInPDP());
     }
 
-    public function testUseExclusion(): void
+    public function testUseExclusion()
     {
         $config = new Config();
         $this->setConfigParam('blAmazonPayUseExclusion', true);
@@ -89,7 +89,7 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->useExclusion());
     }
 
-    public function testDisplayExpressInMinicartAndModal(): void
+    public function testDisplayExpressInMinicartAndModal()
     {
         $config = new Config();
         $this->setConfigParam('blAmazonPayExpressMinicartAndModal', true);
@@ -98,51 +98,70 @@ class ConfigTest extends UnitTestCase
         $this->assertFalse($config->displayExpressInMiniCartAndModal());
     }
 
-    public function testCheckHealthMissingPrivKey(): void
+    /**
+     * @throws StandardException
+     */
+    public function testCheckHealthMissingPrivKey()
     {
         $this->setConfigParam('sAmazonPayPrivKey', '');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
-        $this->expectException(StandardException::class);
+        $this->setExpectedException(StandardException::class);
         $config->checkHealth();
+        $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
 
-    public function testCheckHealthMissingPrivKeyId(): void
+    /**
+     * @throws StandardException
+     */
+    public function testCheckHealthMissingPrivKeyId()
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', '');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
-        $this->expectException(StandardException::class);
+        $this->setExpectedException(StandardException::class);
         $config->checkHealth();
+        $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
 
-    public function testCheckHealthMissingMerchantId(): void
+    /**
+     * @throws StandardException
+     */
+    public function testCheckHealthMissingMerchantId()
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', '');
         $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
-        $this->expectException(StandardException::class);
+        $this->setExpectedException(StandardException::class);
         $config->checkHealth();
+        $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
 
-    public function testCheckHealthMissingStoreId(): void
+    /**
+     * @throws StandardException
+     */
+    public function testCheckHealthMissingStoreId()
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');
         $this->setConfigParam('sAmazonPayMerchantId', 'set');
         $this->setConfigParam('sAmazonPayStoreId', '');
         $config = new Config();
-        $this->expectException(StandardException::class);
+        $this->setExpectedException(StandardException::class);
         $config->checkHealth();
+        $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
     }
 
-    public function testCheckHealthOK(): void
+    /**
+     * @throws StandardException
+     */
+    public function testCheckHealthOK()
     {
         $this->setConfigParam('sAmazonPayPrivKey', 'set');
         $this->setConfigParam('sAmazonPayPubKeyId', 'set');

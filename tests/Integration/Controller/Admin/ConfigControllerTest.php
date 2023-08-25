@@ -31,7 +31,7 @@ use Psr\Container\NotFoundExceptionInterface;
 
 class ConfigControllerTest extends UnitTestCase
 {
-    public function testRender(): void
+    public function testRender()
     {
         $c = new ConfigController();
         $this->assertSame('amazonpay/amazonconfig.tpl', $c->render());
@@ -136,16 +136,15 @@ class ConfigControllerTest extends UnitTestCase
 
     /**
      * @dataProvider configValueProvider
-     * @covers       ConfigController::handleSpecialFields
+     * @covers \OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController::handleSpecialFields
      *
      * @param $conf array Configuration values
      * @param $expected mixed Expected return value
      * @param $getterMethod string Getter method in config object
-     * @throws ModuleSettingNotFountException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function testSave($conf, $expected, $getterMethod): void
+    public function testSave($conf, $expected, $getterMethod)
     {
         $config = new Config();
         $configController = new ConfigController();

@@ -33,9 +33,9 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class LogRepositoryTest extends UnitTestCase
 {
     /** @var LogRepository */
-    private LogRepository $logRepository;
+    private $logRepository;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->logRepository = oxNew(LogRepository::class);
     }
@@ -44,7 +44,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testSaveLogMessage(): void
+    public function testSaveLogMessage()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);
@@ -59,7 +59,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testFindLogMessageForUserId(): void
+    public function testFindLogMessageForUserId()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);
@@ -74,7 +74,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testFindLogMessageForIdentifier(): void
+    public function testFindLogMessageForIdentifier()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);
@@ -89,7 +89,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testFindLogMessageForChargePermissionId(): void
+    public function testFindLogMessageForChargePermissionId()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);
@@ -104,7 +104,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testFindLogMessageForOrderId(): void
+    public function testFindLogMessageForOrderId()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);
@@ -119,7 +119,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testFindLogMessageForChargeId(): void
+    public function testFindLogMessageForChargeId()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);
@@ -134,7 +134,7 @@ class LogRepositoryTest extends UnitTestCase
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function testFindOrderIdByChargeId(): void
+    public function testFindOrderIdByChargeId()
     {
         $logMessage = $this->prepareLogMessage();
         $this->logRepository->saveLogMessage($logMessage);

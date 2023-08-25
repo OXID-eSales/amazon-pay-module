@@ -1,0 +1,8 @@
+{% extends "page/checkout/inc/summary_sidebar.html.twig" %}
+
+{% block basket_btn_next_bottom %}
+    {{ parent() }}
+    {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and not oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
+        {#  include "@osc_amazonpay/amazonpay/basket_btn_next_bottom" #}
+    {% endif %}
+{% endblock %}

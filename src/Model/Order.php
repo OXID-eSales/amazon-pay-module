@@ -25,7 +25,7 @@ use function date;
  */
 class Order extends Order_parent
 {
-    private AmazonService $amazonService;
+    private $amazonService;
 
     /**
      * Security and Cleanup before finalize order
@@ -34,7 +34,7 @@ class Order extends Order_parent
      * @return int|null
      *
      */
-    protected function prepareFinalizeOrder(Basket $oBasket): ?int
+    protected function prepareFinalizeOrder(Basket $oBasket): int
     {
         $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
@@ -64,7 +64,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false): ?int
+    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
@@ -89,10 +89,12 @@ class Order extends Order_parent
     /**
      * If Amazon Pay is active, it will return an address from Amazon
      *
+     * Needs to return Address|Null, is not possible in PHP
+     * TODO: check if in Oxid 7 the return type ?Address can be provided
      * @return Address|null
      *
      */
-    public function getDelAddressInfo(): ?Address
+    public function getDelAddressInfo()
     {
         $amazonService = $this->getAmazonService();
         $amazonDelAddress = $amazonService->getDeliveryAddress();
@@ -116,7 +118,7 @@ class Order extends Order_parent
      *
      * @return int
      */
-    public function validateDeliveryAddress($oUser): int
+    public function validateDeliveryAddress($oUser)
     {
         if (!$this->getAmazonService()->isAmazonSessionActive()) {
             return parent::validateDeliveryAddress($oUser);
@@ -125,23 +127,23 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = []): void
+    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
-            $this->_setFieldData('oxtransid', $data['chargeId']);
+            $this->setFieldData('oxtransid', $data['chargeId']);
         }
 
         switch ($amazonPayStatus) {
             case "AMZ_PAYMENT_PENDING":
-                $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');
-                $this->_setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
-                $this->_setFieldData('osc_amazon_remark', 'AmazonPay Authorisation pending');
+                $this->setFieldData('oxtransstatus', 'NOT_FINISHED');
+                $this->setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
+                $this->setFieldData('osc_amazon_remark', 'AmazonPay Authorisation pending');
                 $this->save();
                 break;
 
             case "AMZ_AUTH_STILL_PENDING":
                 if (!empty($data)) {
-                    $this->_setFieldData(
+                    $this->setFieldData(
                         'osc_amazon_remark',
                         'AmazonPay Authorisation still pending: '
                         . $data['chargeAmount']
@@ -157,31 +159,31 @@ class Order extends Order_parent
                     $remark = 'AmazonPay ERROR: ' . $response['reasonCode'];
                 }
 
-                $this->_setFieldData('osc_amazon_remark', $remark);
+                $this->setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
 
             case "AMZ_AUTH_AND_CAPT_OK":
                 // we move the order only if the oxtransstatus not OK before
                 if ($this->getFieldData('oxpaid') == '0000-00-00 00:00:00') {
-                    $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
+                    $this->setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 }
-                $this->_setFieldData('oxpaid', date('Y-m-d H:i:s'));
-                $this->_setFieldData('oxtransstatus', 'OK');
+                $this->setFieldData('oxpaid', date('Y-m-d H:i:s'));
+                $this->setFieldData('oxtransstatus', 'OK');
                 if (!empty($data)) {
-                    $this->_setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);
+                    $this->setFieldData('osc_amazon_remark', 'AmazonPay Captured: ' . $data['chargeAmount']);
                 }
                 $this->save();
                 break;
 
             case "AMZ_2STEP_AUTH_OK":
                 if (!empty($data['chargeAmount'])) {
-                    $this->_setFieldData(
+                    $this->setFieldData(
                         'osc_amazon_remark',
                         'AmazonPay Authorized (not Captured):' . $data['chargeAmount']
                     );
                 }
-                $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
+                $this->setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 $this->save();
                 break;
         }
@@ -204,7 +206,7 @@ class Order extends Order_parent
     /**
      * @param AmazonService $amazonService
      */
-    public function setAmazonService(AmazonService $amazonService): void
+    public function setAmazonService(AmazonService $amazonService)
     {
         $this->amazonService = $amazonService;
     }
@@ -221,7 +223,7 @@ class Order extends Order_parent
         }
 
         /** @var string $paymentId */
-        $paymentId = $this->getFieldData('oxpaymentid');
+        $paymentId = $this->getFieldData('oxpaymenttype');
         return Constants::isAmazonPayment($paymentId);
     }
 
@@ -229,10 +231,10 @@ class Order extends Order_parent
      * @inheritdoc
      * TODO: check in Oxid 7 if the base methods has updated parameter typehints
      */
-    public function delete($oxid = null): bool
+    public function delete($oxid = null)
     {
         $oxid = $oxid ?: $this->getId();
-        if (!$oxid) {
+        if (!$oxid || !$this->load($oxid)) {
             return false;
         }
 

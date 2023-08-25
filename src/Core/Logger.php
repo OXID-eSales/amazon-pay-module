@@ -25,12 +25,12 @@ class Logger extends AbstractLogger
     /**
      * @var LogRepository
      */
-    private LogRepository $repository;
+    private $repository;
 
     /**
      * @var string
      */
-    private string $logFileName;
+    private $logFileName;
 
     public function __construct(string $logFileName = 'amazonpay.log')
     {
@@ -44,7 +44,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage(?string $message, array $context = []): void
+    public function logMessage(string $message, array $context = [])
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();

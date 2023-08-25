@@ -18,11 +18,11 @@ class Category extends Category_parent
      * @inheritDoc
      * @return string|bool
      */
-    public function save(): bool|string
+    public function save()
     {
         /** @var array $editVal */
         $editVal = Registry::getRequest()->getRequestParameter('editval');
-        $this->_setFieldData('osc_amazon_exclude', $editVal['oxcategories__osc_amazon_exclude']);
+        $this->setFieldData('osc_amazon_exclude', $editVal['oxcategories__osc_amazon_exclude']);
         return parent::save();
     }
 }

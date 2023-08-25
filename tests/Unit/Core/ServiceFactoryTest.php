@@ -32,19 +32,19 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class ServiceFactoryTest extends UnitTestCase
 {
     /** @var ServiceFactory */
-    private ServiceFactory $serviceFactory;
+    private $serviceFactory;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $this->serviceFactory = new ServiceFactory();
     }
 
-    public function testGetClient(): void
+    public function testGetClient()
     {
         $this->assertInstanceOf(AmazonClient::class, $this->serviceFactory->getClient());
     }
 
-    public function testGetService(): void
+    public function testGetService()
     {
         $this->assertInstanceOf(AmazonService::class, $this->serviceFactory->getService());
     }

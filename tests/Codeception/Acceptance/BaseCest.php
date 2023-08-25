@@ -23,12 +23,12 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
 abstract class BaseCest
 {
-    private int $timestampForScreenshot;
-    private int $amount = 1;
-    private AcceptanceTester $I;
-    private Home $homePage;
+    private $timestampForScreenshot;
+    private $amount = 1;
+    private $I;
+    private $homePage;
 
-    public function _before(AcceptanceTester $I): void
+    public function _before(AcceptanceTester $I)
     {
         $this->timestampForScreenshot = time();
         $this->I = $I;
@@ -56,7 +56,7 @@ abstract class BaseCest
         $this->homePage = new Home($this->I);
     }
 
-    public function _after(AcceptanceTester $I): void
+    public function _after(AcceptanceTester $I)
     {
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         $I->clearShopCache();
@@ -66,7 +66,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _initializeTest(): void
+    protected function _initializeTest()
     {
         $this->_openShop();
         $this->I->waitForDocumentReadyState();
@@ -93,7 +93,7 @@ abstract class BaseCest
      * @param string $errorMsg
      * @return void
      */
-    protected function _failIfTextNotSeen(string $text, string $errorMsg = ''): void
+    protected function _failIfTextNotSeen(string $text, string $errorMsg = '')
     {
         $errorMsg = $errorMsg ?: 'Text not found: ' . $text;
         try {
@@ -106,14 +106,14 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _addProductToBasket(): void
+    protected function _addProductToBasket()
     {
         $basketItem = Fixtures::get('product');
         $basketSteps = new BasketSteps($this->I);
         $basketSteps->addProductToBasket($basketItem['id'], $this->amount);
     }
 
-    protected function _openDetailPage(): void
+    protected function _openDetailPage()
     {
         $this->I->waitForText(Translator::translate('MORE_INFO'), 60);
         $this->I->click(Translator::translate('MORE_INFO'));
@@ -122,7 +122,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _loginOxid(): void
+    protected function _loginOxid()
     {
         $this->_openShop();
         $this->I->waitForDocumentReadyState();
@@ -135,7 +135,7 @@ abstract class BaseCest
     /**
      * @throws \Exception
      */
-    protected function _loginOxidWithAmazonCredentials(): void
+    protected function _loginOxidWithAmazonCredentials()
     {
         $loginInput = "//input[@name='lgn_usr' and " .
             "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";
@@ -158,7 +158,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _openCheckout(): void
+    protected function _openCheckout()
     {
         $this->homePage->openMiniBasket()->openCheckout();
     }
@@ -166,12 +166,12 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _openBasketDisplay(): void
+    protected function _openBasketDisplay()
     {
         $this->homePage->openMiniBasket()->openBasketDisplay();
     }
 
-    protected function _openAccountMenu(): void
+    protected function _openAccountMenu()
     {
         $this->homePage->openAccountMenu();
     }
@@ -180,7 +180,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _openAmazonPayPage(): void
+    protected function _openAmazonPayPage()
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
@@ -191,7 +191,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _loginAmazonPayment(): void
+    protected function _loginAmazonPayment()
     {
         $amazonpayLoginPage = new AmazonPayLogin($this->I);
         $amazonpayLoginPage->login();
@@ -201,7 +201,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _checkAccountExist(): void
+    protected function _checkAccountExist()
     {
         $this->I->waitForDocumentReadyState();
         $this->I->makeScreenshot(time() . 'Account already exists');
@@ -225,7 +225,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _submitPaymentMethod(): void
+    protected function _submitPaymentMethod()
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->submitPayment();
@@ -235,7 +235,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _changePaymentMethod(): void
+    protected function _changePaymentMethod()
     {
         $amazonPayment = '#payment_oxidamazon';
         $paymentNextStep = '#paymentNextStepBottom';
@@ -247,7 +247,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _cancelPayment(): void
+    protected function _cancelPayment()
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->cancelPayment();
@@ -257,7 +257,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _submitOrder(): void
+    protected function _submitOrder()
     {
         $this->I->executeJS('window.scrollTo(0,1600);');
         $this->_makeScreenshot('submitOrder');
@@ -281,7 +281,7 @@ abstract class BaseCest
     /**
      * @throws \Exception
      */
-    protected function _loginAdmin(): void
+    protected function _loginAdmin()
     {
         $userAccountLoginName = '#usr';
         $userAccountLoginPassword = '#pwd';
@@ -300,7 +300,7 @@ abstract class BaseCest
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
-    protected function _openOrder(string $orderNumber): void
+    protected function _openOrder(string $orderNumber)
     {
         $this->_loginAdmin();
         $this->I->wait(5);
@@ -320,7 +320,7 @@ abstract class BaseCest
         $this->I->switchToFrame("basefrm");
     }
 
-    protected function _openAdminAmazonPayConfig(): void
+    protected function _openAdminAmazonPayConfig()
     {
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");

@@ -86,3 +86,8 @@ class_alias(
     \OxidEsales\Eshop\Application\Model\Order::class,
     \OxidSolutionCatalysts\AmazonPay\Model\Order_parent::class
 );
+
+class_alias(
+    \OxidEsales\Eshop\Application\Controller\PaymentController::class,
+    \OxidSolutionCatalysts\AmazonPay\Controller\PaymentController_parent::class
+);

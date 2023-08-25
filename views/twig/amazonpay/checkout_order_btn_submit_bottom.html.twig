@@ -1,0 +1,29 @@
+  {% if paymentId == oViewConf.getAmazonPaymentId() %}
+    {% set oConfig = oViewConf.getConfig() %}
+    {% set confirmAGB = oConfig.getConfigParam('blConfirmAGB') %}
+    {% set confirmIPA = oConfig.getConfigParam('blEnableIntangibleProdAgreement') %}
+    {% set confirmDPA = false %}
+    {% set confirmSPA = false %}
+    {% if confirmIPA and oxcmp_basket.hasArticlesWithDownloadableAgreement() %}
+        {% set confirmDPA = true %}
+    {% endif %}
+    {% if confirmIPA and oxcmp_basket.hasArticlesWithIntangibleAgreement() %}
+        {% set confirmSPA = true %}
+    {% endif %}
+    {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay.min.js'), priority: 30, dynamic: __oxid_include_dynamic }) }}
+    <p class="alert alert-danger" id="confirm-agb-error-container"
+       {% if confirmAGB == 1 %} data-oxid-agb-force-confirm="1"{% endif %}
+       {% if confirmDPA == 1 %} data-oxid-dpa-force-confirm="1"{% endif %}
+       {% if confirmSPA == 1 %} data-oxid-spa-force-confirm="1"{% endif %}
+    >
+        {{ "READ_AND_CONFIRM_TERMS"|translate }}
+    </p>
+      <div class="pull-right amazonpay-button-or">
+          {{ "AMAZON_PAY_SUBMIT_ORDER_WITH"|translate }}
+      </div>
+    <div class="pull-right">
+        {% include "@osc_amazonpay/amazonpay/amazonbutton" with {buttonId: "AmazonPayButtonNextCartLastStep"} %}
+    </div>
+{% endif %}
+
+

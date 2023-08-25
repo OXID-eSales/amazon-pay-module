@@ -9,6 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller;
 
 use Exception;
 use OxidEsales\Eshop\Application\Component\UserComponent;
+use OxidEsales\Eshop\Application\Model\Address as CoreAddress;
 use OxidEsales\Eshop\Application\Model\DeliveryList;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\Order;
@@ -26,7 +27,6 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Core\ViewConfig;
 use stdClass;
 
 /**
@@ -41,41 +41,37 @@ class OrderController extends OrderController_parent
      * @throws DatabaseErrorException
      * @throws Exception
      */
-    public function init(): void
+    public function init()
     {
         $session = Registry::getSession();
-        $viewConfig = $this->getViewConfig();
-        $exclude = $viewConfig->isAmazonExclude();
+        $exclude = $this->getViewConfig()->isAmazonExclude();
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
 
         if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
             $amazonService = OxidServiceProvider::getAmazonService();
             $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
-            /** TODO: check if the double if can be avoided without using else */
+
             if ($isAmazonSessionActive) {
                 $this->initAmazonPayExpress($amazonService, $session);
             }
 
-            if (!$isAmazonSessionActive) {
+            if (!$isAmazonSessionActive && Constants::isAmazonPayment($paymentId)) {
                 $this->initAmazonPay();
             }
         }
         parent::init();
     }
 
-    public function getViewConfig(): ViewConfig
+    public function render()
     {
-        if ($this->_oViewConf === null) {
-            $this->_oViewConf = oxNew(ViewConfig::class);
-        }
+        $service = OxidServiceProvider::getTermsAndConditionService();
+        $service->resetConfirmOnGet();
 
-        /** @var ViewConfig $conf */
-        $conf = $this->_oViewConf;
-        return $conf;
+        return parent::render();
     }
 
-    protected function initAmazonPay(): void
+    protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
@@ -83,7 +79,7 @@ class OrderController extends OrderController_parent
     /**
      * @throws Exception
      */
-    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session): void
+    protected function initAmazonPayExpress(AmazonService $amazonService, Session $session)
     {
         $user = $this->getUser();
         $amazonSession = $amazonService->getCheckoutSession();
@@ -118,6 +114,7 @@ class OrderController extends OrderController_parent
     {
         $basket = Registry::getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
+
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
 
@@ -167,7 +164,90 @@ class OrderController extends OrderController_parent
         return $ret;
     }
 
-    protected function completeAmazonPayment(): void
+    /**
+     * @return bool
+     */
+    protected function _validateTermsAndConditions()
+    {
+        $basket = $this->getBasket();
+        $paymentId = $basket->getPaymentId();
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+
+        return $isAmazonPayment ? $this->validateTermsAndConditionsByAmazon() : parent::_validateTermsAndConditions();
+    }
+
+    protected function validateTermsAndConditionsByAmazon(): bool
+    {
+        $valid = $this->confirmAGBbyAmazon();
+        if (
+            $valid &&
+            !$this->confirmIntangibleProdAgreementbyAmazon()
+        ) {
+            $valid = false;
+        }
+
+        return $valid;
+    }
+
+    protected function confirmAGBbyAmazon(): bool
+    {
+        $valid = true;
+
+        $confirmAGB = Registry::getConfig()->getConfigParam('blConfirmAGB');
+
+        $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
+        if (
+            $confirmAGB &&
+            !$termsAndConditionService->getAGBConfirmFromSession()
+        ) {
+            $valid = false;
+        }
+        return $valid;
+    }
+
+    protected function confirmIntangibleProdAgreementbyAmazon(): bool
+    {
+        $valid = true;
+
+        $basket = $this->getBasket();
+        $confirmIPA = Registry::getConfig()->getConfigParam('blEnableIntangibleProdAgreement');
+
+        if ($confirmIPA) {
+            $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
+            if (
+                $basket->hasArticlesWithDownloadableAgreement() &&
+                !$termsAndConditionService->getDPAConfirmFromSession()
+            ) {
+                $valid = false;
+            }
+            if (
+                $valid &&
+                $basket->hasArticlesWithIntangibleAgreement() &&
+                !$termsAndConditionService->getSPAConfirmFromSession()
+            ) {
+                $valid = false;
+            }
+        }
+        return $valid;
+    }
+
+    /**
+     * @return CoreAddress
+     */
+    public function getDelAddress()
+    {
+        $deliveryAddressService = OxidServiceProvider::getDeliveryAddressService();
+        if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
+            $delAddress = $deliveryAddressService->getTempDeliveryAddressAddress();
+            if ($delAddress->getId()) {
+                return $delAddress;
+            }
+        }
+
+        return parent::getDelAddress();
+    }
+
+    protected function completeAmazonPayment()
     {
 
         $payload = new Payload();
@@ -189,10 +269,7 @@ class OrderController extends OrderController_parent
         );
 
         if (
-            isset($result['response']) &&
-            isset($result['status']) &&
-            $result['status'] === 200 &&
-            $isOrderLoaded
+            isset($result['response'], $result['status']) && $result['status'] === 200 && $isOrderLoaded
         ) {
             $response = PhpHelper::jsonToArray($result['response']);
             /** @var string $redirectUrl */
@@ -215,7 +292,7 @@ class OrderController extends OrderController_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    protected function completeAmazonPaymentExpress(): void
+    protected function completeAmazonPaymentExpress()
     {
         $payload = new Payload();
         /** @var string $orderOxId */
@@ -306,14 +383,14 @@ class OrderController extends OrderController_parent
      * @param string $paymentId
      * @return void
      */
-    protected function setAmazonPayAsPaymentMethod(string $paymentId): void
+    protected function setAmazonPayAsPaymentMethod(string $paymentId)
     {
         $basket = $this->getBasket();
         $user = $this->getUser();
         $session = Registry::getSession();
         $countryOxId = $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
-        $session->setVariable('paymentId', $paymentId);
+        $session->setVariable('paymentid', $paymentId);
         $session->setVariable('_selected_paymentid', $paymentId);
 
         $actShipSet = null;
@@ -341,7 +418,7 @@ class OrderController extends OrderController_parent
                     if (is_null($fallbackShipSet)) {
                         $fallbackShipSet = $shipSetId;
                     }
-                    if ($shipSetId == $lastShipSet) {
+                    if ($shipSetId === $lastShipSet) {
                         $actShipSet = (string)$lastShipSet;
                     }
                 }

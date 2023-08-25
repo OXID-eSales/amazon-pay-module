@@ -29,9 +29,9 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger as AmazonLogger;
 
 class LoggerTest extends UnitTestCase
 {
-    private const TEST_LOG_NAME = 'amazon_logger_test_log.log';
+    const TEST_LOG_NAME = 'amazon_logger_test_log.log';
 
-    public function testSaveLogMessage(): void
+    public function testSaveLogMessage()
     {
         $amazonLogger = new AmazonLogger(self::TEST_LOG_NAME);
 
@@ -56,7 +56,7 @@ class LoggerTest extends UnitTestCase
             . '"shopId":"' . $id . '",'
             . '"requestType":"test request","statusCode":200}';
 
-        $this->assertStringContainsString($expectedLogFileRow, $logFileContents);
+        $this->assertContains($expectedLogFileRow, $logFileContents);
 
         unlink(Registry::getConfig()->getLogsDir() . self::TEST_LOG_NAME);
     }

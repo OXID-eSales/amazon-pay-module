@@ -14,7 +14,7 @@ final class RefundCest extends BaseCest
      * @throws \Exception
      * @group RefundTest
      */
-    public function checkRefundPaymentWorks(AcceptanceTester $I): void
+    public function checkRefundPaymentWorks(AcceptanceTester $I)
     {
         $I->wantToTest('Test refund payment');
 

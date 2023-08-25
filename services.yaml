@@ -1,0 +1,13 @@
+services:
+
+  _defaults:
+    public: false
+    autowire: true
+
+  OxidSolutionCatalysts\AmazonPay\Core\Registry:
+    class: OxidEsales\Eshop\Core\Registry
+    public: true
+
+  OxidSolutionCatalysts\AmazonPay\Service\:
+    resource: 'src/Service/*'
+    public: true

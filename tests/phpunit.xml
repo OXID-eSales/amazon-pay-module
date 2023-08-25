@@ -7,7 +7,6 @@
          convertNoticesToExceptions="false"
          convertWarningsToExceptions="false"
          forceCoversAnnotation="false"
-         printerClass="PHPUnit\TextUI\ResultPrinter"
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"
@@ -15,7 +14,6 @@
          stopOnSkipped="false"
          beStrictAboutTestsThatDoNotTestAnything="true"
          verbose="false">
-
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../src</directory>

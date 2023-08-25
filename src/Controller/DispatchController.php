@@ -36,7 +36,7 @@ class DispatchController extends FrontendController
      * @return void
      * @throws Exception
      */
-    public function init(): void
+    public function init()
     {
         parent::init();
 
@@ -168,6 +168,9 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
+        // prevent missing template error
+        http_response_code(200);
+        exit();
     }
 
     /**

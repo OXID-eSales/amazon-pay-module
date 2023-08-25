@@ -26,18 +26,19 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
 class AmazonClientTest extends AmazonTestCase
 {
-    public function testCreateCheckoutSessionReturns201(): void
+    public function testCreateCheckoutSessionReturns201()
     {
         $result = $this->createTestCheckoutSession();
         $this->assertEquals(201, $result['status']);
     }
 
-    public function testGetCheckoutSessionReturns200(): void
+    public function testGetCheckoutSessionReturns200()
     {
         $result = $this->createTestCheckoutSession();
 
         $response = json_decode($result['response'], true);
-        $this->assertIsArray($response);
+        $isArray = is_array($response);
+        $this->assertTrue($isArray);
 
         $checkoutSessionId = $response['checkoutSessionId'];
         $this->assertNotNull($checkoutSessionId);

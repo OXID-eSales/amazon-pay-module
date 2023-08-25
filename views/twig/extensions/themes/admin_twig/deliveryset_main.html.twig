@@ -1,0 +1,18 @@
+{% extends "deliveryset_main.html.twig" %}
+
+{% block admin_deliveryset_main_form %}
+    {{ parent() }}
+    <tr>
+        <td class="edittext">
+            {{ translate({ ident: "OSC_AMAZONPAY_CARRIER_CODE" }) }}
+        </td>
+        <td class="edittext">
+            <select name="editAmazonCarrier" id="editAmazonCarrier" {{ custreadonly }}>
+                <option value="" {% if selectedAmazonCarrier is null %}SELECTED{% endif %}>---</option>
+                {% for code, name in amazonCarriers %}
+                    <option value="{{ code }}"{% if code == selectedAmazonCarrier %}SELECTED{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+{% endblock %}

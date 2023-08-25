@@ -8,8 +8,9 @@ name: Docker
 on:
   schedule:
     - cron: '16 6 * * *'
+  workflow_dispatch:
   push:
-    branches: [ b-6.2.x ]
+    branches: [ b-6.1.x ]
   repository_dispatch:
     types: [docker-build]
 
@@ -68,7 +69,7 @@ jobs:
       # https://github.com/docker/metadata-action
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@507c2f2dc502c992ad446e3d7a5dfbe311567a96
+        uses: docker/metadata-action@818d4b7b91585d195f67373fd9cb0332e31a7175
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 

@@ -17,11 +17,11 @@ class AmazonClient extends Client
     /**
      * @var LoggerInterface
      */
-    private LoggerInterface $logger;
+    private $logger;
     /**
      * @var Config
      */
-    private Config $moduleConfig;
+    private $moduleConfig;
 
     /**
      * AmazonClient constructor.

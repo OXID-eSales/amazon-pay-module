@@ -30,15 +30,15 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class ArticleTest extends UnitTestCase
 {
     /** @var EshopArticleModel */
-    private EshopArticleModel $article;
+    private $article;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->article = oxNew(EshopArticleModel::class);
     }
 
-    public function testLoad(): void
+    public function testLoad()
     {
         $this->article->setShopId(1);
         $this->article->setId('testId');
@@ -48,7 +48,7 @@ class ArticleTest extends UnitTestCase
         $this->assertNotTrue($this->article->load('testIdNotExisting'));
     }
 
-    public function testSave(): void
+    public function testSave()
     {
         $this->article->setShopId(1);
         $this->article->setId('testIdSave');

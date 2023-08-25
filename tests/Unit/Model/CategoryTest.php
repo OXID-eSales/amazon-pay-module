@@ -31,9 +31,9 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 class CategoryTest extends UnitTestCase
 {
     /** @var EshopCategoryModel */
-    private EshopCategoryModel $category;
+    private $category;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->category = oxNew(EshopCategoryModel::class);
@@ -42,7 +42,7 @@ class CategoryTest extends UnitTestCase
     /**
      * @throws \Exception
      */
-    public function testSave(): void
+    public function testSave()
     {
         $this->category->setShopId(1);
         $this->category->setId('testSaveId');

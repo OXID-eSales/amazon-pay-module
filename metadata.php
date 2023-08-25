@@ -40,6 +40,9 @@ use OxidSolutionCatalysts\AmazonPay\Model\Basket as ModuleBasket;
 use OxidSolutionCatalysts\AmazonPay\Model\Category as ModuleCategory;
 use OxidSolutionCatalysts\AmazonPay\Model\Order as ModuleOrder;
 use OxidSolutionCatalysts\AmazonPay\Model\User as ModuleUser;
+use OxidSolutionCatalysts\AmazonPay\Controller\PaymentController;
+use OxidEsales\Eshop\Application\Controller\PaymentController as CorePaymentController;
+use OxidSolutionCatalysts\AmazonPay\Controller\AmazonCheckoutAjaxController;
 
 $sMetadataVersion = '2.1';
 
@@ -56,8 +59,8 @@ $aModule = [
         'de' => 'Nutzung des Online-Bezahldienstes von amazon.de',
         'en' => 'Use of the online payment service from amazon.com'
     ],
-    'thumbnail' => 'out/img/amazon-pay-logo.png',
-    'version' => '2.0.2',
+    'thumbnail' => '/img/amazon-pay-logo.png',
+    'version' => '2.1.3-rc.1',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',
     'email' => 'info@oxid-esales.com',
@@ -65,6 +68,7 @@ $aModule = [
         CoreViewConfig::class => ViewConfig::class,
         CoreUserController::class => UserController::class,
         CoreOrderController::class => OrderController::class,
+        CorePaymentController::class => PaymentController::class,
         CoreArticleDetailsController::class => ArticleDetailsController::class,
         CoreOrderOverviewmodel::class => ModuleOrderOverview::class,
         CoreOrderArticleModel::class => ModuleOrderArticle::class,
@@ -82,7 +86,8 @@ $aModule = [
     'controllers' => [
         'amazonconfig' => ConfigController::class,
         'amazoncheckout' => AmazonCheckoutController::class,
-        'amazondispatch' => DispatchController::class
+        'amazondispatch' => DispatchController::class,
+        'amazoncheckoutajax' => AmazonCheckoutAjaxController::class,
     ],
     'templates' => [
         'amazonpay/amazonconfig.tpl' => 'osc/amazonpay/views/admin/tpl/amazonconfig.tpl',
@@ -117,8 +122,9 @@ $aModule = [
             'osc/amazonpay/views/elements/details_productmain_tobasket.tpl',
         'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl' =>
             'osc/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl',
-       'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
+        'amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
             'osc/amazonpay/views/elements/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl',
+        'amazonpay/json.tpl' => 'osc/amazonpay/views/json.tpl',
     ],
     'events' => [
         'onActivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onActivate',

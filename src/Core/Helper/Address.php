@@ -19,7 +19,7 @@ class Address
      *
      * @var array
      */
-    protected static array $possibleDBTablePrefix = [
+    protected static $possibleDBTablePrefix = [
         'oxuser__', 'oxaddress__'
     ];
 
@@ -28,7 +28,7 @@ class Address
      *
      * @var string
      */
-    protected static string $defaultDBTablePrefix = 'oxaddress__';
+    protected static $defaultDBTablePrefix = 'oxaddress__';
 
     /**
      * This is used as a prefilter for OXID functions below.
@@ -81,7 +81,7 @@ class Address
                 $addressData = AddressSplitter::splitAddress($streetTmp);
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
-            } catch (SplittingException) {
+            } catch (SplittingException $ex) {
                 // The Address could not be split
                 // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();
@@ -99,7 +99,7 @@ class Address
                 $street = $addressData['streetName'] ?? '';
                 $streetNo = $addressData['houseNumber'] ?? '';
                 $additionalInfo = $addressData['additionToAddress2'] ?? '';
-            } catch (SplittingException) {
+            } catch (SplittingException $ex1) {
                 // The Address could not be split
                 // we have an exception, bit we did not log the message because of sensible Address-Information
                 // $logger = new Logger();

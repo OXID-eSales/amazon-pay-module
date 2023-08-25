@@ -14,7 +14,7 @@ use OxidSolutionCatalysts\AmazonPay\Model\Article;
  */
 class ArticleDetailsController extends ArticleDetailsController_parent
 {
-    public function render(): string
+    public function render()
     {
         /** @var Article $article */
         $article = $this->getProduct();

@@ -277,18 +277,6 @@ class Config
     }
 
     /**
-     * Shop's create checkout controller. Used in amazon buttons.
-     *
-     * @return string
-     */
-    public function getCreateCheckoutUrl(): string
-    {
-        return html_entity_decode(
-            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazoncheckout&fnc=createCheckout'
-        );
-    }
-
-    /**
      * @return bool
      */
     public function displayExpressInPDP(): bool

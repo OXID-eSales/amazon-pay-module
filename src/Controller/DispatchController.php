@@ -230,7 +230,8 @@ class DispatchController extends FrontendController
         return $this->getRequestAmazonSessionId();
     }
 
-    protected function showMessageAndExit(string $msg = '') {
+    protected function showMessageAndExit(string $msg = '')
+    {
         Registry::getUtils()->showMessageAndExit($msg);
     }
 }

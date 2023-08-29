@@ -17,6 +17,7 @@ use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Field as FieldAlias;
+use OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Core\AmazonResponseService;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -202,6 +203,7 @@ class AmazonService
             $this->deliveryAddress = new stdClass();
             $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
             $deliveryAddress = $oOrder->getDelAddressInfo();
+
             if ($deliveryAddress) {
                 foreach ($deliveryAddress as $key => $value) {
                     $this->deliveryAddress->{$key} = new Field($value, FieldAlias::T_RAW);
@@ -293,13 +295,6 @@ class AmazonService
         $payload = new Payload();
         $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue($basket->getPrice()->getBruttoPrice()));
 
-        $activeShop = Registry::getConfig()->getActiveShop();
-        /** @var string $oxCompany */
-        $oxCompany = $activeShop->getFieldData('oxcompany');
-        $payload->setMerchantStoreName($oxCompany);
-        /** @var string $oxOrderSubject */
-        $oxOrderSubject = $activeShop->getFieldData('oxordersubject');
-        $payload->setNoteToBuyer($oxOrderSubject);
         $payload->setCurrencyCode($amazonConfig->getPresentmentCurrency());
 
         $data = $payload->removeMerchantMetadata($payload->getData());
@@ -309,8 +304,9 @@ class AmazonService
             $amazonSessionId,
             $data
         );
-
-        $response = PhpHelper::jsonToArray($result['response']);
+        $response = $this->checkAmazonResult($result, $basket, $logger);
+        // fiddle in the merchant meta data update
+        $this->updateMerchantReferenceId($response['chargePermissionId'], $basket, $logger);
 
         if ($response['statusDetails']['state'] === 'Completed' && !$this->isTwoStep) {
             $response['statusDetails']['state'] = 'Completed & Captured';
@@ -323,7 +319,7 @@ class AmazonService
 
         /** @var Order $order */
         $order = oxNew(Order::class);
-        if ($order->load($basket->getOrderId())) {
+        if ($order->load(Registry::getSession()->getVariable('sess_challenge'))) {
             if ($result['status'] === 200) {
                 $data = [
                     "chargeAmount" => $request['chargeAmount']['amount'],
@@ -353,6 +349,46 @@ class AmazonService
         $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
     }
 
+    protected function checkAmazonResult(array $result, Basket $basket, LoggerInterface $logger): array
+    {
+        $response = PhpHelper::jsonToArray($result['response']);
+
+        // in case of error, the resulting structure is different...
+        if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
+            $this->showErrorOnRedirect($logger, $result, (string)$basket->getOrderId());
+        }
+
+        return $response;
+    }
+
+    protected function updateMerchantReferenceId(string $chargePermissionId, Basket $basket, LoggerInterface $logger)
+    {
+        /** @var string $orderOxId */
+        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
+        $oOrder = oxNew(\OxidEsales\Eshop\Application\Model\Order::class);
+        if ($oOrder->load($orderOxId) && !empty($chargePermissionId)) {
+            $activeShop = Registry::getConfig()->getActiveShop();
+            /** @var string $oxCompany */
+            $oxCompany = $activeShop->getFieldData('oxcompany');
+            /** @var string $oxOrderSubject */
+            $oxOrderSubject = $activeShop->getFieldData('oxordersubject');
+            /** @var string $oxOrderNr */
+            $oxOrderNr = $oOrder->getFieldData('oxordernr');
+
+            $result = OxidServiceProvider::getAmazonClient()->updateChargePermission(
+                $chargePermissionId,
+                [
+                    'merchantMetadata' => [
+                        'merchantStoreName' => $oxCompany,
+                        'merchantReferenceId' => $oxOrderNr,
+                        'noteToBuyer' => $oxOrderSubject
+                    ]
+                ]
+            );
+            $this->checkAmazonResult($result, $basket, $logger);
+        }
+    }
+
     /**
      * Processing Amazon Pay Auth and Capture
      *
@@ -374,7 +410,7 @@ class AmazonService
      */
     public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
-        $this->isTwoStep = false;
+        $this->isTwoStep = true;
         $this->processPayment($amazonSessionId, $basket, $logger);
     }
 
@@ -406,11 +442,7 @@ class AmazonService
         $body = [
             'chargeId' => $repository->findLogMessageForOrderId($orderId)[0]['OSC_AMAZON_CHARGE_ID'],
             'refundAmount' => [
-                'amount' => str_replace(
-                    ',',
-                    '.',
-                    Registry::getLang()->formatCurrency($refundAmount)
-                ),
+                'amount' => $refundAmount,
                 'currencyCode' => $orderCurrencyName
             ],
             'softDescriptor' => 'AMZ*OXID'
@@ -426,6 +458,11 @@ class AmazonService
         );
 
         $response = PhpHelper::jsonToArray($result['response']);
+
+        $responseService = oxNew(AmazonResponseService::class);
+        if ($responseService->isRequestError($result)) {
+            return $responseService->getRequestErrorMessage($result);
+        }
 
         if ($result['status'] !== 201) {
             return;
@@ -892,10 +929,15 @@ class AmazonService
             return [];
         }
 
+        $amazonObjIds = [];
         foreach ($logMessages as $logMessage) {
             $logsWithChargePermission =
                 $repository->findLogMessageForOrderId($logMessage['OSC_AMAZON_OXORDERID']);
             $error = strpos($logMessage['OSC_AMAZON_REQUEST_TYPE'], 'Error');
+            $chargeId = $logMessage['OSC_AMAZON_CHARGE_ID'];
+            if (!empty($chargeId) && $chargeId !== 'null') {
+                $amazonObjIds[$chargeId] = 1;
+            }
             if ($error !== false) {
                 $logsWithChargePermission =
                     $repository->findLogMessageForChargePermissionId($logMessage['OSC_AMAZON_CHARGE_PERMISSION_ID']);
@@ -907,6 +949,14 @@ class AmazonService
 
             foreach ($logsWithChargePermission as $logsWithPermission) {
                 $orderLogs[] = $logsWithPermission;
+            }
+        }
+
+        // IPN logs refer the "chargeId" in OSC_AMAZON_OBJECT_ID field
+        foreach (array_keys($amazonObjIds) as $objId) {
+            $logsIPN = $repository->findLogMessageForAmazonObjectId($objId);
+            if (!empty($logsIPN)) {
+                $orderLogs = array_merge($orderLogs, $logsIPN);
             }
         }
 

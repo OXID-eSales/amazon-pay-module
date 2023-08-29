@@ -38,6 +38,24 @@ class User extends User_parent
     }
 
     /**
+     * Returns user country ID, but If delivery address is given - returns
+     * delivery country.
+     *
+     * @return string
+     */
+    public function getActiveCountry()
+    {
+        $activeCountry = parent::getActiveCountry();
+        $session = Registry::getSession();
+        $paymentId = $session->getVariable('paymentid');
+        if ($paymentId === Constants::PAYMENT_ID_EXPRESS) {
+            $amazonAddr = $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
+            $activeCountry = $amazonAddr['oxaddress__oxcountryid'] ?? $activeCountry;
+        }
+        return $activeCountry;
+    }
+
+    /**
      * Return the amazon address if set.
      *
      * @return Address|null

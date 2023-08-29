@@ -167,12 +167,10 @@ class Payload
         }
 
 
-        if (!empty($this->softDescriptor)) {
-            $data['softDescriptor'] = $this->softDescriptor;
-            $data = $this->addMerchantMetaData($data);
+        $data['softDescriptor'] = $this->softDescriptor;
+        if (empty($data['softDescriptor'])) {
+            unset($data['softDescriptor']);
         }
-
-
 
         if (!empty($this->checkoutChargeAmount)) {
             $data['chargeAmount'] = [];

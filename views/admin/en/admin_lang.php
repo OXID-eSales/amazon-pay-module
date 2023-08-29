@@ -47,6 +47,10 @@ $aLang = [
     'OSC_AMAZONPAY_SOCIAL_LOGIN'        => 'Amazon Social Login',
     'OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'        => 'deactivate Amazon Social Login',
     'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'It is possible to register in the shop with an Amazon customer account. The address data will be taken over from Amazon. Registration is only possible if there is no account in the shop with the same Amazon email address.<br>If you do not want to offer this function to your customers, you can deactivate it here.',
+    'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatic refund & cancel',
+    'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Activate Amazon automatic refund (order and orderpostion storno)',
+    'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Activate Amazon automatic cancel (order deletion)',
+    'HELP_OSC_AMAZONPAY_AUTOMATED_REFUND'           => 'If items are removed from an Amazon order, or order is canceled, or the entire order is deleted, an Amazon money refund or cancel can be carried out automatically.',
     'OSC_AMAZONPAY_SAVE'               => 'Save',
     'OSC_AMAZONPAY_ERR_CONF_INVALID'   =>
         'One or more configuration values are either not set or incorrect. Please double check them.<br>
@@ -68,8 +72,15 @@ $aLang = [
     'OSC_AMAZONPAY_REFERENCE'               => 'Reference',
     'OSC_AMAZONPAY_RESULT'                  => 'Result',
     'OSC_AMAZONPAY_REMARK'                  => 'Amazon Pay notice',
+    'OSC_AMAZONPAY_LIVESTATUS'              => 'Amazon Pay money capture status (via API)',
+    'OSC_AMAZONPAY_LIVESTATUS_CLOSED'       => 'Closed - fully charged',
+    'OSC_AMAZONPAY_LIVESTATUS_CHARGEABLE'   => 'Order is ready for charge',
+    'OSC_AMAZONPAY_LIVESTATUS_NONCHARGEABLE'=> 'Order cannot be charged (<a href="https://developer.amazon.com/it/docs/amazon-pay-api-v2/charge-permission.html#states-and-reason-codes" target="_blank">List of possible reasons</a>)',
+    'OSC_AMAZONPAY_NOLIVESTATUS'            => 'not available',
     'GENERAL_ARTICLE_OSC_AMAZON_EXCLUDE'    => 'Exclude AmazonPay',
     'OSC_AMAZONPAY_REFUND'                  => 'Refund',
     'OSC_AMAZONPAY_REFUND_ANNOTATION'       => 'Make a refund of up to ',
     'OSC_AMAZONPAY_DELETE_ERROR'            => 'Order cannot be deleted because money has already been transferred between the shop and Amazon.',
+    'OSC_AMAZONPAY_CAPTURE_ANNOTATION'      => 'Make a charge of up to ',
+    'OSC_AMAZONPAY_CAPTURE'                 => 'Charge',
 ];

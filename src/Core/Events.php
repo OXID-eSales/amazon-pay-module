@@ -41,6 +41,7 @@ class Events
     {
         self::createLogTable();
         self::updateOxpsToOsc();
+        self::updateAddUniqueIndexToOscLogTable();
         self::addPaymentMethods();
         self::addArticleColumn();
         self::addCategoryColumn();
@@ -348,14 +349,18 @@ class Events
 
     protected static function updateOxpsToOscLogTable()
     {
-        $sql = 'show columns
-                from `' . LogRepository::TABLE_NAME . '`
-                like \'OXPS_AMAZON_PAYLOGID\'';
+        $sql = sprintf(
+            'SHOW COLUMNS
+                from %s
+                LIKE \'OXPS_AMAZON_PAYLOGID\'',
+            LogRepository::TABLE_NAME
+        );
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
         if (count($result)) {
-            $sql = 'ALTER TABLE `amazonpaylog`
+            $sql = sprintf(
+                'ALTER TABLE %s
                 CHANGE `OXPS_AMAZON_PAYLOGID` `OSC_AMAZON_PAYLOGID`
                     char(32) COLLATE \'latin1_general_ci\'
                     NOT NULL COMMENT \'Record id\',
@@ -391,8 +396,58 @@ class Events
                     NOT NULL COMMENT \'Amazon objectType\',
                 CHANGE `OXPS_AMAZON_OBJECT_ID` `OSC_AMAZON_OBJECT_ID`
                     char(32) COLLATE \'latin1_general_ci\'
-                    NOT NULL COMMENT \'Amazon objectId\'';
+                    NOT NULL COMMENT \'Amazon objectId\'',
+                LogRepository::TABLE_NAME
+            );
 
+            DatabaseProvider::getDb()->execute($sql);
+        }
+    }
+
+
+    protected static function updateAddUniqueIndexToOscLogTable()
+    {
+        $sql = sprintf(
+            'SHOW INDEX
+                FROM %s
+                WHERE `key_name`
+                LIKE \'OSC_AMAZON_UNIQUE\'',
+            LogRepository::TABLE_NAME
+        );
+
+        $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
+
+        if (!count($result)) {
+            $sql = sprintf(
+                'DELETE FROM %s
+                WHERE
+                    `OSC_AMAZON_PAYLOGID` not in (
+                        SELECT * FROM (
+                            SELECT MIN(`OSC_AMAZON_PAYLOGID`) as uniqueid
+                            FROM %s
+                            GROUP BY `OSC_AMAZON_OXSHOPID`, `OSC_AMAZON_OXORDERID`, `OSC_AMAZON_RESPONSE_MSG`,
+                                     `OSC_AMAZON_IDENTIFIER`, `OSC_AMAZON_CHARGE_ID`, `OSC_AMAZON_OBJECT_TYPE`,
+                                     `OSC_AMAZON_OBJECT_ID`
+                            ) AS tmp)',
+                LogRepository::TABLE_NAME,
+                LogRepository::TABLE_NAME
+            );
+            DatabaseProvider::getDb()->execute($sql);
+
+            $sql = sprintf(
+                'ALTER TABLE %s
+                CHANGE `OSC_AMAZON_RESPONSE_MSG` `OSC_AMAZON_RESPONSE_MSG` varchar(255)',
+                LogRepository::TABLE_NAME
+            );
+            DatabaseProvider::getDb()->execute($sql);
+
+            $sql = sprintf(
+                'ALTER TABLE %s
+                ADD UNIQUE `OSC_AMAZON_UNIQUE` (`OSC_AMAZON_OXSHOPID`, `OSC_AMAZON_OXORDERID`, `OSC_AMAZON_RESPONSE_MSG`,
+                `OSC_AMAZON_IDENTIFIER`, `OSC_AMAZON_CHARGE_ID`, `OSC_AMAZON_OBJECT_TYPE`,
+                `OSC_AMAZON_OBJECT_ID`)',
+                LogRepository::TABLE_NAME
+            );
             DatabaseProvider::getDb()->execute($sql);
         }
     }
@@ -426,7 +481,7 @@ class Events
                             NOT NULL
                             COMMENT \'Order id (oxorder)\',
                         `OSC_AMAZON_RESPONSE_MSG`
-                            TEXT
+                            VARCHAR(255)
                             NOT NULL
                             COMMENT \'Response from Amazon SDK\',
                         `OSC_AMAZON_STATUS_CODE`
@@ -437,12 +492,6 @@ class Events
                             VARCHAR(100)
                             NOT NULL
                             COMMENT \'Request type\',
-                        `OXTIMESTAMP`
-                            timestamp
-                            NOT NULL
-                            default CURRENT_TIMESTAMP
-                            on update CURRENT_TIMESTAMP
-                            COMMENT \'Timestamp\',
                         `OSC_AMAZON_IDENTIFIER`
                             char(32)
                             character set latin1
@@ -473,9 +522,17 @@ class Events
                             collate latin1_general_ci
                             NOT NULL
                             COMMENT \'Amazon objectId\',
-                        PRIMARY KEY (`OSC_AMAZON_PAYLOGID`))
-                            ENGINE=InnoDB
-                            COMMENT \'Amazon Payment transaction log\'',
+                        `OXTIMESTAMP`
+                            timestamp
+                            NOT NULL
+                            default CURRENT_TIMESTAMP
+                            on update CURRENT_TIMESTAMP
+                            COMMENT \'Timestamp\',
+                        PRIMARY KEY (`OSC_AMAZON_PAYLOGID`),
+                        UNIQUE KEY `OSC_AMAZON_UNIQUE` (`OSC_AMAZON_OXSHOPID`,`OSC_AMAZON_OXORDERID`,`OSC_AMAZON_RESPONSE_MSG`,`OSC_AMAZON_IDENTIFIER`,`OSC_AMAZON_CHARGE_ID`,`OSC_AMAZON_OBJECT_TYPE`,`OSC_AMAZON_OBJECT_ID`)
+                        )
+                        ENGINE=InnoDB
+                        COMMENT \'Amazon Payment transaction log\'',
             LogRepository::TABLE_NAME
         );
 

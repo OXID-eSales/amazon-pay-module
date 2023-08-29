@@ -36,10 +36,8 @@ class DispatchController extends FrontendController
      * @return void
      * @throws Exception
      */
-    public function init()
+    public function render()
     {
-        parent::init();
-
         $logger = new Logger();
         $action = Registry::getRequest()->getRequestParameter('action');
 
@@ -62,13 +60,13 @@ class DispatchController extends FrontendController
                 }
 
                 if ($amazonSessionId === '') {
-                    return;
+                    $this->showMessageAndExit();
                 }
 
                 $basket = Registry::getSession()->getBasket();
                 $paymentId = $basket->getPaymentId();
                 if ($paymentId !== Constants::PAYMENT_ID_EXPRESS) {
-                    return;
+                    $this->showMessageAndExit();
                 }
 
                 $isOneStepPayment = OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture();
@@ -168,9 +166,7 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
-        // prevent missing template error
-        http_response_code(200);
-        exit();
+        $this->showMessageAndExit();
     }
 
     /**
@@ -232,5 +228,10 @@ class DispatchController extends FrontendController
         }
 
         return $this->getRequestAmazonSessionId();
+    }
+
+    protected function showMessageAndExit(string $msg = '')
+    {
+        Registry::getUtils()->showMessageAndExit($msg);
     }
 }

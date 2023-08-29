@@ -27,7 +27,7 @@ class LogRepository
     {
         $uid = Registry::getUtilsObject()->generateUID();
 
-        $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (
+        $sql = 'INSERT IGNORE INTO ' . self::TABLE_NAME . ' (
                 `OSC_AMAZON_PAYLOGID`,
                 `OSC_AMAZON_OXSHOPID`,
                 `OSC_AMAZON_OXUSERID`,
@@ -83,6 +83,20 @@ class LogRepository
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_IDENTIFIER = ? ORDER BY OXTIMESTAMP',
             [$identifier]
+        );
+    }
+
+    /**
+     * @param string $amazonObjectId
+     * @return array
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function findLogMessageForAmazonObjectId(string $amazonObjectId): array
+    {
+        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OBJECT_ID = ? ORDER BY OXTIMESTAMP',
+            [$amazonObjectId]
         );
     }
 

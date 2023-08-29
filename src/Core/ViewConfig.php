@@ -15,6 +15,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Theme;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Model\Order;
 use OxidSolutionCatalysts\AmazonPay\Model\User;
 use OxidSolutionCatalysts\AmazonPay\Traits\ServiceContainer;
 use OxidSolutionCatalysts\AmazonPay\Service\ModuleSettings;
@@ -74,6 +75,14 @@ class ViewConfig extends ViewConfig_parent
     public function displayExpressInPDP(): bool
     {
         return $this->getAmazonConfig()->displayExpressInPDP();
+    }
+
+    /**
+     * @return bool
+     */
+    public function useExclusion(): bool
+    {
+        return $this->getAmazonConfig()->useExclusion();
     }
 
     /**
@@ -243,13 +252,12 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress(): string
+    public function getPayloadExpress(string $anid = ''): string
     {
         /** @var string $anid */
-        $anid = Registry::getRequest()->getRequestParameter('anid') ?? '';
-        $this->setArticlesId($anid);
+        $anid = !empty($anid) ? $anid : (string)Registry::getRequest()->getRequestParameter('anid');
         $payload = new Payload();
-        $payload->setCheckoutReviewReturnUrl($this->articlesId);
+        $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();
         $payload->setStoreId();
         $payload->addScopes([
@@ -367,15 +375,6 @@ class ViewConfig extends ViewConfig_parent
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
         return $amazonClient->generateButtonSignature($payload);
-    }
-
-    /**
-     * Note: added this because of missing method error in article templates
-     * @return bool
-     */
-    public function useExclusion(): bool
-    {
-        return $this->getAmazonConfig()->useExclusion();
     }
 
     /**

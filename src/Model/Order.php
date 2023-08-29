@@ -13,6 +13,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -233,12 +234,14 @@ class Order extends Order_parent
      */
     public function delete($oxid = null)
     {
+        $config = new Config();
+
         $oxid = $oxid ?: $this->getId();
         if (!$oxid || !$this->load($oxid)) {
             return false;
         }
 
-        if ($this->isAmazonOrder($oxid)) {
+        if ($this->isAmazonOrder($oxid) && $config->automatedCancelActivated()) {
             if (!$this->canDeleteAmazonOrder($oxid)) {
                 return false;
             }

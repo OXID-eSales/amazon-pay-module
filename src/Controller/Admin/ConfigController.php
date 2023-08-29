@@ -13,6 +13,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Setup\Bridge\ModuleActivationBridgeInterface;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use Psr\Container\ContainerExceptionInterface;
@@ -89,7 +90,13 @@ class ConfigController extends AdminController
     {
         $oModuleConfiguration = null;
         $oModuleConfigurationDaoBridge = null;
+        $oModuleActivationBridge = null;
         if ($this->useDaoBridge()) {
+            /** @var ModuleActivationBridgeInterface $oModuleActivationBridge */
+            $oModuleActivationBridge = ContainerFactory::getInstance()->getContainer()->get(
+                ModuleActivationBridgeInterface::class
+            );
+            $oModuleActivationBridge->deactivate(Constants::MODULE_ID, $shopId);
 
             /** @var ModuleConfigurationDaoBridgeInterface $oModuleConfigurationDaoBridge */
             $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(
@@ -102,17 +109,22 @@ class ConfigController extends AdminController
             $value = trim($value);
             if ($this->useDaoBridge()) {
                 $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
+                $value = $oModuleSetting->getType() === 'bool' ? filter_var($value, FILTER_VALIDATE_BOOLEAN) : $value;
                 $oModuleSetting->setValue($value);
-                $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
             }
-
-            Registry::getConfig()->saveShopConfVar(
-                strpos($confName, 'bl') ? 'bool' : 'str',
-                $confName,
-                $value,
-                $shopId,
-                'module:' . Constants::MODULE_ID
-            );
+            if (!$this->useDaoBridge()) {
+                Registry::getConfig()->saveShopConfVar(
+                    strpos($confName, 'bl') ? 'bool' : 'str',
+                    $confName,
+                    $value,
+                    $shopId,
+                    'module:' . Constants::MODULE_ID
+                );
+            }
+        }
+        if ($this->useDaoBridge()) {
+            $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
+            $oModuleActivationBridge->activate(Constants::MODULE_ID, $shopId);
         }
     }
 

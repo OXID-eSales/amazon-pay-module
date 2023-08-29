@@ -10,7 +10,6 @@
                     OSCAmazonPayButtonComponent.hideErrorContainer();
                     OSCAmazonPayCheckoutAGBComponent.saveAGBConfirmInSession();
                 });
-
             }
             if (OSCAmazonPayButtonComponent.forceConfirmDPA()) {
                 $('#oxdownloadableproductsagreement').on('click', function () {
@@ -19,7 +18,6 @@
                     OSCAmazonPayCheckoutAGBComponent.saveDpaConfirmInSession();
                 });
             }
-
             if (OSCAmazonPayButtonComponent.forceConfirmSPA()) {
                 $('#oxserviceproductsagreement').on('click', function () {
                     $('.agbConfirmation').removeClass('alert-danger');

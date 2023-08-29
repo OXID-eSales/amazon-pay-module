@@ -2,8 +2,10 @@
 
 {% block details_productmain_tobasket %}
     {{ parent() }}
-    <!-- Amazon -->
-    <div class="text-center amazonpay-button-or large">{{ "OR"|translate|upper }}</div>
-    {% include '@osc_amazonpay/amazonpay/amazonexpressbutton' with {buttonId: "AmazonPayButtonProductMain", oxArticlesId: oDetailsProduct.oxarticles__oxid.value, placement: "Product"} %}
-    <br />
+    {% if blCanBuy %}
+        <!-- Amazon -->
+        <div class="text-center amazonpay-button-or large">{{ "OR"|translate|upper }}</div>
+        {% include '@osc_amazonpay/amazonpay/amazonexpressbutton' with {buttonId: "AmazonPayButtonProductMain", oxArticlesId: oDetailsProduct.oxarticles__oxid.value, placement: "Product"} %}
+        <br />
+    {% endif %}
 {% endblock %}

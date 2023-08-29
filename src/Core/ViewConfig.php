@@ -39,11 +39,6 @@ class ViewConfig extends ViewConfig_parent
      */
     protected $isWaveCompatibleTheme = null;
 
-    /**
-     * articlesId for the checkout review url
-     */
-    protected $articlesId = '';
-
     public $signature = '';
 
     /**
@@ -165,11 +160,6 @@ class ViewConfig extends ViewConfig_parent
         return Constants::isAmazonPayment($paymentId);
     }
 
-    public function getMaximalRefundAmount(string $orderId): float
-    {
-        return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId));
-    }
-
     /**
      * @param string $oxid
      * @return bool
@@ -235,11 +225,6 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
-    public function setArticlesId(string $articlesId)
-    {
-        $this->articlesId = $articlesId;
-    }
-
     public function getPaymentDescriptor(): string
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
@@ -256,6 +241,7 @@ class ViewConfig extends ViewConfig_parent
     {
         /** @var string $anid */
         $anid = !empty($anid) ? $anid : (string)Registry::getRequest()->getRequestParameter('anid');
+        $anid = !empty((string)Registry::getRequest()->getRequestParameter('varselid')) ? (string)Registry::getRequest()->getRequestParameter('varselid') : $anid;
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();

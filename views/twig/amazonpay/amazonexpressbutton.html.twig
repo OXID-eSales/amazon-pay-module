@@ -1,6 +1,9 @@
 {% set amazonConfig = oViewConf.getAmazonConfig() %}
 {% set sToken = oViewConf.getSessionChallengeToken() %}
-{% set aPayload = oViewConf.getPayloadExpress() %}
+{%if not oxArticlesId %}
+    {% set oxArticlesId = "" %}
+{% endif %}
+{% set aPayload = oViewConf.getPayloadExpress(oxArticlesId) %}
 <div class="amazonpay-button {{ buttonclass }} express" id="{{ buttonId }}"></div>
 {% capture assign = "amazonpay_script_expressbutton" %}
     // console.log('amazonpay_script_expressbutton captured');

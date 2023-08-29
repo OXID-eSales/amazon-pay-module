@@ -18,6 +18,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Application\Model\CountryList;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleSettingBridgeInterface;
 
@@ -343,18 +344,6 @@ class Config
             $config->getCurrentShopUrl(false),
             $config->getShopId()
         ));
-    }
-
-    /**
-     * Shop's create checkout controller. Used in amazon buttons.
-     *
-     * @return string
-     */
-    public function getCreateCheckoutUrl(): string
-    {
-        return html_entity_decode(
-            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazoncheckout&fnc=createCheckout'
-        );
     }
 
     /**

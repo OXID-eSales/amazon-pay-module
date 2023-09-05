@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007501](https://bugs.oxid-esales.com/view.php?id=7501) fix to buy variants in OXID
 * Show Charge-Status additionally from API in Admin-Order-Overview
 * Config-Values still exists after (de-)activating in OXID >=6.3
+* add IPN-Handling of declined authorizations
 
 ## [2.1.2] - Release
 

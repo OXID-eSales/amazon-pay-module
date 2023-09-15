@@ -106,15 +106,19 @@ class ConfigController extends AdminController
         }
 
         foreach ($conf as $confName => $value) {
-            $value = trim($value);
             if ($this->useDaoBridge()) {
                 $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
                 $value = $oModuleSetting->getType() === 'bool' ? filter_var($value, FILTER_VALIDATE_BOOLEAN) : $value;
+                $value = $oModuleSetting->getType() === 'str' ? trim($value) : $value;
                 $oModuleSetting->setValue($value);
             }
             if (!$this->useDaoBridge()) {
+                $type = strpos($confName, 'bl') ? 'bool' : 'str';
+                $value = $type === 'bool' ? filter_var($value, FILTER_VALIDATE_BOOLEAN) : $value;
+                $value = $type === 'str' ? trim($value) : $value;
+
                 Registry::getConfig()->saveShopConfVar(
-                    strpos($confName, 'bl') ? 'bool' : 'str',
+                    $type,
                     $confName,
                     $value,
                     $shopId,
@@ -138,7 +142,7 @@ class ConfigController extends AdminController
     protected function handleSpecialFields(array $conf): array
     {
         $config = new Config();
-        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? 1 : 0;
+        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? true : false;
 
         // remove FakePrivateKeys before save
         if ($conf['sAmazonPayPrivKey'] === '' || $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()) {
@@ -150,15 +154,15 @@ class ConfigController extends AdminController
         }
 
         if (!isset($conf['blAmazonPayExpressPDP'])) {
-            $conf['blAmazonPayExpressPDP'] = 0;
+            $conf['blAmazonPayExpressPDP'] = false;
         }
 
         if (!isset($conf['blAmazonSocialLoginDeactivated'])) {
-            $conf['blAmazonSocialLoginDeactivated'] = 0;
+            $conf['blAmazonSocialLoginDeactivated'] = false;
         }
 
         if (!isset($conf['blAmazonPayExpressMinicartAndModal'])) {
-            $conf['blAmazonPayExpressMinicartAndModal'] = 0;
+            $conf['blAmazonPayExpressMinicartAndModal'] = false;
         }
 
         return $conf;

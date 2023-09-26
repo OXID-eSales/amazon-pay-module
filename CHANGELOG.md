@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.1.4] - 2023-??-??
 
 - [0007538](https://bugs.oxid-esales.com/view.php?id=7538): Amazon PAy - Values are stored correctly in the YAML
+- [0007542](https://bugs.oxid-esales.com/view.php?id=7542): Transaction-History in case of a refund is not updated + suggested refund value
 
 ## [2.1.3] - 2023-09-07 - Release
 

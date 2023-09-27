@@ -2,10 +2,28 @@
 
 {% block details_productmain_tobasket %}
     {{ parent() }}
-    {% if blCanBuy %}
-        <!-- Amazon -->
-        <div class="text-center amazonpay-button-or large">{{ "OR"|translate|upper }}</div>
-        {% include '@osc_amazonpay/amazonpay/amazonexpressbutton' with {buttonId: "AmazonPayButtonProductMain", oxArticlesId: oDetailsProduct.oxarticles__oxid.value, placement: "Product"} %}
-        <br />
-    {% endif %}
+        {% set amazonConfig = oViewConf.getAmazonConfig() %}
+        {% set sToken = oViewConf.getSessionChallengeToken() %}
+        {% set oxArticlesId = oDetailsProduct.oxarticles__oxid.value %}
+        {% if not oxArticlesId %}
+            {% set oxArticlesId = "" %}
+        {% endif %}
+        {% set aPayload = oViewConf.getPayloadExpress(oxArticlesId) %}
+        <div id="osc_amazonpay_config" class="hidden">
+            <input  type="hidden" id="osc_amazonpay_merchantId" value="{{ amazonConfig.getMerchantId() }}">
+            <input  type="hidden" id="osc_amazonpay_isSandbox" value="{% if amazonConfig.isSandbox() %}true{% else %}false{% endif %}">
+            <input  type="hidden" id="osc_amazonpay_ledgerCurrency" value="{{ amazonConfig.getLedgerCurrency() }}">
+            <input  type="hidden" id="osc_amazonpay_checkoutLanguage" value="{{ amazonConfig.getCheckoutLanguage() }}">
+            <input  type="hidden" id="osc_amazonpay_placement" value="Product">
+            <input  type="hidden" id="osc_amazonpay_payloadJSON" value='{{ aPayload|raw }}'>
+            <input  type="hidden" id="osc_amazonpay_signature" value='{{ oViewConf.signature|raw }}'>
+            <input  type="hidden" id="osc_amazonpay_publicKeyId" value="{{ amazonConfig.getPublicKeyId()|raw }}">
+        </div>
+        <div id="osc_amazonpay_wrapper">
+            <div class="text-center amazonpay-button-or large">{{ "OR"|translate|upper }}</div>
+            <div class="amazonpay-button express" id="amazonpayexpressbutton"></div>
+            <br>
+        </div>
+        {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-button.min.js'), priority:20, dynamic: __oxid_include_dynamic }) }}
+        {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-observer.min.js'), priority:30, dynamic: __oxid_include_dynamic }) }}
 {% endblock %}

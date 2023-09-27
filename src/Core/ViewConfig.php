@@ -241,7 +241,6 @@ class ViewConfig extends ViewConfig_parent
     {
         /** @var string $anid */
         $anid = !empty($anid) ? $anid : (string)Registry::getRequest()->getRequestParameter('anid');
-        $anid = !empty((string)Registry::getRequest()->getRequestParameter('varselid')) ? (string)Registry::getRequest()->getRequestParameter('varselid') : $anid;
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();

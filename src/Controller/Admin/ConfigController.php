@@ -143,7 +143,7 @@ class ConfigController extends AdminController
         // remove \r\n from the keys
         // because the key string is saved with single ticks in yaml that lead to memory overflow issues
         // keys with \r\n will be loaded correctly with double ticks in yaml
-        $conf['sAmazonPayPrivKey'] = str_replace(['\r\n', '\r', '\n'],'', $conf['sAmazonPayPrivKey']);
+        $conf['sAmazonPayPrivKey'] = str_replace(['\r\n', '\r', '\n'], '', $conf['sAmazonPayPrivKey']);
 
         // remove FakePrivateKeys before save
         if ($conf['sAmazonPayPrivKey'] === '' || $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()) {

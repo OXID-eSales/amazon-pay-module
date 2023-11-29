@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 * split Version for OXID7
 
-## [2.1.3] - Release
+## [2.1.4] - 2023-??-??
+
+- [0007538](https://bugs.oxid-esales.com/view.php?id=7538): Amazon Pay - Values are stored correctly in the YAML
+- [0007542](https://bugs.oxid-esales.com/view.php?id=7542): Transaction-History in case of a refund is not updated + suggested refund value
+- add Templates for overloading JS and CSS Resources (Requirement for integration of CMPs)
+
+## [2.1.3] - 2023-09-07 - Release
 
 ### Fixed
 * Delivery address was not send to Amazon
@@ -23,8 +29,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007501](https://bugs.oxid-esales.com/view.php?id=7501) fix to buy variants in OXID
 * Show Charge-Status additionally from API in Admin-Order-Overview
 * Config-Values still exists after (de-)activating in OXID >=6.3
+* add IPN-Handling of declined authorizations
 
-## [2.1.2] - Release
+## [2.1.2] - 2023-06-07 - Release
 
 ### Fixed
 
@@ -33,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007471](https://bugs.oxid-esales.com/view.php?id=7475) Compatibility-Issue with OXID 6.1
 * [0007462](https://bugs.oxid-esales.com/view.php?id=7475) if mandatory Confirm General Terms and Conditions field is activated -> you go round in circles
 
-## [2.1.1] - Release
+## [2.1.1] - 2023-05-25 - Release
 
 ### Fixed
 
@@ -42,7 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007462](https://bugs.oxid-esales.com/view.php?id=7462) if mandatory Confirm General Terms and Conditions field is activated -> you go round in circles
 * compatibility issues with core or other payment-modules
 
-## [2.1.0] - Release
+## [2.1.0] - 2023-03-16 - Release
 
 ### Added
 
@@ -58,7 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007463](https://bugs.oxid-esales.com/view.php?id=7463) reAdd missing MerchantReferenceId
 * [0007350](https://bugs.oxid-esales.com/view.php?id=7350) OXTRANSID contains authorize status codes
 
-## [2.0.1] - Release
+## [2.0.1] - 2023-02-10 - Release
 
 ### Added
 
@@ -76,7 +83,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * [0007379](https://bugs.oxid-esales.com/view.php?id=7379) Error messages from the DispatchController spam the log, probably a template is missing here
 * [0007351](https://bugs.oxid-esales.com/view.php?id=7351) PlatformId set in headers instead of Payload
 
-## [2.0.0] - Release with new Namespace
+## [2.0.0] - 2022-08-22 - Release with new Namespace
 
 * we change the namespace from OxidProfessional (oxps) to OxidSolutionCatalysts (osc)
 * please read the documentation for the upgrade from v1.2.0 to v2.0.0
@@ -91,7 +98,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * some session tweaks for better consumer experience during checkout
 * us github Actions for testing the module
 
-## [1.1.3] - Maintenance Release
+## [1.1.3] - 2022-05-17 - Maintenance Release
 
 * faster checkout
 * Currency restriction may prevent Amazon Payment
@@ -99,7 +106,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 * remove Validation Hack
 * use central constante for paymentid and deladr
 
-## [1.1.2] - Backward-Compatibility for OXID 6.1
+## [1.1.2] - 2022-05-10 - Backward-Compatibility for OXID 6.1
 
 * Add Backward-Compatibility for OXID 6.1
 * Add Secure use of OrderController::execute
@@ -108,11 +115,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   Amazon delivery address as the billing address, since the delivery addresses have already been
   restricted by country beforehand)
 
-## [1.1.1] - Maintenance Release
+## [1.1.1] - 2022-04-01 - Maintenance Release
 
 * change handling of required fields
 
-## [1.1.0] - First Release for OXID 6.2
+## [1.1.0] - 2022-03-25 - First Release for OXID 6.2
 
 * change the module-id to oxps_amazonpay
 * configuration-handling OXID6.2 compatible

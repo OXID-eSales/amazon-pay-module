@@ -29,7 +29,7 @@ class OrderOverview extends OrderOverview_parent
      */
     public function render()
     {
-        $oOrder = oxNew(\OxidSolutionCatalysts\AmazonPay\Model\Order::class);
+        $oOrder = oxNew(Order::class);
         $filteredLogs = [];
         $ipnLogs = [];
         $isCaptured = false;

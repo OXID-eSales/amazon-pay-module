@@ -1,6 +1,6 @@
 # Amazon Pay for OXID
 
-Amazon Pay integration for OXID eShop 6.1 and above.
+Amazon Pay integration for OXID eShop 6.1 until 6.5.
 
 ## Documentation
 

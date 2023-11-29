@@ -157,7 +157,7 @@ class Order extends Order_parent
                 $remark = 'AmazonPay: ERROR';
                 if (!empty($data['result']['response'])) {
                     $response = PhpHelper::jsonToArray($data['result']['response']);
-                    $remark = 'AmazonPay ERROR: ' . $response['reasonCode'];
+                    $remark .= ' (' . $response['reasonCode'] . ')';
                 }
 
                 $this->setFieldData('osc_amazon_remark', $remark);
@@ -187,6 +187,19 @@ class Order extends Order_parent
                 $this->setFieldData('oxfolder', 'ORDERFOLDER_NEW');
                 $this->save();
                 break;
+
+            case "AMZ_AUTH_OR_CAPT_DECLINED":
+                $remark = 'AmazonPay: Auth or Capture Declined';
+                if (!empty($data['result']['response'])) {
+                    $response = PhpHelper::jsonToArray($data['result']['response']);
+                    $remark .= ' (' . $response['reasonCode'] . ')';
+                }
+                $this->setFieldData('oxtransstatus', 'NOT_FINISHED');
+                $this->setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
+                $this->setFieldData('osc_amazon_remark', $remark);
+                $this->save();
+                break;
+
         }
     }
 

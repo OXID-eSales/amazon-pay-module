@@ -8,7 +8,7 @@
                 {{ translate({ ident: "AMAZON_PAY_PROCESSED" }) }}
             </div>
             <div class="pull-right">
-                <a class="btn btn-default" href="{{ oViewConf.getCancelAmazonPaymentUrl() }}">{{ translate({ ident: "AMAZON_PAY_UNLINK" }) }}</a>
+                <a class="btn btn-default" href="{{ oViewConf.getCancelAmazonPaymentUrl()|raw }}">{{ translate({ ident: "AMAZON_PAY_UNLINK" }) }}</a>
             </div>
             {% if not oViewConf.isAmazonPaymentPossible() %}
                 <p class="alert alert-danger">

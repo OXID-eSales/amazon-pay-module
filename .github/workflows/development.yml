@@ -76,7 +76,7 @@ jobs:
           docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
 
       - name: Checkout current module
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: source/test-module
       - name: Install module
@@ -192,7 +192,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: source/test-module
 
@@ -238,7 +238,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 

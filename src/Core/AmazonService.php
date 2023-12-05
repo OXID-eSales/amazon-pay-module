@@ -578,6 +578,9 @@ class AmazonService
         $order = oxNew(Order::class);
         if ($order->load($orderId)) {
             switch ($response['statusDetails']['state']) {
+                case "Declined":
+                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_OR_CAPT_DECLINED', $result);
+                    break;
                 case "Pending":
                     $order->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING', $result);
                     break;

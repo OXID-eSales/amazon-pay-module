@@ -285,7 +285,15 @@ class ViewConfig extends ViewConfig_parent
             "phoneNumber",
             "billingAddress"
         ]);
-        $payload->setPaymentIntent('AuthorizeWithCapture');
+
+        $paymentIntent = 'Authorize';
+        $canHandlePendingAuth = true;
+        if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+            $paymentIntent = 'AuthorizeWithCapture';
+            $canHandlePendingAuth = false;
+        }
+        $payload->setPaymentIntent($paymentIntent);
+        $payload->setCanHandlePendingAuthorization($canHandlePendingAuth);
 
         $delAddress = OxidServiceProvider::getDeliveryAddressService();
         $address = $delAddress->getTempDeliveryAddressAddress();

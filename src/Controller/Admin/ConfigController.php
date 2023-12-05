@@ -110,11 +110,16 @@ class ConfigController extends AdminController
             if ($this->useDaoBridge()) {
                 $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
                 $value = $oModuleSetting->getType() === 'bool' ? filter_var($value, FILTER_VALIDATE_BOOLEAN) : $value;
+                $value = $oModuleSetting->getType() === 'str' ? trim($value) : $value;
                 $oModuleSetting->setValue($value);
             }
             if (!$this->useDaoBridge()) {
+                $type = strpos($confName, 'bl') ? 'bool' : 'str';
+                $value = $type === 'bool' ? filter_var($value, FILTER_VALIDATE_BOOLEAN) : $value;
+                $value = $type === 'str' ? trim($value) : $value;
+
                 Registry::getConfig()->saveShopConfVar(
-                    strpos($confName, 'bl') ? 'bool' : 'str',
+                    $type,
                     $confName,
                     $value,
                     $shopId,
@@ -138,12 +143,12 @@ class ConfigController extends AdminController
     protected function handleSpecialFields(array $conf): array
     {
         $config = new Config();
-        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? 1 : 0;
+        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? true : false;
 
         // remove \r\n from the keys
         // because the key string is saved with single ticks in yaml that lead to memory overflow issues
         // keys with \r\n will be loaded correctly with double ticks in yaml
-        $conf['sAmazonPayPrivKey'] = str_replace(['\r\n', '\r', '\n'],'', $conf['sAmazonPayPrivKey']);
+        $conf['sAmazonPayPrivKey'] = str_replace(['\r\n', '\r', '\n'], '', $conf['sAmazonPayPrivKey']);
 
         // remove FakePrivateKeys before save
         if ($conf['sAmazonPayPrivKey'] === '' || $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()) {
@@ -155,15 +160,15 @@ class ConfigController extends AdminController
         }
 
         if (!isset($conf['blAmazonPayExpressPDP'])) {
-            $conf['blAmazonPayExpressPDP'] = 0;
+            $conf['blAmazonPayExpressPDP'] = false;
         }
 
         if (!isset($conf['blAmazonSocialLoginDeactivated'])) {
-            $conf['blAmazonSocialLoginDeactivated'] = 0;
+            $conf['blAmazonSocialLoginDeactivated'] = false;
         }
 
         if (!isset($conf['blAmazonPayExpressMinicartAndModal'])) {
-            $conf['blAmazonPayExpressMinicartAndModal'] = 0;
+            $conf['blAmazonPayExpressMinicartAndModal'] = false;
         }
 
         return $conf;

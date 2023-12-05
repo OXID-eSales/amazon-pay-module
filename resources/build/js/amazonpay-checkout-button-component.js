@@ -30,25 +30,25 @@
                     }
                 });
             } else if(this.forceConfirmAGB() || this.forceConfirmDPA() || this.forceConfirmSPA()) {
-                $('#confirm-agb-error-container').css('display', 'block');
-                $('.agbConfirmation').addClass('alert-danger');
+                document.getElementById('confirm-agb-error-container').css('display', 'block');
+                document.getElementByClassName('agbConfirmation').addClass('alert-danger');
             }
         },
 
         hideErrorContainer: function() {
-            $('#confirm-agb-error-container').css('display', 'none');
+            document.getElementById('confirm-agb-error-container').css('display', 'none');
         },
 
         forceConfirmAGB: function () {
-            return $('#confirm-agb-error-container').data('oxidAgbForceConfirm');
+            return document.getElementById('confirm-agb-error-container').dataset.oxidAgbForceConfirm;
         },
 
         forceConfirmDPA: function () {
-            return $('#confirm-agb-error-container').data('oxidDpaForceConfirm');
+            return document.getElementById('confirm-agb-error-container').dataset.oxidDpaForceConfirm;
         },
 
         forceConfirmSPA: function () {
-            return $('#confirm-agb-error-container').data('oxidSpaForceConfirm');
+            return document.getElementById('confirm-agb-error-container').dataset.oxidSpaForceConfirm;
         }
     };
 })()

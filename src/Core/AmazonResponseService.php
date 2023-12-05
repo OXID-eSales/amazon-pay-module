@@ -6,7 +6,7 @@ class AmazonResponseService
 {
     public function isRequestError(array $result): bool
     {
-        return $result['status'] ?: 200 >= 400;
+        return ($result['status'] ?: 200) >= 400;
     }
 
     public function getRequestErrorMessage(array $result): string

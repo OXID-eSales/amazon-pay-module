@@ -133,7 +133,7 @@ class Config
         $moduleSettingBridge = ContainerFactory::getInstance()
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
-        $moduleSettingBridge->save('blAmazonPaySandboxMode',$value, AmazonPayModule::MODULE_ID);
+        $moduleSettingBridge->save('blAmazonPaySandboxMode', $value, AmazonPayModule::MODULE_ID);
     }
 
     /**
@@ -397,7 +397,10 @@ class Config
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
         /** @var string $blAmazonSocialLoginDeactivated */
-        $blAmazonSocialLoginDeactivated = $moduleSettingBridge->get('blAmazonSocialLoginDeactivated', AmazonPayModule::MODULE_ID);
+        $blAmazonSocialLoginDeactivated = $moduleSettingBridge->get(
+            'blAmazonSocialLoginDeactivated',
+            AmazonPayModule::MODULE_ID
+        );
         return (bool) $blAmazonSocialLoginDeactivated;
     }
 
@@ -410,7 +413,10 @@ class Config
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
         /** @var string $blAmazonAutomatedRefundActivated */
-        $blAmazonAutomatedRefundActivated = $moduleSettingBridge->get('blAmazonAutomatedRefundActivated', AmazonPayModule::MODULE_ID);
+        $blAmazonAutomatedRefundActivated = $moduleSettingBridge->get(
+            'blAmazonAutomatedRefundActivated',
+            AmazonPayModule::MODULE_ID
+        );
         return (bool) $blAmazonAutomatedRefundActivated;
     }
 
@@ -423,7 +429,10 @@ class Config
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
         /** @var string $blAmazonAutomatedCancelActivated */
-        $blAmazonAutomatedCancelActivated = $moduleSettingBridge->get('blAmazonAutomatedCancelActivated', AmazonPayModule::MODULE_ID);
+        $blAmazonAutomatedCancelActivated = $moduleSettingBridge->get(
+            'blAmazonAutomatedCancelActivated',
+            AmazonPayModule::MODULE_ID
+        );
         return (bool) $blAmazonAutomatedCancelActivated;
     }
 
@@ -436,7 +445,10 @@ class Config
             ->getContainer()
             ->get(ModuleSettingBridgeInterface::class);
         /** @var string $blAmazonPayExpressMinicartAndModal */
-        $blAmazonPayExpressMinicartAndModal = $moduleSettingBridge->get('blAmazonPayExpressMinicartAndModal', AmazonPayModule::MODULE_ID);
+        $blAmazonPayExpressMinicartAndModal = $moduleSettingBridge->get(
+            'blAmazonPayExpressMinicartAndModal',
+            AmazonPayModule::MODULE_ID
+        );
         return (bool) $blAmazonPayExpressMinicartAndModal;
     }
 

@@ -20,7 +20,6 @@
 
         registerEvents: function () {
             amazonPayButton.onClick(function(){
-                console.log('amazonpay onCLick regsitered');
                 OSCAmazonPayButtonComponent.payButtonClickHandler();
             });
         },

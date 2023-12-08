@@ -5,6 +5,13 @@
         signature: null,
 
         init: function (amazonPayButton, payloadJSON, signature) {
+            // replace the "Zur Kasse" button by using javascript
+            // until we get a block to replace it by template
+            // for now identify the button by using css classes
+            buttonClasses = 'btn btn-highlight btn-lg w-100'
+            document.getElementsByClassName(buttonClasses)[0].parentNode.append(document.getElementById('AmazonPayWrapper'))
+            document.getElementsByClassName(buttonClasses)[0].style.display = "none"
+
             this.amazonPayButton = amazonPayButton;
             this.payloadJSON = payloadJSON;
             this.signature = signature;
@@ -13,6 +20,7 @@
 
         registerEvents: function () {
             amazonPayButton.onClick(function(){
+                console.log('amazonpay onCLick regsitered');
                 OSCAmazonPayButtonComponent.payButtonClickHandler();
             });
         },

@@ -18,12 +18,14 @@
     >
         {{ "READ_AND_CONFIRM_TERMS"|translate }}
     </p>
-      <div class="pull-right amazonpay-button-or">
-          {{ "AMAZON_PAY_SUBMIT_ORDER_WITH"|translate }}
+      <div id="AmazonPayWrapper">
+          <div class="pull-right amazonpay-button-or">
+              {{ "AMAZON_PAY_SUBMIT_ORDER_WITH"|translate }}
+          </div>
+          <div class="pull-right">
+            {% include "@osc_amazonpay/amazonpay/amazonbutton" with {buttonId: "AmazonPayButtonNextCartLastStep"} %}
+          </div>
       </div>
-    <div class="pull-right">
-        {% include "@osc_amazonpay/amazonpay/amazonbutton" with {buttonId: "AmazonPayButtonNextCartLastStep"} %}
-    </div>
 {% endif %}
 
 

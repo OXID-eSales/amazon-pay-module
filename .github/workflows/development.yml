@@ -244,14 +244,14 @@ jobs:
 
       - name: Download unit_tests artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: TestsLog-7.0
           path: ./tests/reports/
 
       - name: Download styles artifacts
         continue-on-error: true
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: StylesLog-7.0
           path: ./tests/reports/

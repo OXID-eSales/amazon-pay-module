@@ -85,7 +85,7 @@ jobs:
           sleep 2
       - name: Upload configuration artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Configs-${{ matrix.php }}
           path: |
@@ -135,7 +135,7 @@ jobs:
           sleep 2
       - name: Upload log artifact
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TestsLog-${{ matrix.php }}
           path: |

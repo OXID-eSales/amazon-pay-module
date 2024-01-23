@@ -20,7 +20,7 @@ jobs:
         run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-6.4.x --single-branch source
 
       - name: Cache current installation
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./*
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Load current installation from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./*
@@ -159,7 +159,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Load current installation from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./*
@@ -197,7 +197,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Load current installation from cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ./*

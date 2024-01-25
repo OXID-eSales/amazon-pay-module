@@ -559,7 +559,7 @@ class AmazonService
             ]
         );
 
-        $response = PhpHelper::jsonToArray($result['response']);
+        $response = $result['response'];
 
         if ($result['status'] !== 200) {
             return;
@@ -656,7 +656,7 @@ class AmazonService
             ]
         );
 
-        $response = PhpHelper::jsonToArray($result['response']);
+        $response = $result['response'];
 
         if ($response['statusDetails']['state'] === 'Canceled' && $isCancelled === false) {
             $this->processCancel($orderId);

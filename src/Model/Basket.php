@@ -20,7 +20,7 @@ class Basket extends Basket_parent
      *
      * @return string
      */
-    protected function _findDelivCountry(): string // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+    protected function findDelivCountry() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $deliveryCountryId = null;
         $paymentId = $this->getPaymentId() ?: '';
@@ -29,7 +29,7 @@ class Basket extends Basket_parent
             $deliveryCountryId = Registry::getSession()->getVariable('amazonCountryOxId');
         }
         if (is_null($deliveryCountryId)) {
-            $deliveryCountryId = parent::_findDelivCountry();
+            $deliveryCountryId = parent::findDelivCountry();
         }
         return $deliveryCountryId;
     }

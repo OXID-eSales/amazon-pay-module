@@ -3,7 +3,7 @@
 {% block details_productmain_tobasket %}
     {{ parent() }}
 
-    {% if blCanBuy and oViewConf.isAmazonActive() and oViewConf.displayExpressInPDP() and not oViewConf.isAmazonExclude(oDetailsProduct.oxarticles__oxid.value) and not oViewConf.isAmazonSessionActive() %}
+    {% if oViewConf.isAmazonActive() and oViewConf.displayExpressInPDP() and not oViewConf.isAmazonExclude(oDetailsProduct.oxarticles__oxid.value) and not oViewConf.isAmazonSessionActive() %}
         {% set amazonConfig = oViewConf.getAmazonConfig() %}
         {% set sToken = oViewConf.getSessionChallengeToken() %}
         {% set oxArticlesId = oDetailsProduct.oxarticles__oxid.value %}

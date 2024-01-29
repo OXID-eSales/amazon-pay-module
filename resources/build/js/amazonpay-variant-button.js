@@ -9,8 +9,8 @@ const oscAmazonPayButtonContainer = '.amazonpay-button-container';
 oscAmazonPayRegisterAmazonPayClickHandler = () => {
     oscAmazonPayExpressButton.onClick(function () {
         var BasketElem = document.getElementById(oscAmazonPayBasketSelector);
-        // the disabled amazonpay butoon can still be clicked; prevent this when the basket is disabled
-        if (!BasketElem.disabled) {
+        // the disabled amazonpay button can still be clicked; prevent this when the basket is disabled
+        if (typeof BasketElem !== 'undefined' && !BasketElem.disabled) {
             // replace() fixes the json output string, twigs "|json_encode" on the array differs from php json_encode and produces checksum errors
             var payloadJson = document.getElementById('osc_amazonpay_payloadJSON').value.replace(/\\/g, "");
             var signature = document.getElementById('osc_amazonpay_signature').value;
@@ -32,10 +32,10 @@ oscAmazonPaySetAmazonButtonState = () => {
     var showButtonAndText = true;
     var BasketDisabled = true;
 
-    if (BasketElem !== 'undefined') {
+    if (typeof BasketElem !== 'undefined' && BasketElem) {
         // set amazonpay button to the same state the basket button is in
         BasketDisabled = BasketElem.disabled;
-    } else if (BasketElem === 'undefined') {
+    } else if (typeof BasketElem === 'undefined' || !BasketElem) {
         // do not show text and button when basket is not shown on detail page (out-of-stock)
         showButtonAndText = false;
     }

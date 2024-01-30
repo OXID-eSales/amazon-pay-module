@@ -1,5 +1,5 @@
 {% if delivadr %}
-    <div id="shippingAddress" class="col-lg-9 offset-lg-3">
+    <div id="shippingAddressText" class="mb-3">
         {% if delivadr.oxaddress__oxcompany.value != '' %} <strong>{{ delivadr.oxaddress__oxcompany.value }}</strong><br />{% endif %}
         {% if delivadr.oxaddress__oxaddinfo.value != '' %} {{ delivadr.oxaddress__oxaddinfo.value }}<br />{% endif %}
         {% if delivadr.oxaddress__oxfname.value != '' or delivadr.oxaddress__oxlname.value != '' %}

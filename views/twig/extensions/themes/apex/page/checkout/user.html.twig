@@ -1,10 +1,8 @@
 {% extends "page/checkout/user.html.twig" %}
 
 {% block checkout_user_main %}
-    Stef: Block checkout_user_main in userhtml
-    {{ parent() }}
     {% if not oxcmp_user and not oView.getLoginOption() and oViewConf.isAmazonActive() and not oViewConf.isAmazonSessionActive() and not oViewConf.socialLoginDeactivated() %}
-        Including amazonpAY checkout_user_main
         {% include "@osc_amazonpay/amazonpay/checkout_user_main" %}
     {% endif %}
+    {{ parent() }}
 {% endblock %}

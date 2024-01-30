@@ -50,7 +50,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
                 )
             );
 
-            return $this->_addValidationError("oxuser__oxusername", $oEx);
+            return $this->addValidationError("oxuser__oxusername", $oEx);
         }
 
         return parent::checkLogin($user, $login, $invAddress);

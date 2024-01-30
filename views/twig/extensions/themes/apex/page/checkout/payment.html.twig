@@ -3,12 +3,12 @@
 {% block change_payment %}
     change_payment
     {% if oViewConf.getAmazonPaymentId() in oView.getPaymentList()|keys and not oViewConf.isAmazonExclude() %}
-        {% include '@osc_amazonpay/amazonpay/change_payment_block_twig' %}
+        {% include '@osc_amazonpay/amazonpay/change_payment_block_apex' %}
     {% endif %}
     {% if not oViewConf.isAmazonSessionActive() or oViewConf.isAmazonExclude() %}
         {{ parent() }}
     {% elseif oViewConf.getAmazonPaymentId() in oView.getPaymentList()|keys %}
-        {% include '@osc_amazonpay/amazonpay/change_payment_form_twig' %}
+        {% include '@osc_amazonpay/amazonpay/change_payment_form_apex' %}
     {% endif %}
 {% endblock %}
 

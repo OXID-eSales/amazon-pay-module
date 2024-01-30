@@ -12,16 +12,13 @@
             buttonClassesTwig = 'btn btn-lg btn-primary pull-right submitButton nextStep largeButton'
             if (document.getElementsByClassName(buttonClassesApex)[0])
             {
-                console.log('ButtonCLasses Apex');
                 document.getElementsByClassName(buttonClassesApex)[0].parentNode.append(document.getElementById('AmazonPayWrapper'))
                 document.getElementsByClassName(buttonClassesApex)[0].style.display = "none"
             }
             if (document.getElementsByClassName(buttonClassesTwig)[0]) {
-                console.log('ButtonCLasses Twig');
                 document.getElementsByClassName(buttonClassesTwig)[0].parentNode.prepend(document.getElementById('AmazonPayWrapper'))
                 document.getElementsByClassName(buttonClassesTwig)[0].style.display = "none"
             }
-            console.log('Init Ende');
             this.amazonPayButton = amazonPayButton;
             this.payloadJSON = payloadJSON;
             this.signature = signature;

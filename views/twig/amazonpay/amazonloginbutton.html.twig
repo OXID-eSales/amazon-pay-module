@@ -3,13 +3,7 @@
 {% set aPayload = oViewConf.getPayloadSignIn() %}
 <div class="amazonpay-button {{ buttonclass }}" id="{{ buttonId }}"></div>
 {% capture assign = "amazonpay_login_script" %}
-    console.log('amazonpay_login_script captured');
     if (typeof {{ buttonId }}_is_rendered === "undefined" || {{ buttonId }}_is_rendered !== true) {
-        console.log('amazonpay_login_script');
-        console.log('buttonid: ' + '{{  buttonId }}');
-        console.log('buttonclass: ' + '{{  buttonclass }}');
-        console.log('sandbox: ' + '{% if amazonConfig.isSandbox() %}true{% else %}false{% endif %}');
-        console.log('aPayload: ' + '{{  aPayload|raw }}');
         amazon.Pay.renderButton('#{{ buttonId }}', {
             merchantId: '{{ amazonConfig.getMerchantId() }}',
             ledgerCurrency: '{{ amazonConfig.getLedgerCurrency() }}',
@@ -25,7 +19,6 @@
             }
         });
         {{ buttonId }}_is_rendered = true;
-        console.log('{{ buttonId }}_is_rendered:' + {{ buttonId }}_is_rendered );
     }
 {% endcapture %}
 {{ script({ add: amazonpay_login_script, dynamic: __oxid_include_dynamic }) }}

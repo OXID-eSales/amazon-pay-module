@@ -1,7 +1,6 @@
 {% extends "page/checkout/payment.html.twig" %}
 
 {% block change_payment %}
-    change_payment
     {% if oViewConf.getAmazonPaymentId() in oView.getPaymentList()|keys and not oViewConf.isAmazonExclude() %}
         {% include '@osc_amazonpay/amazonpay/change_payment_block_twig' %}
     {% endif %}

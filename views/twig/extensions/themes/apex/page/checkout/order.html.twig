@@ -2,7 +2,7 @@
 
 {% block checkout_order_address %}
     {% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() and not oViewConf.isAmazonExclude() %}
-        {% include "@osc_amazonpay/amazonpay/checkout_order_address_twig" %}
+        {% include "@osc_amazonpay/amazonpay/checkout_order_address_apex" %}
     {% else %}
         {{ parent() }}
     {% endif %}
@@ -25,10 +25,26 @@
     {% endif %}
 {% endblock %}
 
+{#  apex : block is commented out in theme #}
+{# % block checkout_order_btn_submit_bottom %}
+    {% set oPayment = oView.getPayment() %}
+    {% set paymentId = oPayment.getId() %}
+    {% if (
+            oViewConf.isAmazonActive() and
+            paymentId == oViewConf.getAmazonPaymentId() and
+            not oViewConf.isAmazonExclude()
+          )
+    %}
+        {% include "@osc_amazonpay/amazonpay/checkout_order_btn_submit_bottom" with {paymentId: paymentId} %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock % #}
+
 {% block shippingAndPayment %}
     {% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() %}
         {% if oViewConf.isAmazonPaymentPossible() %}
-            {% include "@osc_amazonpay/amazonpay/shippingandpayment_twig" %}
+            {% include "@osc_amazonpay/amazonpay/shippingandpayment_apex" %}
         {% else %}
             {% include "@osc_amazonpay/amazonpay/shippingandpayment_error" %}
         {% endif %}

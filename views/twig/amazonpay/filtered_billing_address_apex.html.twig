@@ -1,0 +1,19 @@
+{% if billadr %}
+    <div id="billingAddressText" class="mb-3">
+        {% if billadr.oxuser__oxcompany.value != '' %} {{ billadr.oxuser__oxcompany.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxaddinfo.value != '' %} {{ billadr.oxuser__oxaddinfo.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxustid.value != '' %} {{ translate({ ident: "VAT_ID_NUMBER" }) }} {{ billadr.oxuser__oxustid.value }}<br /> {% endif %}
+        {% if billadr.oxuser__oxfname.value != '' or billadr.oxuser__oxlname.value != '' %}
+            {% if billadr.oxuser__oxsal.value != '' %}{{ billadr.oxuser__oxsal.value|translate_salutation }}&nbsp;{% endif %}{{ billadr.oxuser__oxfname.value }} {{ billadr.oxuser__oxlname.value }}<br />
+        {% endif %}
+        {% if billadr.oxuser__oxstreet.value != '' or billadr.oxuser__oxstreetnr.value != '' %}{{ billadr.oxuser__oxstreet.value }}&nbsp;{{ billadr.oxuser__oxstreetnr.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxstateid.value != '' %}{{ billadr.oxuser__oxstateid.value != '' }}&nbsp;{% endif %}
+        {% if billadr.oxuser__oxzip.value or billadr.oxuser__oxcity.value %}{{ billadr.oxuser__oxzip.value }}&nbsp;{{ billadr.oxuser__oxcity.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxcountry.value != '' %}{{ billadr.oxuser__oxcountry.value }}<br /><br />{% endif %}
+        {% if billadr.oxuser__oxusername.value != '' %}<strong>{{ translate({ ident: "EMAIL" }) }}</strong> {{ billadr.oxuser__oxusername.value }}<br /><br />{% endif %}
+        {% if billadr.oxuser__oxfon.value != '' %}<strong>{{ translate({ ident: "PHONE" }) }}</strong> {{ billadr.oxuser__oxfon.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxfax.value != '' %}<strong>{{ translate({ ident: "FAX" }) }}</strong> {{ billadr.oxuser__oxfax.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxmobfon.value != '' %}<strong>{{ translate({ ident: "CELLUAR_PHONE" }) }}</strong> {{ billadr.oxuser__oxmobfon.value }}<br />{% endif %}
+        {% if billadr.oxuser__oxprivfon.value != '' %}<strong>{{ translate({ ident: "PERSONAL_PHONE" }) }}</strong> {{ billadr.oxuser__oxprivfon.value }}<br />{% endif %}
+    </div>
+{% endif %}

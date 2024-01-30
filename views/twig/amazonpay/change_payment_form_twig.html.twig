@@ -6,6 +6,7 @@
         <input type="hidden" name="fnc" value="validatepayment">
         <input type="hidden" name="paymentid" value="{{ oViewConf.getAmazonPaymentId() }}">
     </div>
+    <!-- show additional buttons in twig template !-->
     <div class="well well-sm cart-buttons">
         <a href="{{ seo_url({ ident: oViewConf.getOrderLink()|raw }) }}" class="btn btn-default pull-left prevStep submitButton largeButton" id="paymentBackStepBottom"><i class="fa fa-caret-left"></i> {{ translate({ ident: "PREVIOUS_STEP" }) }}</a>
         <button type="submit" name="userform" class="btn btn-primary pull-right submitButton nextStep largeButton" id="paymentNextStepBottom">{{ translate({ ident: "CONTINUE_TO_NEXT_STEP" }) }} <i class="fa fa-caret-right"></i></button>

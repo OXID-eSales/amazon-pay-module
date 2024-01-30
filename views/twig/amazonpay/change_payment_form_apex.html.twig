@@ -1,0 +1,9 @@
+<form action="{{ oViewConf.getSslSelfLink()|raw }}" class="form-horizontal js-oxValidate payment" id="payment" name="order" method="post" novalidate="novalidate">
+    <div class="hidden">
+        {{ oViewConf.getHiddenSid()|raw }}
+        {{ oViewConf.getNavFormParams()|raw }}
+        <input type="hidden" name="cl" value="{{ oViewConf.getActiveClassName() }}">
+        <input type="hidden" name="fnc" value="validatepayment">
+        <input type="hidden" name="paymentid" value="{{ oViewConf.getAmazonPaymentId() }}">
+    </div>
+</form>

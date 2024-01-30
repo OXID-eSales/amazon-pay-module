@@ -64,7 +64,7 @@ oscAmazonPayRenderAmazonButton = () => {
                 checkoutLanguage: document.getElementById('osc_amazonpay_checkoutLanguage').value,
                 productType: 'PayAndShip',
                 placement: document.getElementById('osc_amazonpay_placement').value,
-                buttonColor: 'Gold',
+                buttonColor: 'Gold'
             });
             oscAmazonPayButtonIsRendered = true;
         } catch (err) {

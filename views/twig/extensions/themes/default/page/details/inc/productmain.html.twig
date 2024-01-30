@@ -23,8 +23,8 @@
             <input type="hidden" id="osc_amazonpay_publicKeyId" value="{{ amazonConfig.getPublicKeyId()|raw }}">
         </div>
         <div id="osc_amazonpay_wrapper">
-            <div class="text-center amazonpay-button-or large">{{ "OR"|translate|upper }}</div>
-            <div class="amazonpay-button express" id="amazonpayexpressbutton"></div>
+            <div class="amazonpay-button-or large">{{ "OR"|translate|upper }}</div>
+            <div class="amazonpay-button express text-center" id="amazonpayexpressbutton"></div>
             <br>
         </div>
         {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-button.min.js'), priority:20, dynamic: __oxid_include_dynamic }) }}

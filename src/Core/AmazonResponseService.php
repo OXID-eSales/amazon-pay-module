@@ -1,6 +1,6 @@
 <?php
 
-namespace OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Core;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
 class AmazonResponseService
 {

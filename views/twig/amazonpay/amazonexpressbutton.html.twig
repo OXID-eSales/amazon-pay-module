@@ -6,14 +6,7 @@
 {% set aPayload = oViewConf.getPayloadExpress(oxArticlesId) %}
 <div class="amazonpay-button {{ buttonclass }} express" id="{{ buttonId }}"></div>
 {% capture assign = "amazonpay_script_expressbutton" %}
-    // console.log('amazonpay_script_expressbutton captured');
     if (typeof {{ buttonId }}_is_rendered === "undefined" || {{ buttonId }}_is_rendered !== true) {
-        /* console.log('amazonpay_script amazonexpressbutton');
-        console.log('ButtonId: ' + '{{  buttonId }}');
-        console.log('sandbox: ' + '{% if amazonConfig.isSandbox() %}true{% else %}false{% endif %}');
-        console.log('buttonclass: ' + '{{  buttonclass }}');
-        console.log('Payload: ' + '{{  aPayload|raw }}');
-    */
         amazon.Pay.renderButton('#{{ buttonId }}', {
             merchantId: '{{ amazonConfig.getMerchantId() }}',
             sandbox: {% if amazonConfig.isSandbox() %}true{% else %}false{% endif %},
@@ -28,7 +21,6 @@
         }
     });
     {{ buttonId }}_is_rendered = true;
-    // console.log('{{ buttonId }}_is_rendered:' + {{ buttonId }}_is_rendered );
     }
 {% endcapture %}
 {{ script({ add: amazonpay_script_expressbutton, dynamic: __oxid_include_dynamic }) }}

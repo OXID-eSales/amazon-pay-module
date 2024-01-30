@@ -1,14 +1,20 @@
 .amazonpay-button {
-    width: 250px;
+    padding: 10px;
+    width: 100% !important;
     display: block;
+    text-align: center;
+    &.large {
+        width: 100% !important;
+    }
     &.small {
         width: 200px;
     }
 }
 .amazonpay-button-or {
     padding: 10px;
+    text-align: center;
     &.large {
-        width: 250px;
+        width: 100% !important;
     }
     &.small {
         width: 200px;

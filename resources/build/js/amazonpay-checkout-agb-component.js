@@ -33,15 +33,12 @@
             return document.getElementById('checkAgbTop').checked
         },
         isDpaConfirmed: function () {
-            console.log('DPA is:' + document.getElementById('oxdownloadableproductsagreement').checked);
             return document.getElementById('oxdownloadableproductsagreement').checked;
         },
         isSpaConfirmed: function () {
-            console.log('Spa is:' + document.getElementById('oxserviceproductsagreement').checked);
             return document.getElementById('oxserviceproductsagreement').checked;
         },
         saveAGBConfirmInSession() {
-            console.log('saveAGBConfirmInSession call');
             var http = new XMLHttpRequest();
             var url = '/index.php?cl=amazoncheckoutajax&fnc=confirmAGB';
             var params = "confirm=" + (this.isAgbConfirmed() ? 1 : 0);

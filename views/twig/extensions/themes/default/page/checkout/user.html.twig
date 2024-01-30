@@ -3,6 +3,6 @@
 {% block checkout_user_main %}
     {{ parent() }}
     {% if not oxcmp_user and not oView.getLoginOption() and oViewConf.isAmazonActive() and not oViewConf.isAmazonSessionActive() and not oViewConf.socialLoginDeactivated() %}
-        {% include "@osc_amazonpay/amazonpay/checkout_user_main" %}
+        {% include "@osc_amazonpay/amazonpay/checkout_user_main_twig" %}
     {% endif %}
 {% endblock %}

@@ -8,10 +8,20 @@
             // replace the "Zur Kasse" button by using javascript
             // until we get a block to replace it by template
             // for now identify the button by using css classes
-            buttonClasses = 'btn btn-highlight btn-lg w-100'
-            document.getElementsByClassName(buttonClasses)[0].parentNode.append(document.getElementById('AmazonPayWrapper'))
-            document.getElementsByClassName(buttonClasses)[0].style.display = "none"
-
+            buttonClassesApex = 'btn btn-highlight btn-lg w-100'
+            buttonClassesTwig = 'btn btn-lg btn-primary pull-right submitButton nextStep largeButton'
+            if (document.getElementsByClassName(buttonClassesApex)[0])
+            {
+                console.log('ButtonCLasses Apex');
+                document.getElementsByClassName(buttonClassesApex)[0].parentNode.append(document.getElementById('AmazonPayWrapper'))
+                document.getElementsByClassName(buttonClassesApex)[0].style.display = "none"
+            }
+            if (document.getElementsByClassName(buttonClassesTwig)[0]) {
+                console.log('ButtonCLasses Twig');
+                document.getElementsByClassName(buttonClassesTwig)[0].parentNode.prepend(document.getElementById('AmazonPayWrapper'))
+                document.getElementsByClassName(buttonClassesTwig)[0].style.display = "none"
+            }
+            console.log('Init Ende');
             this.amazonPayButton = amazonPayButton;
             this.payloadJSON = payloadJSON;
             this.signature = signature;
@@ -37,13 +47,15 @@
                     }
                 });
             } else if(this.forceConfirmAGB() || this.forceConfirmDPA() || this.forceConfirmSPA()) {
-                document.getElementById('confirm-agb-error-container').css('display', 'block');
-                document.getElementByClassName('agbConfirmation').addClass('alert-danger');
+                if (document.getElementById('confirm-agb-error-container')){
+                    document.getElementById('confirm-agb-error-container').setAttribute('style', 'display:block');
+                    document.getElementsByClassName('agbConfirmation')[0].classList.add('alert-danger');
+                }
             }
         },
 
         hideErrorContainer: function() {
-            document.getElementById('confirm-agb-error-container').css('display', 'none');
+            document.getElementById('confirm-agb-error-container').setAttribute('style', 'display:none');
         },
 
         forceConfirmAGB: function () {

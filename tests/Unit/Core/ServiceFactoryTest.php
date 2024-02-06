@@ -27,14 +27,13 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\ServiceFactory;
-use OxidEsales\TestingLibrary\UnitTestCase;
 
-class ServiceFactoryTest extends UnitTestCase
+class ServiceFactoryTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var ServiceFactory */
     private $serviceFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serviceFactory = new ServiceFactory();
     }

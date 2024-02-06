@@ -27,7 +27,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Helper;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\AmazonCarrier;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
-class AmazonCarrierTest extends UnitTestCase
+class AmazonCarrierTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     public function testGetAllCarriers()
     {

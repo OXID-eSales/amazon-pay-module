@@ -26,14 +26,13 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Model;
 
 use OxidEsales\Eshop\Application\Model\Category as EshopCategoryModel;
 use OxidEsales\Eshop\Core\Field;
-use OxidEsales\TestingLibrary\UnitTestCase;
 
-class CategoryTest extends UnitTestCase
+class CategoryTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var EshopCategoryModel */
     private $category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->category = oxNew(EshopCategoryModel::class);

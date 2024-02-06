@@ -25,15 +25,14 @@ declare(strict_types=1);
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
-use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
-class LoggerTest extends UnitTestCase
+class LoggerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var Logger */
     private $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockLogFileName = 'amazonpay-test.log';
         $this->logger = new Logger(

@@ -31,9 +31,9 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
-class OxidServiceProviderTest extends UnitTestCase
+class OxidServiceProviderTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
     }
 

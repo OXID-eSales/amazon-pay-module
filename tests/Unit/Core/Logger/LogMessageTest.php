@@ -27,12 +27,12 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
-class LogMessageTest extends UnitTestCase
+class LogMessageTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var LogMessage */
     private $logMessage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logMessage = new LogMessage();
 

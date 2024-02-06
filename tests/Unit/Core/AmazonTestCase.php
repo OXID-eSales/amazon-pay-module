@@ -11,33 +11,29 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
 use Dotenv\Dotenv;
 use Exception;
-use Mockery;
-use Mockery\MockInterface;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class AmazonTestCase extends UnitTestCase
+class AmazonTestCase extends TestCase
 {
-    /** @var AmazonService */
-    protected $amazonService;
 
-    /** @var AmazonClient */
-    protected $amazonClient;
+    protected AmazonService $amazonService;
+    protected AmazonClient $amazonClient;
+    protected Config $moduleConfig;
 
-    /** @var Config */
-    protected $moduleConfig;
-
-    /** @var LoggerInterface | MockInterface */
-    protected $mockLogger;
+    protected MockObject $mockLogger;
     public static $modulConfig = [];
 
     /**
      * @throws Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -71,7 +67,7 @@ class AmazonTestCase extends UnitTestCase
             'sandbox' => true
         ];
 
-        $this->mockLogger = Mockery::mock(LoggerInterface::class);
+        $this->mockLogger = $this->createMock(LoggerInterface::class);
 
         $this->amazonClient = new AmazonClient(
             $configurations,
@@ -84,9 +80,6 @@ class AmazonTestCase extends UnitTestCase
         );
     }
 
-    /**
-     * @return array
-     */
     protected function createTestCheckoutSession(): array
     {
         return $this->amazonClient->createCheckoutSession([], []);
@@ -102,9 +95,6 @@ class AmazonTestCase extends UnitTestCase
         return $checkoutSessionId;
     }
 
-    /**
-     * @return array
-     */
     protected function getAddressArray(): array
     {
         $address = [];
@@ -120,5 +110,15 @@ class AmazonTestCase extends UnitTestCase
         $address['stateOrRegion'] = 'BW';
 
         return $address;
+    }
+
+    public function setConfigParam(string $name, mixed $value): void
+    {
+        Registry::getConfig()->setConfigParam($name, $value);
+    }
+
+    public function setRequestParameter(string $paramName, mixed $paramValue): void
+    {
+        $_POST[$paramName] = $paramValue;
     }
 }

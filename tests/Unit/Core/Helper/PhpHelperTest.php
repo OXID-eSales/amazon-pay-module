@@ -27,7 +27,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Helper;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
-class PhpHelperTest extends UnitTestCase
+class PhpHelperTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     public function testJsonToArray()
     {

@@ -24,12 +24,11 @@ declare(strict_types=1);
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 
-use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 
-class PayloadTest extends UnitTestCase
+class PayloadTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
     }
 

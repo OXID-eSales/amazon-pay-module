@@ -31,10 +31,9 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 
 class OrderTest extends AmazonTestCase
 {
-    /** @var EshopOrderModel */
-    private $order;
+    private EshopOrderModel $order;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->order = oxNew(EshopOrderModel::class);
@@ -42,7 +41,7 @@ class OrderTest extends AmazonTestCase
 
     public function testGetDelAddressInfo()
     {
-        $amazonServiceMock = Mockery::mock(AmazonService::class);
+        $amazonServiceMock = $this->createMock(AmazonService::class);
         $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
         $amazonServiceMock->shouldReceive('getDeliveryAddress')->andReturn($this->getAddressArray());
         $this->order->setAmazonService($amazonServiceMock);
@@ -65,7 +64,7 @@ class OrderTest extends AmazonTestCase
 
     public function testValidateDeliveryAddress()
     {
-        $amazonServiceMock = $this->mockLogger = Mockery::mock(AmazonService::class);
+        $amazonServiceMock = $this->mockLogger = $this->createMock(AmazonService::class);
         $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
         $this->order->setAmazonService($amazonServiceMock);
 

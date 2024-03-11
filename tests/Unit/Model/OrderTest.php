@@ -42,8 +42,8 @@ class OrderTest extends AmazonTestCase
     public function testGetDelAddressInfo()
     {
         $amazonServiceMock = $this->createMock(AmazonService::class);
-        $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
-        $amazonServiceMock->shouldReceive('getDeliveryAddress')->andReturn($this->getAddressArray());
+        $amazonServiceMock->method('isAmazonSessionActive')->willReturn(true);
+        $amazonServiceMock->method('getDeliveryAddress')->willReturn($this->getAddressArray());
         $this->order->setAmazonService($amazonServiceMock);
 
         $delAddressInfo = $this->order->getDelAddressInfo();
@@ -65,7 +65,7 @@ class OrderTest extends AmazonTestCase
     public function testValidateDeliveryAddress()
     {
         $amazonServiceMock = $this->mockLogger = $this->createMock(AmazonService::class);
-        $amazonServiceMock->shouldReceive('isAmazonSessionActive')->andReturn(true);
+        $amazonServiceMock->method('isAmazonSessionActive')->willReturn(true);
         $this->order->setAmazonService($amazonServiceMock);
 
         $this->assertSame(0, $this->order->validateDeliveryAddress(null));

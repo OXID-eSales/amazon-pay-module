@@ -117,13 +117,6 @@ class AmazonService
     {
         $checkoutSessionId = $this->getCheckoutSessionId();
         if (!$checkoutSessionId) {
-            $session = Registry::getSession();
-            /** @var string $paymentId */
-            $paymentId = $session->getVariable('paymentid') ?? '';
-            $isAmazonPayment = Constants::isAmazonPayment($paymentId);
-            if ($isAmazonPayment) {
-                //self::unsetPaymentMethod();
-            }
             return false;
         }
 

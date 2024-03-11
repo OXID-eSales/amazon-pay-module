@@ -6,6 +6,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
+/** @group amazonpay */
 final class RefundCest extends BaseCest
 {
     /**
@@ -18,20 +19,20 @@ final class RefundCest extends BaseCest
     {
         $I->wantToTest('Test refund payment');
 
-        $this->_initializeTest();
-        $this->_addProductToBasket();
-        $this->_loginOxid();
-        $this->_openBasketDisplay();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_submitPaymentMethod();
-        $this->_submitOrder();
-        $orderNumber = $this->_checkSuccessfulPayment();
+        $this->initializeTest();
+        $this->addProductToBasket();
+        $this->loginOxid();
+        $this->openBasketDisplay();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->submitPaymentMethod();
+        $this->submitOrder();
+        $orderNumber = $this->checkSuccessfulPayment();
 
         $orderStatus = $I->grabFromDatabase('oxorder', 'oxtransstatus', ['OXORDERNR' => $orderNumber]);
         $orderRemark = $I->grabFromDatabase('oxorder', 'osc_amazon_remark', ['OXORDERNR' => $orderNumber]);
 
-        $this->_openOrder($orderNumber);
+        $this->openOrder($orderNumber);
         $I->switchToFrame("edit");
         $I->see(Translator::translate("GENERAL_ORDERNUM") . ': ' . $orderNumber);
         $I->see(Translator::translate("ORDER_OVERVIEW_INTSTATUS") . ': ' . $orderStatus);

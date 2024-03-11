@@ -8,6 +8,7 @@ use OxidEsales\Codeception\Module\Translation\Translator;
 use OxidEsales\Codeception\Page\Details\ProductDetails;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
+/** @group amazonpay */
 final class AmazonPayExcludeCest extends BaseCest
 {
     protected $excluded;
@@ -42,13 +43,13 @@ final class AmazonPayExcludeCest extends BaseCest
 
         $this->excluded = Fixtures::get('amazonExclude');
         $I->wantToTest('AmazonPay Exclude Option for products are working');
-        $this->_loginAdmin();
-        $this->_openAdminAmazonPayConfig();
+        $this->loginAdmin();
+        $this->openAdminAmazonPayConfig();
         $I->scrollTo('#useExclusion');
         $I->checkOption('#useExclusion');
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        $error = $this->grabTextFromElementWhenPresent('.alert-danger');
         if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
@@ -106,13 +107,13 @@ final class AmazonPayExcludeCest extends BaseCest
     {
         $this->excluded = Fixtures::get('amazonExclude');
         $I->wantToTest('AmazonPay Exclude Option for categories is  working');
-        $this->_loginAdmin();
-        $this->_openAdminAmazonPayConfig();
+        $this->loginAdmin();
+        $this->openAdminAmazonPayConfig();
         $I->scrollTo('#useExclusion');
         $I->checkOption('#useExclusion');
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        $error = $this->grabTextFromElementWhenPresent('.alert-danger');
         if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }

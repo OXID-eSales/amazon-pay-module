@@ -23,10 +23,10 @@ use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
 
 abstract class BaseCest
 {
-    private $timestampForScreenshot;
-    private $amount = 1;
-    private $I;
-    private $homePage;
+    private int $timestampForScreenshot;
+    private int $amount = 1;
+    private AcceptanceTester $I;
+    private Home $homePage;
 
     public function _before(AcceptanceTester $I)
     {
@@ -66,9 +66,9 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _initializeTest()
+    protected function initializeTest(): void
     {
-        $this->_openShop();
+        $this->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->waitForPageLoad();
     }
@@ -77,7 +77,7 @@ abstract class BaseCest
      * @param string $element
      * @return string
      */
-    protected function _grabTextFromElementWhenPresent(string $element): string
+    protected function grabTextFromElementWhenPresent(string $element): string
     {
         try {
             $this->I->seeElement($element);
@@ -89,31 +89,16 @@ abstract class BaseCest
     }
 
     /**
-     * @param string $text
-     * @param string $errorMsg
      * @return void
      */
-    protected function _failIfTextNotSeen(string $text, string $errorMsg = '')
-    {
-        $errorMsg = $errorMsg ?: 'Text not found: ' . $text;
-        try {
-            $this->I->see($text);
-        } catch (\Exception $e) {
-            $this->I->fail($errorMsg);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    protected function _addProductToBasket()
+    protected function addProductToBasket()
     {
         $basketItem = Fixtures::get('product');
         $basketSteps = new BasketSteps($this->I);
         $basketSteps->addProductToBasket($basketItem['id'], $this->amount);
     }
 
-    protected function _openDetailPage()
+    protected function openDetailPage()
     {
         $this->I->waitForText(Translator::translate('MORE_INFO'), 60);
         $this->I->click(Translator::translate('MORE_INFO'));
@@ -122,12 +107,12 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _loginOxid()
+    protected function loginOxid()
     {
-        $this->_openShop();
+        $this->openShop();
         $this->I->waitForDocumentReadyState();
         $this->I->wait(5);
-        $this->_makeScreenshot('beforeLogin');
+        $this->makeScreenshot('beforeLogin');
         $this->homePage->loginUser($_ENV['OXID_CLIENT_USERNAME'], $_ENV['OXID_CLIENT_PASSWORD']);
         $this->I->wait(5);
     }
@@ -135,7 +120,7 @@ abstract class BaseCest
     /**
      * @throws \Exception
      */
-    protected function _loginOxidWithAmazonCredentials()
+    protected function loginOxidWithAmazonCredentials()
     {
         $loginInput = "//input[@name='lgn_usr' and " .
             "@class='form-control textbox js-oxValidate js-oxValidate_notEmpty']";
@@ -166,12 +151,12 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _openBasketDisplay()
+    protected function openBasketDisplay()
     {
         $this->homePage->openMiniBasket()->openBasketDisplay();
     }
 
-    protected function _openAccountMenu()
+    protected function openAccountMenu()
     {
         $this->homePage->openAccountMenu();
     }
@@ -180,7 +165,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _openAmazonPayPage()
+    protected function openAmazonPayPage()
     {
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
@@ -191,7 +176,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _loginAmazonPayment()
+    protected function loginAmazonPayment()
     {
         $amazonpayLoginPage = new AmazonPayLogin($this->I);
         $amazonpayLoginPage->login();
@@ -201,7 +186,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _checkAccountExist()
+    protected function checkAccountExist()
     {
         $this->I->waitForDocumentReadyState();
         $this->I->makeScreenshot(time() . 'Account already exists');
@@ -217,7 +202,7 @@ abstract class BaseCest
             ))
         ];
 
-        $error = $this->_grabTextFromElementWhenPresent('.alert .alert-danger');
+        $error = $this->grabTextFromElementWhenPresent('.alert .alert-danger');
         if ($error !== '' && !in_array($error, $acceptableErrors)) {
             $this->I->fail('Login issue: ' . $error);
         }
@@ -225,7 +210,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _submitPaymentMethod()
+    protected function submitPaymentMethod()
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->submitPayment();
@@ -235,7 +220,7 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _changePaymentMethod()
+    protected function changePaymentMethod()
     {
         $amazonPayment = '#payment_oxidamazon';
         $paymentNextStep = '#paymentNextStepBottom';
@@ -247,7 +232,7 @@ abstract class BaseCest
     /**
      * @return void
      */
-    protected function _cancelPayment()
+    protected function cancelPayment()
     {
         $amazonpayInformationPage = new AmazonPayInformation($this->I);
         $amazonpayInformationPage->cancelPayment();
@@ -257,10 +242,10 @@ abstract class BaseCest
      * @return void
      * @throws \Exception
      */
-    protected function _submitOrder()
+    protected function submitOrder()
     {
         $this->I->executeJS('window.scrollTo(0,1600);');
-        $this->_makeScreenshot('submitOrder');
+        $this->makeScreenshot('submitOrder');
         $this->I->waitForText(Translator::translate('SUBMIT_ORDER'), 60);
         $this->I->click(Translator::translate('SUBMIT_ORDER'));
     }
@@ -269,11 +254,11 @@ abstract class BaseCest
      * @return string
      * @throws \Exception
      */
-    protected function _checkSuccessfulPayment(): string
+    protected function checkSuccessfulPayment(): string
     {
         $this->I->wait(10);
         $thankYouPage = new ThankYou($this->I);
-        $this->_makeScreenshot('thankYouPage');
+        $this->makeScreenshot('thankYouPage');
         $orderNumber = $thankYouPage->grabOrderNumber();
         return $orderNumber;
     }
@@ -281,7 +266,7 @@ abstract class BaseCest
     /**
      * @throws \Exception
      */
-    protected function _loginAdmin()
+    protected function loginAdmin()
     {
         $userAccountLoginName = '#usr';
         $userAccountLoginPassword = '#pwd';
@@ -300,9 +285,9 @@ abstract class BaseCest
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
-    protected function _openOrder(string $orderNumber)
+    protected function openOrder(string $orderNumber)
     {
-        $this->_loginAdmin();
+        $this->loginAdmin();
         $this->I->wait(5);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
@@ -320,7 +305,7 @@ abstract class BaseCest
         $this->I->switchToFrame("basefrm");
     }
 
-    protected function _openAdminAmazonPayConfig()
+    protected function openAdminAmazonPayConfig()
     {
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
@@ -340,7 +325,7 @@ abstract class BaseCest
         $this->I->switchToFrame("basefrm");
     }
 
-    protected function _makeScreenshot($suffix)
+    protected function makeScreenshot($suffix)
     {
         $class = get_class($this);
         $arr = explode('\\', $class);
@@ -349,7 +334,7 @@ abstract class BaseCest
         $this->I->makeScreenshot($filename);
     }
 
-    protected function _openShop()
+    protected function openShop(): void
     {
         $this->I->amOnPage($this->homePage->URL);
     }

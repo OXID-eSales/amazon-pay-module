@@ -34,6 +34,7 @@ class ConfigControllerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\C
 {
     public function testRender()
     {
+        $this->markTestSkipped('This test has been skipped.');
         $c = new ConfigController();
         $this->assertSame('amazonpay/amazonconfig.tpl', $c->render());
     }

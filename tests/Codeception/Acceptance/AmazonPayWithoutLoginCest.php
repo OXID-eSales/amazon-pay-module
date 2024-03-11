@@ -11,6 +11,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
+/** @group amazonpay */
 final class AmazonPayWithoutLoginCest extends BaseCest
 {
     public function _before(AcceptanceTester $I)
@@ -56,18 +57,18 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     {
         $I->wantToTest('Test AmazonPay via Basket without login payment works');
 
-        $this->_initializeTest();
-        $this->_addProductToBasket();
-        $this->_openBasketDisplay();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_submitPaymentMethod();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $this->initializeTest();
+        $this->addProductToBasket();
+        $this->openBasketDisplay();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->submitPaymentMethod();
+        $this->checkAccountExist();
+        $this->loginOxidWithAmazonCredentials();
+        $this->changePaymentMethod();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkSuccessfulPayment();
     }
 
     /**
@@ -80,17 +81,17 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     {
         $I->wantToTest('Test AmazonPay via Address Page without login payment works');
 
-        $this->_initializeTest();
-        $this->_addProductToBasket();
+        $this->initializeTest();
+        $this->addProductToBasket();
         $this->_openCheckout();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->checkAccountExist();
+        $this->loginOxidWithAmazonCredentials();
+        $this->changePaymentMethod();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkSuccessfulPayment();
     }
 
     /**
@@ -103,17 +104,17 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     {
         $I->wantToTest('Test AmazonPay via Details Page without login payment works');
 
-        $this->_initializeTest();
-        $this->_openDetailPage();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_submitPaymentMethod();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $this->initializeTest();
+        $this->openDetailPage();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->submitPaymentMethod();
+        $this->checkAccountExist();
+        $this->loginOxidWithAmazonCredentials();
+        $this->changePaymentMethod();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkSuccessfulPayment();
     }
 
     /**
@@ -126,20 +127,20 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     {
         $I->wantToTest('Test AmazonPay via Basket without login with return payment works');
 
-        $this->_initializeTest();
-        $this->_addProductToBasket();
-        $this->_openBasketDisplay();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_cancelPayment();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $this->initializeTest();
+        $this->addProductToBasket();
+        $this->openBasketDisplay();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->cancelPayment();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkAccountExist();
+        $this->loginOxidWithAmazonCredentials();
+        $this->changePaymentMethod();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkSuccessfulPayment();
     }
 
     /**
@@ -153,17 +154,17 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     {
         $I->wantToTest('Test AmazonPay via Address Page without login with return payment works');
 
-        $this->_initializeTest();
-        $this->_addProductToBasket();
+        $this->initializeTest();
+        $this->addProductToBasket();
         $this->_openCheckout();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->checkAccountExist();
+        $this->loginOxidWithAmazonCredentials();
+        $this->changePaymentMethod();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkSuccessfulPayment();
     }
 
     /**
@@ -176,18 +177,18 @@ final class AmazonPayWithoutLoginCest extends BaseCest
     {
         $I->wantToTest('Test AmazonPay via Details Page without login with return payment works');
 
-        $this->_initializeTest();
-        $this->_openDetailPage();
-        $this->_openAmazonPayPage();
-        $this->_loginAmazonPayment();
-        $this->_cancelPayment();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkAccountExist();
-        $this->_loginOxidWithAmazonCredentials();
-        $this->_changePaymentMethod();
-        $this->_openAmazonPayPage();
-        $this->_submitPaymentMethod();
-        $this->_checkSuccessfulPayment();
+        $this->initializeTest();
+        $this->openDetailPage();
+        $this->openAmazonPayPage();
+        $this->loginAmazonPayment();
+        $this->cancelPayment();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkAccountExist();
+        $this->loginOxidWithAmazonCredentials();
+        $this->changePaymentMethod();
+        $this->openAmazonPayPage();
+        $this->submitPaymentMethod();
+        $this->checkSuccessfulPayment();
     }
 }

@@ -11,17 +11,12 @@ use Amazon\Pay\API\Client;
 use Exception;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 class AmazonClient extends Client
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var Config
-     */
-    private $moduleConfig;
+    private LoggerInterface $logger;
+    private Config $moduleConfig;
 
     /**
      * AmazonClient constructor.
@@ -114,8 +109,12 @@ class AmazonClient extends Client
      */
     private function decodeResponse(array $result): array
     {
-        $result['response'] = PhpHelper::jsonToArray($result['response']);
+        if ($this->moduleConfig->isSandbox()) {
+            $logger = new Logger();
+            $logger->log(LogLevel::DEBUG, (string)$result['response']);
+        }
 
+        $result['response'] = PhpHelper::jsonToArray($result['response']);
         return $result;
     }
 

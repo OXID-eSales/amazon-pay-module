@@ -10,7 +10,7 @@ modules:
         host: '%SELENIUM_SERVER_IP%'
         browser: '%BROWSER_NAME%'
         port: '%SELENIUM_SERVER_PORT%'
-        window_size: 1960x1080
+        window_size: 1280x1080
         clear_cookies: true
         capabilities:
           acceptInsecureCerts: true
@@ -43,4 +43,4 @@ modules:
         depends: Db
     - \OxidEsales\Codeception\Module\Translation\TranslationsModule:
         shop_path: '%SHOP_SOURCE_PATH%'
-        paths: 'Application/views/flow,Application/views/admin,modules/osc/amazonpay/translations,modules/osc/amazonpay/views/admin'
+        paths: 'Application/views/admin,modules/osc/amazonpay/translations,modules/osc/amazonpay/views/admin'

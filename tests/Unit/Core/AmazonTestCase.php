@@ -88,9 +88,16 @@ class AmazonTestCase extends TestCase
     protected function createAmazonSession(): string
     {
         $result = $this->createTestCheckoutSession();
+
         $response = json_decode($result['response'], true);
-        $checkoutSessionId = $response['checkoutSessionId'];
-        $this->amazonService->storeAmazonSession($checkoutSessionId);
+
+        if (is_array($response)
+            && isset($response['checkoutSessionId'])
+            && is_string( $response['checkoutSessionId'])
+        ) {
+            $checkoutSessionId = $response['checkoutSessionId'];
+            $this->amazonService->storeAmazonSession($checkoutSessionId);
+        }
 
         return $checkoutSessionId;
     }

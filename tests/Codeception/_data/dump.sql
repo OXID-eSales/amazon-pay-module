@@ -5,7 +5,7 @@ REPLACE INTO `oxuser` SET
     OXRIGHTS = 'user',
     OXSHOPID = 1,
     OXUSERNAME = 'amazonpayuser@oxid-esales.dev',
-    OXPASSWORD = '$2y$10$tJd1YkFr2y4kUmojqa6NPuHrcMzZmxc9mh4OWQcLONfHg4WXzbtlu',
+    OXPASSWORD = '$2y$10$nAl.484daZA7qJCs0G8wBes0Fj6Pa1M0d32M2C9nbYpdK/1YXwvuu',
     OXPASSSALT = '',
     OXFNAME = 'TestUserName',
     OXLNAME = 'TestUserSurname',
@@ -17,4 +17,3 @@ REPLACE INTO `oxuser` SET
     OXBIRTHDATE = '1985-02-05 14:42:42',
     OXCREATE = '2021-02-05 14:42:42',
     OXREGISTER = '2021-02-05 14:42:42';
-

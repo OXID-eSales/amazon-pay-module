@@ -4,6 +4,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Acceptance;
 
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 
+/** @group amazonpay */
 final class AmazonPaySocialLoginDeactivateCest extends BaseCest
 {
     protected $amazonSocialLoginDeactivated = '#amazonSocialLoginDeactivated';
@@ -20,23 +21,23 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
     public function checkAmazonSocialLoginDeactivateWorks(AcceptanceTester $I)
     {
         $I->wantToTest('AmazonPay Social Login Deactivate');
-        $this->_initializeTest();
-        $this->_openAccountMenu();
+        $this->initializeTest();
+        $this->openAccountMenu();
         $I->seeElement($this->amazonSocialLoginUserMenu);
 
-        $this->_addProductToBasket();
+        $this->addProductToBasket();
         $this->_openCheckout();
         $I->seeElement($this->amazonSocialLoginCheckoutPage);
 
         // deactivate option
         $I->openNewTab();
-        $this->_loginAdmin();
-        $this->_openAdminAmazonPayConfig();
+        $this->loginAdmin();
+        $this->openAdminAmazonPayConfig();
         $I->scrollTo($this->amazonSocialLoginDeactivated);
         $I->checkOption($this->amazonSocialLoginDeactivated);
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        $error = $this->grabTextFromElementWhenPresent('.alert-danger');
         if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }
@@ -44,7 +45,7 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
         $I->switchToPreviousTab();
 
         $I->reloadPage();
-        $this->_openAccountMenu();
+        $this->openAccountMenu();
         try {
             $I->dontSeeElement($this->amazonSocialLoginUserMenu);
         } catch (\Exception $e) {
@@ -60,12 +61,12 @@ final class AmazonPaySocialLoginDeactivateCest extends BaseCest
         // reactivate option for following tests
         $I->switchToNextTab();
         $I->reloadPage();
-        $this->_openAdminAmazonPayConfig();
+        $this->openAdminAmazonPayConfig();
         $I->scrollTo($this->amazonSocialLoginDeactivated);
         $I->uncheckOption($this->amazonSocialLoginDeactivated);
         $I->submitForm('.amazonpay-config form', []);
         $I->waitForDocumentReadyState();
-        $error = $this->_grabTextFromElementWhenPresent('.alert-danger');
+        $error = $this->grabTextFromElementWhenPresent('.alert-danger');
         if ('' !== $error) {
             $I->fail('Error on saving amazon module config: ' . $error);
         }

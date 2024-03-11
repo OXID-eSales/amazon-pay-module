@@ -39,7 +39,6 @@ class AmazonTestCase extends TestCase
 
         $this->moduleConfig = oxNew(Config::class);
 
-
         if (empty(self::$modulConfig)) {
             /**
              * On a second run of this method, $_ENV won't have the .env-files content.

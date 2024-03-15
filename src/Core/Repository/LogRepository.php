@@ -22,6 +22,8 @@ class LogRepository
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      * @psalm-suppress InternalMethod
+     *
+     * @return void
      */
     public function saveLogMessage(LogMessage $logMessage)
     {
@@ -174,6 +176,8 @@ class LogRepository
      * @param string $chargeId
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     *
+     * @return void
      */
     public function markOrderPaid(
         string $orderId,
@@ -200,6 +204,8 @@ class LogRepository
      * @param string $chargeId
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     *
+     * @return void
      */
     public function updateOrderStatus(string $orderId, string $transStatus = 'OK', string $chargeId = '')
     {

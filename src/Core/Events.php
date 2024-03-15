@@ -68,6 +68,7 @@ class Events
     }
 
     /**
+     * @return void
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
@@ -113,6 +114,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function updateOxpsToOscCategoryColumn()
     {
         $sql = 'show columns
@@ -132,6 +138,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function addCategoryColumn()
     {
         $sql = 'show columns
@@ -151,6 +162,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function updateOxpsToOscDeliverySetColumn()
     {
         $sql = 'show columns
@@ -167,7 +183,11 @@ class Events
         }
     }
 
-
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function addDeliverySetColumn()
     {
         $sql = 'show columns
@@ -184,6 +204,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function updateOxpsToOscOrderColumn()
     {
         $sql = 'show columns
@@ -203,6 +228,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function addOrderColumn()
     {
         $sql = 'show columns
@@ -224,6 +254,8 @@ class Events
 
     /**
      * Add payment methods set EN and DE long descriptions
+     *
+     * @return void
      */
     protected static function addPaymentMethods()
     {
@@ -234,6 +266,7 @@ class Events
 
     /**
      * @param string[][] $paymentDescription
+     * @return void
      *
      * @throws Exception
      */
@@ -347,6 +380,11 @@ class Events
         $config->saveShopConfVar('arr', 'aRequireSessionWithParams', $cfg, (string)$config->getShopId());
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function updateOxpsToOscLogTable()
     {
         $sql = sprintf(
@@ -404,7 +442,11 @@ class Events
         }
     }
 
-
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function updateAddUniqueIndexToOscLogTable()
     {
         $sql = sprintf(
@@ -452,6 +494,11 @@ class Events
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     protected static function createLogTable()
     {
         $sql = sprintf(

@@ -44,7 +44,7 @@ class OrderController extends OrderController_parent
     public function init()
     {
         $session = Registry::getSession();
-        $exclude = $this->getViewConfig()->isAmazonExclude();
+        $exclude = Registry::get(Config::class)->isAmazonExcluded('');
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
 
@@ -63,6 +63,9 @@ class OrderController extends OrderController_parent
         parent::init();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function render()
     {
         $service = OxidServiceProvider::getTermsAndConditionService();
@@ -71,12 +74,16 @@ class OrderController extends OrderController_parent
         return parent::render();
     }
 
+    /**
+     * @return void
+     */
     protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
 
     /**
+     * @return void
      * @throws Exception
      */
     protected function initAmazonPayExpress(AmazonService $amazonService, Session $session)
@@ -110,10 +117,15 @@ class OrderController extends OrderController_parent
         }
     }
 
+    /**
+     * @return mixed|string|null
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function execute()
     {
         $basket = Registry::getSession()->getBasket();
-        $exclude = $this->getViewConfig()->isAmazonExclude();
+        $exclude = Registry::get(Config::class)->isAmazonExcluded('');
 
         $paymentId = $basket->getPaymentId();
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
@@ -179,6 +191,9 @@ class OrderController extends OrderController_parent
             parent::_validateTermsAndConditions();
     }
 
+    /**
+     * @return bool
+     */
     protected function validateTermsAndConditionsByAmazon(): bool
     {
         $valid = $this->confirmAGBbyAmazon();
@@ -192,6 +207,9 @@ class OrderController extends OrderController_parent
         return $valid;
     }
 
+    /**
+     * @return bool
+     */
     protected function confirmAGBbyAmazon(): bool
     {
         $valid = true;
@@ -208,6 +226,9 @@ class OrderController extends OrderController_parent
         return $valid;
     }
 
+    /**
+     * @return bool
+     */
     protected function confirmIntangibleProdAgreementbyAmazon(): bool
     {
         $valid = true;
@@ -235,7 +256,7 @@ class OrderController extends OrderController_parent
     }
 
     /**
-     * @return CoreAddress
+     * @return CoreAddress|object
      */
     public function getDelAddress()
     {
@@ -251,6 +272,7 @@ class OrderController extends OrderController_parent
     }
 
     /**
+     * @return void
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */

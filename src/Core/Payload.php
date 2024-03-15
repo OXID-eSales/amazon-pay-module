@@ -105,10 +105,15 @@ class Payload
      * @var array
      */
     private $addressDetails = [];
+
     /**
      * @var string
      */
     private $platformId = '';
+
+    /**
+     * @var array
+     */
     private $addressRestrictions = [];
 
     /**
@@ -195,6 +200,10 @@ class Payload
         return $data;
     }
 
+    /**
+     * @param array $allowedCountries
+     * @return void
+     */
     public function setAddressRestrictions(array $allowedCountries)
     {
         $this->addressRestrictions = $allowedCountries;
@@ -211,6 +220,7 @@ class Payload
 
     /**
      * @param string $paymentIntent
+     * @return void
      */
     public function setPaymentIntent(string $paymentIntent)
     {
@@ -219,6 +229,7 @@ class Payload
 
     /**
      * @param string $merchantStoreName
+     * @return void
      */
     public function setMerchantStoreName(string $merchantStoreName)
     {
@@ -227,6 +238,7 @@ class Payload
 
     /**
      * @param string $noteToBuyer
+     * @return void
      */
     public function setNoteToBuyer(string $noteToBuyer)
     {
@@ -235,6 +247,7 @@ class Payload
 
     /**
      * @param string $currencyCode
+     * @return void
      */
     public function setCurrencyCode(string $currencyCode)
     {
@@ -243,6 +256,7 @@ class Payload
 
     /**
      * @param bool $canHandlePendingAuthorization
+     * @return void
      */
     public function setCanHandlePendingAuthorization(bool $canHandlePendingAuthorization)
     {
@@ -251,6 +265,7 @@ class Payload
 
     /**
      * @param string $paymentDetailsChargeAmount
+     * @return void
      */
     public function setPaymentDetailsChargeAmount(string $paymentDetailsChargeAmount)
     {
@@ -259,6 +274,7 @@ class Payload
 
     /**
      * @param string $merchantReferenceId
+     * @return void
      */
     public function setMerchantReferenceId(string $merchantReferenceId)
     {
@@ -267,6 +283,7 @@ class Payload
 
     /**
      * @param string $softDescriptor
+     * @return void
      */
     public function setSoftDescriptor(string $softDescriptor)
     {
@@ -275,6 +292,7 @@ class Payload
 
     /**
      * @param string $captureAmount
+     * @return void
      */
     public function setCaptureAmount(string $captureAmount)
     {
@@ -283,6 +301,7 @@ class Payload
 
     /**
      * @param string $checkoutChargeAmount
+     * @return void
      */
     public function setCheckoutChargeAmount(string $checkoutChargeAmount)
     {
@@ -353,6 +372,10 @@ class Payload
         $this->scopes = array_merge($this->scopes, $scopes);
     }
 
+    /**
+     * @param array $scopes
+     * @return void
+     */
     public function addSignInScopes(array $scopes)
     {
         $this->signInScopes = array_merge($this->scopes, $scopes);

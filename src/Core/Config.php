@@ -98,6 +98,8 @@ class Config
 
     /**
      * Checks if module configuration is valid
+     *
+     * @return void
      * @throws StandardException
      */
     public function checkHealth()
@@ -399,6 +401,7 @@ class Config
                 $allowedCountries = [];
                 $countries = oxNew(CountryList::class);
                 $countries->loadActiveCountries();
+                /** @var Country $allowedCountry */
                 foreach ($countries as $allowedCountry) {
                     $allowedCountries[] = $allowedCountry->getId();
                 }

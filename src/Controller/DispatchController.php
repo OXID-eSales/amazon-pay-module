@@ -33,7 +33,7 @@ use OxidSolutionCatalysts\AmazonPay\Model\User;
 class DispatchController extends FrontendController
 {
     /**
-     * @return void
+     * @inheritDoc
      * @throws Exception
      */
     public function render()
@@ -46,7 +46,7 @@ class DispatchController extends FrontendController
                 /** @var string $amazonSessionId */
                 $amazonSessionId = $this->setRequestAmazonSessionId();
                 if ($amazonSessionId === '') {
-                    return;
+                    return $this->getTemplateName();
                 }
                 $redirectUrl = Registry::getConfig()->getShopHomeUrl() .
                     'cl=order&stoken=' . Registry::getSession()->getSessionChallengeToken();
@@ -134,7 +134,7 @@ class DispatchController extends FrontendController
                 $response['response'] = PhpHelper::jsonToArray($result['response']);
 
                 if ($result['status'] !== 200) {
-                    return;
+                    return $this->getTemplateName();
                 }
 
                 $user = $this->getUser();
@@ -167,6 +167,8 @@ class DispatchController extends FrontendController
                 break;
         }
         $this->showMessageAndExit();
+
+        return $this->getTemplateName();
     }
 
     /**
@@ -230,6 +232,10 @@ class DispatchController extends FrontendController
         return $this->getRequestAmazonSessionId();
     }
 
+    /**
+     * @param string $msg
+     * @return void
+     */
     protected function showMessageAndExit(string $msg = '')
     {
         Registry::getUtils()->showMessageAndExit($msg);

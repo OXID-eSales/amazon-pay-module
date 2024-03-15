@@ -39,8 +39,9 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * @param string|null $message
+     * @param string $message
      * @param array $context
+     * @return void
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */

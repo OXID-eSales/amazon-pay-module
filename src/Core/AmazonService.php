@@ -46,10 +46,13 @@ class AmazonService
     /**
      * Billing address
      *
-     * @var stdClass
+     * @var ?stdClass
      */
     protected $billingAddress;
 
+    /**
+     * @var bool
+     */
     protected $isTwoStep = false;
 
     /**
@@ -98,6 +101,8 @@ class AmazonService
 
     /**
      * @param string $checkoutSessionId
+     *
+     * @return void
      */
     public function storeAmazonSession(string $checkoutSessionId)
     {
@@ -261,15 +266,18 @@ class AmazonService
          * There is no trustful method to round down numbers with precision,
          * so we cut off everything after the second decimal
          */
-        $decimal = strpos($compensation, '.');
+        $decimal = strpos(strval($compensation), '.');
         if ($decimal !== false) {
             $decimal += 3;
-            $compensation = (float)substr($compensation, 0, $decimal);
+            $compensation = (float)substr(strval($compensation), 0, $decimal);
         }
 
         return min(150000, $orderAmount + $compensation);
     }
 
+    /**
+     * @return void
+     */
     public function unsetPaymentMethod()
     {
         $session = Registry::getSession();
@@ -283,6 +291,7 @@ class AmazonService
      * @param string $amazonSessionId
      * @param Basket $basket Basket object
      * @param LoggerInterface $logger Logger
+     * @return void
      */
     protected function processPayment(
         string $amazonSessionId,
@@ -348,6 +357,12 @@ class AmazonService
         $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
     }
 
+    /**
+     * @param array $result
+     * @param Basket $basket
+     * @param LoggerInterface $logger
+     * @return array
+     */
     protected function checkAmazonResult(array $result, Basket $basket, LoggerInterface $logger): array
     {
         $response = PhpHelper::jsonToArray($result['response']);
@@ -360,6 +375,12 @@ class AmazonService
         return $response;
     }
 
+    /**
+     * @param string $chargePermissionId
+     * @param Basket $basket
+     * @param LoggerInterface $logger
+     * @return void
+     */
     protected function updateMerchantReferenceId(string $chargePermissionId, Basket $basket, LoggerInterface $logger)
     {
         /** @var string $orderOxId */
@@ -394,6 +415,7 @@ class AmazonService
      * @param string $amazonSessionId
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
+     * @return void
      */
     public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
@@ -406,6 +428,7 @@ class AmazonService
      * @param string $amazonSessionId
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
+     * @return void
      */
     public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
@@ -414,6 +437,7 @@ class AmazonService
     }
 
     /**
+     * @return void|string
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
@@ -489,6 +513,7 @@ class AmazonService
     /**
      * @param string $refundId
      * @param LoggerInterface $logger
+     * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -543,6 +568,7 @@ class AmazonService
     /**
      * @param string $chargeId
      * @param LoggerInterface $logger
+     * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -596,6 +622,7 @@ class AmazonService
 
     /**
      * @param string $orderId
+     * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * TODO: refactor
@@ -695,6 +722,7 @@ class AmazonService
 
     /**
      * @param string $orderId
+     * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -759,6 +787,7 @@ class AmazonService
 
     /**
      * @param LoggerInterface $logger
+     * @return void
      * @param array $result
      * @param string $orderId
      */
@@ -807,6 +836,7 @@ class AmazonService
      * @param string $chargeId
      * @param string $amount
      * @param string $currencyCode
+     * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -870,6 +900,12 @@ class AmazonService
         $logger->info($response['statusDetails']['state'], $result);
     }
 
+    /**
+     * @param string $chargePermissionId
+     * @param string $trackingCode
+     * @param string $deliveryType
+     * @return void
+     */
     public function sendAlexaNotification(
         string $chargePermissionId,
         string $trackingCode = '',
@@ -956,7 +992,7 @@ class AmazonService
 
         // IPN logs refer the "chargeId" in OSC_AMAZON_OBJECT_ID field
         foreach (array_keys($amazonObjIds) as $objId) {
-            $logsIPN = $repository->findLogMessageForAmazonObjectId($objId);
+            $logsIPN = $repository->findLogMessageForAmazonObjectId(strval($objId));
             if (!empty($logsIPN)) {
                 $orderLogs = array_merge($orderLogs, $logsIPN);
             }

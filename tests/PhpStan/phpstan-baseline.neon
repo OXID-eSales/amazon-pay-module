@@ -31,6 +31,6 @@ parameters:
 			path: ../../src/Core/AmazonService.php
 
 		-
-			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Payload\\:\\:\\$merchantReferenceId is never read, only written\\.$#"
+			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Controller\\\\Admin\\\\OrderOverview\\:\\:\\$captureStatus \\(string\\) does not accept array\\|string\\.$#"
 			count: 1
-			path: ../../src/Core/Payload.php
+			path: ../../src/Controller/Admin/OrderOverview.php

@@ -20,15 +20,18 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 class OrderOverview extends OrderOverview_parent
 {
-    /** @var null|string $captureStatus */
-    protected $captureStatus = null;
+    /** @var string $captureStatus */
+    protected $captureStatus = '';
 
     /**
+     * @inheritDoc
+     *
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
     public function render()
     {
+        /** @var \OxidSolutionCatalysts\AmazonPay\Model\Order $oOrder */
         $oOrder = oxNew(Order::class);
         $filteredLogs = [];
         $ipnLogs = [];
@@ -121,9 +124,14 @@ class OrderOverview extends OrderOverview_parent
         return parent::render();
     }
 
+    /**
+     * @return string
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function getAmazonAPIOrderStatus(): string
     {
-        if (is_null($this->captureStatus)) {
+        if (empty($this->captureStatus)) {
             $this->captureStatus = '';
             $orderId = $this->getEditObjectId();
             if ($orderId !== '-1') {
@@ -147,21 +155,28 @@ class OrderOverview extends OrderOverview_parent
         return $this->captureStatus;
     }
 
-    public function getAmazonMaximalRefundAmount(): float
+    /**
+     * @return string
+     */
+    public function getAmazonMaximalRefundAmount(): string
     {
         return PhpHelper::getMoneyValue(
             OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($this->getEditObjectId())
         );
     }
 
-    public function getAmazonMaximalCaptureAmount(): float
+    /**
+     * @return string
+     */
+    public function getAmazonMaximalCaptureAmount(): string
     {
         $order = new Order();
         $order->load($this->getEditObjectId());
-        return PhpHelper::getMoneyValue($order->getTotalOrderSum());
+        return $order->getTotalOrderSum();
     }
 
     /**
+     * @return void
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
@@ -191,10 +206,15 @@ class OrderOverview extends OrderOverview_parent
         }
     }
 
+    /**
+     * @return string|void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function makeCharge()
     {
         $oOrder = oxNew(Order::class);
-        /** @var float $captureAmount */
+        /** @var string $captureAmount */
         $captureAmount = Registry::getRequest()->getRequestParameter("captureAmount");
         $amazonConfig = oxNew(Config::class);
         $currencyCode = $oOrder->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();

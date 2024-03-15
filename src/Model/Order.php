@@ -26,13 +26,14 @@ use function date;
  */
 class Order extends Order_parent
 {
-    private $amazonService;
+    /** @var AmazonService */
+    private $amazonService = null;
 
     /**
      * Security and Cleanup before finalize order
      *
      * @param Basket $oBasket Basket object
-     * @return int|null
+     * @return int
      *
      */
     protected function prepareFinalizeOrder(Basket $oBasket): int
@@ -128,6 +129,11 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
+    /**
+     * @param string $amazonPayStatus
+     * @param array $data
+     * @return void
+     */
     public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
@@ -200,7 +206,6 @@ class Order extends Order_parent
                 $this->_setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
-
         }
     }
 
@@ -210,8 +215,7 @@ class Order extends Order_parent
      */
     public function getAmazonService(): AmazonService
     {
-
-        if (empty($this->amazonService)) {
+        if ($this->amazonService == null) {
             $this->setAmazonService(OxidServiceProvider::getAmazonService());
             return $this->amazonService;
         }
@@ -220,6 +224,7 @@ class Order extends Order_parent
 
     /**
      * @param AmazonService $amazonService
+     * @return void
      */
     public function setAmazonService(AmazonService $amazonService)
     {

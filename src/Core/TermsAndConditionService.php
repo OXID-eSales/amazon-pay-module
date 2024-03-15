@@ -2,6 +2,7 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Core;
 
+use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 
@@ -19,9 +20,9 @@ class TermsAndConditionService
     const SESSION_VAR_NAME_CONFIRM_AGB = 'payamazon_confirm_agb';
     const SESSION_VAR_NAME_CONFIRM_DPA = 'payamazon_confirm_dpa';
     const SESSION_VAR_NAME_CONFIRM_SPA = 'payamazon_confirm_spa';
-    /** @var object|Session */
+    /** @var Session */
     private $session;
-    /** @var object|Session */
+    /** @var Request */
     private $request;
 
     /**
@@ -32,6 +33,10 @@ class TermsAndConditionService
         $this->request = Registry::getRequest();
         $this->session = Registry::getSession();
     }
+
+    /**
+     * @return void
+     */
     public function setAGBConfirmFromRequestToSession()
     {
         $this->session->setVariable(
@@ -39,11 +44,19 @@ class TermsAndConditionService
             (bool) $this->request->getRequestParameter('confirm')
         );
     }
+
+    /**
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
     public function getAGBConfirmFromSession(): bool
     {
         return (bool) $this->session->getVariable(self::SESSION_VAR_NAME_CONFIRM_AGB);
     }
 
+    /**
+     * @return void
+     */
     public function setDPAConfirmFromRequestToSession()
     {
         $this->session->setVariable(
@@ -51,10 +64,19 @@ class TermsAndConditionService
             (bool) $this->request->getRequestParameter('confirm')
         );
     }
+
+    /**
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
     public function getDPAConfirmFromSession(): bool
     {
         return (bool) $this->session->getVariable(self::SESSION_VAR_NAME_CONFIRM_DPA);
     }
+
+    /**
+     * @return void
+     */
     public function setSPAConfirmFromRequestToSession()
     {
         $this->session->setVariable(
@@ -62,10 +84,19 @@ class TermsAndConditionService
             (bool) $this->request->getRequestParameter('confirm')
         );
     }
+
+    /**
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
     public function getSPAConfirmFromSession(): bool
     {
         return (bool) $this->session->getVariable(self::SESSION_VAR_NAME_CONFIRM_SPA);
     }
+
+    /**
+     * @return void
+     */
     public function resetConfirmOnGet()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {

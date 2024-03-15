@@ -70,7 +70,7 @@ class ConfigController extends AdminController
     public function save()
     {
         $confArr = (array)Registry::getRequest()->getRequestEscapedParameter('conf');
-        $shopId = (string)Registry::getConfig()->getShopId();
+        $shopId = Registry::getConfig()->getShopId();
 
         $confArr = $this->handleSpecialFields($confArr);
         $this->saveConfig($confArr, $shopId);
@@ -82,17 +82,20 @@ class ConfigController extends AdminController
      * Saves configuration values
      *
      * @param array $conf
-     * @param string $shopId
+     * @param int $shopId
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function saveConfig(array $conf, string $shopId)
+    protected function saveConfig(array $conf, int $shopId)
     {
         $oModuleConfiguration = null;
         $oModuleConfigurationDaoBridge = null;
+        /** @var ModuleActivationBridgeInterface $oModuleActivationBridge */
         $oModuleActivationBridge = null;
         if ($this->useDaoBridge()) {
-            /** @var ModuleActivationBridgeInterface $oModuleActivationBridge */
             $oModuleActivationBridge = ContainerFactory::getInstance()->getContainer()->get(
                 ModuleActivationBridgeInterface::class
             );
@@ -121,7 +124,7 @@ class ConfigController extends AdminController
                     $type,
                     $confName,
                     $value,
-                    $shopId,
+                    (string)$shopId,
                     'module:' . Constants::MODULE_ID
                 );
             }

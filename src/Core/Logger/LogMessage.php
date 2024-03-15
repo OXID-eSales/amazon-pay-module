@@ -74,6 +74,7 @@ class LogMessage
 
     /**
      * @param string $shopId
+     * @return void
      */
     public function setShopId(string $shopId)
     {
@@ -90,6 +91,7 @@ class LogMessage
 
     /**
      * @param string $userId
+     * @return void
      */
     public function setUserId(string $userId)
     {
@@ -106,6 +108,7 @@ class LogMessage
 
     /**
      * @param string $orderId
+     * @return void
      */
     public function setOrderId(string $orderId)
     {
@@ -121,7 +124,8 @@ class LogMessage
     }
 
     /**
-     * @param string|null $responseMessage
+     * @param string $responseMessage
+     * @return void
      */
     public function setResponseMessage(string $responseMessage)
     {
@@ -141,6 +145,7 @@ class LogMessage
 
     /**
      * @param string $statusCode
+     * @return void
      */
     public function setStatusCode(string $statusCode)
     {
@@ -157,6 +162,7 @@ class LogMessage
 
     /**
      * @param string $requestType
+     * @return void
      */
     public function setRequestType(string $requestType)
     {
@@ -173,6 +179,7 @@ class LogMessage
 
     /**
      * @param string $identifier
+     * @return void
      */
     public function setIdentifier(string $identifier)
     {
@@ -189,6 +196,7 @@ class LogMessage
 
     /**
      * @param string $chargeId
+     * @return void
      */
     public function setChargeId(string $chargeId)
     {
@@ -205,6 +213,7 @@ class LogMessage
 
     /**
      * @param string $chargePermissionId
+     * @return void
      */
     public function setChargePermissionId(string $chargePermissionId)
     {
@@ -221,6 +230,7 @@ class LogMessage
 
     /**
      * @param string $objectId
+     * @return void
      */
     public function setObjectId(string $objectId)
     {
@@ -237,6 +247,7 @@ class LogMessage
 
     /**
      * @param string $objectType
+     * @return void
      */
     public function setObjectType(string $objectType)
     {

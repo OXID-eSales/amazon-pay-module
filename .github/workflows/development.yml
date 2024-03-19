@@ -16,7 +16,8 @@ jobs:
   install_shop_with_module:
     strategy:
       matrix:
-        php: [ '7.0' ]
+        php: [ '7.0', '7.3' ]
+        oxid: [ '6.1', '6.3' ]
     runs-on: ubuntu-latest
     steps:
       - name: Clone testing environment v4.0.0
@@ -137,7 +138,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.0' ]
+        php: [ '7.0', '7.3' ]
+        oxid: [ '6.1', '6.3' ]
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:
@@ -188,7 +190,8 @@ jobs:
   styles:
     strategy:
       matrix:
-        php: [ '7.0' ]
+        php: [ '7.0', '7.3' ]
+        oxid: [ '6.1', '6.3' ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module

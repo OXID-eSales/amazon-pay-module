@@ -18,20 +18,25 @@ jobs:
       matrix:
         php: [ '7.0', '7.3' ]
         oxid: [ '6.1', '6.3' ]
+        exclude:
+          - php: 7.3
+            oxid: 6.1
+          - php: 7.0
+            oxid: 6.3
     runs-on: ubuntu-latest
     steps:
       - name: Clone testing environment v4.0.0
         run: git clone https://github.com/OXID-eSales/docker-eshop-sdk.git .
 
       - name: Clone the shop
-        run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-6.1.x --single-branch source
+        run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-${{ matrix.oxid }}.x --single-branch source
 
       - name: Cache current installation
         uses: actions/cache@v4
         with:
           path: |
             ./*
-          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+          key: development-${{ matrix.php }}-${{ matrix.oxid }}-${{ github.run_number }}-${{ github.run_attempt }}
 
       - name: Prepare container configuration
         run: |
@@ -80,6 +85,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: source/test-module
+
       - name: Install module
         run: |
           docker-compose exec -T \
@@ -125,7 +131,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Configs-${{ matrix.php }}
+          name: Configs-${{ matrix.php }}-${{ matrix.oxid }}
           path: |
             docker-compose.yml
             source/composer.json
@@ -140,6 +146,11 @@ jobs:
       matrix:
         php: [ '7.0', '7.3' ]
         oxid: [ '6.1', '6.3' ]
+        exclude:
+          - php: 7.3
+            oxid: 6.1
+          - php: 7.0
+            oxid: 6.3
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:
@@ -148,9 +159,9 @@ jobs:
         with:
           path: |
             ./*
-          key: development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+          key: development-${{ matrix.php }}-${{ matrix.oxid }}-${{ github.run_number }}-${{ github.run_attempt }}
           restore-keys: |
-            development-${{ matrix.php }}-${{ github.run_number }}-${{ github.run_attempt }}
+            development-${{ matrix.php }}-${{ matrix.oxid }}-${{ github.run_number }}-${{ github.run_attempt }}
 
       - name: Start containers
         run: |
@@ -182,7 +193,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: TestsLog-${{ matrix.php }}
+          name: TestsLog-${{ matrix.php }}-${{ matrix.oxid }}
           path: |
             source/coverage.xml
             source/phpunit.xml
@@ -192,6 +203,11 @@ jobs:
       matrix:
         php: [ '7.0', '7.3' ]
         oxid: [ '6.1', '6.3' ]
+        exclude:
+          - php: 7.3
+            oxid: 6.1
+          - php: 7.0
+            oxid: 6.3
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module
@@ -231,7 +247,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: StylesLog-${{ matrix.php }}
+          name: StylesLog-${{ matrix.php }}-${{ matrix.oxid }}
           path: |
             source/test-module/tests/reports/phpmd.report.json
 

@@ -1,0 +1,26 @@
+name: Trigger
+
+on:
+  pull_request:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php70oxid61:
+    name: 'PHP-7.0-OXID-6.1'
+    uses: ./.github/workflows/development.yml
+    secrets: inherit
+    with:
+      php: '7.0'
+      oxid: '6.1'
+
+  php73oxid63:
+    name: 'PHP-7.3-OXID-6.3'
+    uses: ./.github/workflows/development.yml
+    secrets: inherit
+    with:
+      php: '7.3'
+      oxid: '6.3'

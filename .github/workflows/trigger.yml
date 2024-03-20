@@ -19,7 +19,7 @@ jobs:
 
   php73oxid63:
     name: 'PHP-7.3-OXID-6.3'
-    uses: ./.github/workflows/development.yml
+    uses: ./.github/workflows/development63.yml
     secrets: inherit
     with:
       php: '7.3'

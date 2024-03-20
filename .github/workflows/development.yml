@@ -237,6 +237,12 @@ jobs:
         working-directory: source/test-module
         run: composer phpmd-report || composer phpmd
 
+      - name: Run phpstan
+        id: phpstan
+        if: always()
+        working-directory: source/test-module
+        run: composer phpstan-report || composer phpstan
+
       - name: Upload log artifact
         if: always()
         uses: actions/upload-artifact@v4

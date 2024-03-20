@@ -249,16 +249,6 @@ jobs:
             source/phpunit.xml
 
   codeception_tests:
-    strategy:
-      fail-fast: false
-      matrix:
-        group:
-          [
-            'PaymentAvailableTest',
-            'FirstGroup',
-            'SecondGroup',
-            'ThirdGroup',
-          ]
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:
@@ -296,7 +286,7 @@ jobs:
             -e RUN_TESTS_FOR_SHOP=0 \
             -e RUN_TESTS_FOR_MODULES=0 \
             -e ADDITIONAL_TEST_PATHS='/var/www/vendor/${{ env.PACKAGE_NAME }}/Tests' \
-            php php vendor/bin/runtests-codeception -g ${{ matrix.group }}
+            php php vendor/bin/runtests-codeception
 
       - name: Stop containers
         if: always()

@@ -1,6 +1,6 @@
-{% extends "widget/minibasket/minibasket_button.html.twig" %}
+{% extends "widget/minibasket/minibasket.html.twig" %}
 
-{% block dd_layout_page_header_icon_menu_minibasket_button %}
+{% block dd_layout_page_header_icon_menu_minibasket_functions %}
     {{ parent() }}
     {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and not oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
         {% include "@osc_amazonpay/amazonpay/dd_layout_page_header_icon_menu_minibasket_functions" %}

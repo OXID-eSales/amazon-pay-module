@@ -59,7 +59,7 @@ $aModule = [
         'de' => 'Nutzung des Online-Bezahldienstes von amazon.de',
         'en' => 'Use of the online payment service from amazon.com'
     ],
-    'thumbnail' => 'out/img/amazon-pay-logo.png',
+    'thumbnail' => 'img/amazon-pay-logo.png',
     'version' => '3.1.3-rc.1',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',

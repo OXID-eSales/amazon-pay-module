@@ -4,11 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.3] - Release
+## [3.1.5] - 2024-03-22
 
+### NEW
 * split Version for OXID7
 
-## [2.1.4] - 2023-??-??
+### Fixed
+* Bugfix in Basket and AmazonService
+
+## [2.1.4] - 2023-12-05
 
 - [0007538](https://bugs.oxid-esales.com/view.php?id=7538): Amazon Pay - Values are stored correctly in the YAML
 - [0007542](https://bugs.oxid-esales.com/view.php?id=7542): Transaction-History in case of a refund is not updated + suggested refund value

@@ -3,7 +3,6 @@
 {% set aPayload = oViewConf.getPayload() %}
 <div class="amazonpay-button {{ buttonclass }} nonexpress" id="{{ buttonId }}"></div>
 {% capture assign = "amazonpay_script_amazonbutton" %}
-    // console.log('amazonpay_script amazonbutton captured');
     if (typeof {{ buttonId }}_is_rendered === "undefined" || {{ buttonId }}_is_rendered !== true) {
         var amazonPayButton = amazon.Pay.renderButton('#{{ buttonId }}', {
             merchantId: '{{ amazonConfig.getMerchantId() }}',
@@ -17,7 +16,6 @@
         OSCAmazonPayButtonComponent.init(amazonPayButton, '{{ aPayload|raw }}', '{{ oViewConf.signature|raw }}');
         OSCAmazonPayCheckoutAGBComponent.init();
     {{ buttonId }}_is_rendered = true;
-    // console.log('{{ buttonId }}_is_rendered:' + {{ buttonId }}_is_rendered );
     }
 {% endcapture %}
 {{ script({ add: amazonpay_script_amazonbutton, dynamic: __oxid_include_dynamic }) }}

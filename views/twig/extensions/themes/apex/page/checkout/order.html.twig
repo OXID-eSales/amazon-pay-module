@@ -2,7 +2,7 @@
 
 {% block checkout_order_address %}
     {% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() and not oViewConf.isAmazonExclude() %}
-        {% include "@osc_amazonpay/amazonpay/checkout_order_address_twig" %}
+        {% include "@osc_amazonpay/amazonpay/checkout_order_address_apex" %}
     {% else %}
         {{ parent() }}
     {% endif %}
@@ -28,7 +28,7 @@
 {% block shippingAndPayment %}
     {% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() %}
         {% if oViewConf.isAmazonPaymentPossible() %}
-            {% include "@osc_amazonpay/amazonpay/shippingandpayment_twig" %}
+            {% include "@osc_amazonpay/amazonpay/shippingandpayment_apex" %}
         {% else %}
             {% include "@osc_amazonpay/amazonpay/shippingandpayment_error" %}
         {% endif %}

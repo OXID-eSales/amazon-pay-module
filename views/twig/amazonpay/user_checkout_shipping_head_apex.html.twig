@@ -1,21 +1,24 @@
 {% capture assign = "amazonpay_script_user_checkout_shipping_head" %}
-    // console.log('amazonpay_script_user_checkout_shipping_head user_checkout_shipping_head');
-$('#userChangeShippingAddress').click(function (e) {
+    var userChangeShippingAddress = document.getElementById('userChangeShippingAddress');
+    userChangeShippingAddress.addEventListener('click', function(e) {
     e.preventDefault();
-});
+    }, false);
 amazon.Pay.bindChangeAction('#userChangeShippingAddress', {
     amazonCheckoutSessionId: '{{ oViewConf.getAmazonSessionId() }}',
     changeAction: 'changeAddress'
 });
 {% endcapture %}
 {{ script({ add: amazonpay_script_user_checkout_shipping_head, dynamic: __oxid_include_dynamic }) }}
-<h3 class="panel-title">
+<h4 class="card-header card-title card-header-edit d-flex justify-content-between align-items-center">
     {{ translate({ ident: "SHIPPING_ADDRESS" }) }}
     <button id="userChangeShippingAddress"
-            class="btn btn-xs btn-warning pull-right submitButton largeButton"
+            class="btn btn-outline-dark btn-sm float-end dd-action dd-edit-shipping-address edit-button"
             name="changeShippingAddress"
             type="submit"
             title="{{ translate({ ident: "CHANGE" }) }}">
-        <i class="fa fa-pencil"></i>
+        <svg>
+            <use xlink:href="#pencil"></use>
+        </svg>
     </button>
-</h3>
+</h4>
+

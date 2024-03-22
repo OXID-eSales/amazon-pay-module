@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.5-rc1] - 2024-02-24
+## [3.1.5] - 2024-03-22
 
+### NEW
 * split Version for OXID7
+
+### Fixed
+* Bugfix in Basket and AmazonService
 
 ## [2.1.4] - 2023-12-05
 

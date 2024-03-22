@@ -23,13 +23,13 @@
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
 use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain;
-use OxidEsales\TestingLibrary\UnitTestCase;
+use OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 
-class DeliverySetMainControllerTest extends UnitTestCase
+class DeliverySetMainControllerTest extends AmazonTestCase
 {
     public function testRender()
     {
         $controller = new DeliverySetMain();
-        $this->assertSame('deliveryset_main.tpl', $controller->render());
+        $this->assertSame('deliveryset_main', $controller->render());
     }
 }

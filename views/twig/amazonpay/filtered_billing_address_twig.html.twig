@@ -1,10 +1,10 @@
 {% if billadr %}
-    <div class="col-lg-9 offset-lg-3" id="addressText">
+    <div id="addressText" class="col-lg-9 col-lg-offset-3">
         {% if billadr.oxuser__oxcompany.value != '' %} {{ billadr.oxuser__oxcompany.value }}<br />{% endif %}
         {% if billadr.oxuser__oxaddinfo.value != '' %} {{ billadr.oxuser__oxaddinfo.value }}<br />{% endif %}
         {% if billadr.oxuser__oxustid.value != '' %} {{ translate({ ident: "VAT_ID_NUMBER" }) }} {{ billadr.oxuser__oxustid.value }}<br /> {% endif %}
-        {% if billadr.oxuser__oxfname.value != '' or billadr.oxuser__oxlname.value != '' %}
-            {% if billadr.oxuser__oxsal.value != '' %}{{ billadr.oxuser__oxsal.value|translate_salutation }}&nbsp;{% endif %}{{ billadr.oxuser__oxfname.value }} {{ billadr.oxuser__oxlname.value }}<br />
+        {% if billadr.oxuser__oxfname.value != '' or billadr.oxuser__oxlname.value != '' %}1
+        {% if billadr.oxuser__oxsal.value != '' %}{{ billadr.oxuser__oxsal.value|translate_salutation }}2{% endif %}3{{ billadr.oxuser__oxfname.value }} {{ billadr.oxuser__oxlname.value }}<br />
         {% endif %}
         {% if billadr.oxuser__oxstreet.value != '' or billadr.oxuser__oxstreetnr.value != '' %}{{ billadr.oxuser__oxstreet.value }}&nbsp;{{ billadr.oxuser__oxstreetnr.value }}<br />{% endif %}
         {% if billadr.oxuser__oxstateid.value != '' %}{{ billadr.oxuser__oxstateid.value != '' }}&nbsp;{% endif %}
@@ -17,5 +17,3 @@
         {% if billadr.oxuser__oxprivfon.value != '' %}<strong>{{ translate({ ident: "PERSONAL_PHONE" }) }}</strong> {{ billadr.oxuser__oxprivfon.value }}<br />{% endif %}
     </div>
 {% endif %}
-
-

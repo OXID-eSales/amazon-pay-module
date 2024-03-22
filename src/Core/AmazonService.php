@@ -17,7 +17,6 @@ use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Field as FieldAlias;
-use OxidEsales\EshopCommunity\modules\osc\amazonpay\src\Core\AmazonResponseService;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -117,13 +116,6 @@ class AmazonService
     {
         $checkoutSessionId = $this->getCheckoutSessionId();
         if (!$checkoutSessionId) {
-            $session = Registry::getSession();
-            /** @var string $paymentId */
-            $paymentId = $session->getVariable('paymentid') ?? '';
-            $isAmazonPayment = Constants::isAmazonPayment($paymentId);
-            if ($isAmazonPayment) {
-                //self::unsetPaymentMethod();
-            }
             return false;
         }
 

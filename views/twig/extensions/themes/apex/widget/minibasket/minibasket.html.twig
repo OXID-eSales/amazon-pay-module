@@ -1,8 +1,8 @@
-{% extends "page/checkout/inc/summary_sidebar.html.twig" %}
+{% extends "widget/minibasket/minibasket.html.twig" %}
 
-{% block basket_btn_next_bottom %}
+{% block minibasket_top_functions %}
     {{ parent() }}
     {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and not oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
-        {#  include "@osc_amazonpay/amazonpay/basket_btn_next_bottom" #}
+        {% include "@osc_amazonpay/amazonpay/minibasket_top_functions" %}
     {% endif %}
 {% endblock %}

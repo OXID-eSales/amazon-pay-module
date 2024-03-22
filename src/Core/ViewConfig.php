@@ -386,4 +386,15 @@ class ViewConfig extends ViewConfig_parent
     {
         return Registry::getConfig();
     }
+
+    /**
+     * prevent showing the amazon button in last order step in apex theme
+     * @return bool
+     */
+    public function isLastCheckoutStep(): bool
+    {
+        $test = $this->getTopActionClassName();
+        $blIsLastStep = $test === 'order';
+        return $blIsLastStep;
+    }
 }

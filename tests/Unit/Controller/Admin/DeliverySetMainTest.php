@@ -26,20 +26,21 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Controller\Admin;
 
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain;
 use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit\Framework\TestCase;
 
-class DeliverySetMainTest extends UnitTestCase
+class DeliverySetMainTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var DeliverySetMain */
     private $deliverySetMain;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deliverySetMain = oxNew(DeliverySetMain::class);
     }
 
     public function testRender()
     {
-        $this->assertSame('deliveryset_main.tpl', $this->deliverySetMain->render());
+        $this->assertSame('deliveryset_main', $this->deliverySetMain->render());
     }
 
     /**

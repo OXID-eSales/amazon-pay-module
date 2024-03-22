@@ -39,16 +39,15 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * @param string|null $message
+     * @param string $message
      * @param array $context
-     * @throws DatabaseErrorException
-     * @throws DatabaseConnectionException
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
+     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function logMessage(string $message, array $context = [])
+    public function logMessage(string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
-        #$userId = $context['userId'] ?? Registry::getSession()->getUser();
 
         $userId = $context['userId'] ?? 'guest';
         if ($userId === 'guest') {
@@ -179,5 +178,10 @@ class Logger extends AbstractLogger
         $this->getLogger($levelName)->addRecord($levelName, $message, $context);
         $context['log_level'] = $levelName;
         $this->logMessage($message, $context);
+    }
+
+    public static function getLogfileName()
+    {
+        return 'amazon_pay_' . date("Y.m.d") . '.log';
     }
 }

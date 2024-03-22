@@ -28,14 +28,13 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
-use OxidEsales\TestingLibrary\UnitTestCase;
 
-class LogRepositoryTest extends UnitTestCase
+class LogRepositoryTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var LogRepository */
     private $logRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logRepository = oxNew(LogRepository::class);
     }

@@ -26,14 +26,13 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Model;
 
 use OxidEsales\Eshop\Application\Model\Category as EshopCategoryModel;
 use OxidEsales\Eshop\Core\Field;
-use OxidEsales\TestingLibrary\UnitTestCase;
+use OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase;
 
-class CategoryTest extends UnitTestCase
+class CategoryTest extends AmazonTestCase
 {
-    /** @var EshopCategoryModel */
-    private $category;
+    private EshopCategoryModel $category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->category = oxNew(EshopCategoryModel::class);
@@ -57,6 +56,6 @@ class CategoryTest extends UnitTestCase
         $this->category->save();
         $this->assertTrue($this->category->load('testSaveId'));
 
-        $this->assertSame('1', $this->category->oxcategories__osc_amazon_exclude->rawValue);
+        $this->assertSame(1, $this->category->oxcategories__osc_amazon_exclude->rawValue);
     }
 }

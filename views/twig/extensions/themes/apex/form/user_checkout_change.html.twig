@@ -1,0 +1,33 @@
+{% extends "form/user_checkout_change.html.twig" %}
+
+{% block user_checkout_billing_feedback %}
+    {% set oBillingAddress = oView.getBillingAddressAsObj() %}
+    {% if oViewConf.isAmazonSessionActive() and not oViewConf.isAmazonExclude() and oBillingAddress %}
+        {% include '@osc_amazonpay/amazonpay/filtered_billing_address_apex' with {billadr: oBillingAddress} %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block user_checkout_shipping_change %}
+    {% if not oViewConf.isAmazonSessionActive() and not oViewConf.isAmazonExclude() %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block user_checkout_shipping_form %}
+    {% set oDeliveryAddress = oView.getDeliveryAddressAsObj() %}
+    {% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() and oDeliveryAddress %}
+        {% include "@osc_amazonpay/amazonpay/filtered_delivery_address_apex" with {delivadr: oDeliveryAddress} %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block user_checkout_shipping_head %}
+    {% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() and not oViewConf.isAmazonExclude() %}
+        {% include "@osc_amazonpay/amazonpay/user_checkout_shipping_head_apex" %}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

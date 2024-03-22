@@ -62,7 +62,7 @@ function getShopTestPath()
     $facts = new Facts();
 
     if ($facts->isEnterprise()) {
-        $shopTestPath = $facts->getEnterpriseEditionRootPath() . '/tests';
+        $shopTestPath = $facts->getEnterpriseEditionRootPath() . '/Tests';
     } else {
         $shopTestPath = getShopSuitePath($facts);
     }

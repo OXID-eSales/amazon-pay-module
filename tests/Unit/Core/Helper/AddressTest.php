@@ -27,7 +27,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Helper;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidEsales\TestingLibrary\UnitTestCase;
 
-class AddressTest extends UnitTestCase
+class AddressTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     public function amazonDefaultAddressProvider(): array
     {

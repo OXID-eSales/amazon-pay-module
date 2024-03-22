@@ -25,14 +25,13 @@ declare(strict_types=1);
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Model;
 
 use OxidEsales\Eshop\Application\Model\Article as EshopArticleModel;
-use OxidEsales\TestingLibrary\UnitTestCase;
 
-class ArticleTest extends UnitTestCase
+class ArticleTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     /** @var EshopArticleModel */
     private $article;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->article = oxNew(EshopArticleModel::class);

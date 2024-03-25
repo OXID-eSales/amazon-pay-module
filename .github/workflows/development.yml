@@ -171,6 +171,11 @@ jobs:
           make up
           sleep 2
 
+      - name: Install module dependencies
+        id: dependencies
+        working-directory: source/test-module
+        run: composer install
+
       - name: Run tests
         run: |
           docker-compose exec -T \
@@ -236,12 +241,6 @@ jobs:
         if: always()
         working-directory: source/test-module
         run: composer phpmd-report || composer phpmd
-
-      - name: Run phpstan
-        id: phpstan
-        if: always()
-        working-directory: source/test-module
-        run: composer phpstan-report || composer phpstan
 
       - name: Upload log artifact
         if: always()

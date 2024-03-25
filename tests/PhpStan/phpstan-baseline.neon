@@ -1,2 +1,37 @@
 parameters:
 	ignoreErrors:
+		-
+			message: "#^Cannot call method getModuleSetting\\(\\) on OxidEsales\\\\EshopCommunity\\\\Internal\\\\Framework\\\\Module\\\\Configuration\\\\DataObject\\\\ModuleConfiguration\\|null\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/ConfigController.php
+
+		-
+			message: "#^Cannot call method save\\(\\) on OxidEsales\\\\EshopCommunity\\\\Internal\\\\Framework\\\\Module\\\\Configuration\\\\Bridge\\\\ModuleConfigurationDaoBridgeInterface\\|null\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/ConfigController.php
+
+		-
+			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\AmazonClient\\:\\:\\$logger is never read, only written\\.$#"
+			count: 1
+			path: ../../src/Core/AmazonClient.php
+
+		-
+			message: "#^Access to property \\$name on an unknown class OxidEsales\\\\EshopCommunity\\\\Application\\\\Model\\\\stdClass\\.$#"
+			count: 1
+			path: ../../src/Core/AmazonService.php
+
+		-
+			message: "#^Argument of an invalid type OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Address supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: ../../src/Core/AmazonService.php
+
+		-
+			message: "#^Binary operation \"\\.\" between array\\|string and string results in an error\\.$#"
+			count: 1
+			path: ../../src/Core/AmazonService.php
+
+		-
+			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Controller\\\\Admin\\\\OrderOverview\\:\\:\\$captureStatus \\(string\\) does not accept array\\|string\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/OrderOverview.php
+

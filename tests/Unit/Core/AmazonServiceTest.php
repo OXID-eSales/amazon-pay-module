@@ -29,6 +29,9 @@ use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 class AmazonServiceTest extends AmazonTestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testGetCheckoutSessionId()
     {
         Registry::getSession()->deleteVariable(Constants::SESSION_CHECKOUT_ID);

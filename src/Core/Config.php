@@ -346,9 +346,6 @@ class Config
         ));
     }
 
-    /**
-     * @return bool
-     */
     public function displayExpressInPDP(): bool
     {
         $moduleSettingBridge = ContainerFactory::getInstance()
@@ -420,9 +417,6 @@ class Config
         return (bool) $blAmazonAutomatedRefundActivated;
     }
 
-    /**
-     * @return bool
-     */
     public function automatedCancelActivated(): bool
     {
         $moduleSettingBridge = ContainerFactory::getInstance()

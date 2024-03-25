@@ -22,21 +22,17 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
-use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
-use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 class ConfigControllerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     public function testRender()
     {
-        $this->markTestSkipped('This test has been skipped.');
+//        $this->markTestSkipped('This test has been skipped.');
         $c = new ConfigController();
-        $this->assertSame('amazonpay/amazonconfig.tpl', $c->render());
+        $this->assertSame('@osc_amazonpay/admin/amazonconfig', $c->render());
     }
 
     public function configValueProvider(): array
@@ -44,10 +40,14 @@ class ConfigControllerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\C
         return [
             [
                 ['blAmazonPaySandboxMode' => 'sandbox'],
-                true, 'getterMethod' => 'isSandbox'],
+                true,
+                'getterMethod' => 'isSandbox'
+            ],
             [
                 ['blAmazonPaySandboxMode' => 'prod'],
-                false, 'getterMethod' => 'isSandbox'],
+                false,
+                'getterMethod' => 'isSandbox'
+            ],
             [
                 ['blAmazonPaySandboxMode' => 'undefined'],
                 false,
@@ -69,8 +69,8 @@ class ConfigControllerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\C
                 'getterMethod' => 'getMerchantId'
             ],
             [
-                ['sAmazonPayStoreId' => 'store id'],
-                'store id',
+                ['sAmazonPayStoreId' => 'amzn1.application-oa2-client.e1a3bc3e386c4d62babb5a0b9848a00a'],
+                'amzn1.application-oa2-client.e1a3bc3e386c4d62babb5a0b9848a00a',
                 'getterMethod' => 'getStoreId'
             ],
             [
@@ -144,7 +144,6 @@ class ConfigControllerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\C
      * @param $expected mixed Expected return value
      * @param $getterMethod string Getter method in config object
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     public function testSave($conf, $expected, $getterMethod)
     {

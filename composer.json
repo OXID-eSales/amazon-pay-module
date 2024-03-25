@@ -53,7 +53,7 @@
         "phpcs": "phpcs --standard=tests/phpcs.xml",
         "phpcbf": "phpcbf --standard=tests/phpcs.xml",
 
-        "phpmd": "phpmd src ansi tests/PhpMd/standard.xml --baseline tests/PhpMd/phpmd.baseline.xml",
+        "phpmd": "phpmd src ansi tests/PhpMd/standard.xml",
         "phpmd-generate-baseline": "phpmd src ansi tests/PhpMd/standard.xml --generate-baseline",
         "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json --baseline tests/PhpMd/phpmd.baseline.xml",
 

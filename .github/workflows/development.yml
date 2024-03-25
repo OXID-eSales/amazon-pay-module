@@ -145,7 +145,7 @@ jobs:
             data/php/logs/error_log.txt
             source/test-module/tests/.env
 
-  unit_tests:
+  unit_integration_tests:
     strategy:
       fail-fast: false
       matrix:
@@ -307,7 +307,7 @@ jobs:
             source/test-module/tests/reports/phpmd.report.json
 
   sonarcloud:
-    needs: [ styles, unit_tests ]
+    needs: [ styles, unit_integration_tests ]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -316,7 +316,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download unit_tests artifacts
+      - name: Download unit_integration_tests artifacts
         continue-on-error: true
         uses: actions/download-artifact@v3
         with:

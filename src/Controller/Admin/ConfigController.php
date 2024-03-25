@@ -79,12 +79,7 @@ class ConfigController extends AdminController
     }
 
     /**
-     * Saves configuration values
-     *
-     * @param array $conf
-     * @param string $shopId
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function saveConfig(array $conf, string $shopId)
     {

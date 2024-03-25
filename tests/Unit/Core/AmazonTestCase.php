@@ -12,23 +12,27 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 use Dotenv\Dotenv;
 use Exception;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\TestingLibrary\UnitTestCase;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Facade\ModuleSettingServiceInterface;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 class AmazonTestCase extends TestCase
 {
-
     protected AmazonService $amazonService;
     protected AmazonClient $amazonClient;
     protected Config $moduleConfig;
 
     protected MockObject $mockLogger;
     public static $modulConfig = [];
+    private ModuleSettingServiceInterface $settingFacade;
+    private null|ContainerInterface $container = null;
+    private string $testModuleId = 'osc_amazonpay';
 
     /**
      * @throws Exception
@@ -38,7 +42,7 @@ class AmazonTestCase extends TestCase
         parent::setUp();
 
         $this->moduleConfig = oxNew(Config::class);
-
+        $this->settingFacade = $this->getModuleSettingsFacade();
 
         if (empty(self::$modulConfig)) {
             /**
@@ -55,10 +59,10 @@ class AmazonTestCase extends TestCase
             ];
         }
 
-        $this->setConfigParam('sAmazonPayStoreId', self::$modulConfig['sAmazonPayStoreId']);
-        $this->setConfigParam('sAmazonPayMerchantId', self::$modulConfig['sAmazonPayMerchantId']);
-        $this->setConfigParam('sAmazonPayPubKeyId', self::$modulConfig['sAmazonPayPubKeyId']);
-        $this->setConfigParam('sAmazonPayPrivKey', self::$modulConfig['sAmazonPayPrivKey']);
+        $this->setSettingsParamStr('sAmazonPayStoreId', self::$modulConfig['sAmazonPayStoreId']);
+        $this->setSettingsParamStr('sAmazonPayMerchantId', self::$modulConfig['sAmazonPayMerchantId']);
+        $this->setSettingsParamStr('sAmazonPayPubKeyId', self::$modulConfig['sAmazonPayPubKeyId']);
+        $this->setSettingsParamStr('sAmazonPayPrivKey', self::$modulConfig['sAmazonPayPrivKey']);
 
         $configurations = [
             'public_key_id' => self::$modulConfig['sAmazonPayPubKeyId'],
@@ -85,21 +89,28 @@ class AmazonTestCase extends TestCase
         return $this->amazonClient->createCheckoutSession([], []);
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function createAmazonSession(): string
     {
         $result = $this->createTestCheckoutSession();
 
         $response = json_decode($result['response'], true);
 
-        if (is_array($response)
+        if (
+            is_array($response)
             && isset($response['checkoutSessionId'])
-            && is_string( $response['checkoutSessionId'])
+            && is_string($response['checkoutSessionId'])
         ) {
             $checkoutSessionId = $response['checkoutSessionId'];
             $this->amazonService->storeAmazonSession($checkoutSessionId);
+            return $checkoutSessionId;
         }
 
-        return $checkoutSessionId;
+        $message = sprintf("Request: %s ### \nResponse: %s \n", $result['request'], $result['response']);
+
+        throw new Exception($message);
     }
 
     protected function getAddressArray(): array
@@ -127,5 +138,24 @@ class AmazonTestCase extends TestCase
     public function setRequestParameter(string $paramName, mixed $paramValue): void
     {
         $_POST[$paramName] = $paramValue;
+    }
+
+    public function setSettingsParamStr(string $name, string $value): void
+    {
+        $this->settingFacade->saveString($name, $value, $this->testModuleId);
+    }
+
+    public function setSettingsParamBool(string $name, bool $value): void
+    {
+        $this->settingFacade->saveInteger($name, (int)$value, $this->testModuleId);
+    }
+
+    private function getModuleSettingsFacade()
+    {
+        if ($this->container === null) {
+            $this->container = ContainerFactory::getInstance()->getContainer();
+        }
+
+        return $this->container->get(ModuleSettingServiceInterface::class);
     }
 }

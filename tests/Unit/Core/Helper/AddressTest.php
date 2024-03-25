@@ -37,7 +37,7 @@ class AddressTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazo
             [$address, 'Firstname', 'Some'],
             [$address, 'Lastname', 'Name'],
             [$address, 'CountryIso', 'DE'],
-            [$address, 'CountryId', 'a7c40f631fc920687.20179984'],
+            [$address, 'CountryId', 'testcountry_de'],
             [$address, 'Country', 'Deutschland'],
             [$address, 'Street', 'Bayreuther Straße'],
             [$address, 'StreetNo', '108'],
@@ -71,7 +71,7 @@ class AddressTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazo
             [$address, 'oxuser__oxstreet', 'Bayreuther Straße'],
             [$address, 'oxuser__oxcity', 'Freiburg'],
             [$address, 'oxuser__oxstreetnr', '108'],
-            [$address, 'oxuser__oxcountryid', 'a7c40f631fc920687.20179984'],
+            [$address, 'oxuser__oxcountryid', 'testcountry_de'],
             [$address, 'oxuser__oxzip', '12345'],
         ];
     }
@@ -100,7 +100,7 @@ class AddressTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazo
             [$address, 'oxaddress__oxstreet', 'Bayreuther Straße'],
             [$address, 'oxaddress__oxcity', 'Freiburg'],
             [$address, 'oxaddress__oxstreetnr', '108'],
-            [$address, 'oxaddress__oxcountryid', 'a7c40f631fc920687.20179984'],
+            [$address, 'oxaddress__oxcountryid', 'testcountry_de'],
             [$address, 'oxaddress__oxzip', '12345'],
         ];
     }
@@ -129,7 +129,7 @@ class AddressTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazo
             [$address, 'oxstreet', 'Bayreuther Straße'],
             [$address, 'oxcity', 'Freiburg'],
             [$address, 'oxstreetnr', '108'],
-            [$address, 'oxcountryid', 'a7c40f631fc920687.20179984'],
+            [$address, 'oxcountryid', 'testcountry_de'],
             [$address, 'oxzip', '12345'],
             [$address, 'oxstateid', 'BW'],
             [$address, 'oxfon', '+44989383728'],

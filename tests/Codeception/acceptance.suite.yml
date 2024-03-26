@@ -26,9 +26,9 @@ modules:
         populate: true # run populator before all tests
         cleanup: false # run populator before each test
         populator: >
-          %PHP_BIN% %VENDOR_PATH%/bin/reset-shop
-          && mysql --defaults-file=$mysql_config --default-character-set=utf8 $dbname < $dump
+          mysql --defaults-file=$mysql_config --default-character-set=utf8 $dbname < $dump
           && mysql --defaults-file=$mysql_config --default-character-set=utf8 $dbname < $module_dump
+          && %PHP_BIN% %VENDOR_PATH%/../bin/oe-console oe:module:activate osc_amazonpay
     - \OxidEsales\Codeception\Module\Oxideshop:
         screen_shot_url: '%SCREEN_SHOT_URL%'
         depends:
@@ -43,4 +43,4 @@ modules:
         depends: Db
     - \OxidEsales\Codeception\Module\Translation\TranslationsModule:
         shop_path: '%SHOP_SOURCE_PATH%'
-        paths: 'Application/views/admin,modules/osc/amazonpay/translations,modules/osc/amazonpay/views/admin'
+        paths: 'Application/views/admin_twig,extensions/amazonpay/translations,extensions/amazonpay/views/admin'

@@ -20,9 +20,11 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\AcceptanceTester;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayInformation;
 use OxidSolutionCatalysts\AmazonPay\Tests\Codeception\Page\AmazonPayLogin;
+use OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonPayTestTrait;
 
 abstract class BaseCest
 {
+    use AmazonPayTestTrait;
     private int $timestampForScreenshot;
     private int $amount = 1;
     private AcceptanceTester $I;
@@ -30,6 +32,9 @@ abstract class BaseCest
 
     public function _before(AcceptanceTester $I)
     {
+        $this->resetModuleSettingsFacade();
+        $this->setSettingsParamBool('blAmazonPaySandboxMode', true);
+
         $this->timestampForScreenshot = time();
         $this->I = $I;
         $this->I->haveInDatabase(
@@ -53,6 +58,7 @@ abstract class BaseCest
             ['OXACTIVE' => 1],
             ['OXID' => 'oxidamazonexpress']
         );
+
         $this->homePage = new Home($this->I);
     }
 
@@ -305,17 +311,17 @@ abstract class BaseCest
         $this->I->switchToFrame("basefrm");
     }
 
-    protected function openAdminAmazonPayConfig()
+    protected function openAdminAmazonPayConfig(): void
     {
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");
         try {
-            $this->I->see(Translator::translate("amazonpay"));
+            $this->I->see(Translator::translate("AMAZON_PAY"));
         } catch (\Exception $e) {
             $this->I->fail('Amazon Pay menu item not found. Is the module active?');
         }
-        $this->I->click(Translator::translate("amazonpay"));
+        $this->I->click(Translator::translate("AMAZON_PAY"));
         $this->I->waitForElementVisible('[name="nav_amazonconfig"]', 60);
         $this->I->see(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->click(Translator::translate("OSC_AMAZONPAY_CONFIG"));

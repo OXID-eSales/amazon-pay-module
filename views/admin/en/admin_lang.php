@@ -8,7 +8,7 @@
 $sLangName = 'English';
 $aLang = [
     'charset'                          => 'UTF-8',
-    'amazonpay'                        => 'Amazon Pay',
+    'AMAZON_PAY'                        => 'Amazon Pay',
     'OSC_AMAZONPAY_CONFIG'             => 'Configuration',
     'OSC_AMAZONPAY_GENERAL'            => 'General',
     'OSC_AMAZONPAY_CREDENTIALS'        => 'Credentials',

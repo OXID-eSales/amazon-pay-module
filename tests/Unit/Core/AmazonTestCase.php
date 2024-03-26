@@ -17,6 +17,7 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Facade\ModuleSettingServ
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonPayTestTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -24,13 +25,13 @@ use Psr\Log\LoggerInterface;
 
 class AmazonTestCase extends TestCase
 {
+    use AmazonPayTestTrait;
     protected AmazonService $amazonService;
     protected AmazonClient $amazonClient;
     protected Config $moduleConfig;
 
     protected MockObject $mockLogger;
     public static $modulConfig = [];
-    private ModuleSettingServiceInterface $settingFacade;
     private null|ContainerInterface $container = null;
     private string $testModuleId = 'osc_amazonpay';
 
@@ -42,7 +43,6 @@ class AmazonTestCase extends TestCase
         parent::setUp();
 
         $this->moduleConfig = oxNew(Config::class);
-        $this->settingFacade = $this->getModuleSettingsFacade();
 
         if (empty(self::$modulConfig)) {
             /**
@@ -59,6 +59,7 @@ class AmazonTestCase extends TestCase
             ];
         }
 
+        $this->resetModuleSettingsFacade();
         $this->setSettingsParamStr('sAmazonPayStoreId', self::$modulConfig['sAmazonPayStoreId']);
         $this->setSettingsParamStr('sAmazonPayMerchantId', self::$modulConfig['sAmazonPayMerchantId']);
         $this->setSettingsParamStr('sAmazonPayPubKeyId', self::$modulConfig['sAmazonPayPubKeyId']);
@@ -138,24 +139,5 @@ class AmazonTestCase extends TestCase
     public function setRequestParameter(string $paramName, mixed $paramValue): void
     {
         $_POST[$paramName] = $paramValue;
-    }
-
-    public function setSettingsParamStr(string $name, string $value): void
-    {
-        $this->settingFacade->saveString($name, $value, $this->testModuleId);
-    }
-
-    public function setSettingsParamBool(string $name, bool $value): void
-    {
-        $this->settingFacade->saveInteger($name, (int)$value, $this->testModuleId);
-    }
-
-    private function getModuleSettingsFacade()
-    {
-        if ($this->container === null) {
-            $this->container = ContainerFactory::getInstance()->getContainer();
-        }
-
-        return $this->container->get(ModuleSettingServiceInterface::class);
     }
 }

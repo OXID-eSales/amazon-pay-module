@@ -39,7 +39,7 @@ class AmazonClient extends Client
      * @param array $payload
      * @param array $headers
      */
-    public function createCheckoutSession($payload, $headers): array
+    public function createCheckoutSession($payload, $headers)
     {
         $config = $this->getModuleConfig();
 

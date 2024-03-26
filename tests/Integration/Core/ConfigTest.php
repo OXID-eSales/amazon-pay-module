@@ -25,14 +25,10 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 
-/**
- *
- */
 class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
 {
     protected function setUp(): void
     {
-//        $this->markTestSkipped('All tests in this class are skipped.');
         parent::setUp();
     }
 

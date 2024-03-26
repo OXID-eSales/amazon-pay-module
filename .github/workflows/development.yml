@@ -111,7 +111,6 @@ jobs:
 
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer1 require vlucas/phpdotenv --no-update --no-interaction --dev
           docker-compose exec -T php composer1 update --no-interaction
           docker-compose exec -T php php vendor/bin/reset-shop
 

@@ -113,7 +113,7 @@ jobs:
             --db-name example \
             --db-user root \
             --db-password root \
-            --shop-url https://amazonv7.oxiddev.de \
+            --shop-url https://localhost.local \
             --shop-directory /var/www/source \
             --compile-directory /var/www/source/tmp
 
@@ -125,12 +125,6 @@ jobs:
         run: |
           docker compose exec -T php bin/oe-console oe:module:activate osc_amazonpay
           docker compose exec -T php bin/oe-console oe:cache:clear
-
-      - name: Setup a tunnel
-        run: |
-          git clone git@github.com:dantweb/cf-tunnel-template.git --branch feature/gha-amazon tunnel 
-          cd tunnel
-          docker compose up -d
 
       - name: Stop containers
         if: always()

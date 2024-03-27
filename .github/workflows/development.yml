@@ -171,11 +171,6 @@ jobs:
           make up
           sleep 2
 
-      - name: Install module dependencies
-        id: dependencies
-        working-directory: source/test-module
-        run: composer1 install
-
       - name: Run tests
         run: |
           docker-compose exec -T \

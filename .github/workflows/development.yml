@@ -151,6 +151,7 @@ jobs:
             source/config.inc.php
             data/php/logs/error_log.txt
             source/test-module/tests/.env
+            .env
 
   unit_tests:
     needs: [ install_shop_with_module ]

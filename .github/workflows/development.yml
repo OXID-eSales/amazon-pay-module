@@ -174,7 +174,7 @@ jobs:
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer install
+        run: composer1 install
 
       - name: Run tests
         run: |
@@ -228,19 +228,19 @@ jobs:
       - name: Install module dependencies
         id: dependencies
         working-directory: source/test-module
-        run: composer1 install
+        run: composer install
 
       - name: Run phpcs
         id: phpcs
         if: always()
         working-directory: source/test-module
-        run: composer1 phpcs
+        run: composer phpcs
 
       - name: Run phpmd
         id: phpmd
         if: always()
         working-directory: source/test-module
-        run: composer1 phpmd-report || composer phpmd
+        run: composer phpmd-report || composer phpmd
 
       - name: Upload log artifact
         if: always()

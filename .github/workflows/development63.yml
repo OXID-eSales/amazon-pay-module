@@ -63,7 +63,7 @@ jobs:
           make addbasicservices
           make file=services/selenium-chrome.yml addservice
           perl -pi\
-            -e "s#PHP_VERSION=.*#PHP_VERSION='${{ inputs.php }}'#g;"\
+            -e "s#PHP_VERSION=.*#PHP_VERSION=${{ inputs.php }}#g;"\
             .env
           perl -pi\
             -e 's#display_errors =.*#display_errors = false#g;'\

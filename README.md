@@ -1,26 +1,26 @@
 # Amazon Pay for OXID
 
-Amazon Pay integration for OXID eShop 6.1 until 6.5.
+Amazon Pay integration for OXID eShop 7.x.
 
 ## Documentation
 
-* Official German Amazon Pay for OXID [documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/)
-* Official English Amazon Pay for OXID [documentation](https://docs.oxid-esales.com/modules/amazon-pay/en/latest/)
+* Official [German Amazon Pay for OXID documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/3.1/)
+* Official [English Amazon Pay for OXID documentation](https://docs.oxid-esales.com/modules/amazon-pay/en/3.1/)
 
-## Branch Compatibility
+## Branch compatibility
 
-* b-6.1.x module branch is compatible with OXID eShop compilation 6.1 and higher
+* b-6.1.x module branch is compatible with OXID eShop compilation 7.x.
 
-## Install for OXID
+## Installaton
 
-* see Official documentation
+* See the official documentation under [Installation](https://docs.oxid-esales.com/modules/amazon-pay/en/3.1/installation/installation.html#installation)
 
 ## Limitations
 
-List of Limitations could be found in
+Find the lst of limitations in the
 
-* german Documentation [Limitations](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/einfuehrung.html#wann-konnen-sie-amazon-pay-nicht-anbieten)
-* english Documentation [Limitations](https://docs.oxid-esales.com/modules/amazon-pay/en/latest/einfuehrung.html#wann-konnen-sie-amazon-pay-nicht-anbieten)
+* German documentation under [Wann können Sie Amazon Pay nicht anbieten?](https://docs.oxid-esales.com/modules/amazon-pay/de/latest/einfuehrung.html#wann-konnen-sie-amazon-pay-nicht-anbieten)
+* English documentation under [When can you not offer Amazon Pay?](https://docs.oxid-esales.com/modules/amazon-pay/en/3.1/introduction.html#when-can-you-not-offer-amazon-pay)
 
 ## Running tests
 

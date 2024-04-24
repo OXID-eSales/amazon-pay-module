@@ -244,7 +244,7 @@ class Order extends Order_parent
      * @inheritdoc
      * TODO: check in Oxid 7 if the base methods has updated parameter typehints
      */
-    public function delete($oxid = null)
+    public function delete($oxid = null): bool
     {
         $config = new Config();
 

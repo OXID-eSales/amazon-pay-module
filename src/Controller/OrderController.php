@@ -151,7 +151,19 @@ class OrderController extends OrderController_parent
                     $this->completeAmazonPaymentExpress();
                 } elseif ($paymentId === Constants::PAYMENT_ID) {
                     $logger = new Logger();
-                    OxidServiceProvider::getAmazonService()->processOneStepPayment($amazonSessionId, $basket, $logger);
+                    if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+                        OxidServiceProvider::getAmazonService()->processOneStepPayment(
+                            $amazonSessionId,
+                            $basket,
+                            $logger
+                        );
+                    } else {
+                        OxidServiceProvider::getAmazonService()->processTwoStepPayment(
+                            $amazonSessionId,
+                            $basket,
+                            $logger
+                        );
+                    }
                 }
             }
         }

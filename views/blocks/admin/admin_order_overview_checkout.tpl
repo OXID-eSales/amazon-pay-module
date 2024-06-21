@@ -44,7 +44,7 @@
                     [{if ($amazonServiceErrorMessage)}]
                         <div style="color: darkred">[{$amazonServiceErrorMessage}]</div>
                     [{/if}]
-                    <input type="text" name="refundAmount" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                    <input type="text" name="refundAmount" value="0" oninput="this.value = this.value.replace(/[^0-9.,]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/(,.*?),.*/g, '$1')" />
                     <input type="button" name="refundButton" value="[{oxmultilang ident="OSC_AMAZONPAY_REFUND"}]" onclick="document.refundpayment.submit()" />
                     <input type="hidden" name="oxid" value="[{$oxid}]">
                     <input type="hidden" name="cl" value="order_overview">

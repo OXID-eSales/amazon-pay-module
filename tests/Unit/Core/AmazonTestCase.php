@@ -22,7 +22,6 @@ use Psr\Log\LoggerInterface;
 
 class AmazonTestCase extends TestCase
 {
-
     protected AmazonService $amazonService;
     protected AmazonClient $amazonClient;
     protected Config $moduleConfig;
@@ -91,9 +90,10 @@ class AmazonTestCase extends TestCase
 
         $response = json_decode($result['response'], true);
 
-        if (is_array($response)
+        if (
+            is_array($response)
             && isset($response['checkoutSessionId'])
-            && is_string( $response['checkoutSessionId'])
+            && is_string($response['checkoutSessionId'])
         ) {
             $checkoutSessionId = $response['checkoutSessionId'];
             $this->amazonService->storeAmazonSession($checkoutSessionId);

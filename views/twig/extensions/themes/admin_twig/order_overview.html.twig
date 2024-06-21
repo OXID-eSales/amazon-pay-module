@@ -61,6 +61,8 @@
 {% endblock %}
 
 {% block admin_order_overview_send_form %}
+    {{ parent() }}
+
     {% if oViewConf.isAmazonPaymentId(edit.oxorder__oxpaymenttype.value) %}
         <tr>
             {% if isOneStepCapture is same as('0') %}

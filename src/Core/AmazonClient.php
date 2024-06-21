@@ -89,7 +89,7 @@ class AmazonClient extends Client
      */
     public function getCharge($chargeId, $headers = []): array
     {
-        return $this->decodeResponse(parent::getChargePermission($chargeId, $headers));
+        return $this->decodeResponse(parent::getCharge($chargeId, $headers));
     }
 
     /**

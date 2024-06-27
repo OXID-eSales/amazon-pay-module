@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - [0007654](https://bugs.oxid-esales.com/view.php?id=7654): Fix Capture type is incorrectly evaluated
 - [0007636](https://bugs.oxid-esales.com/view.php?id=7636): Fix Refund value can only be entered with a point, semicolon is not possible
+- [0007685](https://bugs.oxid-esales.com/view.php?id=7685): Smarty-Template Improvements
 
 ## [3.1.5] - 2024-03-22
 

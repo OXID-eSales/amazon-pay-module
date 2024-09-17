@@ -8,7 +8,7 @@
         <td class="edittext"><b>[{oxmultilang ident="OSC_AMAZONPAY_LIVESTATUS" suffix="COLON"}]</b></td>
         <td class="edittext">[{$oView->getAmazonAPIOrderStatus()}]<br></td>
     </tr>
-    [{if $edit->oxorder__oxtransstatus->value == 'NOT_FINISHED' && $oViewConf->isAmazonActive()}]
+    [{if $oViewConf->isAmazonActive()}]
         <tr>
             <td class="edittext">
                 [{oxmultilang ident="OSC_AMAZONPAY_CAPTURE_ANNOTATION"}]

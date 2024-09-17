@@ -21,7 +21,10 @@ use OxidEsales\Eshop\Application\Model\Order;
 class OrderList extends OrderList_parent
 {
     /**
+     * @inheritDoc
+     *
      * @return void
+     *
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */

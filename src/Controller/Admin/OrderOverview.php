@@ -145,10 +145,20 @@ class OrderOverview extends OrderOverview_parent
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
                     $captureStatusRaw = $amzData['response']['statusDetails']['state'] ?? '';
+                    $reasonCodes = [];
+                    $captureReasonRaw = $amzData['response']['statusDetails']['reasons'] ?? [];
+                    foreach ($captureReasonRaw as $captureReason) {
+                        if (isset($captureReason['reasonCode'])) {
+                            $reasonCodes[] = $captureReason['reasonCode'];
+                        }
+                    }
                     $captureStatus = $lang->translateString(
                         'OSC_AMAZONPAY_LIVESTATUS_' . strtoupper($captureStatusRaw)
                     );
                     $this->captureStatus = $lang->isTranslated() ? $captureStatus : $captureStatusRaw;
+                    if ($reasonCodes) {
+                        $this->captureStatus .= ' (' . implode(',', $reasonCodes) . ')';
+                    }
                 }
             }
         }

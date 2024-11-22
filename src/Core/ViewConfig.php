@@ -237,10 +237,12 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress(string $anid = ''): string
+    public function getPayloadExpress(?string $anid = null): string
     {
         /** @var string $anid */
-        $anid = !empty($anid) ? $anid : (string)Registry::getRequest()->getRequestParameter('anid');
+        $anid = (!is_null($anid) && $anid === '')
+            ? (string)Registry::getRequest()->getRequestParameter('anid')
+            : (string)$anid;
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();

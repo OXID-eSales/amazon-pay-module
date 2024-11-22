@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - [0007715](https://bugs.oxid-esales.com/view.php?id=7715): Fix wrong HTML-Code-Output
 - [0007718](https://bugs.oxid-esales.com/view.php?id=7718): Fix compatibility-Issue with Core (Method-Return-Values must be compatible with CORE)
+- [0007728](https://bugs.oxid-esales.com/view.php?id=7728): Fix that Items are not added when paying with AmazonPay Express from Minibasket (Flyout)
 
 ## [2.1.6] - 2024-08-15
 

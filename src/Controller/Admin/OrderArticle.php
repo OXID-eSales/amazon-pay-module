@@ -18,13 +18,29 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderArticle extends OrderArticle_parent
 {
-    public function deleteThisArticle(): void
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function deleteThisArticle()
     {
         $this->refundAmazon();
         parent::deleteThisArticle();
     }
 
-    public function storno(): void
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function storno()
     {
         $this->refundAmazon();
         parent::storno();
@@ -33,10 +49,8 @@ class OrderArticle extends OrderArticle_parent
     /**
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
-     *
-     * @return void
      */
-    private function refundAmazon()
+    private function refundAmazon(): void
     {
         $config = new Config();
         if (!$config->automatedRefundActivated()) {

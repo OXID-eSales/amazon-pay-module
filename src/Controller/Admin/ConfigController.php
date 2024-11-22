@@ -24,15 +24,13 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class ConfigController extends AdminController
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->_sThisTemplate = 'amazonpay/amazonconfig.tpl';
-    }
+    protected $_sThisTemplate = 'amazonpay/amazonconfig.tpl';
 
     /**
+     * @inheritDoc
+     *
      * @return string
+     *
      */
     public function render()
     {
@@ -134,13 +132,12 @@ class ConfigController extends AdminController
      * Handles checkboxes/dropdowns
      *
      * @param array $conf
-     *
      * @return array
      */
     protected function handleSpecialFields(array $conf): array
     {
         $config = new Config();
-        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? true : false;
+        $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox';
 
         // remove FakePrivateKeys before save
         if ($conf['sAmazonPayPrivKey'] === '' || $conf['sAmazonPayPrivKey'] === $config->getFakePrivateKey()) {

@@ -371,7 +371,7 @@ class AmazonService
         $response = PhpHelper::jsonToArray($result['response']);
 
         // in case of error, the resulting structure is different...
-        if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
+        if (!isset($result['response'], $result['status']) || ($result['status'] !== 200 && $result['status'] !== 202)) {
             $this->showErrorOnRedirect($logger, $result, (string)$basket->getOrderId());
         }
 

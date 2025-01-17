@@ -368,7 +368,12 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getSignature(string $payload): string
     {
-        $amazonClient = OxidServiceProvider::getAmazonClient();
-        return $amazonClient->generateButtonSignature($payload);
+        try {
+            return OxidServiceProvider::getAmazonClient()->generateButtonSignature($payload);
+        } catch (Exception $exception) {
+            $logger = new Logger();
+            $logger->log('ERROR', $exception->getMessage(), [$exception]);
+            return '';
+        }
     }
 }

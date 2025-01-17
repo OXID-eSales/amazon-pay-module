@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.1.6] - 2025-??-??
 
+- Added `is_string` check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
+- Fixed wrong namespace on Controller/Admin/OrderArticle
+- Changed [Amazonclient::getCharge()](./src/Core/AmazonClient.php) to match the upstream library call
 - [0007654](https://bugs.oxid-esales.com/view.php?id=7654): Fix Capture type is incorrectly evaluated
 - [0007636](https://bugs.oxid-esales.com/view.php?id=7636): Fix Refund value can only be entered with a point, semicolon is not possible
 - [0007685](https://bugs.oxid-esales.com/view.php?id=7685): Smarty-Template Improvements

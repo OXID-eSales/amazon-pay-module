@@ -44,7 +44,7 @@ class Logger extends AbstractLogger
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function logMessage(string $message, array $context = []): void
+    public function logMessage(?string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();

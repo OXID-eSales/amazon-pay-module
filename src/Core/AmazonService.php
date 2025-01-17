@@ -371,7 +371,7 @@ class AmazonService
         $response = PhpHelper::jsonToArray($result['response']);
 
         // in case of error, the resulting structure is different...
-        if (!isset($result['response'], $result['status']) || $result['status'] !== 200) {
+        if (!isset($result['response'], $result['status']) || ($result['status'] !== 200 && $result['status'] !== 202)) {
             $this->showErrorOnRedirect($logger, $result, (string)$basket->getOrderId());
         }
 
@@ -610,13 +610,24 @@ class AmazonService
         if ($order->load($orderId)) {
             switch ($response['statusDetails']['state']) {
                 case "Declined":
-                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_OR_CAPT_DECLINED', $result);
+                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_OR_CAPT_DECLINED', [
+                        'result' => $result
+                    ]);
                     break;
                 case "Pending":
                     $order->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING', $result);
                     break;
+                case 'Authorized':
+                    $order->updateAmazonPayOrderStatus('AMZ_2STEP_AUTH_OK', [
+                        'chargeAmount' => $response['chargeAmount']['amount'],
+                        'chargeId'     => $response['chargeId']
+                    ]);
+                    break;
                 case "Captured":
-                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK', $result);
+                    $order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK', [
+                        'chargeAmount' => $response['chargeAmount']['amount'],
+                        'chargeId'     => $response['chargeId']
+                    ]);
                     break;
             }
         }

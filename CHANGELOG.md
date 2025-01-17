@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.1.7] - 2024-??-??
+## [2.1.7] - 2025-??-??
 
+- Added `is_string` check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
+- Fixed wrong namespace on Controller/Admin/OrderArticle 
+- Changed [Amazonclient::getCharge()](./src/Core/AmazonClient.php) to match the upstream library call
 - [0007715](https://bugs.oxid-esales.com/view.php?id=7715): Fix wrong HTML-Code-Output
 - [0007718](https://bugs.oxid-esales.com/view.php?id=7718): Fix compatibility-Issue with Core (Method-Return-Values must be compatible with CORE)
 - [0007728](https://bugs.oxid-esales.com/view.php?id=7728): Fix that Items are not added when paying with AmazonPay Express from Minibasket (Flyout)

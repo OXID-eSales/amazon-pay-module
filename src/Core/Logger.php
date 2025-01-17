@@ -82,7 +82,12 @@ class Logger extends AbstractLogger
         $context = [];
 
         if (!empty($result['response'])) {
-            $response = PhpHelper::jsonToArray($result['response']);
+            // ensure it is a string 
+            if (is_string($result['response'])){
+                $response = PhpHelper::jsonToArray($result['response']);
+            } else {
+                $response = $result['response'];
+            }
 
             if (!empty($response['statusDetails']['state'])) {
                 $context['message'] = $response['statusDetails']['state'];

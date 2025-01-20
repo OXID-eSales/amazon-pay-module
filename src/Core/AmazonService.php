@@ -122,13 +122,6 @@ class AmazonService
     {
         $checkoutSessionId = $this->getCheckoutSessionId();
         if (!$checkoutSessionId) {
-            $session = Registry::getSession();
-            /** @var string $paymentId */
-            $paymentId = $session->getVariable('paymentid') ?? '';
-            $isAmazonPayment = Constants::isAmazonPayment($paymentId);
-            if ($isAmazonPayment) {
-                //self::unsetPaymentMethod();
-            }
             return false;
         }
 
@@ -216,21 +209,6 @@ class AmazonService
             }
         }
         return $this->deliveryAddress;
-    }
-
-    /**
-     * Oxid formatted billing address from Amazon
-     *
-     * @return array
-     */
-    public function getBillingAddress(): array
-    {
-        $checkoutSession = $this->getCheckoutSession();
-        $address = $checkoutSession['response']['billingAddress'] ?? [];
-        $buyer = $checkoutSession['response']['buyer'];
-        $bill = ['oxusername' => $buyer['email']];
-
-        return array_merge($bill, Address::mapAddressToView($address));
     }
 
     /**

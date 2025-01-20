@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHP Code Style
 
 on:
   push:
@@ -32,12 +32,5 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-interaction
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    - name: PHPCS
+    - name: PHP Codestyle
       run: composer run-script phpcs
-    - name: PHPMD
-      run: composer run-script phpmd
-    - name: PHPstan
-      run: composer run-script phpstan

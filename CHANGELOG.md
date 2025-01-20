@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.2.0] - 2025-??-??
 
+### Added
+
+- Add .idea to gitignore
+
 ### Fixed
 
-- Fix incorrect namespace on AmazonService, UserComponent, OrderList,
+- Fix incorrect namespace on AmazonService, UserComponent, OrderList
 - Added `is_string` check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
 - Fixed wrong namespace on Controller/Admin/OrderArticle
 - Changed [Amazonclient::getCharge()](./src/Core/AmazonClient.php) to match the upstream library call
@@ -17,7 +21,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007728](https://bugs.oxid-esales.com/view.php?id=7728): Fix that Items are not added when paying with AmazonPay Express from Minibasket (Flyout)
 - [0007752](https://bugs.oxid-esales.com/view.php?id=7728): Fis that Orders are NOT always refunded when cancelled, even if the option for this is deactivated.
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
-
 
 
 ## [2.1.6] - 2024-08-15

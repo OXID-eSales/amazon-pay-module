@@ -2,6 +2,7 @@
 /source/
 /vendor/
 /var/
+.idea
 /composer.lock
 /tests/.phpunit.result.cache
 /tests/.env

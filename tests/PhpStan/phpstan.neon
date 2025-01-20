@@ -7,6 +7,7 @@ parameters:
         - ../../vendor/oxid-esales/oxideshop-ce/source/overridablefunctions.php
     ignoreErrors:
         - identifier: missingType.iterableValue
+        - '#Method OxidSolutionCatalysts\\AmazonPay\\Core\\Helper\\PhpHelper::prepareResponse\(\) has parameter \$response with no type specified#'
 
 includes:
     - phpstan-baseline.neon

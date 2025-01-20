@@ -9,7 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
 class PhpHelper
 {
-    public static function prepareResponse($response)
+    public static function prepareResponse($response): array
     {
         if (is_string($response)) {
             return json_decode($response, true);

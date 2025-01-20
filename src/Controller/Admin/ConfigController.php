@@ -21,6 +21,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Constants;
  */
 class ConfigController extends AdminController
 {
+    // phpcs:ignore
     protected $_sThisTemplate = 'amazonpay/amazonconfig.tpl';
 
     /**

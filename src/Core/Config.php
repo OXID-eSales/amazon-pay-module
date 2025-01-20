@@ -12,12 +12,13 @@ use OxidEsales\Eshop\Application\Model\Country;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\Payment;
 use OxidEsales\Eshop\Application\Model\User;
-use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Application\Model\CountryList;
+use OxidEsales\Eshop\Application\Model\CountryList;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Database\QueryBuilderFactoryInterface;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -480,25 +481,16 @@ class Config
             return false;
         }
 
-        // generates the string "?,?,?,?," for an array with count() = 4 and strips the trailing comma
-        $questionMarks = trim(
-            str_pad(
-                "",
-                count($productIds) * 2,
-                '?,'
-            ),
-            ','
-        );
-        $sql = "SELECT oa.OSC_AMAZON_EXCLUDE as excludeArticle,
-               oc.OSC_AMAZON_EXCLUDE as excludeCategory
-          FROM oxarticles oa
-          JOIN oxobject2category o2c
-            ON (o2c.OXOBJECTID = oa.OXID)
-          JOIN oxcategories oc
-            ON (oc.OXID = o2c.OXCATNID)
-         WHERE oa.OXID in (" . $questionMarks . ")";
-
-        $results = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql, $productIds);
+        $container = ContainerFactory::getInstance()->getContainer();
+        $queryBuilderFactory = $container->get(QueryBuilderFactoryInterface::class);
+        $queryBuilder = $queryBuilderFactory->create();
+        $queryBuilder->select(['oa.OSC_AMAZON_EXCLUDE as excludeArticle', 'oc.OSC_AMAZON_EXCLUDE as excludeCategory'])
+            ->from('oxarticles', 'oa')
+            ->innerJoin('oa', 'oxobject2category', 'o2c', 'o2c.OXOBJECTID = oa.OXID')
+            ->innerJoin('o2c', 'oxcategories', 'oc', 'oc.OXID = o2c.OXCATNID')
+            ->where('oa.OXID in (:productIds)')
+            ->setParameter('productIds', $productIds);
+        $results = $queryBuilder->execute()->fetchAll();
 
         foreach ($results as $result) {
             if ($result['excludeArticle'] === '1' || $result['excludeCategory'] === '1') {

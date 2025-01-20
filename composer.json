@@ -22,9 +22,11 @@
         "phpmd/phpmd": "^2.11",
         "phpstan/phpstan": "^1.10.",
         "symfony/dotenv": "^5.4",
-        "codeception/module-rest": "1.4.2",
+        "codeception/module-rest": "^1.4.2",
         "codeception/module-phpbrowser": "^1.0.2",
-        "oxid-esales/oxideshop-ce": "^6.3"
+        "oxid-esales/oxideshop-ce": "^6.3",
+        "phpunit/phpunit": "^9.6",
+        "oxid-esales/oxideshop-ide-helper": "^6.2"
     },
     "conflict": {
         "oxid-esales/oxideshop-ce": "<6.3 | ^7.0"

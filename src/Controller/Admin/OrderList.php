@@ -16,7 +16,7 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 /**
  * Class OrderListController
- * @mixin \OxidEsales\EshopCommunity\Application\Controller\Admin\OrderList
+ * @mixin \OxidEsales\Eshop\Application\Controller\Admin\OrderList
  */
 class OrderList extends OrderList_parent
 {

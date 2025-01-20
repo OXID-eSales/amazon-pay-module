@@ -12,8 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- Fix phpcs and phpmd
 - Fix incorrect namespace on AmazonService, UserComponent, OrderList
-- Added `is_string` check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
+- Added `is_string`                    }
+ check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
 - Fixed wrong namespace on Controller/Admin/OrderArticle
 - Changed [Amazonclient::getCharge()](./src/Core/AmazonClient.php) to match the upstream library call
 - [0007715](https://bugs.oxid-esales.com/view.php?id=7715): Fix wrong HTML-Code-Output

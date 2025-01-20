@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 
+- Removed calls to deprecated DatabaseProvider and replaced with QueryBuilderInterface
 - Removed unused namespaces in code
 
 ## [2.1.6] - 2024-08-15

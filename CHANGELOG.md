@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007752](https://bugs.oxid-esales.com/view.php?id=7728): Fis that Orders are NOT always refunded when cancelled, even if the option for this is deactivated.
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
 
+### Removed
+
+- Removed unused namespaces in code
 
 ## [2.1.6] - 2024-08-15
 

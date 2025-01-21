@@ -27,10 +27,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Removed unused namespaces in code
 
-### Removed
-
-- Removed unused namespaces in code
-
 ## [2.1.6] - 2024-08-15
 
 - [0007654](https://bugs.oxid-esales.com/view.php?id=7654): Fix Capture type is incorrectly evaluated

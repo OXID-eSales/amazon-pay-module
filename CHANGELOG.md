@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.2.0] - 2025-??-??
+## [2.1.7] - 2025-??-??
 
 ### Added
 
@@ -26,7 +26,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Removed
 
-- Removed calls to deprecated DatabaseProvider and replaced with QueryBuilderInterface
 - Removed unused namespaces in code
 
 ## [2.1.6] - 2024-08-15

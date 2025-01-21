@@ -45,7 +45,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage(?string $message, array $context = [])
+    public function logMessage($message, array $context = [])
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
@@ -82,7 +82,7 @@ class Logger extends AbstractLogger
         $context = [];
 
         if (!empty($result['response'])) {
-            // ensure it is a string 
+            // ensure it is a string
             if (is_string($result['response'])){
                 $response = PhpHelper::jsonToArray($result['response']);
             } else {

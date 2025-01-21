@@ -234,10 +234,11 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get payload in JSON Format
      *
+     * @param string|null $anid
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress(?string $anid = null): string
+    public function getPayloadExpress($anid): string
     {
         /** @var string $anid */
         $anid = (!is_null($anid) && $anid === '')

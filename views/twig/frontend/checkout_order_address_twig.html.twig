@@ -31,7 +31,7 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    {% include "@osc_amazonpay/amazonpay/filtered_billing_address_twig" with {billadr: oBillingAddress} %}
+                    {% include "@osc_amazonpay/frontend/filtered_billing_address_twig" with {billadr: oBillingAddress} %}
                 </div>
             </div>
         </form>
@@ -55,9 +55,9 @@
                 </div>
                 <div class="panel-body">
                     {% if oDeliveryAddress %}
-                        {% include "@osc_amazonpay/amazonpay/filtered_delivery_address_twig" with {delivadr: oDeliveryAddress} %}
+                        {% include "@osc_amazonpay/frontend/filtered_delivery_address_twig" with {delivadr: oDeliveryAddress} %}
                     {% else %}
-                        {% include "@osc_amazonpay/amazonpay/filtered_billing_address_twig" with {billadr: oBillingAddress} %}
+                        {% include "@osc_amazonpay/frontend/filtered_billing_address_twig" with {billadr: oBillingAddress} %}
                     {% endif %}
                 </div>
             </div>

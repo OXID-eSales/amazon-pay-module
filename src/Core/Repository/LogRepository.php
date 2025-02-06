@@ -95,8 +95,8 @@ class LogRepository
      */
     public function findLogMessageForChargePermissionId(
         string $chargePermissionId,
-        string $orderBy = 'OXTIMESTAMP'
-    ): array {
+        string $orderBy
+    ) {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]
@@ -164,8 +164,8 @@ class LogRepository
     public function markOrderPaid(
         string $orderId,
         string $remark,
-        string $transStatus = 'OK',
-        string $chargeId = ''
+        string $transStatus,
+        string $chargeId
     ) {
         $sql = 'UPDATE oxorder SET OXPAID = ?, OXTRANSSTATUS = ?, OSC_AMAZON_REMARK = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(

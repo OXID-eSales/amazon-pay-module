@@ -8,7 +8,7 @@
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
 use OxidEsales\Eshop\Application\Model\Address;
-use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\Basket as ShopBasket;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
@@ -34,7 +34,7 @@ class Order extends Order_parent
      * @return int|null
      *
      */
-    protected function prepareFinalizeOrder(Basket $oBasket)
+    protected function prepareFinalizeOrder(ShopBasket $oBasket)
     {
         $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
@@ -51,7 +51,7 @@ class Order extends Order_parent
     /**
      * Order checking, processing and saving method.
      *
-     * @param Basket $oBasket Basket object
+     * @param ShopBasket $oBasket ShopBasket object
      * @param object $oUser Current User object
      * @param bool $blRecalculatingOrder Order recalculation
      *
@@ -64,7 +64,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    public function finalizeOrder(ShopBasket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 

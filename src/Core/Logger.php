@@ -152,7 +152,7 @@ class Logger extends AbstractLogger
      * @return MonoLogLogger
      * @throws Exception
      */
-    private function getLogger(int $log_level)
+    private function getLogger($log_level)
     {
         $logger = new MonoLogLogger('amazonpaylog');
         $logger->pushHandler(
@@ -172,7 +172,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function log($level, $message, $context = [])
+    public function log($level, $message, array $context = array())
     {
         $levelName = MonoLogLogger::getLevels()[strtoupper($level)];
         $this->getLogger($levelName)->addRecord($levelName, $message, $context);

@@ -836,8 +836,8 @@ class AmazonService
 
     public function sendAlexaNotification(
         string $chargePermissionId,
-        string $trackingCode = '',
-        string $deliveryType = ''
+        string $trackingCode,
+        string $deliveryType
     ) {
         $amazonConfig = oxNew(Config::class);
 

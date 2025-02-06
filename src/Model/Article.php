@@ -17,7 +17,7 @@ class Article extends Article_parent
      *
      * @return bool
      */
-    public function isAmazonExclude(): bool
+    public function isAmazonExclude()
     {
         return (bool)$this->getFieldData('osc_amazon_exclude');
     }

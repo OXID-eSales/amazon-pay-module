@@ -99,7 +99,7 @@ class AmazonService
     /**
      * @param string $checkoutSessionId
      */
-    public function storeAmazonSession(string $checkoutSessionId)
+    public function storeAmazonSession($checkoutSessionId)
     {
         Registry::getSession()->setVariable(
             Constants::SESSION_CHECKOUT_ID,
@@ -112,7 +112,7 @@ class AmazonService
      *
      * @return bool
      */
-    public function isAmazonSessionActive(): bool
+    public function isAmazonSessionActive()
     {
         $checkoutSessionId = $this->getCheckoutSessionId();
         if (!$checkoutSessionId) {
@@ -148,7 +148,7 @@ class AmazonService
      *
      * @return string
      */
-    public function getCheckoutSessionId(): string
+    public function getCheckoutSessionId()
     {
         /** @var string $sessionId */
         $sessionId = Registry::getSession()->getVariable(Constants::SESSION_CHECKOUT_ID);
@@ -160,7 +160,7 @@ class AmazonService
      *
      * @return array
      */
-    public function getCheckoutSession(): array
+    public function getCheckoutSession()
     {
         if ($this->checkoutSession != null) {
             return $this->checkoutSession;
@@ -181,7 +181,7 @@ class AmazonService
      *
      * @return array
      */
-    public function getDeliveryAddress(): array
+    public function getDeliveryAddress()
     {
         $checkoutSession = $this->getCheckoutSession();
         /** @var array $address */
@@ -196,7 +196,7 @@ class AmazonService
      *
      * @return stdClass
      */
-    public function getDeliveryAddressAsObj(): stdClass
+    public function getDeliveryAddressAsObj()
     {
         if (is_null($this->deliveryAddress)) {
             $this->deliveryAddress = new stdClass();
@@ -216,7 +216,7 @@ class AmazonService
      *
      * @return array
      */
-    public function getBillingAddress(): array
+    public function getBillingAddress()
     {
         $checkoutSession = $this->getCheckoutSession();
         $address = $checkoutSession['response']['billingAddress'] ?? [];
@@ -231,7 +231,7 @@ class AmazonService
      *
      * @return stdClass
      */
-    public function getBillingAddressAsObj(): stdClass
+    public function getBillingAddressAsObj()
     {
         if (empty($this->billingAddress)) {
             $oUser = $this->getUser();
@@ -249,7 +249,7 @@ class AmazonService
      * @param string $orderId
      * @return float
      */
-    public function getMaximalRefundAmount(string $orderId): float
+    public function getMaximalRefundAmount($orderId)
     {
         $order = new Order();
         $order->load($orderId);
@@ -360,7 +360,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processOneStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
+    public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->processPayment($amazonSessionId, $basket, $logger);
     }
@@ -372,7 +372,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processTwoStepPayment(string $amazonSessionId, Basket $basket, LoggerInterface $logger)
+    public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->isTwoStep = false;
         $this->processPayment($amazonSessionId, $basket, $logger);
@@ -383,7 +383,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund(string $orderId, float $refundAmount, LoggerInterface $logger)
+    public function createRefund($orderId, float $refundAmount, LoggerInterface $logger)
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
@@ -456,7 +456,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processRefund(string $refundId, LoggerInterface $logger)
+    public function processRefund($refundId, LoggerInterface $logger)
     {
         $logger->info("Start processRefund");
         $amazonConfig = oxNew(Config::class);
@@ -510,7 +510,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processCharge(string $chargeId, LoggerInterface $logger)
+    public function processCharge($chargeId, LoggerInterface $logger)
     {
         $amazonConfig = oxNew(Config::class);
 
@@ -561,7 +561,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * TODO: refactor
      */
-    public function checkOrderState(string $orderId)
+    public function checkOrderState($orderId)
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
@@ -659,7 +659,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processCancel(string $orderId)
+    public function processCancel($orderId)
     {
         $amazonConfig = oxNew(Config::class);
         $repository = oxNew(LogRepository::class);
@@ -771,7 +771,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function capturePaymentForOrder(string $chargeId, string $amount, string $currencyCode)
+    public function capturePaymentForOrder($chargeId, string $amount, string $currencyCode)
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();
@@ -881,7 +881,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function getOrderLogs(Order $order): array
+    public function getOrderLogs(Order $order)
     {
         $orderLogs = [];
 
@@ -916,7 +916,7 @@ class AmazonService
     /**
      * Active user getter
      */
-    private function getUser(): User
+    private function getUser()
     {
         if ($this->actUser === null) {
             $this->actUser = oxNew(User::class);

@@ -175,7 +175,7 @@ class DispatchController extends FrontendController
      *
      * @return string
      */
-    protected function getRequestAmazonSessionId(): string
+    protected function getRequestAmazonSessionId()
     {
         /** @var string $amazonSessionIdRequest */
         $amazonSessionIdRequest = Registry::getRequest()->getRequestParameter(
@@ -196,7 +196,7 @@ class DispatchController extends FrontendController
      * @throws NoArticleException
      * @throws OutOfStockException
      */
-    protected function setRequestAmazonSessionId(): string
+    protected function setRequestAmazonSessionId()
     {
         // add item to basket if an "anid" was provided in the url
         /** @var string $anid */

@@ -17,7 +17,7 @@ class ServiceFactory
     /**
      * @return AmazonClient
      */
-    public function getClient(): AmazonClient
+    public function getClient()
     {
         $config = oxNew(Config::class);
         $logger = new NullLogger();
@@ -38,7 +38,7 @@ class ServiceFactory
     /**
      * @return AmazonService
      */
-    public function getService(): AmazonService
+    public function getService()
     {
         return oxNew(AmazonService::class);
     }

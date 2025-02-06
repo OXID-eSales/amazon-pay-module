@@ -46,7 +46,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return Config
      */
-    public function getAmazonConfig(): Config
+    public function getAmazonConfig()
     {
         return Registry::get(Config::class);
     }
@@ -54,7 +54,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function isAmazonActive(): bool
+    public function isAmazonActive()
     {
         $config = $this->getAmazonConfig();
         $blIsActive = true;
@@ -69,7 +69,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function displayExpressInPDP(): bool
+    public function displayExpressInPDP()
     {
         return $this->getAmazonConfig()->displayExpressInPDP();
     }
@@ -77,7 +77,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function socialLoginDeactivated(): bool
+    public function socialLoginDeactivated()
     {
         return $this->getAmazonConfig()->socialLoginDeactivated();
     }
@@ -85,7 +85,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function displayExpressInMiniCartAndModal(): bool
+    public function displayExpressInMiniCartAndModal()
     {
         return $this->getAmazonConfig()->displayExpressInMiniCartAndModal();
     }
@@ -93,7 +93,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return string
      */
-    public function getAmazonSessionId(): string
+    public function getAmazonSessionId()
     {
         return OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
     }
@@ -101,7 +101,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * @return bool
      */
-    public function isAmazonSessionActive(): bool
+    public function isAmazonSessionActive()
     {
         return OxidServiceProvider::getAmazonService()->isAmazonSessionActive();
     }
@@ -111,7 +111,7 @@ class ViewConfig extends ViewConfig_parent
      *
      * @return string
      */
-    public function getCancelAmazonPaymentUrl(): string
+    public function getCancelAmazonPaymentUrl()
     {
         return $this->getSelfLink() . 'cl=amazoncheckout&fnc=cancelAmazonPayment';
     }
@@ -122,11 +122,12 @@ class ViewConfig extends ViewConfig_parent
      * @param string $paymentId
      * @return boolean
      */
-    public function isAmazonPaymentPossible(string $paymentId = ''): bool
+    public function isAmazonPaymentPossible($paymentId)
     {
         if ($paymentId === '') {
             /** @var string $paymentId */
-            $paymentId = Registry::getSession()->getVariable('paymentid') ?? '';
+            $paymentId = Registry::getSession()->getVariable('paymentid') !== null
+                ? Registry::getSession()->getVariable('paymentid') : '';
         }
         return (
             Registry::getSession()->getVariable('sShipSet') &&
@@ -139,22 +140,22 @@ class ViewConfig extends ViewConfig_parent
      *
      * @return string
      */
-    public function getAmazonPaymentId(): string
+    public function getAmazonPaymentId()
     {
         return Constants::PAYMENT_ID;
     }
 
-    public function getAmazonExpressPaymentId(): string
+    public function getAmazonExpressPaymentId()
     {
         return Constants::PAYMENT_ID_EXPRESS;
     }
 
-    public function isAmazonPaymentId(string $paymentId): bool
+    public function isAmazonPaymentId($paymentId)
     {
         return Constants::isAmazonPayment($paymentId);
     }
 
-    public function getMaximalRefundAmount(string $orderId): float
+    public function getMaximalRefundAmount($orderId)
     {
         return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId));
     }
@@ -165,7 +166,7 @@ class ViewConfig extends ViewConfig_parent
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function isAmazonExclude(string $oxid = ''): bool
+    public function isAmazonExclude($oxid)
     {
         return $this->getAmazonConfig()->isAmazonExcluded($oxid);
     }
@@ -207,7 +208,7 @@ class ViewConfig extends ViewConfig_parent
      * @psalm-suppress InternalMethod
      *
      */
-    public function isThemeBasedOn(string $themeId): bool
+    public function isThemeBasedOn($themeId)
     {
         $result = false;
 
@@ -224,12 +225,12 @@ class ViewConfig extends ViewConfig_parent
         return $result;
     }
 
-    public function setArticlesId(string $articlesId)
+    public function setArticlesId($articlesId)
     {
         $this->articlesId = $articlesId;
     }
 
-    public function getPaymentDescriptor(): string
+    public function getPaymentDescriptor()
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
         return $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
@@ -241,10 +242,11 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress(): string
+    public function getPayloadExpress()
     {
         /** @var string $anid */
-        $anid = Registry::getRequest()->getRequestParameter('anid') ?? '';
+        $anid = Registry::getRequest()->getRequestParameter('anid') !== null
+            ? Registry::getRequest()->getRequestParameter('anid') : '';
         $this->setArticlesId($anid);
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($this->articlesId);
@@ -275,7 +277,7 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayload(): string
+    public function getPayload()
     {
         $amazonConfig = $this->getAmazonConfig();
 
@@ -321,7 +323,7 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayloadSignIn(): string
+    public function getPayloadSignIn()
     {
         $payload = new Payload();
         $payload->setSignInReturnUrl();
@@ -354,7 +356,7 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getSignature(string $payload): string
+    public function getSignature($payload)
     {
         $amazonClient = OxidServiceProvider::getAmazonClient();
         return $amazonClient->generateButtonSignature($payload);

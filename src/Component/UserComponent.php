@@ -105,12 +105,12 @@ class UserComponent extends UserComponent_parent
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameterString(string $paramName, string $paramValue)
+    public function setRequestParameterString($paramName, string $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }
 
-    public function setRequestParameterArray(string $paramName, array $paramValue)
+    public function setRequestParameterArray($paramName, array $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }
@@ -149,7 +149,7 @@ class UserComponent extends UserComponent_parent
         return $aDelAddress;
     }
 
-    protected function _getNameFromAmazonResponse(array $amazonSession): string
+    protected function _getNameFromAmazonResponse(array $amazonSession)
     {
         if (array_key_exists('buyer', $amazonSession['response'])) {
             return $amazonSession['response']['buyer']['name'];
@@ -158,7 +158,7 @@ class UserComponent extends UserComponent_parent
         return $amazonSession['response']['name'];
     }
 
-    protected function _getEMailFromAmazonResponse(array $amazonSession): string
+    protected function _getEMailFromAmazonResponse(array $amazonSession)
     {
         if (array_key_exists('buyer', $amazonSession['response'])) {
             return $amazonSession['response']['buyer']['email'];

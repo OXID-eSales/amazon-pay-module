@@ -68,7 +68,7 @@ class OrderMain extends OrderMain_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    protected function getOrderChargePermissionId(Order $oOrder): string
+    protected function getOrderChargePermissionId(Order $oOrder)
     {
         $chargePermissionId = null;
 
@@ -99,7 +99,7 @@ class OrderMain extends OrderMain_parent
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    protected function getOrderChargeId(Order $oOrder): string
+    protected function getOrderChargeId(Order $oOrder)
     {
         $chargeId = '';
 

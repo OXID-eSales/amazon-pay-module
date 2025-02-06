@@ -87,12 +87,12 @@ class AmazonTestCase extends UnitTestCase
     /**
      * @return array
      */
-    protected function createTestCheckoutSession(): array
+    protected function createTestCheckoutSession()
     {
         return $this->amazonClient->createCheckoutSession([], []);
     }
 
-    protected function createAmazonSession(): string
+    protected function createAmazonSession()
     {
         $result = $this->createTestCheckoutSession();
         $response = json_decode($result['response'], true);
@@ -105,7 +105,7 @@ class AmazonTestCase extends UnitTestCase
     /**
      * @return array
      */
-    protected function getAddressArray(): array
+    protected function getAddressArray()
     {
         $address = [];
         $address['name'] = 'Some Name';

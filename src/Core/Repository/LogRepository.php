@@ -64,7 +64,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function findLogMessageForUserId(string $userId): array
+    public function findLogMessageForUserId($userId)
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXUSERID = ? ORDER BY OXTIMESTAMP',
@@ -78,7 +78,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function findLogMessageForIdentifier(string $identifier): array
+    public function findLogMessageForIdentifier($identifier)
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_IDENTIFIER = ? ORDER BY OXTIMESTAMP',
@@ -109,7 +109,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function findLogMessageForOrderId(string $orderId): array
+    public function findLogMessageForOrderId($orderId)
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP',
@@ -123,7 +123,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function findLogMessageForChargeId(string $chargeId): array
+    public function findLogMessageForChargeId($chargeId)
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_ID = ? ORDER BY OXTIMESTAMP',
@@ -137,7 +137,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function findOrderIdByChargeId(string $chargeId): string
+    public function findOrderIdByChargeId($chargeId)
     {
         $orderId = '';
 
@@ -187,7 +187,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function updateOrderStatus(string $orderId, string $transStatus = 'OK', string $chargeId = '')
+    public function updateOrderStatus($orderId, string $transStatus = 'OK', string $chargeId = '')
     {
         $sql = 'UPDATE oxorder SET OXTRANSSTATUS = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
@@ -206,7 +206,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function deleteLogMessageByOrderId(string $orderId)
+    public function deleteLogMessageByOrderId($orderId)
     {
         $sql = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID =' . $orderId;
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(

@@ -123,7 +123,7 @@ class ConfigController extends AdminController
      *
      * @return array
      */
-    protected function handleSpecialFields(array $conf): array
+    protected function handleSpecialFields(array $conf)
     {
         $config = new Config();
         $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? 1 : 0;
@@ -157,7 +157,7 @@ class ConfigController extends AdminController
      *
      * @return boolean
      */
-    protected function useDaoBridge(): bool
+    protected function useDaoBridge()
     {
         return class_exists(
             '\OxidEsales\EshopCommunity\Internal\Container\ContainerFactory'

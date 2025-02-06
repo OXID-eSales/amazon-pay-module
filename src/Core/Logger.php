@@ -32,7 +32,7 @@ class Logger extends AbstractLogger
      */
     private $logFileName;
 
-    public function __construct(string $logFileName = 'amazonpay.log')
+    public function __construct($logFileName = 'amazonpay.log')
     {
         $this->logFileName = $logFileName;
         $this->repository = oxNew(LogRepository::class);
@@ -44,7 +44,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage(string $message, array $context = [])
+    public function logMessage($message, array $context = [])
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
@@ -78,7 +78,7 @@ class Logger extends AbstractLogger
      * @param array $result
      * @return array
      */
-    public function resolveLogContent(array $result): array
+    public function resolveLogContent(array $result)
     {
         $context = [];
 
@@ -143,7 +143,7 @@ class Logger extends AbstractLogger
     /**
      * @return LogRepository
      */
-    public function getRepository(): LogRepository
+    public function getRepository()
     {
         return $this->repository;
     }
@@ -153,7 +153,7 @@ class Logger extends AbstractLogger
      * @return MonoLogLogger
      * @throws Exception
      */
-    private function getLogger(int $log_level): LoggerInterface
+    private function getLogger(int $log_level)
     {
         $logger = new MonoLogLogger('amazonpaylog');
         $logger->pushHandler(

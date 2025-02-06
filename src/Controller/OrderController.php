@@ -290,7 +290,7 @@ class OrderController extends OrderController_parent
      *
      * @return stdClass
      */
-    public function getDeliveryAddressAsObj(): stdClass
+    public function getDeliveryAddressAsObj()
     {
         return OxidServiceProvider::getAmazonService()->getDeliveryAddressAsObj();
     }
@@ -300,7 +300,7 @@ class OrderController extends OrderController_parent
      *
      * @return stdClass
      */
-    public function getBillingAddressAsObj(): stdClass
+    public function getBillingAddressAsObj()
     {
         return OxidServiceProvider::getAmazonService()->getBillingAddressAsObj();
     }
@@ -309,7 +309,7 @@ class OrderController extends OrderController_parent
      * @param string $paymentId
      * @return void
      */
-    protected function setAmazonPayAsPaymentMethod(string $paymentId)
+    protected function setAmazonPayAsPaymentMethod($paymentId)
     {
         $basket = $this->getBasket();
         $user = $this->getUser();

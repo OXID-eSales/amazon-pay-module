@@ -13,7 +13,7 @@ class PhpHelper
      * @param string $json
      * @return array
      */
-    public static function jsonToArray(string $json): array
+    public static function jsonToArray($json)
     {
         /** @var array $decoded */
         $decoded = json_decode($json, true);
@@ -25,7 +25,7 @@ class PhpHelper
      * @param array $haystack
      * @return string|array
      */
-    public static function getArrayValue(string $needle, array $haystack): string
+    public static function getArrayValue($needle, array $haystack)
     {
         foreach ($haystack as $key => $value) {
             if ($key === $needle) {
@@ -43,7 +43,7 @@ class PhpHelper
         return false;
     }
 
-    public static function getMoneyValue(float $num): string
+    public static function getMoneyValue(float $num)
     {
         return number_format($num, 2, '.', '');
     }
@@ -52,7 +52,7 @@ class PhpHelper
      * Get POST from $_POST or php://input if set
      * @return array
      */
-    public static function getPost(): array
+    public static function getPost()
     {
         if (!empty($_POST)) {
             return $_POST;

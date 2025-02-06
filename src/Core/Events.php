@@ -236,7 +236,7 @@ class Events
      *
      * @throws Exception
      */
-    protected static function createPaymentMethod(string $paymentId, array $paymentDescription)
+    protected static function createPaymentMethod($paymentId, array $paymentDescription)
     {
         $payment = oxNew(Payment::class);
         $paymentLoaded = $payment->load($paymentId);
@@ -276,7 +276,7 @@ class Events
      * @return void
      * @throws Exception
      */
-    protected static function assignPaymentToActiveDeliverySets(string $paymentId)
+    protected static function assignPaymentToActiveDeliverySets($paymentId)
     {
         $deliverySetIds = self::getActiveDeliverySetIds();
         foreach ($deliverySetIds as $deliverySetId) {
@@ -290,7 +290,7 @@ class Events
      * @return void
      * @throws Exception
      */
-    protected static function assignPaymentToDelivery(string $paymentId, string $deliverySetId)
+    protected static function assignPaymentToDelivery($paymentId, string $deliverySetId)
     {
         $object2Payment = oxNew(EshopBaseModel::class);
         $object2Payment->init('oxobject2payment');
@@ -309,7 +309,7 @@ class Events
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    protected static function getActiveDeliverySetIds(): array
+    protected static function getActiveDeliverySetIds()
     {
         $sql = 'SELECT `OXID`
                 FROM `oxdeliveryset`

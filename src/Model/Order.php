@@ -34,7 +34,7 @@ class Order extends Order_parent
      * @return int|null
      *
      */
-    protected function prepareFinalizeOrder(Basket $oBasket): int
+    protected function prepareFinalizeOrder(Basket $oBasket)
     {
         $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
@@ -118,7 +118,7 @@ class Order extends Order_parent
      *
      * @return int
      */
-    public function validateDeliveryAddress($oUser): int
+    public function validateDeliveryAddress($oUser)
     {
         if (!$this->getAmazonService()->isAmazonSessionActive()) {
             return parent::validateDeliveryAddress($oUser);
@@ -127,7 +127,7 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus(string $amazonPayStatus, array $data = [])
+    public function updateAmazonPayOrderStatus($amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
             $this->_setFieldData('oxtransid', $data['chargeId']);
@@ -193,7 +193,7 @@ class Order extends Order_parent
      * Just a helper to allow mock injection for testing
      * @return AmazonService
      */
-    public function getAmazonService(): AmazonService
+    public function getAmazonService()
     {
 
         if (empty($this->amazonService)) {
@@ -215,7 +215,7 @@ class Order extends Order_parent
      * @param string $oxid
      * @return bool
      */
-    public function isAmazonOrder(string $oxid = ''): bool
+    public function isAmazonOrder($oxid = '')
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {
@@ -256,7 +256,7 @@ class Order extends Order_parent
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    private function canDeleteAmazonOrder(string $oxid = ''): bool
+    private function canDeleteAmazonOrder($oxid = '')
     {
         $oxid = $oxid ?: $this->getId();
         if (!$oxid) {

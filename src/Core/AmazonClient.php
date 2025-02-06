@@ -44,7 +44,7 @@ class AmazonClient extends Client
      * @param array $payload
      * @param array $headers
      */
-    public function createCheckoutSession($payload, $headers): array
+    public function createCheckoutSession($payload, $headers)
     {
         $config = $this->getModuleConfig();
 
@@ -82,7 +82,7 @@ class AmazonClient extends Client
      * @param array $headers
      * @return array
      */
-    public function getCheckoutSession($checkoutSessionId, $headers = []): array
+    public function getCheckoutSession($checkoutSessionId, $headers = [])
     {
         return $this->decodeResponse(parent::getCheckoutSession($checkoutSessionId, $headers));
     }
@@ -92,7 +92,7 @@ class AmazonClient extends Client
      *
      * @return array
      */
-    private function decodeResponse(array $result): array
+    private function decodeResponse(array $result)
     {
         $result['response'] = PhpHelper::jsonToArray($result['response']);
 
@@ -102,7 +102,7 @@ class AmazonClient extends Client
     /**
      * @return Config
      */
-    public function getModuleConfig(): Config
+    public function getModuleConfig()
     {
         return $this->moduleConfig;
     }

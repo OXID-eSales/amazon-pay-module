@@ -148,7 +148,7 @@ class LogRepositoryTest extends UnitTestCase
     /**
      * @return LogMessage
      */
-    private function prepareLogMessage(): LogMessage
+    private function prepareLogMessage()
     {
         $rand = RAND(1000, 9999);
         $logMessage = new LogMessage();

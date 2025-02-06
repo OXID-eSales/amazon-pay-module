@@ -115,7 +115,7 @@ class Config
     /**
      * @return bool
      */
-    public function isSandbox(): bool
+    public function isSandbox()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPaySandboxMode');
     }
@@ -123,7 +123,7 @@ class Config
     /**
      * @return bool
      */
-    public function isOneStepCapture(): bool
+    public function isOneStepCapture()
     {
         return Registry::getConfig()->getConfigParam('amazonPayCapType') === '1';
     }
@@ -131,7 +131,7 @@ class Config
     /**
      * @return bool
      */
-    public function isTwoStepCapture(): bool
+    public function isTwoStepCapture()
     {
         return Registry::getConfig()->getConfigParam('amazonPayCapType') === '2';
     }
@@ -139,7 +139,7 @@ class Config
     /**
      * @return string
      */
-    public function getPrivateKey(): string
+    public function getPrivateKey()
     {
         /** @var string $sAmazonPayPrivateKey */
         $sAmazonPayPrivateKey = Registry::getConfig()->getConfigParam('sAmazonPayPrivKey');
@@ -149,7 +149,7 @@ class Config
     /**
      * @return string
      */
-    public function getFakePrivateKey(): string
+    public function getFakePrivateKey()
     {
         return str_repeat('*', 10);
     }
@@ -157,7 +157,7 @@ class Config
     /**
      * @return string
      */
-    public function getPublicKeyId(): string
+    public function getPublicKeyId()
     {
         /** @var string $sAmazonPayPubKeyId */
         $sAmazonPayPubKeyId = Registry::getConfig()->getConfigParam('sAmazonPayPubKeyId');
@@ -167,7 +167,7 @@ class Config
     /**
      * @return string
      */
-    public function getMerchantId(): string
+    public function getMerchantId()
     {
         /** @var string $sAmazonPayMerchantId */
         $sAmazonPayMerchantId = Registry::getConfig()->getConfigParam('sAmazonPayMerchantId');
@@ -177,7 +177,7 @@ class Config
     /**
      * @return string
      */
-    public function getStoreId(): string
+    public function getStoreId()
     {
         /** @var string $sAmazonPayStoreId */
         $sAmazonPayStoreId = Registry::getConfig()->getConfigParam('sAmazonPayStoreId');
@@ -187,17 +187,18 @@ class Config
     /**
      * @return string
      */
-    public function getCheckoutLanguage(): string
+    public function getCheckoutLanguage()
     {
         $lang = Registry::getLang();
         $langAbbr = $lang->getLanguageAbbr();
-        return $this->amazonLanguages[$langAbbr] ?? $this->amazonLanguages[$this->amazonDefaultLanguage];
+        return isset($this->amazonLanguages[$langAbbr])
+            ? $this->amazonLanguages[$langAbbr] : $this->amazonLanguages[$this->amazonDefaultLanguage];
     }
 
     /**
      * @return string
      */
-    public function getPresentmentCurrency(): string
+    public function getPresentmentCurrency()
     {
         $currencyAbbr = '';
 
@@ -212,7 +213,7 @@ class Config
     /**
      * @return string
      */
-    public function getLedgerCurrency(): string
+    public function getLedgerCurrency()
     {
         return $this->amazonLedgerCurrency;
     }
@@ -220,7 +221,7 @@ class Config
     /**
      * @return array
      */
-    public function getPossiblePresentmentCurrenciesAbbr(): array
+    public function getPossiblePresentmentCurrenciesAbbr()
     {
         $result = [];
         $shopCurrencies = Registry::getConfig()->getCurrencyArray();
@@ -233,7 +234,7 @@ class Config
         return $result;
     }
 
-    public function getPossibleEUAddressesAbbr(): array
+    public function getPossibleEUAddressesAbbr()
     {
         // if there are no specific countries, then all countries are allowed.
         // Then the Countrylist corresponds to the amazonEUAddresses
@@ -243,7 +244,7 @@ class Config
     /**
      * @return array
      */
-    public function getPossibleEUAddresses(): array
+    public function getPossibleEUAddresses()
     {
         $result = [];
         foreach ($this->getPossibleEUAddressesAbbr() as $isoCode) {
@@ -257,7 +258,7 @@ class Config
     /**
      * @return string
      */
-    public function getPaymentRegion(): string
+    public function getPaymentRegion()
     {
         return 'eu'; //todo also add in tpl
     }
@@ -265,7 +266,7 @@ class Config
     /**
      * @return string
      */
-    public function getIPNUrl(): string
+    public function getIPNUrl()
     {
         $config = Registry::getConfig();
         return html_entity_decode(sprintf(
@@ -280,7 +281,7 @@ class Config
      *
      * @return string
      */
-    public function getCreateCheckoutUrl(): string
+    public function getCreateCheckoutUrl()
     {
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazoncheckout&fnc=createCheckout'
@@ -290,7 +291,7 @@ class Config
     /**
      * @return bool
      */
-    public function displayExpressInPDP(): bool
+    public function displayExpressInPDP()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressPDP');
     }
@@ -298,7 +299,7 @@ class Config
     /**
      * @return bool
      */
-    public function useExclusion(): bool
+    public function useExclusion()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayUseExclusion');
     }
@@ -306,7 +307,7 @@ class Config
     /**
      * @return bool
      */
-    public function socialLoginDeactivated(): bool
+    public function socialLoginDeactivated()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonSocialLoginDeactivated');
     }
@@ -314,7 +315,7 @@ class Config
     /**
      * @return bool
      */
-    public function displayExpressInMiniCartAndModal(): bool
+    public function displayExpressInMiniCartAndModal()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressMinicartAndModal');
     }
@@ -324,7 +325,7 @@ class Config
      *
      * @return string
      */
-    public function checkoutReviewUrl(): string
+    public function checkoutReviewUrl()
     {
 
         return html_entity_decode(
@@ -339,7 +340,7 @@ class Config
      *
      * @return string
      */
-    public function checkoutResultUrl(): string
+    public function checkoutResultUrl()
     {
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
@@ -351,7 +352,7 @@ class Config
     /**
      * @return string
      */
-    public function signInReturnUrl(): string
+    public function signInReturnUrl()
     {
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
@@ -363,7 +364,7 @@ class Config
     /**
      * @return string
      */
-    public function signInCancelUrl(): string
+    public function signInCancelUrl()
     {
         return html_entity_decode(
             Registry::getConfig()->getCurrentShopUrl(false)
@@ -377,7 +378,7 @@ class Config
      *
      * @return array
      */
-    public function getCountryList(): array
+    public function getCountryList()
     {
         $user = oxNew(User::class);
         $user->loadActiveUser();
@@ -409,7 +410,7 @@ class Config
      *
      * @return string
      */
-    public function getUuid(): string
+    public function getUuid()
     {
         try {
             // throws Exception if it was not possible to gather sufficient entropy.
@@ -425,7 +426,7 @@ class Config
      *
      * @return string
      */
-    public function getPlatformId(): string
+    public function getPlatformId()
     {
         return Constants::PLATTFORM_ID;
     }
@@ -436,7 +437,7 @@ class Config
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function isAmazonExcluded(string $oxid): bool
+    public function isAmazonExcluded($oxid)
     {
         if (!$this->useExclusion()) {
             return false;

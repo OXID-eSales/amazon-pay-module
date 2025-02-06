@@ -66,7 +66,7 @@ class PhpHelperTest extends UnitTestCase
         $this->assertEquals('b', $result);
     }
 
-    public function dataProviderMoneyValue(): array
+    public function dataProviderMoneyValue()
     {
         return [
             [12, 12.00],

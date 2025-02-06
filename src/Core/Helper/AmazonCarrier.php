@@ -9,7 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Core\Helper;
 
 class AmazonCarrier extends AmazonCarrierMap
 {
-    public static function getAllCarriers(): array
+    public static function getAllCarriers()
     {
         return static::$carriers;
     }

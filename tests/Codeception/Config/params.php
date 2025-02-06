@@ -42,7 +42,7 @@ function getTestDataDumpFilePath()
     return getShopTestPath() . '/Codeception/_data/dump.sql';
 }
 
-function getModuleTestDataDumpFilePath(): string
+function getModuleTestDataDumpFilePath()
 {
     return __DIR__ . '/../_data/dump.sql';
 }

@@ -29,7 +29,7 @@ use OxidEsales\TestingLibrary\UnitTestCase;
 
 class AddressTest extends UnitTestCase
 {
-    public function amazonDefaultAddressProvider(): array
+    public function amazonDefaultAddressProvider()
     {
         $address = $this->getAddressArray();
 
@@ -60,7 +60,7 @@ class AddressTest extends UnitTestCase
         $this->assertSame($result[$key], $value);
     }
 
-    public function amazonDbMapBillingAddressProvider(): array
+    public function amazonDbMapBillingAddressProvider()
     {
         $address = $this->getAddressArray();
 
@@ -89,7 +89,7 @@ class AddressTest extends UnitTestCase
         $this->assertSame($result[$key], $value);
     }
 
-    public function amazonDbMapShippingAddressProvider(): array
+    public function amazonDbMapShippingAddressProvider()
     {
         $address = $this->getAddressArray();
 
@@ -118,7 +118,7 @@ class AddressTest extends UnitTestCase
         $this->assertSame($result[$key], $value);
     }
 
-    public function amazonViewMapAddressProvider(): array
+    public function amazonViewMapAddressProvider()
     {
         $address = $this->getAddressArray();
 
@@ -155,7 +155,7 @@ class AddressTest extends UnitTestCase
     /**
      * @return array
      */
-    protected function getAddressArray(): array
+    protected function getAddressArray()
     {
         $address = [];
         $address['name'] = 'Some Name';

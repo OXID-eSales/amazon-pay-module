@@ -77,7 +77,7 @@ abstract class BaseCest
      * @param string $element
      * @return string
      */
-    protected function _grabTextFromElementWhenPresent(string $element): string
+    protected function _grabTextFromElementWhenPresent($element)
     {
         try {
             $this->I->seeElement($element);
@@ -93,7 +93,7 @@ abstract class BaseCest
      * @param string $errorMsg
      * @return void
      */
-    protected function _failIfTextNotSeen(string $text, string $errorMsg = '')
+    protected function _failIfTextNotSeen($text, string $errorMsg = '')
     {
         $errorMsg = $errorMsg ?: 'Text not found: ' . $text;
         try {
@@ -269,7 +269,7 @@ abstract class BaseCest
      * @return string
      * @throws \Exception
      */
-    protected function _checkSuccessfulPayment(): string
+    protected function _checkSuccessfulPayment()
     {
         $this->I->wait(10);
         $thankYouPage = new ThankYou($this->I);
@@ -300,7 +300,7 @@ abstract class BaseCest
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
-    protected function _openOrder(string $orderNumber)
+    protected function _openOrder($orderNumber)
     {
         $this->_loginAdmin();
         $this->I->wait(5);

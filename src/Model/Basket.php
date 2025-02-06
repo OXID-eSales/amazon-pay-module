@@ -20,7 +20,7 @@ class Basket extends Basket_parent
      *
      * @return string
      */
-    protected function _findDelivCountry(): string // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+    protected function _findDelivCountry() // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
     {
         $deliveryCountryId = null;
         $paymentId = $this->getPaymentId() ?: '';

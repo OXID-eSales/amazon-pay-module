@@ -30,7 +30,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
      * @param $invAddress
      * @return string login name
      */
-    public function checkLogin($user, $login, $invAddress): string
+    public function checkLogin($user, $login, $invAddress)
     {
         $login = $invAddress['oxuser__oxusername'] ?? $login;
 

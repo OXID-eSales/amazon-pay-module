@@ -37,7 +37,7 @@ class ConfigControllerTest extends UnitTestCase
         $this->assertSame('amazonpay/amazonconfig.tpl', $c->render());
     }
 
-    public function configValueProvider(): array
+    public function configValueProvider()
     {
         return [
             [

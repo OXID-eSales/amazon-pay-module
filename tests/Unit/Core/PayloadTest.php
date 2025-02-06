@@ -33,7 +33,7 @@ class PayloadTest extends UnitTestCase
     {
     }
 
-    private function createPayloadData(): Payload
+    private function createPayloadData()
     {
         $payload = new Payload();
         $payload->setCaptureAmount('1234.56');

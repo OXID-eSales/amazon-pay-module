@@ -35,7 +35,7 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function parseAddress(array $address): array
+    public static function parseAddress(array $address)
     {
         $name = trim($address['name']);
         $last_name = self::getLastName($name);
@@ -129,7 +129,7 @@ class Address
      * @param string $DBTablePrefix
      * @return array
      */
-    public static function mapAddressToDb(array $address, string $DBTablePrefix): array
+    public static function mapAddressToDb(array $address, string $DBTablePrefix)
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
@@ -155,7 +155,7 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function mapAddressToView(array $address): array
+    public static function mapAddressToView(array $address)
     {
         $parsedAddress = self::parseAddress($address);
 
@@ -184,7 +184,7 @@ class Address
      *
      * @return array
      */
-    private static function getAddressLines(array $address): array
+    private static function getAddressLines(array $address)
     {
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {
@@ -205,7 +205,7 @@ class Address
      * Firstname of a Name
      *
      */
-    private static function getFirstName(string $name): string
+    private static function getFirstName($name)
     {
         return implode(' ', array_slice(explode(' ', $name), 0, -1));
     }
@@ -214,7 +214,7 @@ class Address
      * Lastname of a Name
      *
      */
-    private static function getLastName(string $name): string
+    private static function getLastName($name)
     {
         return array_slice(explode(' ', $name), -1)[0];
     }
@@ -226,7 +226,7 @@ class Address
      *
      * @return string
      */
-    private static function validateDBTablePrefix(string $DBTablePrefix): string
+    private static function validateDBTablePrefix($DBTablePrefix)
     {
         return in_array($DBTablePrefix, self::$possibleDBTablePrefix) ?
             $DBTablePrefix :

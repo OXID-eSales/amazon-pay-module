@@ -113,7 +113,7 @@ class Payload
     /**
      * @return array
      */
-    public function getData(): array
+    public function getData()
     {
         $data = [];
 
@@ -205,7 +205,7 @@ class Payload
      * @param string $platformId
      * @return void
      */
-    public function setPlatformId(string $platformId)
+    public function setPlatformId($platformId)
     {
         $this->platformId = $platformId;
     }
@@ -213,7 +213,7 @@ class Payload
     /**
      * @param string $paymentIntent
      */
-    public function setPaymentIntent(string $paymentIntent)
+    public function setPaymentIntent($paymentIntent)
     {
         $this->paymentIntent = $paymentIntent;
     }
@@ -221,7 +221,7 @@ class Payload
     /**
      * @param string $merchantStoreName
      */
-    public function setMerchantStoreName(string $merchantStoreName)
+    public function setMerchantStoreName($merchantStoreName)
     {
         $this->merchantStoreName = $merchantStoreName;
     }
@@ -229,7 +229,7 @@ class Payload
     /**
      * @param string $noteToBuyer
      */
-    public function setNoteToBuyer(string $noteToBuyer)
+    public function setNoteToBuyer($noteToBuyer)
     {
         $this->noteToBuyer = $noteToBuyer;
     }
@@ -237,7 +237,7 @@ class Payload
     /**
      * @param string $currencyCode
      */
-    public function setCurrencyCode(string $currencyCode)
+    public function setCurrencyCode($currencyCode)
     {
         $this->currencyCode = $currencyCode;
     }
@@ -253,7 +253,7 @@ class Payload
     /**
      * @param string $paymentDetailsChargeAmount
      */
-    public function setPaymentDetailsChargeAmount(string $paymentDetailsChargeAmount)
+    public function setPaymentDetailsChargeAmount($paymentDetailsChargeAmount)
     {
         $this->paymentDetailsChargeAmount = PhpHelper::getMoneyValue((float)$paymentDetailsChargeAmount);
     }
@@ -261,7 +261,7 @@ class Payload
     /**
      * @param string $merchantReferenceId
      */
-    public function setMerchantReferenceId(string $merchantReferenceId)
+    public function setMerchantReferenceId($merchantReferenceId)
     {
         $this->merchantReferenceId = $merchantReferenceId;
     }
@@ -269,7 +269,7 @@ class Payload
     /**
      * @param string $softDescriptor
      */
-    public function setSoftDescriptor(string $softDescriptor)
+    public function setSoftDescriptor($softDescriptor)
     {
         $this->softDescriptor = $softDescriptor;
     }
@@ -277,7 +277,7 @@ class Payload
     /**
      * @param string $captureAmount
      */
-    public function setCaptureAmount(string $captureAmount)
+    public function setCaptureAmount($captureAmount)
     {
         $this->captureAmount = PhpHelper::getMoneyValue((float)$captureAmount);
     }
@@ -285,7 +285,7 @@ class Payload
     /**
      * @param string $checkoutChargeAmount
      */
-    public function setCheckoutChargeAmount(string $checkoutChargeAmount)
+    public function setCheckoutChargeAmount($checkoutChargeAmount)
     {
         $this->checkoutChargeAmount = $checkoutChargeAmount;
     }
@@ -294,7 +294,7 @@ class Payload
      * @param string $articlesId
      * @return void
      */
-    public function setCheckoutReviewReturnUrl(string $articlesId = '')
+    public function setCheckoutReviewReturnUrl($articlesId = '')
     {
         $this->checkoutReviewReturnUrl =
             OxidServiceProvider::getAmazonClient()->getModuleConfig()->checkoutReviewUrl() .
@@ -363,7 +363,7 @@ class Payload
      * @param array $data
      * @return array
      */
-    protected function addMerchantMetaData(array $data): array
+    protected function addMerchantMetaData(array $data)
     {
         $data['merchantMetadata'] = [];
         //$data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
@@ -376,7 +376,7 @@ class Payload
      * @param array $data
      * @return array
      */
-    public function removeMerchantMetadata(array $data): array
+    public function removeMerchantMetadata(array $data)
     {
         unset($data['merchantMetadata']);
         return $data;
@@ -386,7 +386,7 @@ class Payload
      * @param User $user
      * @return Payload
      */
-    public function setAddressDetails(User $user): Payload
+    public function setAddressDetails(User $user)
     {
         /** @var string $oxstreet */
         $oxstreet = $user->getFieldData('oxstreet');

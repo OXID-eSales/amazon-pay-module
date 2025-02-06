@@ -52,7 +52,7 @@ class OxidServiceProvider
     /**
      * @return OxidServiceProvider
      */
-    public static function getInstance(): OxidServiceProvider
+    public static function getInstance()
     {
         if (self::$instance == null) {
             self::$instance = new self();
@@ -64,7 +64,7 @@ class OxidServiceProvider
     /**
      * @return AmazonClient
      */
-    public static function getAmazonClient(): AmazonClient
+    public static function getAmazonClient()
     {
         return self::getInstance()->amazonClient;
     }
@@ -72,7 +72,7 @@ class OxidServiceProvider
     /**
      * @return AmazonService
      */
-    public static function getAmazonService(): AmazonService
+    public static function getAmazonService()
     {
         return self::getInstance()->amazonService;
     }
@@ -80,7 +80,7 @@ class OxidServiceProvider
     /**
      * @return User
      */
-    public static function getOxidUser(): User
+    public static function getOxidUser()
     {
         return self::getInstance()->oxidUser;
     }
@@ -88,7 +88,7 @@ class OxidServiceProvider
     /**
      * @return LoggerInterface
      */
-    public static function getLogger(): LoggerInterface
+    public static function getLogger()
     {
         return self::getInstance()->logger;
     }

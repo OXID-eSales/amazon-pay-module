@@ -118,7 +118,8 @@ class AmazonService
         if (!$checkoutSessionId) {
             $session = Registry::getSession();
             /** @var string $paymentId */
-            $paymentId = $session->getVariable('paymentid') ?? '';
+            $paymentId = $session->getVariable('paymentid') !== null
+                ? $session->getVariable('paymentid') : '';
             $isAmazonPayment = Constants::isAmazonPayment($paymentId);
             if ($isAmazonPayment) {
                 self::unsetPaymentMethod();
@@ -185,7 +186,8 @@ class AmazonService
     {
         $checkoutSession = $this->getCheckoutSession();
         /** @var array $address */
-        $address = $checkoutSession['response']['shippingAddress'] ?? [];
+        $address = isset($checkoutSession['response']['shippingAddress'])
+            ? $checkoutSession['response']['shippingAddress'] : [];
 
         // map address fields only if amazon response have a shippingAddress
         return !empty($address) ? Address::mapAddressToView($address) : $address;
@@ -219,7 +221,8 @@ class AmazonService
     public function getBillingAddress()
     {
         $checkoutSession = $this->getCheckoutSession();
-        $address = $checkoutSession['response']['billingAddress'] ?? [];
+        $address = $checkoutSession['response']['billingAddress']
+            ? $checkoutSession['response']['billingAddress'] : [];
         $buyer = $checkoutSession['response']['buyer'];
         $bill = ['oxusername' => $buyer['email']];
 
@@ -360,7 +363,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger)
+    public function processOneStepPayment($amazonSessionId, $basket, $logger)
     {
         $this->processPayment($amazonSessionId, $basket, $logger);
     }
@@ -372,7 +375,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger)
+    public function processTwoStepPayment($amazonSessionId, $basket, $logger)
     {
         $this->isTwoStep = false;
         $this->processPayment($amazonSessionId, $basket, $logger);
@@ -383,7 +386,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund($orderId, float $refundAmount, LoggerInterface $logger)
+    public function createRefund($orderId, $refundAmount, $logger)
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
@@ -456,7 +459,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processRefund($refundId, LoggerInterface $logger)
+    public function processRefund($refundId, $logger)
     {
         $logger->info("Start processRefund");
         $amazonConfig = oxNew(Config::class);
@@ -510,7 +513,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processCharge($chargeId, LoggerInterface $logger)
+    public function processCharge($chargeId, $logger)
     {
         $amazonConfig = oxNew(Config::class);
 
@@ -723,7 +726,7 @@ class AmazonService
      * @param array $result
      * @param string $orderId
      */
-    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId = '')
+    protected function showErrorOnRedirect(LoggerInterface $logger, $result, $orderId = '')
     {
         $response = PhpHelper::jsonToArray($result['response']);
 
@@ -771,7 +774,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function capturePaymentForOrder($chargeId, string $amount, string $currencyCode)
+    public function capturePaymentForOrder($chargeId, $amount, $currencyCode)
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();

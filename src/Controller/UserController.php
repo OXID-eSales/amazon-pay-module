@@ -30,7 +30,7 @@ class UserController extends UserController_parent
              * @var bool|null $showShipAddress
              */
             $showShipAddress = parent::showShipAddress();
-            return $showShipAddress ?? false;
+            return $showShipAddress ? $showShipAddress : false;
         }
 
         return true;

@@ -93,7 +93,7 @@ abstract class BaseCest
      * @param string $errorMsg
      * @return void
      */
-    protected function _failIfTextNotSeen($text, string $errorMsg = '')
+    protected function _failIfTextNotSeen($text, $errorMsg = '')
     {
         $errorMsg = $errorMsg ?: 'Text not found: ' . $text;
         try {

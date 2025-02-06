@@ -196,7 +196,7 @@ class Payload
         return $data;
     }
 
-    public function setAddressRestrictions(array $allowedCountries)
+    public function setAddressRestrictions($allowedCountries)
     {
         $this->addressRestrictions = $allowedCountries;
     }
@@ -349,12 +349,12 @@ class Payload
      * @param array $scopes
      * @return void
      */
-    public function addScopes(array $scopes)
+    public function addScopes($scopes)
     {
         $this->scopes = array_merge($this->scopes, $scopes);
     }
 
-    public function addSignInScopes(array $scopes)
+    public function addSignInScopes($scopes)
     {
         $this->signInScopes = array_merge($this->scopes, $scopes);
     }
@@ -363,7 +363,7 @@ class Payload
      * @param array $data
      * @return array
      */
-    protected function addMerchantMetaData(array $data)
+    protected function addMerchantMetaData($data)
     {
         $data['merchantMetadata'] = [];
         //$data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
@@ -376,7 +376,7 @@ class Payload
      * @param array $data
      * @return array
      */
-    public function removeMerchantMetadata(array $data)
+    public function removeMerchantMetadata($data)
     {
         unset($data['merchantMetadata']);
         return $data;
@@ -441,7 +441,7 @@ class Payload
             $phoneNumber = $oxmobfon;
         }
         /** TODO Change default number to  0 */
-        $this->addressDetails['phoneNumber'] = $phoneNumber ?? '0'; // when no number was provided, Amazon accepts '0'
+        $this->addressDetails['phoneNumber'] = isset($phoneNumber) ? $phoneNumber : '0'; // when no number was provided, Amazon accepts '0'
         return $this;
     }
 }

@@ -32,7 +32,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
      */
     public function checkLogin($user, $login, $invAddress)
     {
-        $login = $invAddress['oxuser__oxusername'] ?? $login;
+        $login = isset($invAddress['oxuser__oxusername']) ? $invAddress['oxuser__oxusername'] : $login;
 
         $service = OxidServiceProvider::getAmazonService();
 

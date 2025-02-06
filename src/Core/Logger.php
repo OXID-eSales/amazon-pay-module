@@ -44,13 +44,12 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage($message, array $context = [])
+    public function logMessage($message, $context)
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
-        #$userId = $context['userId'] ?? Registry::getSession()->getUser();
 
-        $userId = $context['userId'] ?? 'guest';
+        $userId = isset($context['userId']) ? $context['userId'] : 'guest';
         if ($userId === 'guest') {
             $user = Registry::getSession()->getUser();
             if ($user instanceof User) {
@@ -62,7 +61,7 @@ class Logger extends AbstractLogger
         $logMessage->setUserId($userId);
         $logMessage->setOrderId($context['orderId'] ?: $basket->getOrderId() ?: 'no basket');
         $logMessage->setShopId($context['shopId'] ?: Registry::getConfig()->getShopId());
-        $logMessage->setRequestType($context['requestType'] ?? 'amazonpay');
+        $logMessage->setRequestType($context['requestType'] ? $context['requestType'] : 'amazonpay');
         $logMessage->setResponseMessage($message);
         $logMessage->setStatusCode($context['statusCode'] ?: '200');
         $logMessage->setIdentifier($context['identifier'] ?: $context['orderId'] ?: $userId);
@@ -78,7 +77,7 @@ class Logger extends AbstractLogger
      * @param array $result
      * @return array
      */
-    public function resolveLogContent(array $result)
+    public function resolveLogContent($result)
     {
         $context = [];
 
@@ -173,7 +172,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, $context = [])
     {
         $levelName = MonoLogLogger::getLevels()[strtoupper($level)];
         $this->getLogger($levelName)->addRecord($levelName, $message, $context);

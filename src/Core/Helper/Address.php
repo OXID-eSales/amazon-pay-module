@@ -35,7 +35,7 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function parseAddress(array $address)
+    public static function parseAddress($address)
     {
         $name = trim($address['name']);
         $last_name = self::getLastName($name);
@@ -44,7 +44,7 @@ class Address
         // Country
         $countryIsoCode = $address["countryCode"];
         $country = oxNew(Country::class);
-        $countryOxId = $country->getIdByCode($countryIsoCode ?? '');
+        $countryOxId = $country->getIdByCode(isset($countryIsoCode) ? $countryIsoCode : '');
         $country->loadInLang(
             (int)Registry::getLang()->getBaseLanguage(),
             $countryOxId
@@ -79,8 +79,8 @@ class Address
 
             try {
                 $addressData = AddressSplitter::splitAddress($streetTmp);
-                $street = $addressData['streetName'] ?? '';
-                $streetNo = $addressData['houseNumber'] ?? '';
+                $street = isset($addressData['streetName']) ? $addressData['streetName'] : '';
+                $streetNo = isset($addressData['houseNumber']) ? $addressData['houseNumber'] : '';
             } catch (SplittingException $ex) {
                 // The Address could not be split
                 // we have an exception, bit we did not log the message because of sensible Address-Information
@@ -95,10 +95,10 @@ class Address
                 $addressLinesAsString = implode(', ', $addressLines);
                 $addressData = AddressSplitter::splitAddress($addressLinesAsString);
 
-                $company = $addressData['additionToAddress1'] ?? '';
-                $street = $addressData['streetName'] ?? '';
-                $streetNo = $addressData['houseNumber'] ?? '';
-                $additionalInfo = $addressData['additionToAddress2'] ?? '';
+                $company = isset($addressData['additionToAddress1']) ? $addressData['additionToAddress1'] : '';
+                $street = isset($addressData['streetName']) ? $addressData['streetName'] : '';
+                $streetNo = isset($addressData['houseNumber']) ? $addressData['houseNumber'] : '';
+                $additionalInfo = isset($addressData['additionToAddress2']) ? $addressData['additionToAddress2'] : '';
             } catch (SplittingException $ex1) {
                 // The Address could not be split
                 // we have an exception, bit we did not log the message because of sensible Address-Information
@@ -129,7 +129,7 @@ class Address
      * @param string $DBTablePrefix
      * @return array
      */
-    public static function mapAddressToDb(array $address, string $DBTablePrefix)
+    public static function mapAddressToDb($address, $DBTablePrefix)
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
@@ -155,7 +155,7 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function mapAddressToView(array $address)
+    public static function mapAddressToView($address)
     {
         $parsedAddress = self::parseAddress($address);
 
@@ -184,7 +184,7 @@ class Address
      *
      * @return array
      */
-    private static function getAddressLines(array $address)
+    private static function getAddressLines($address)
     {
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {

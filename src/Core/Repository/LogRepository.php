@@ -187,7 +187,7 @@ class LogRepository
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function updateOrderStatus($orderId, string $transStatus = 'OK', string $chargeId = '')
+    public function updateOrderStatus($orderId, $transStatus = 'OK', $chargeId = '')
     {
         $sql = 'UPDATE oxorder SET OXTRANSSTATUS = ?, OXTRANSID= ? WHERE OXID=?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(

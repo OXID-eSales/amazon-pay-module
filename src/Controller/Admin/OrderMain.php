@@ -40,7 +40,7 @@ class OrderMain extends OrderMain_parent
                 }
 
                 $amazonConfig = oxNew(Config::class);
-                $currencyCode = $order->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
+                $currencyCode = isset($order->oxorder__oxcurrency->rawValue) ? $order->oxorder__oxcurrency->rawValue : $amazonConfig->getPresentmentCurrency();
 
                 if ($order->getRawFieldData('oxtransstatus') !== 'OK') {
                     OxidServiceProvider::getAmazonService()

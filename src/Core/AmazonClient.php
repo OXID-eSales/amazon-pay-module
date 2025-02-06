@@ -32,7 +32,7 @@ class AmazonClient extends Client
      *
      * @throws Exception
      */
-    public function __construct(array $config, Config $moduleConfig, LoggerInterface $logger)
+    public function __construct($config, $moduleConfig, $logger)
     {
         parent::__construct($config);
         $this->logger = $logger;
@@ -92,7 +92,7 @@ class AmazonClient extends Client
      *
      * @return array
      */
-    private function decodeResponse(array $result)
+    private function decodeResponse($result)
     {
         $result['response'] = PhpHelper::jsonToArray($result['response']);
 

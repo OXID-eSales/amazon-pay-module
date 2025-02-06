@@ -363,7 +363,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processOneStepPayment($amazonSessionId, $basket, $logger)
+    public function processOneStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->processPayment($amazonSessionId, $basket, $logger);
     }
@@ -375,7 +375,7 @@ class AmazonService
      * @param Basket $basket
      * @param LoggerInterface $logger Logger
      */
-    public function processTwoStepPayment($amazonSessionId, $basket, $logger)
+    public function processTwoStepPayment($amazonSessionId, Basket $basket, LoggerInterface $logger)
     {
         $this->isTwoStep = false;
         $this->processPayment($amazonSessionId, $basket, $logger);
@@ -386,7 +386,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund($orderId, $refundAmount, $logger)
+    public function createRefund($orderId, float $refundAmount, LoggerInterface $logger)
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();
@@ -459,7 +459,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processRefund($refundId, $logger)
+    public function processRefund($refundId, LoggerInterface $logger)
     {
         $logger->info("Start processRefund");
         $amazonConfig = oxNew(Config::class);
@@ -513,7 +513,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function processCharge($chargeId, $logger)
+    public function processCharge($chargeId, LoggerInterface $logger)
     {
         $amazonConfig = oxNew(Config::class);
 
@@ -726,7 +726,7 @@ class AmazonService
      * @param array $result
      * @param string $orderId
      */
-    protected function showErrorOnRedirect(LoggerInterface $logger, $result, $orderId = '')
+    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId)
     {
         $response = PhpHelper::jsonToArray($result['response']);
 
@@ -774,7 +774,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function capturePaymentForOrder($chargeId, $amount, $currencyCode)
+    public function capturePaymentForOrder($chargeId, string $amount, string $currencyCode)
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();

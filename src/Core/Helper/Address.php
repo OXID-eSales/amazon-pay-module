@@ -35,7 +35,7 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function parseAddress($address)
+    public static function parseAddress(array $address)
     {
         $name = trim($address['name']);
         $last_name = self::getLastName($name);
@@ -129,7 +129,7 @@ class Address
      * @param string $DBTablePrefix
      * @return array
      */
-    public static function mapAddressToDb($address, $DBTablePrefix)
+    public static function mapAddressToDb(array $address, string $DBTablePrefix)
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);
@@ -155,7 +155,7 @@ class Address
      * @param array $address
      * @return array
      */
-    public static function mapAddressToView($address)
+    public static function mapAddressToView(array $address)
     {
         $parsedAddress = self::parseAddress($address);
 
@@ -184,7 +184,7 @@ class Address
      *
      * @return array
      */
-    private static function getAddressLines($address)
+    private static function getAddressLines(array $address)
     {
         $lines = [];
         for ($i = 1; $i <= 3; $i++) {

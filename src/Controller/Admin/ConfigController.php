@@ -85,7 +85,7 @@ class ConfigController extends AdminController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function saveConfig($conf, $shopId)
+    protected function saveConfig(array $conf, string $shopId)
     {
         $oModuleConfiguration = null;
         $oModuleConfigurationDaoBridge = null;
@@ -123,7 +123,7 @@ class ConfigController extends AdminController
      *
      * @return array
      */
-    protected function handleSpecialFields($conf)
+    protected function handleSpecialFields(array $conf)
     {
         $config = new Config();
         $conf['blAmazonPaySandboxMode'] = $conf['blAmazonPaySandboxMode'] === 'sandbox' ? 1 : 0;

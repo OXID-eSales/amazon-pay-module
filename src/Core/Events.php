@@ -236,7 +236,7 @@ class Events
      *
      * @throws Exception
      */
-    protected static function createPaymentMethod($paymentId, $paymentDescription)
+    protected static function createPaymentMethod($paymentId, array $paymentDescription)
     {
         $payment = oxNew(Payment::class);
         $paymentLoaded = $payment->load($paymentId);
@@ -290,7 +290,7 @@ class Events
      * @return void
      * @throws Exception
      */
-    protected static function assignPaymentToDelivery($paymentId, $deliverySetId)
+    protected static function assignPaymentToDelivery($paymentId, string $deliverySetId)
     {
         $object2Payment = oxNew(EshopBaseModel::class);
         $object2Payment->init('oxobject2payment');

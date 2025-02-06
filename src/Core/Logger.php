@@ -18,7 +18,6 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 use OxidSolutionCatalysts\AmazonPay\Model\User;
 use Psr\Log\AbstractLogger;
-use Psr\Log\LoggerInterface;
 
 class Logger extends AbstractLogger
 {
@@ -44,7 +43,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage($message, $context)
+    public function logMessage($message, array $context = array())
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
@@ -77,7 +76,7 @@ class Logger extends AbstractLogger
      * @param array $result
      * @return array
      */
-    public function resolveLogContent($result)
+    public function resolveLogContent(array $result)
     {
         $context = [];
 
@@ -152,7 +151,7 @@ class Logger extends AbstractLogger
      * @return MonoLogLogger
      * @throws Exception
      */
-    private function getLogger($log_level)
+    private function getLogger(int $log_level)
     {
         $logger = new MonoLogLogger('amazonpaylog');
         $logger->pushHandler(

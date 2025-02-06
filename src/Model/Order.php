@@ -127,7 +127,7 @@ class Order extends Order_parent
         return 0; // disable validation
     }
 
-    public function updateAmazonPayOrderStatus($amazonPayStatus, $data = [])
+    public function updateAmazonPayOrderStatus($amazonPayStatus, array $data = [])
     {
         if (!empty($data) && $data['chargeId']) {
             $this->_setFieldData('oxtransid', $data['chargeId']);

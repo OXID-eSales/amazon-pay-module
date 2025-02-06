@@ -196,7 +196,7 @@ class Payload
         return $data;
     }
 
-    public function setAddressRestrictions($allowedCountries)
+    public function setAddressRestrictions(array $allowedCountries)
     {
         $this->addressRestrictions = $allowedCountries;
     }
@@ -349,12 +349,12 @@ class Payload
      * @param array $scopes
      * @return void
      */
-    public function addScopes($scopes)
+    public function addScopes(array $scopes)
     {
         $this->scopes = array_merge($this->scopes, $scopes);
     }
 
-    public function addSignInScopes($scopes)
+    public function addSignInScopes(array $scopes)
     {
         $this->signInScopes = array_merge($this->scopes, $scopes);
     }
@@ -363,7 +363,7 @@ class Payload
      * @param array $data
      * @return array
      */
-    protected function addMerchantMetaData($data)
+    protected function addMerchantMetaData(array $data)
     {
         $data['merchantMetadata'] = [];
         //$data['merchantMetadata']['merchantReferenceId'] = $this->merchantReferenceId;
@@ -376,7 +376,7 @@ class Payload
      * @param array $data
      * @return array
      */
-    public function removeMerchantMetadata($data)
+    public function removeMerchantMetadata(array $data)
     {
         unset($data['merchantMetadata']);
         return $data;

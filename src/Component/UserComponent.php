@@ -27,7 +27,7 @@ class UserComponent extends UserComponent_parent
      * @param array $amazonSession
      * @throws Exception
      */
-    public function createGuestUser($amazonSession)
+    public function createGuestUser(array $amazonSession)
     {
         $session = Registry::getSession();
         $config = new Config();
@@ -105,12 +105,12 @@ class UserComponent extends UserComponent_parent
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameterString($paramName, $paramValue)
+    public function setRequestParameterString($paramName, string $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }
 
-    public function setRequestParameterArray($paramName, $paramValue)
+    public function setRequestParameterArray($paramName, array $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }
@@ -149,7 +149,7 @@ class UserComponent extends UserComponent_parent
         return $aDelAddress;
     }
 
-    protected function _getNameFromAmazonResponse($amazonSession)
+    protected function _getNameFromAmazonResponse(array $amazonSession)
     {
         if (array_key_exists('buyer', $amazonSession['response'])) {
             return $amazonSession['response']['buyer']['name'];
@@ -158,7 +158,7 @@ class UserComponent extends UserComponent_parent
         return $amazonSession['response']['name'];
     }
 
-    protected function _getEMailFromAmazonResponse($amazonSession)
+    protected function _getEMailFromAmazonResponse(array $amazonSession)
     {
         if (array_key_exists('buyer', $amazonSession['response'])) {
             return $amazonSession['response']['buyer']['email'];

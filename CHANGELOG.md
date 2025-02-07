@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007636](https://bugs.oxid-esales.com/view.php?id=7636): Fix Refund value can only be entered with a point, semicolon is not possible
 - [0007685](https://bugs.oxid-esales.com/view.php?id=7685): Smarty-Template Improvements
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
+- fix Tpl Paths in Twig
 
 ## [3.1.5] - 2024-03-22
 

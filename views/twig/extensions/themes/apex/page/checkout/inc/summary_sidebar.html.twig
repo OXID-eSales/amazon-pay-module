@@ -3,6 +3,6 @@
 {% block basket_btn_next_bottom %}
     {{ parent() }}
     {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and not oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() and not oViewConf.isLastCheckoutStep() %}
-        {% include "@osc_amazonpay/amazonpay/basket_btn_next_bottom_apex" %}
+        {% include "@osc_amazonpay/frontend/basket_btn_next_bottom_apex" %}
     {% endif %}
 {% endblock %}

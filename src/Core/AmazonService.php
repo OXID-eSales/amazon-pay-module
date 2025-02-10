@@ -386,7 +386,7 @@ class AmazonService
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund($orderId, float $refundAmount, LoggerInterface $logger)
+    public function createRefund($orderId, $refundAmount, LoggerInterface $logger)
     {
         $repository = oxNew(LogRepository::class);
         $order = new Order();

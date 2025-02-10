@@ -151,7 +151,7 @@ class Logger extends AbstractLogger
      * @return MonoLogLogger
      * @throws Exception
      */
-    private function getLogger(int $log_level)
+    private function getLogger($log_level)
     {
         $logger = new MonoLogLogger('amazonpaylog');
         $logger->pushHandler(

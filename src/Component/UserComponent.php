@@ -105,7 +105,7 @@ class UserComponent extends UserComponent_parent
      * @param string $paramName
      * @param mixed $paramValue
      */
-    public function setRequestParameterString($paramName, string $paramValue)
+    public function setRequestParameterString($paramName, $paramValue)
     {
         $_POST[$paramName] = $paramValue;
     }

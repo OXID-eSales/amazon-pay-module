@@ -85,7 +85,7 @@ class ConfigController extends AdminController
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    protected function saveConfig(array $conf, string $shopId)
+    protected function saveConfig(array $conf, $shopId)
     {
         $oModuleConfiguration = null;
         $oModuleConfigurationDaoBridge = null;

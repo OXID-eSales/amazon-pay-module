@@ -287,7 +287,7 @@ class AmazonService
      * @param LoggerInterface $logger Logger
      */
     protected function processPayment(
-        string $amazonSessionId,
+        $amazonSessionId,
         Basket $basket,
         LoggerInterface $logger
     ) {
@@ -726,7 +726,7 @@ class AmazonService
      * @param array $result
      * @param string $orderId
      */
-    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, string $orderId)
+    protected function showErrorOnRedirect(LoggerInterface $logger, array $result, $orderId)
     {
         $response = PhpHelper::jsonToArray($result['response']);
 
@@ -774,7 +774,7 @@ class AmazonService
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function capturePaymentForOrder($chargeId, string $amount, string $currencyCode)
+    public function capturePaymentForOrder($chargeId, $amount, $currencyCode)
     {
         $amazonConfig = oxNew(Config::class);
         $logger = new Logger();
@@ -835,9 +835,9 @@ class AmazonService
     }
 
     public function sendAlexaNotification(
-        string $chargePermissionId,
-        string $trackingCode,
-        string $deliveryType
+        $chargePermissionId,
+        $trackingCode,
+        $deliveryType
     ) {
         $amazonConfig = oxNew(Config::class);
 

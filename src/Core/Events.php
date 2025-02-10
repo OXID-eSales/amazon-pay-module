@@ -47,6 +47,7 @@ class Events
         self::addDeliverySetColumn();
         self::addOrderColumn();
         self::addRequireSession();
+        self::executeModuleMigrations();
 
         $dbMetaDataHandler = oxNew(DbMetaDataHandler::class);
         $dbMetaDataHandler->updateViews();
@@ -290,7 +291,7 @@ class Events
      * @return void
      * @throws Exception
      */
-    protected static function assignPaymentToDelivery($paymentId, string $deliverySetId)
+    protected static function assignPaymentToDelivery($paymentId, $deliverySetId)
     {
         $object2Payment = oxNew(EshopBaseModel::class);
         $object2Payment->init('oxobject2payment');
@@ -477,6 +478,21 @@ class Events
                             ENGINE=InnoDB
                             COMMENT \'Amazon Payment transaction log\'',
             LogRepository::TABLE_NAME
+        );
+
+        DatabaseProvider::getDb()->execute($sql);
+    }
+
+    /**
+     * Execute necessary module migrations on activate event
+     *
+     * @return void
+     */
+    private static function executeModuleMigrations()
+    {
+        $sql = sprintf(
+            "SELECT *",
+            ''
         );
 
         DatabaseProvider::getDb()->execute($sql);

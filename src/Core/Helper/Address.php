@@ -129,7 +129,7 @@ class Address
      * @param string $DBTablePrefix
      * @return array
      */
-    public static function mapAddressToDb(array $address, string $DBTablePrefix)
+    public static function mapAddressToDb(array $address, $DBTablePrefix)
     {
         $DBTablePrefix = self::validateDBTablePrefix($DBTablePrefix);
         $parsedAddress = self::parseAddress($address);

@@ -26,7 +26,7 @@ class Events
      */
     protected static $requireSessionWithParams = [
         'cl' => [
-            'details'        => true,
+            'details' => true,
             'amazondispatch' => true
         ]
     ];
@@ -298,8 +298,8 @@ class Events
         $object2Payment->assign(
             [
                 'oxpaymentid' => $paymentId,
-                'oxobjectid'  => $deliverySetId,
-                'oxtype'      => 'oxdelset'
+                'oxobjectid' => $deliverySetId,
+                'oxtype' => 'oxdelset'
             ]
         );
         $object2Payment->save();
@@ -484,17 +484,42 @@ class Events
     }
 
     /**
-     * Execute necessary module migrations on activate event
+     * Configure module with sandbox data. Hardcoded values for sandbox because in Oxid 6.0.x yaml files were not yet introduced.
      *
      * @return void
      */
     private static function executeModuleMigrations()
     {
-        $sql = sprintf(
-            "SELECT *",
-            ''
+        /** @var \OxidEsales\Eshop\Core\Config $config */
+        $config = Registry::getConfig();
+        $shopId = (string)$config->getShopId();
+        $defaults = array(
+            'blAmazonPaySandboxMode' => 1,
+            'sAmazonPayPubKeyId' => 'AFGBEOU2665WCRAGITRYZFXC',
+            'sAmazonPayMerchantId' => 'A2779TIVPHEGIA',
+            'sAmazonPayStoreId' => 'amzn1.application-oa2-client.c6b7452ab1934a56b5d99c4cc31f3f13',
+            'blAmazonPayExpressPDP' => '1',
+            'blAmazonPayExpressMinicartAndModal' => '1',
+            'blAmazonPayUseExclusion' => '0',
+            'blAmazonSocialLoginDeactivated' => '1',
+            'amazonPayCapType' => '1',
         );
+        $sAmazonPayPubKeyId = $config->getConfigParam('sAmazonPayPubKeyId');
 
-        DatabaseProvider::getDb()->execute($sql);
+        //saving sandbox configuration available only with fresh install
+        if (!empty($sAmazonPayPubKeyId)) {
+            return;
+        }
+
+        //Applying sandbox configuration
+        foreach ($defaults as $confName => $value) {
+            $config->saveShopConfVar(
+                strpos($confName, 'bl') ? 'bool' : 'str',
+                $confName,
+                $value,
+                $shopId,
+                'module:' . Constants::MODULE_ID
+            );
+        }
     }
 }

@@ -166,7 +166,7 @@ class ViewConfig extends ViewConfig_parent
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function isAmazonExclude($oxid)
+    public function isAmazonExclude($oxid = '')
     {
         return $this->getAmazonConfig()->isAmazonExcluded($oxid);
     }

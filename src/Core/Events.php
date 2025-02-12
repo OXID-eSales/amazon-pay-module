@@ -343,7 +343,12 @@ class Events
         $config = Registry::getConfig();
         $cfg = $config->getConfigParam('aRequireSessionWithParams');
         $cfg = is_array($cfg) ? $cfg : [];
-        $cfg = array_merge_recursive($cfg, self::$requireSessionWithParams);
+        $cfg = array_merge_recursive($cfg, [
+            'cl' => [
+                'details' => true,
+                'amazondispatch' => true
+            ]
+        ]);
         $config->saveShopConfVar('arr', 'aRequireSessionWithParams', $cfg, (string)$config->getShopId());
     }
 

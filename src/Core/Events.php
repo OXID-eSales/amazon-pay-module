@@ -498,7 +498,7 @@ class Events
         /** @var \OxidEsales\Eshop\Core\Config $config */
         $config = Registry::getConfig();
         $shopId = (string)$config->getShopId();
-        $defaults = array(
+        $defaults = [
             'blAmazonPaySandboxMode' => 1,
             'sAmazonPayPubKeyId' => 'AFGBEOU2665WCRAGITRYZFXC',
             'sAmazonPayMerchantId' => 'A2779TIVPHEGIA',
@@ -508,7 +508,7 @@ class Events
             'blAmazonPayUseExclusion' => '0',
             'blAmazonSocialLoginDeactivated' => '1',
             'amazonPayCapType' => '1',
-        );
+        ];
         $sAmazonPayPubKeyId = $config->getConfigParam('sAmazonPayPubKeyId');
 
         //saving sandbox configuration available only with fresh install

@@ -43,7 +43,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    public function logMessage($message, array $context = array())
+    public function logMessage($message, array $context = [])
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
@@ -171,7 +171,7 @@ class Logger extends AbstractLogger
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         $levelName = MonoLogLogger::getLevels()[strtoupper($level)];
         $this->getLogger($levelName)->addRecord($levelName, $message, $context);

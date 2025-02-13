@@ -2,8 +2,8 @@
     <div id="shippingAddressText" class="col-lg-9 col-lg-offset-3">
         {% if delivadr.oxaddress__oxcompany.value != '' %} <strong>{{ delivadr.oxaddress__oxcompany.value }}</strong><br />{% endif %}
         {% if delivadr.oxaddress__oxaddinfo.value != '' %} {{ delivadr.oxaddress__oxaddinfo.value }}<br />{% endif %}
-        {% if delivadr.oxaddress__oxfname.value != '' or delivadr.oxaddress__oxlname.value != '' %}1
-            {% if delivadr.oxaddress__oxsal.value  != '' %}{{ delivadr.oxaddress__oxsal.value|translate_salutation }}2&nbsp;{% endif %}3{{ delivadr.oxaddress__oxfname.value }} {{ delivadr.oxaddress__oxlname.value }}<br />
+        {% if delivadr.oxaddress__oxfname.value != '' or delivadr.oxaddress__oxlname.value != '' %}
+            {% if delivadr.oxaddress__oxsal.value  != '' %}{{ delivadr.oxaddress__oxsal.value|translate_salutation }}&nbsp;{% endif %} {{ delivadr.oxaddress__oxfname.value }} {{ delivadr.oxaddress__oxlname.value }}<br />
         {% endif %}
         {% if delivadr.oxaddress__oxstreet.value  != '' or delivadr.oxaddress__oxstreetnr.value != '' %}{{ delivadr.oxaddress__oxstreet.value }}&nbsp;{{ delivadr.oxaddress__oxstreetnr.value }}<br />{% endif %}
         {% if delivadr.oxaddress__oxstateid.value != '' %}{{ delivadr.oxaddress__oxstateid.value }} {% endif %}

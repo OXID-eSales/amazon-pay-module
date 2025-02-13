@@ -72,8 +72,8 @@ jobs:
 
       - name: Downgrade composer1 to Version 1
         run: |
-          docker-compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          docker-compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
+          docker compose exec -T php sudo php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          docker compose exec -T php sudo php composer-setup.php --install-dir=/usr/bin --filename=composer1 --1
 
       - name: Checkout current module
         uses: actions/checkout@v3
@@ -81,20 +81,20 @@ jobs:
           path: source/test-module
       - name: Install module
         run: |
-          docker-compose exec -T \
+          docker compose exec -T \
             php composer1 config repositories.${{ env.PACKAGE_NAME }} \
             '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
-          docker-compose exec -T \
+          docker compose exec -T \
             php composer1 config repositories.${{ env.PACKAGE_NAME }} \
             '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
-          docker-compose exec -T \
+          docker compose exec -T \
             php composer1 require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
 
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer1 require vlucas/phpdotenv --no-update --no-interaction --dev
-          docker-compose exec -T php composer1 update --no-interaction
-          docker-compose exec -T php php vendor/bin/reset-shop
+          docker compose exec -T php composer1 require vlucas/phpdotenv --no-update --no-interaction --dev
+          docker compose exec -T php composer1 update --no-interaction
+          docker compose exec -T php php vendor/bin/reset-shop
 
       - name: Put module settings
         continue-on-error: true
@@ -105,7 +105,7 @@ jobs:
       - name: Show docker log
         if: always()
         run: |
-          docker-compose logs
+          docker compose logs
       - name: Create .env-file
         continue-on-error: true
         working-directory: source/test-module/tests
@@ -117,7 +117,7 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
 
       - name: Upload configuration artifacts
@@ -126,7 +126,7 @@ jobs:
         with:
           name: Configs-${{ matrix.php }}
           path: |
-            docker-compose.yml
+            docker compose.yml
             source/composer.json
             source/composer.lock
             source/config.inc.php
@@ -157,7 +157,7 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose exec -T \
+          docker compose exec -T \
             -e PARTIAL_MODULE_PATHS=${{ env.MODULE_PATH }} \
             -e ACTIVATE_ALL_MODULES=1 \
             -e RUN_TESTS_FOR_SHOP=0 \
@@ -173,7 +173,7 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
 
       - name: Upload log artifact

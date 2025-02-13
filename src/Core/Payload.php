@@ -245,7 +245,7 @@ class Payload
     /**
      * @param bool $canHandlePendingAuthorization
      */
-    public function setCanHandlePendingAuthorization(bool $canHandlePendingAuthorization)
+    public function setCanHandlePendingAuthorization($canHandlePendingAuthorization)
     {
         $this->canHandlePendingAuthorization = $canHandlePendingAuthorization;
     }

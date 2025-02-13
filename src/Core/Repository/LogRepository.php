@@ -95,7 +95,7 @@ class LogRepository
      */
     public function findLogMessageForChargePermissionId(
         $chargePermissionId,
-        $orderBy
+        $orderBy = 'OXTIMESTAMP'
     ) {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,

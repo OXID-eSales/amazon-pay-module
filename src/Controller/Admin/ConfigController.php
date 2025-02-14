@@ -82,34 +82,14 @@ class ConfigController extends AdminController
      *
      * @param array $conf
      * @param string $shopId
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     protected function saveConfig(array $conf, $shopId)
     {
-        $oModuleConfiguration = null;
-        $oModuleConfigurationDaoBridge = null;
-        if ($this->useDaoBridge()) {
-
-            /** @var ModuleConfigurationDaoBridgeInterface $oModuleConfigurationDaoBridge */
-            $oModuleConfigurationDaoBridge = ContainerFactory::getInstance()->getContainer()->get(
-                ModuleConfigurationDaoBridgeInterface::class
-            );
-            $oModuleConfiguration = $oModuleConfigurationDaoBridge->get(Constants::MODULE_ID);
-        }
-
         foreach ($conf as $confName => $value) {
-            $value = trim($value);
-            if ($this->useDaoBridge()) {
-                $oModuleSetting = $oModuleConfiguration->getModuleSetting($confName);
-                $oModuleSetting->setValue($value);
-                $oModuleConfigurationDaoBridge->save($oModuleConfiguration);
-            }
-
             Registry::getConfig()->saveShopConfVar(
                 strpos($confName, 'bl') ? 'bool' : 'str',
                 $confName,
-                $value,
+                trim($value),
                 $shopId,
                 'module:' . Constants::MODULE_ID
             );
@@ -150,17 +130,5 @@ class ConfigController extends AdminController
         }
 
         return $conf;
-    }
-
-    /**
-     * check if using DaoBridge is possible
-     *
-     * @return boolean
-     */
-    protected function useDaoBridge()
-    {
-        return class_exists(
-            '\OxidEsales\EshopCommunity\Internal\Container\ContainerFactory'
-        );
     }
 }

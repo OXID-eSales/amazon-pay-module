@@ -124,7 +124,7 @@ class ViewConfig extends ViewConfig_parent
      */
     public function isAmazonPaymentPossible($paymentId)
     {
-        if ($paymentId === '') {
+        if (empty($paymentId)) {
             /** @var string $paymentId */
             $paymentId = Registry::getSession()->getVariable('paymentid') !== null
                 ? Registry::getSession()->getVariable('paymentid') : '';

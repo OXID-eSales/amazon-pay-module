@@ -29,15 +29,17 @@ class ViewConfig extends ViewConfig_parent
 {
     /**
      * is this a "Flow"-Theme Compatible Theme?
-     * @var null|boolean $isFlowCompatibleTheme
+     * @var boolean
+     * @deprecated variable will be removed because it only played a role in the Smarty template engine context.
      */
-    protected $isFlowCompatibleTheme = null;
+    protected ?bool $isFlowCompatibleTheme = null;
 
     /**
      * is this a "Wave"-Theme Compatible Theme?
-     * @var null|boolean $isWaveCompatibleTheme
+     * @var boolean
+     * @deprecated variable will be removed because it only played a role in the Smarty template engine context.
      */
-    protected $isWaveCompatibleTheme = null;
+    protected ?bool $isWaveCompatibleTheme = null;
 
     public $signature = '';
 
@@ -175,8 +177,10 @@ class ViewConfig extends ViewConfig_parent
      * Template variable getter. Check if is a Flow Theme Compatible Theme
      *
      * @return boolean
+     *
+     * @deprecated method will be removed because it only played a role in the Smarty template engine context.
      */
-    public function isFlowCompatibleTheme()
+    public function isFlowCompatibleTheme(): bool
     {
         if (is_null($this->isFlowCompatibleTheme)) {
             $this->isFlowCompatibleTheme = $this->isThemeBasedOn('flow');
@@ -188,8 +192,10 @@ class ViewConfig extends ViewConfig_parent
      * Template variable getter. Check if is a Wave Theme Compatible Theme
      *
      * @return boolean
+     *
+     * @deprecated method will be removed because it only played a role in the Smarty template engine context.
      */
-    public function isWaveCompatibleTheme()
+    public function isWaveCompatibleTheme(): bool
     {
         if (is_null($this->isWaveCompatibleTheme)) {
             $this->isWaveCompatibleTheme = $this->isThemeBasedOn('wave');
@@ -202,26 +208,24 @@ class ViewConfig extends ViewConfig_parent
      *
      * @param string $themeId
      *
-     * @psalm-param 'flow'|'wave' $themeId
      * @return boolean
      *
-     * @psalm-suppress InternalMethod
-     *
+     * @deprecated method will be removed because it only played a role in the Smarty template engine context.
      */
-    public function isThemeBasedOn(string $themeId): bool
+    protected function isThemeBasedOn(string $themeId): bool
     {
         $result = false;
-
-        $theme = oxNew(Theme::class);
-        $theme->load($theme->getActiveThemeId());
-        // check active theme or parent theme
-        if (
-            $theme->getActiveThemeId() == $themeId ||
-            $theme->getInfo('parentTheme') == $themeId
-        ) {
-            $result = true;
+        if ($themeId) {
+            $theme = oxNew(Theme::class);
+            $theme->load($theme->getActiveThemeId());
+            // check active theme or parent theme
+            if (
+                $theme->getActiveThemeId() === $themeId ||
+                $theme->getInfo('parentTheme') === $themeId
+            ) {
+                $result = true;
+            }
         }
-
         return $result;
     }
 

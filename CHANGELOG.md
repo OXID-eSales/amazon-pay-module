@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007685](https://bugs.oxid-esales.com/view.php?id=7685): Smarty-Template Improvements
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
 - fix Tpl Paths in Twig
+- set Smarty-Tpl-Check-Methods as deprecated
 
 ## [3.1.5] - 2024-03-22
 

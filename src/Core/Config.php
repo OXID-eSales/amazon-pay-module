@@ -314,7 +314,7 @@ class Config
      * @param bool $bIsAdmin
      * @return bool
      */
-    public function displayExpressInPDP(bool $bIsAdmin = false): bool
+    public function displayExpressInPDP($bIsAdmin = false)
     {
         return $this->displayExpressButton('blAmazonPayExpressPDP', $bIsAdmin);
     }
@@ -323,7 +323,7 @@ class Config
      * @param bool $bIsAdmin
      * @return bool
      */
-    public function displayExpressInMiniCartAndModal(bool $bIsAdmin = false): bool
+    public function displayExpressInMiniCartAndModal($bIsAdmin = false)
     {
         return $this->displayExpressButton('blAmazonPayExpressMinicartAndModal', $bIsAdmin);
     }
@@ -333,7 +333,7 @@ class Config
      * @param bool $bIsAdmin
      * @return bool
      */
-    protected function displayExpressButton(string $sVarName, bool $bIsAdmin = false): bool
+    private function displayExpressButton($sVarName, $bIsAdmin = false)
     {
         $bShowButton = (bool)Registry::getConfig()->getConfigParam($sVarName);
         if (is_null($this->bIsAmazonExpressActive)) {

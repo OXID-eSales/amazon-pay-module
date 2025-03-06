@@ -43,7 +43,7 @@ use OxidSolutionCatalysts\AmazonPay\Model\User as ModuleUser;
 use OxidSolutionCatalysts\AmazonPay\Controller\PaymentController;
 use OxidEsales\Eshop\Application\Controller\PaymentController as CorePaymentController;
 
-$sMetadataVersion = '2.1';
+$sMetadataVersion = '2.0';
 
 /**
  * Module information
@@ -59,7 +59,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'out/img/amazon-pay-logo.png',
-    'version' => '2.1.0',
+    'version' => '1.6.0-rc.1',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',
     'email' => 'info@oxid-esales.com',

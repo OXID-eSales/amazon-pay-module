@@ -94,6 +94,12 @@ class Config
      */
     protected $countryList = null;
 
+    /**
+     * is AmazonPayExpress as Paymentmethod active
+     *
+     * @var bool|null
+     */
+    protected $bIsAmazonExpressActive = null;
 
     /**
      * Checks if module configuration is valid
@@ -291,14 +297,6 @@ class Config
     /**
      * @return bool
      */
-    public function displayExpressInPDP()
-    {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressPDP');
-    }
-
-    /**
-     * @return bool
-     */
     public function useExclusion()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPayUseExclusion');
@@ -313,11 +311,39 @@ class Config
     }
 
     /**
+     * @param bool $bIsAdmin
      * @return bool
      */
-    public function displayExpressInMiniCartAndModal()
+    public function displayExpressInPDP(bool $bIsAdmin = false): bool
     {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayExpressMinicartAndModal');
+        return $this->displayExpressButton('blAmazonPayExpressPDP', $bIsAdmin);
+    }
+
+    /**
+     * @param bool $bIsAdmin
+     * @return bool
+     */
+    public function displayExpressInMiniCartAndModal(bool $bIsAdmin = false): bool
+    {
+        return $this->displayExpressButton('blAmazonPayExpressMinicartAndModal', $bIsAdmin);
+    }
+
+    /**
+     * @param string $sVarName
+     * @param bool $bIsAdmin
+     * @return bool
+     */
+    protected function displayExpressButton(string $sVarName, bool $bIsAdmin = false): bool
+    {
+        $bShowButton = (bool)Registry::getConfig()->getConfigParam($sVarName);
+        if (is_null($this->bIsAmazonExpressActive)) {
+            $this->bIsAmazonExpressActive = false;
+            $oPayment = oxNew(Payment::class);
+            $oPayment->load(Constants::PAYMENT_ID_EXPRESS);
+            $this->bIsAmazonExpressActive = $oPayment->isLoaded() &&
+                $oPayment->getFieldData('oxactive');
+        }
+        return $bShowButton && ($this->bIsAmazonExpressActive || $bIsAdmin);
     }
 
     /**

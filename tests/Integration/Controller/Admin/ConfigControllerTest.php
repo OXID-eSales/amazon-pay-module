@@ -22,7 +22,8 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
+use OxidEsales\Eshop\Application\Model\Payment;
+use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
@@ -72,26 +73,6 @@ class ConfigControllerTest extends UnitTestCase
                 'getterMethod' => 'getStoreId'
             ],
             [
-                ['blAmazonPayExpressPDP' => 'on'],
-                true,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => 1],
-                true,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => ''],
-                false,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => null],
-                false,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
                 ['blAmazonPayUseExclusion' => 'on'],
                 true,
                 'getterMethod' => 'useExclusion'
@@ -110,26 +91,6 @@ class ConfigControllerTest extends UnitTestCase
                 ['blAmazonPayUseExclusion' => null],
                 false,
                 'getterMethod' => 'useExclusion'
-            ],
-            [
-                ['blAmazonPayExpressMinicartAndModal' => 'on'],
-                true,
-                'getterMethod' => 'displayExpressInMiniCartAndModal'
-            ],
-            [
-                ['blAmazonPayExpressMinicartAndModal' => 1],
-                true,
-                'getterMethod' => 'displayExpressInMiniCartAndModal'
-            ],
-            [
-                ['blAmazonPayExpressMinicartAndModal' => ''],
-                false,
-                'getterMethod' => 'displayExpressInMiniCartAndModal'
-            ],
-            [
-                ['blAmazonPayExpressMinicartAndModal' => null],
-                false,
-                'getterMethod' => 'displayExpressInMiniCartAndModal'
             ],
         ];
     }
@@ -151,5 +112,103 @@ class ConfigControllerTest extends UnitTestCase
         $this->setRequestParameter('conf', $conf);
         $configController->save();
         $this->assertSame($expected, $config->$getterMethod());
+    }
+
+    public function testDisplayExpressInPDP()
+    {
+        // Mock Payment class
+        $paymentMock = $this->getMockBuilder(Payment::class)
+            ->setMethods(['load', 'isLoaded', 'getFieldData'])
+            ->getMock();
+        $paymentMock->expects($this->any())
+            ->method('load')
+            ->with($this->equalTo('oscpayamazonpayexpress'))
+            ->willReturn(true);
+
+        // 1. Test: Option enabled, payment method active, frontend context
+        $paymentMock->expects($this->any())
+            ->method('isLoaded')
+            ->willReturn(true);
+        $paymentMock->expects($this->any())
+            ->method('getFieldData')
+            ->with($this->equalTo('oxactive'))
+            ->willReturn(true);
+
+        $this->setConfigParam('blAmazonPayExpressPDP', true);
+
+        // Override Oxid Registry to return our mock object
+        Registry::set(Payment::class, $paymentMock);
+
+        $config = new Config();
+        // Without bIsAdmin parameter (= false)
+        $this->assertTrue($config->displayExpressInPDP());
+
+        // 2. Test: Option enabled, payment method inactive, frontend context
+        $newPaymentMock = clone $paymentMock;
+        $newPaymentMock->expects($this->any())
+            ->method('getFieldData')
+            ->with($this->equalTo('oxactive'))
+            ->willReturn(false);
+        Registry::set(Payment::class, $newPaymentMock);
+
+        $config = new Config();
+        $this->assertFalse($config->displayExpressInPDP());
+
+        // 3. Test: Option enabled, payment method inactive, admin context
+        $this->assertTrue($config->displayExpressInPDP(true));
+
+        // 4. Test: Option disabled (regardless of other factors)
+        $this->setConfigParam('blAmazonPayExpressPDP', false);
+        $this->assertFalse($config->displayExpressInPDP());
+        $this->assertFalse($config->displayExpressInPDP(true));
+    }
+
+    public function testDisplayExpressInMiniCartAndModal()
+    {
+        // Mock Payment class
+        $paymentMock = $this->getMockBuilder(Payment::class)
+            ->setMethods(['load', 'isLoaded', 'getFieldData'])
+            ->getMock();
+        $paymentMock->expects($this->any())
+            ->method('load')
+            ->with($this->equalTo('oscpayamazonpayexpress'))
+            ->willReturn(true);
+
+        // 1. Test: Option enabled, payment method active, frontend context
+        $paymentMock->expects($this->any())
+            ->method('isLoaded')
+            ->willReturn(true);
+        $paymentMock->expects($this->any())
+            ->method('getFieldData')
+            ->with($this->equalTo('oxactive'))
+            ->willReturn(true);
+
+        $this->setConfigParam('blAmazonPayExpressMinicartAndModal', true);
+
+        // Override Oxid Registry to return our mock object
+        Registry::set(Payment::class, $paymentMock);
+
+        $config = new Config();
+        // Without bIsAdmin parameter (= false)
+        $this->assertTrue($config->displayExpressInMiniCartAndModal());
+
+        // 2. Test: Option enabled, payment method inactive, frontend context
+        $newPaymentMock = clone $paymentMock;
+        $newPaymentMock->expects($this->any())
+            ->method('getFieldData')
+            ->with($this->equalTo('oxactive'))
+            ->willReturn(false);
+        Registry::set(Payment::class, $newPaymentMock);
+
+        $config = new Config();
+        $this->assertFalse($config->displayExpressInMiniCartAndModal());
+
+        // 3. Test: Option enabled, payment method inactive, admin context
+        $this->assertTrue($config->displayExpressInMiniCartAndModal(true));
+
+        // 4. Test: Option disabled (regardless of other factors)
+        $this->setConfigParam('blAmazonPayExpressMinicartAndModal', false);
+        $this->assertFalse($config->displayExpressInMiniCartAndModal());
+        $this->assertFalse($config->displayExpressInMiniCartAndModal(true));
     }
 }

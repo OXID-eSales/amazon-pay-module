@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007728](https://bugs.oxid-esales.com/view.php?id=7728): Fix that Items are not added when paying with AmazonPay Express from Minibasket (Flyout)
 - [0007752](https://bugs.oxid-esales.com/view.php?id=7728): Fis that Orders are NOT always refunded when cancelled, even if the option for this is deactivated.
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
+- show AmazonPay-Express-Buttons only if Payment AmazonPayExpress is active and Show-Option for Button is enabled
 
 ## [2.1.6] - 2024-08-15
 

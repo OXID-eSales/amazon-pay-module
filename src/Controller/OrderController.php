@@ -48,15 +48,14 @@ class OrderController extends OrderController_parent
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
 
-        if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
+        if (!$exclude && Constants::isAmazonPayment($paymentId)) {
             $amazonService = OxidServiceProvider::getAmazonService();
             $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
 
             if ($isAmazonSessionActive) {
                 $this->initAmazonPayExpress($amazonService, $session);
             }
-
-            if (!$isAmazonSessionActive && Constants::isAmazonPayment($paymentId)) {
+            if (!$isAmazonSessionActive) {
                 $this->initAmazonPay();
             }
         }

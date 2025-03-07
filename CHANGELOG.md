@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
 - fix Tpl Paths in Twig
 - set Smarty-Tpl-Check-Methods as deprecated
+- show AmazonPay-Express-Buttons only if Payment AmazonPayExpress is active and Show-Option for Button is enabled
 
 ## [3.1.5] - 2024-03-22
 

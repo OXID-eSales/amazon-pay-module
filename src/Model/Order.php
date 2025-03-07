@@ -203,7 +203,7 @@ class Order extends Order_parent
             case "AMZ_AUTH_OR_CAPT_DECLINED":
                 $remark = 'AmazonPay: Auth or Capture Declined';
                 if (!empty($data['result']['response'])) {
-                    if (is_string($data['result']['response'])){
+                    if (is_string($data['result']['response'])) {
                         $response = PhpHelper::jsonToArray($data['result']['response']);
                     } else {
                         $response = $data['result']['response'];

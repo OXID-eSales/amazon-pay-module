@@ -24,6 +24,7 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class ConfigController extends AdminController
 {
+    // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore
     protected $_sThisTemplate = 'amazonpay/amazonconfig.tpl';
 
     /**

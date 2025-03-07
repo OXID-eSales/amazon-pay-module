@@ -26,6 +26,9 @@ use OxidSolutionCatalysts\AmazonPay\Model\Order as AmazonOrder;
 use Psr\Log\LoggerInterface;
 use stdClass;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ */
 class AmazonService
 {
     /**
@@ -371,7 +374,10 @@ class AmazonService
         $response = PhpHelper::jsonToArray($result['response']);
 
         // in case of error, the resulting structure is different...
-        if (!isset($result['response'], $result['status']) || ($result['status'] !== 200 && $result['status'] !== 202)) {
+        if (
+            !isset($result['response'], $result['status']) ||
+            ($result['status'] !== 200 && $result['status'] !== 202)
+        ) {
             $this->showErrorOnRedirect($logger, $result, (string)$basket->getOrderId());
         }
 
@@ -453,8 +459,12 @@ class AmazonService
         /** @var string $orderCurrencyName */
         $orderCurrencyName = $order->getOrderCurrency()->name;
 
-        //amounts needs to be cast with same precision level or else even if numbers looks the same the compare will be wrong
-        if ($refundAmount < 0 || round($refundAmount, 2) > round($this->getMaximalRefundAmount($orderId), 2)) {
+        // amounts needs to be cast with same precision level or
+        // else even if numbers looks the same the compare will be wrong
+        if (
+            $refundAmount < 0 ||
+            round($refundAmount, 2) > round($this->getMaximalRefundAmount($orderId), 2)
+        ) {
             Registry::getUtilsView()->addErrorToDisplay(
                 Registry::getLang()->translateString(
                     "OSC_AMAZONPAY_REFUND_ANNOTATION"

@@ -17,7 +17,6 @@ use OxidEsales\Eshop\Application\Model\DeliverySet;
  */
 class DeliverySetMain extends DeliverySetMain_parent
 {
-
     /**
      * @inheritDoc
      *

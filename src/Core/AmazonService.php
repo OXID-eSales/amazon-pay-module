@@ -26,6 +26,9 @@ use OxidSolutionCatalysts\AmazonPay\Model\Order as AmazonOrder;
 use Psr\Log\LoggerInterface;
 use stdClass;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ */
 class AmazonService
 {
     /**

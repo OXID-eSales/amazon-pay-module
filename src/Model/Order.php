@@ -23,6 +23,7 @@ use function date;
 
 /**
  * @mixin \OxidEsales\Eshop\Application\Model\Order
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Order extends Order_parent
 {
@@ -162,11 +163,9 @@ class Order extends Order_parent
             case "AMZ_AUTH_AND_CAPT_FAILED":
                 $remark = 'AmazonPay: ERROR';
                 if (!empty($data['result']['response'])) {
-                    if (is_string($data['result']['response'])) {
-                        $response = PhpHelper::jsonToArray($data['result']['response']);
-                    } else {
-                        $response = $data['result']['response'];
-                    }
+                    $response = is_string($data['result']['response']) ?
+                        PhpHelper::jsonToArray($data['result']['response']) :
+                        $data['result']['response'];
                     $remark .= ' (' . $response['reasonCode'] . ')';
                 }
                 $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');
@@ -203,11 +202,10 @@ class Order extends Order_parent
             case "AMZ_AUTH_OR_CAPT_DECLINED":
                 $remark = 'AmazonPay: Auth or Capture Declined';
                 if (!empty($data['result']['response'])) {
-                    if (is_string($data['result']['response'])) {
-                        $response = PhpHelper::jsonToArray($data['result']['response']);
-                    } else {
-                        $response = $data['result']['response'];
-                    }
+                    $response = is_string($data['result']['response']) ?
+                        PhpHelper::jsonToArray($data['result']['response']) :
+                        $data['result']['response'];
+
                     $remark .= ' (' . $response['reasonCode'] . ')';
                 }
                 $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');

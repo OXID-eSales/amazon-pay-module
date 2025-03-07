@@ -97,14 +97,14 @@
                     <div class="checkbox">
                         <label>
                             <input type="hidden" name="conf[blAmazonPayExpressPDP]" value="0" />
-                            <input id="placementDetailPage" type="checkbox" name="conf[blAmazonPayExpressPDP]" [{if $config->displayExpressInPDP()}]checked[{/if}] value="1" />
+                            <input id="placementDetailPage" type="checkbox" name="conf[blAmazonPayExpressPDP]" [{if $config->displayExpressInPDP(true)}]checked[{/if}] value="1" />
                             [{oxmultilang ident="OSC_AMAZONPAY_PDP"}]
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
                             <input type="hidden" name="conf[blAmazonPayExpressMinicartAndModal]" value="0" />
-                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayExpressMinicartAndModal]" [{if $config->displayExpressInMiniCartAndModal()}]checked[{/if}] value="1" />
+                            <input id="placementMinicartAndModal" type="checkbox" name="conf[blAmazonPayExpressMinicartAndModal]" [{if $config->displayExpressInMiniCartAndModal(true)}]checked[{/if}] value="1" />
                             [{oxmultilang ident="OSC_AMAZONPAY_MINICART_AND_MODAL"}]
                         </label>
                     </div>

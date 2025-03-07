@@ -606,6 +606,3 @@ class Config
             ->get(ModuleSettingBridgeInterface::class);
     }
 }
-
-
-

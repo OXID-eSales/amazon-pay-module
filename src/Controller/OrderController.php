@@ -54,7 +54,8 @@ class OrderController extends OrderController_parent
             $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
             if ($isAmazonSessionActive) {
                 $this->initAmazonPayExpress($amazonService, $session);
-            } else {
+            }
+            if (!$isAmazonSessionActive) {
                 $this->initAmazonPay();
             }
         }

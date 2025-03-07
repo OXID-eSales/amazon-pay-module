@@ -313,6 +313,7 @@ class Config
     /**
      * @param bool $bIsAdmin
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function displayExpressInPDP($bIsAdmin = false)
     {
@@ -322,6 +323,7 @@ class Config
     /**
      * @param bool $bIsAdmin
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function displayExpressInMiniCartAndModal($bIsAdmin = false)
     {
@@ -332,6 +334,7 @@ class Config
      * @param string $sVarName
      * @param bool $bIsAdmin
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     private function displayExpressButton($sVarName, $bIsAdmin = false)
     {

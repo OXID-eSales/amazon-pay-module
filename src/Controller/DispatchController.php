@@ -209,6 +209,7 @@ class DispatchController extends FrontendController
                     $anid,
                     1
                 );
+                $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
                 // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
                 $basket->calculateBasket(true);

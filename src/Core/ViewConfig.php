@@ -234,13 +234,16 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Template variable getter. Get payload in JSON Format
      *
+     * @param string|null $anid
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress(string $anid = ''): string
+    public function getPayloadExpress($anid): string
     {
         /** @var string $anid */
-        $anid = !empty($anid) ? $anid : (string)Registry::getRequest()->getRequestParameter('anid');
+        $anid = (!is_null($anid) && $anid === '')
+            ? (string)Registry::getRequest()->getRequestParameter('anid')
+            : (string)$anid;
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();
@@ -366,7 +369,12 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getSignature(string $payload): string
     {
-        $amazonClient = OxidServiceProvider::getAmazonClient();
-        return $amazonClient->generateButtonSignature($payload);
+        try {
+            return OxidServiceProvider::getAmazonClient()->generateButtonSignature($payload);
+        } catch (Exception $exception) {
+            $logger = new Logger();
+            $logger->log('ERROR', $exception->getMessage(), [$exception]);
+            return '';
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
-use OxidEsales\EshopCommunity\Core\Request;
+use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
@@ -18,13 +18,29 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderArticle extends OrderArticle_parent
 {
-    public function deleteThisArticle(): void
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function deleteThisArticle()
     {
         $this->refundAmazon();
         parent::deleteThisArticle();
     }
 
-    public function storno(): void
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function storno()
     {
         $this->refundAmazon();
         parent::storno();
@@ -33,19 +49,16 @@ class OrderArticle extends OrderArticle_parent
     /**
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
-     *
-     * @return void
      */
-    private function refundAmazon()
+    private function refundAmazon(): void
     {
         $config = new Config();
         if (!$config->automatedRefundActivated()) {
             return;
         }
-        $request = new Request();
         // get article id
         /** @var string $sOrderArtId */
-        $sOrderArtId = $request->getRequestParameter('sArtID') ?: '';
+        $sOrderArtId = Registry::getRequest()->getRequestParameter('sArtID') ?: '';
         $sOrderId = $this->getEditObjectId() ?: '';
 
         $oOrderArticle = oxNew(\OxidEsales\Eshop\Application\Model\OrderArticle::class);

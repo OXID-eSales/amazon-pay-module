@@ -26,6 +26,8 @@ class OrderOverview extends OrderOverview_parent
     /**
      * @inheritDoc
      *
+     * @return string
+     *
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
@@ -125,7 +127,6 @@ class OrderOverview extends OrderOverview_parent
     }
 
     /**
-     * @return string
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -165,9 +166,6 @@ class OrderOverview extends OrderOverview_parent
         return $this->captureStatus;
     }
 
-    /**
-     * @return string
-     */
     public function getAmazonMaximalRefundAmount(): string
     {
         return PhpHelper::getMoneyValue(
@@ -175,9 +173,6 @@ class OrderOverview extends OrderOverview_parent
         );
     }
 
-    /**
-     * @return string
-     */
     public function getAmazonMaximalCaptureAmount(): string
     {
         $order = new Order();

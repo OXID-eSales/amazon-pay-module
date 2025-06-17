@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.7] - 2025-??-??
+
+- Added `is_string` check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
+- Fixed wrong namespace on Controller/Admin/OrderArticle 
+- Changed [Amazonclient::getCharge()](./src/Core/AmazonClient.php) to match the upstream library call
+- [0007715](https://bugs.oxid-esales.com/view.php?id=7715): Fix wrong HTML-Code-Output
+- [0007718](https://bugs.oxid-esales.com/view.php?id=7718): Fix compatibility-Issue with Core (Method-Return-Values must be compatible with CORE)
+- [0007728](https://bugs.oxid-esales.com/view.php?id=7728): Fix that Items are not added when paying with AmazonPay Express from Minibasket (Flyout)
+- [0007752](https://bugs.oxid-esales.com/view.php?id=7728): Fis that Orders are NOT always refunded when cancelled, even if the option for this is deactivated.
+- Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
+- show AmazonPay-Express-Buttons only if Payment AmazonPayExpress is active and Show-Option for Button is enabled
+
 ## [2.1.6] - 2024-08-15
 
 - [0007654](https://bugs.oxid-esales.com/view.php?id=7654): Fix Capture type is incorrectly evaluated

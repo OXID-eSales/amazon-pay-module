@@ -4,11 +4,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.3] - Release
+## [3.1.6] - 2025-??-??
 
+- Added `is_string` check for [PhpHelper::jsonToArray()](./src/Core/Helper/PhpHelper.php)
+- Fixed wrong namespace on Controller/Admin/OrderArticle
+- Changed [Amazonclient::getCharge()](./src/Core/AmazonClient.php) to match the upstream library call
+- [0007654](https://bugs.oxid-esales.com/view.php?id=7654): Fix Capture type is incorrectly evaluated
+- [0007636](https://bugs.oxid-esales.com/view.php?id=7636): Fix Refund value can only be entered with a point, semicolon is not possible
+- [0007685](https://bugs.oxid-esales.com/view.php?id=7685): Smarty-Template Improvements
+- Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
+- fix Tpl Paths in Twig
+- set Smarty-Tpl-Check-Methods as deprecated
+- show AmazonPay-Express-Buttons only if Payment AmazonPayExpress is active and Show-Option for Button is enabled
+
+## [3.1.5] - 2024-03-22
+
+### NEW
 * split Version for OXID7
 
-## [2.1.4] - 2023-??-??
+### Fixed
+* Bugfix in Basket and AmazonService
+
+## [2.1.4] - 2023-12-05
 
 - [0007538](https://bugs.oxid-esales.com/view.php?id=7538): Amazon Pay - Values are stored correctly in the YAML
 - [0007542](https://bugs.oxid-esales.com/view.php?id=7542): Transaction-History in case of a refund is not updated + suggested refund value

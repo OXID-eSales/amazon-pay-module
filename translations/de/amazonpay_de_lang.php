@@ -19,7 +19,7 @@ $aLang = [
                                                  </ul>',
     'AMAZON_PAY_PROCESSED'                    => 'Ihre Zahlung wird von Amazon Pay verarbeitet.',
     'AMAZON_PAY_UNLINK'                       => 'aufheben',
-    'AMAZON_PAY_USEREXISTS'                   => 'Es besteht bereits ein Konto unter folgender E-Mail Adresse: <b>"%s"</b>. Bitte melden Sie sich zunächst in ihrem bestehenden Shopkonto unter <b>"%s"</b> an und starten Sie den Amazon Pay Checkout durch einen erneuten Klick auf den Amazon Pay Button.',
+    'AMAZON_PAY_USEREXISTS'                   => 'Es besteht bereits ein Konto unter folgender E-Mail Adresse: "%s". Bitte melden Sie sich zunächst in ihrem bestehenden Shopkonto unter "%s" an und starten Sie den Amazon Pay Checkout durch einen erneuten Klick auf den Amazon Pay Button.',
     'AMAZON_PAY_CHECKOUT_ERROR_HEAD'          => 'Fehler beim Amazon Payment',
     'AMAZON_PAY_CHECKOUT_ERROR'               => 'Leider ist eine Lieferung an Ihre Amazon-Lieferadresse nicht möglich. Bitte wählen Sie eine andere Adresse oder eine andere Zahlart aus.',
     'AMAZON_PAY_CHECKOUT_CHANGE_ADDRESS'      => 'Adresse ändern',

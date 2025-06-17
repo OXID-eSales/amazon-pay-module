@@ -48,7 +48,7 @@ class OrderController extends OrderController_parent
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
 
-        if (!$exclude && ($paymentId === '' || Constants::isAmazonPayment($paymentId))) {
+        if (!$exclude && Constants::isAmazonPayment($paymentId)) {
             $amazonService = OxidServiceProvider::getAmazonService();
             $isAmazonSessionActive = $amazonService->isAmazonSessionActive();
 
@@ -56,7 +56,7 @@ class OrderController extends OrderController_parent
                 $this->initAmazonPayExpress($amazonService, $session);
             }
 
-            if (!$isAmazonSessionActive && Constants::isAmazonPayment($paymentId)) {
+            if (!$isAmazonSessionActive) {
                 $this->initAmazonPay();
             }
         }
@@ -151,7 +151,19 @@ class OrderController extends OrderController_parent
                     $this->completeAmazonPaymentExpress();
                 } elseif ($paymentId === Constants::PAYMENT_ID) {
                     $logger = new Logger();
-                    OxidServiceProvider::getAmazonService()->processOneStepPayment($amazonSessionId, $basket, $logger);
+                    if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+                        OxidServiceProvider::getAmazonService()->processOneStepPayment(
+                            $amazonSessionId,
+                            $basket,
+                            $logger
+                        );
+                    } else {
+                        OxidServiceProvider::getAmazonService()->processTwoStepPayment(
+                            $amazonSessionId,
+                            $basket,
+                            $logger
+                        );
+                    }
                 }
             }
         }
@@ -166,7 +178,7 @@ class OrderController extends OrderController_parent
     /**
      * @return bool
      */
-    protected function _validateTermsAndConditions()
+    protected function validateTermsAndConditions()
     {
         $basket = $this->getBasket();
         $paymentId = $basket->getPaymentId();
@@ -176,7 +188,7 @@ class OrderController extends OrderController_parent
         // check T&C only for regular amazon (with express, some certain steps are skipped)
         return ($isAmazonPayment && !$isAmazonExpress) ?
             $this->validateTermsAndConditionsByAmazon() :
-            parent::_validateTermsAndConditions();
+            parent::validateTermsAndConditions();
     }
 
     protected function validateTermsAndConditionsByAmazon(): bool

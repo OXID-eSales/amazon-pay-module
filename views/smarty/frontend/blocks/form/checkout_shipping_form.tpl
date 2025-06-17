@@ -1,0 +1,6 @@
+[{assign var="oDeliveryAddress" value=$oView->getDeliveryAddressAsObj()}]
+[{if $oViewConf->isAmazonActive() && $oViewConf->isAmazonSessionActive() && $oDeliveryAddress}]
+    [{include file="@osc_amazonpay/frontend/filtered_delivery_address.tpl" delivadr=$oDeliveryAddress}]
+[{else}]
+    [{$smarty.block.parent}]
+[{/if}]

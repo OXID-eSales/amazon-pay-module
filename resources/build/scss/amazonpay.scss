@@ -1,6 +1,9 @@
 .amazonpay-button {
     width: 250px;
     display: block;
+    &.large {
+        width: 100% !important;
+    }
     &.small {
         width: 200px;
     }
@@ -8,7 +11,7 @@
 .amazonpay-button-or {
     padding: 10px;
     &.large {
-        width: 250px;
+        width: 100% !important;
     }
     &.small {
         width: 200px;

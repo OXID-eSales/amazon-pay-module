@@ -44,7 +44,7 @@ class Logger extends AbstractLogger
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
      * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
      */
-    public function logMessage(string $message, array $context = []): void
+    public function logMessage(?string $message, array $context = []): void
     {
         $context = $this->resolveLogContent($context);
         $basket = Registry::getSession()->getBasket();
@@ -62,7 +62,7 @@ class Logger extends AbstractLogger
         $logMessage->setOrderId($context['orderId'] ?: $basket->getOrderId() ?: 'no basket');
         $logMessage->setShopId($context['shopId'] ?: Registry::getConfig()->getShopId());
         $logMessage->setRequestType($context['requestType'] ?? 'amazonpay');
-        $logMessage->setResponseMessage($message);
+        $logMessage->setResponseMessage((string)$message);
         $logMessage->setStatusCode($context['statusCode'] ?: '200');
         $logMessage->setIdentifier($context['identifier'] ?: $context['orderId'] ?: $userId);
         $logMessage->setChargeId($context['chargeId'] ?: 'null');
@@ -82,7 +82,12 @@ class Logger extends AbstractLogger
         $context = [];
 
         if (!empty($result['response'])) {
-            $response = PhpHelper::jsonToArray($result['response']);
+            // ensure it is a string
+            if (is_string($result['response'])) {
+                $response = PhpHelper::jsonToArray($result['response']);
+            } else {
+                $response = $result['response'];
+            }
 
             if (!empty($response['statusDetails']['state'])) {
                 $context['message'] = $response['statusDetails']['state'];

@@ -156,7 +156,11 @@ class Order extends Order_parent
             case "AMZ_AUTH_AND_CAPT_FAILED":
                 $remark = 'AmazonPay: ERROR';
                 if (!empty($data['result']['response'])) {
-                    $response = PhpHelper::jsonToArray($data['result']['response']);
+                    if (is_string($data['result']['response'])) {
+                        $response = PhpHelper::jsonToArray($data['result']['response']);
+                    } else {
+                        $response = $data['result']['response'];
+                    }
                     $remark .= ' (' . $response['reasonCode'] . ')';
                 }
 
@@ -191,7 +195,11 @@ class Order extends Order_parent
             case "AMZ_AUTH_OR_CAPT_DECLINED":
                 $remark = 'AmazonPay: Auth or Capture Declined';
                 if (!empty($data['result']['response'])) {
-                    $response = PhpHelper::jsonToArray($data['result']['response']);
+                    if (is_string($data['result']['response'])) {
+                        $response = PhpHelper::jsonToArray($data['result']['response']);
+                    } else {
+                        $response = $data['result']['response'];
+                    }
                     $remark .= ' (' . $response['reasonCode'] . ')';
                 }
                 $this->setFieldData('oxtransstatus', 'NOT_FINISHED');
@@ -199,7 +207,6 @@ class Order extends Order_parent
                 $this->setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
-
         }
     }
 

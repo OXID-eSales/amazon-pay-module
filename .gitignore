@@ -9,3 +9,4 @@
 !tests/Codeception/_output/.gitkeep
 /tests/reports/*
 !tests/reports/.gitkeep
+/tests/privatekey.pem

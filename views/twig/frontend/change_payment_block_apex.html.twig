@@ -1,0 +1,21 @@
+{% if oViewConf.isAmazonActive() and oViewConf.isAmazonSessionActive() %}
+    <div class="panel panel-default">
+        <h4 class="card-header card-title">{{ translate({ ident: "AMAZON_PAY" }) }}</h4>
+        <div class="card-body">
+            <div class="mb-3 pull-left">
+                {{ translate({ ident: "AMAZON_PAY_PROCESSED" }) }}
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-default btn-primary btn-highlight" href="{{ oViewConf.getCancelAmazonPaymentUrl()|raw }}">{{ translate({ ident: "AMAZON_PAY_UNLINK" }) }}</a>
+            </div>
+            {% if not oViewConf.isAmazonPaymentPossible() %}
+                <p class="alert alert-danger">
+                    {{ translate({ ident: "AMAZON_PAY_PAYMENT_ERROR" }) }}
+                </p>
+                <a href="{{ seo_url({ ident: oViewConf.getSelfLink()|cat("cl=user"|raw) }) }}" class="btn btn-warning">
+                    {{ translate({ ident: "AMAZON_PAY_CHECKOUT_CHANGE_ADDRESS" }) }}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

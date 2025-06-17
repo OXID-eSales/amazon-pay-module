@@ -1,0 +1,8 @@
+[{if !$oxcmp_user && !$oView->getLoginOption() && $oViewConf->isAmazonActive() && !$oViewConf->isAmazonSessionActive() && !$oViewConf->socialLoginDeactivated()}]
+    [{if $oViewConf->isFlowCompatibleTheme()}]
+        [{include file="@osc_amazonpay/frontend/checkout_user_main_flow.tpl"}]
+    [{else}]
+        [{include file="@osc_amazonpay/frontend/checkout_user_main_wave.tpl"}]
+    [{/if}]
+[{/if}]
+[{$smarty.block.parent}]

@@ -87,6 +87,18 @@ class LogRepository
     }
 
     /**
+     * @param string $amazonObjectId
+     * @return array
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    public function findLogMessageForAmazonObjectId($amazonObjectId)
+    {
+        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OBJECT_ID = ? ORDER BY OXTIMESTAMP',
+            [$amazonObjectId]
+        );
+    }
      * @param string $chargePermissionId
      * @param string $orderBy
      * @return array

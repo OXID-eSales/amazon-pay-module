@@ -71,6 +71,26 @@ class ConfigControllerTest extends UnitTestCase
                 'getterMethod' => 'getStoreId'
             ],
             [
+                ['blAmazonPayExpressPDP' => 'on'],
+                true,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => 1],
+                true,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => ''],
+                false,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
+                ['blAmazonPayExpressPDP' => null],
+                false,
+                'getterMethod' => 'displayExpressInPDP'
+            ],
+            [
                 ['blAmazonPayUseExclusion' => 'on'],
                 true,
                 'getterMethod' => 'useExclusion'
@@ -109,26 +129,6 @@ class ConfigControllerTest extends UnitTestCase
                 ['blAmazonPayExpressMinicartAndModal' => null],
                 false,
                 'getterMethod' => 'displayExpressInMiniCartAndModal'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => 'on'],
-                true,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => 1],
-                true,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => ''],
-                false,
-                'getterMethod' => 'displayExpressInPDP'
-            ],
-            [
-                ['blAmazonPayExpressPDP' => null],
-                false,
-                'getterMethod' => 'displayExpressInPDP'
             ],
         ];
     }

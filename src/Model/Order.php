@@ -8,11 +8,12 @@
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
 use OxidEsales\Eshop\Application\Model\Address;
-use OxidEsales\Eshop\Application\Model\Basket as ShopBasket;
+use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -31,10 +32,10 @@ class Order extends Order_parent
      * Security and Cleanup before finalize order
      *
      * @param Basket $oBasket Basket object
-     * @return int|null
+     * @return int
      *
      */
-    protected function prepareFinalizeOrder(ShopBasket $oBasket)
+    protected function prepareFinalizeOrder($oBasket)
     {
         $paymentId = $oBasket->getPaymentId() ?: '';
         // if payment is 'oxidamazon' but we do not have an Amazon Pay Session
@@ -51,7 +52,7 @@ class Order extends Order_parent
     /**
      * Order checking, processing and saving method.
      *
-     * @param ShopBasket $oBasket ShopBasket object
+     * @param Basket $oBasket Basket object
      * @param object $oUser Current User object
      * @param bool $blRecalculatingOrder Order recalculation
      *
@@ -64,7 +65,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(ShopBasket $oBasket, $oUser, $blRecalculatingOrder = false)
+    public function finalizeOrder($oBasket, $oUser, $blRecalculatingOrder = false)
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
@@ -155,10 +156,13 @@ class Order extends Order_parent
             case "AMZ_AUTH_AND_CAPT_FAILED":
                 $remark = 'AmazonPay: ERROR';
                 if (!empty($data['result']['response'])) {
-                    $response = PhpHelper::jsonToArray($data['result']['response']);
-                    $remark = 'AmazonPay ERROR: ' . $response['reasonCode'];
+                    $response = is_string($data['result']['response']) ?
+                        PhpHelper::jsonToArray($data['result']['response']) :
+                        $data['result']['response'];
+                    $remark .= ' (' . $response['reasonCode'] . ')';
                 }
-
+                $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');
+                $this->_setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
                 $this->_setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
@@ -184,6 +188,20 @@ class Order extends Order_parent
                     );
                 }
                 $this->_setFieldData('oxfolder', 'ORDERFOLDER_NEW');
+                $this->_setFieldData('oxtransstatus', 'OK');
+                $this->save();
+                break;
+            case "AMZ_AUTH_OR_CAPT_DECLINED":
+                $remark = 'AmazonPay: Auth or Capture Declined';
+                if (!empty($data['result']['response'])) {
+                    $response = is_string($data['result']['response']) ?
+                        PhpHelper::jsonToArray($data['result']['response']) :
+                        $data['result']['response'];
+                    $remark .= ' (' . $response['reasonCode'] . ')';
+                }
+                $this->_setFieldData('oxtransstatus', 'NOT_FINISHED');
+                $this->_setFieldData('oxfolder', 'ORDERFOLDER_PROBLEMS');
+                $this->_setFieldData('osc_amazon_remark', $remark);
                 $this->save();
                 break;
         }
@@ -196,7 +214,7 @@ class Order extends Order_parent
     public function getAmazonService()
     {
 
-        if (empty($this->amazonService)) {
+        if ($this->amazonService == null) {
             $this->setAmazonService(OxidServiceProvider::getAmazonService());
             return $this->amazonService;
         }
@@ -233,12 +251,13 @@ class Order extends Order_parent
      */
     public function delete($oxid = null)
     {
+        $config = new Config();
         $oxid = $oxid ?: $this->getId();
         if (!$oxid || !$this->load($oxid)) {
             return false;
         }
 
-        if ($this->isAmazonOrder($oxid)) {
+        if ($this->isAmazonOrder($oxid) && $config->automatedCancelActivated()) {
             if (!$this->canDeleteAmazonOrder($oxid)) {
                 return false;
             }

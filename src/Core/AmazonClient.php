@@ -78,6 +78,24 @@ class AmazonClient extends Client
     }
 
     /**
+     * @param string $chargePermissionId
+     * @param array $headers
+     * @return array
+     */
+    public function getChargePermission($chargePermissionId, $headers = [])
+    {
+        return $this->decodeResponse(parent::getChargePermission($chargePermissionId, $headers));
+    }
+    /**
+     * @param string $chargeId
+     * @param array $headers
+     * @return array
+     */
+    public function getCharge($chargeId, $headers = [])
+    {
+        return $this->decodeResponse(parent::getCharge($chargeId, $headers));
+    }
+    /**
      * @param string $checkoutSessionId
      * @param array $headers
      * @return array

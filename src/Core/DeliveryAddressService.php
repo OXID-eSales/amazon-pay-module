@@ -1,11 +1,10 @@
 <?php
 
-namespace OxidSolutionCatalysts\AmazonPay\Service;
+namespace OxidSolutionCatalysts\AmazonPay\Core;
 
-use OxidEsales\Eshop\Core\Registry;
-use OxidSolutionCatalysts\AmazonPay\Core\Constants;
-use OxidEsales\Eshop\Core\Session;
 use OxidEsales\Eshop\Application\Model\Address;
+use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Core\Session;
 
 class DeliveryAddressService
 {
@@ -26,11 +25,11 @@ class DeliveryAddressService
     /**
      * @return bool
      */
-    public function isPaymentInSessionIsAmazonPay()
+    public function isPaymentInSessionIsAmazonPayExpress()
     {
         $paymentId = $this->getSession()->getVariable('paymentid');
 
-        return $paymentId === Constants::PAYMENT_ID;
+        return $paymentId === Constants::PAYMENT_ID_EXPRESS;
     }
 
     /**
@@ -39,7 +38,12 @@ class DeliveryAddressService
     public function getTempDeliveryAddressAddress()
     {
         $deliveryAddress = oxNew(Address::class);
-        $deliveryAddress->load($this->getSession()->getVariable(Constants::SESSION_TEMP_DELIVERY_ADDRESS_ID));
+        /** @var string $delAddressId */
+        $delAddressId = (string)$this->getSession()->getVariable(Constants::SESSION_TEMP_DELIVERY_ADDRESS_ID);
+        if (!$delAddressId) {
+            $delAddressId = (string)$this->getSession()->getVariable('deladrid');
+        }
+        $deliveryAddress->load($delAddressId);
 
         return $deliveryAddress;
     }

@@ -6,4 +6,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.6.0] - Release ??-??-2025
 
-* First release for OXID 6.0 based on Version for OXID 6.1 (v2.1.7)
+* First release for OXID 6.0 based on Version for OXID 6.3 (v2.1.7)

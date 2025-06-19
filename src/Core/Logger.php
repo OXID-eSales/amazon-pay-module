@@ -16,7 +16,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
-use OxidSolutionCatalysts\AmazonPay\Model\User;
+use OxidEsales\Eshop\Application\Model\User;
 use Psr\Log\AbstractLogger;
 
 class Logger extends AbstractLogger
@@ -81,7 +81,10 @@ class Logger extends AbstractLogger
         $context = [];
 
         if (!empty($result['response'])) {
-            $response = PhpHelper::jsonToArray($result['response']);
+            // ensure it is a string
+            $response = is_string($result['response']) ?
+                PhpHelper::jsonToArray($result['response']) :
+                $result['response'];
 
             if (!empty($response['statusDetails']['state'])) {
                 $context['message'] = $response['statusDetails']['state'];

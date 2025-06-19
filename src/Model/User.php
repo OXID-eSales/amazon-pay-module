@@ -50,10 +50,12 @@ class User extends User_parent
         $paymentId = $session->getVariable('paymentid');
         if ($paymentId === Constants::PAYMENT_ID_EXPRESS) {
             $amazonAddr = $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
-            $activeCountry = $amazonAddr['oxaddress__oxcountryid'] ?? $activeCountry;
+            $activeCountry = isset($amazonAddr['oxaddress__oxcountryid']) ? $amazonAddr['oxaddress__oxcountryid'] : $activeCountry;
         }
         return $activeCountry;
     }
+
+    /*
      * Return the amazon address if set.
      *
      * @return Address|null

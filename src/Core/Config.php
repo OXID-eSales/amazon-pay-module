@@ -303,17 +303,19 @@ class Config
     /**
      * @return bool
      */
-    public function automatedRefundActivated(): bool
+    public function automatedRefundActivated()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedRefundActivated');
     }
     /**
      * @return bool
      */
-    public function automatedCancelActivated(): bool
+    public function automatedCancelActivated()
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedCancelActivated');
     }
+
+    /**
      * @param bool $bIsAdmin
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)

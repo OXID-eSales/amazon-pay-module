@@ -44,7 +44,7 @@ class AcceptanceTester extends Actor
     /**
      * Open shop first page.
      */
-    public function openShop()
+    public function openShop(): Home
     {
         $I = $this;
         $homePage = new Home($I);

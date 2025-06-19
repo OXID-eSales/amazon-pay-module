@@ -24,7 +24,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Model\User;
+use OxidEsales\Eshop\Application\Model\User;
 
 /**
  * Class DispatchController
@@ -36,9 +36,8 @@ class DispatchController extends FrontendController
      * @return void
      * @throws Exception
      */
-    public function init()
+    public function render()
     {
-        parent::init();
 
         $logger = new Logger();
         $action = Registry::getRequest()->getRequestParameter('action');
@@ -48,7 +47,7 @@ class DispatchController extends FrontendController
                 /** @var string $amazonSessionId */
                 $amazonSessionId = $this->setRequestAmazonSessionId();
                 if ($amazonSessionId === '') {
-                    return;
+                    return $this->getTemplateName();
                 }
                 $redirectUrl = Registry::getConfig()->getShopHomeUrl() .
                     'cl=order&stoken=' . Registry::getSession()->getSessionChallengeToken();
@@ -62,13 +61,13 @@ class DispatchController extends FrontendController
                 }
 
                 if ($amazonSessionId === '') {
-                    return;
+                    $this->showMessageAndExit();
                 }
 
                 $basket = Registry::getSession()->getBasket();
                 $paymentId = $basket->getPaymentId();
                 if ($paymentId !== Constants::PAYMENT_ID_EXPRESS) {
-                    return;
+                    $this->showMessageAndExit();
                 }
 
                 $isOneStepPayment = OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture();
@@ -136,7 +135,7 @@ class DispatchController extends FrontendController
                 $response['response'] = PhpHelper::jsonToArray($result['response']);
 
                 if ($result['status'] !== 200) {
-                    return;
+                    return $this->getTemplateName();
                 }
 
                 $user = $this->getUser();
@@ -168,6 +167,8 @@ class DispatchController extends FrontendController
                 Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=user');
                 break;
         }
+        $this->showMessageAndExit();
+        return $this->getTemplateName();
     }
 
     /**
@@ -230,5 +231,13 @@ class DispatchController extends FrontendController
         }
 
         return $this->getRequestAmazonSessionId();
+    }
+    /**
+     * @param string $msg
+     * @return void
+     */
+    protected function showMessageAndExit(string $msg = '')
+    {
+        Registry::getUtils()->showMessageAndExit($msg);
     }
 }

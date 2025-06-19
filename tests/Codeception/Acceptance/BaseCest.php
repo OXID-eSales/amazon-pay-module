@@ -77,7 +77,7 @@ abstract class BaseCest
      * @param string $element
      * @return string
      */
-    protected function _grabTextFromElementWhenPresent($element)
+    protected function _grabTextFromElementWhenPresent(string $element): string
     {
         try {
             $this->I->seeElement($element);
@@ -93,7 +93,7 @@ abstract class BaseCest
      * @param string $errorMsg
      * @return void
      */
-    protected function _failIfTextNotSeen($text, $errorMsg = '')
+    protected function _failIfTextNotSeen(string $text, string $errorMsg = '')
     {
         $errorMsg = $errorMsg ?: 'Text not found: ' . $text;
         try {
@@ -160,7 +160,16 @@ abstract class BaseCest
      */
     protected function _openCheckout()
     {
-        $this->homePage->openMiniBasket()->openCheckout();
+        $miniBasketMenuElement = '//div[@class="btn-group minibasket-menu"]';
+
+        $this->_makeScreenshot('beforeOpenMiniBasket');
+        $this->I->waitForElementClickable($miniBasketMenuElement, 15);
+        $this->I->click($miniBasketMenuElement);
+        $this->_makeScreenshot('afterOpenMiniBasket');
+
+        $this->I->waitForText(Translator::translate('CHECKOUT'));
+        $this->I->click(Translator::translate('CHECKOUT'));
+        $this->I->waitForPageLoad();
     }
 
     /**
@@ -168,7 +177,16 @@ abstract class BaseCest
      */
     protected function _openBasketDisplay()
     {
-        $this->homePage->openMiniBasket()->openBasketDisplay();
+        $miniBasketMenuElement = '//div[@class="btn-group minibasket-menu"]';
+
+        $this->_makeScreenshot('beforeOpenMiniBasket');
+        $this->I->waitForElementClickable($miniBasketMenuElement, 15);
+        $this->I->click($miniBasketMenuElement);
+        $this->_makeScreenshot('afterOpenMiniBasket');
+
+        $this->I->waitForText(Translator::translate('DISPLAY_BASKET'));
+        $this->I->click(Translator::translate('DISPLAY_BASKET'));
+        $this->I->waitForPageLoad();
     }
 
     protected function _openAccountMenu()
@@ -185,6 +203,45 @@ abstract class BaseCest
         $amazonpayDiv = "//div[contains(@id, 'AmazonPayButton')]";
 
         $this->I->waitForElement($amazonpayDiv, 60);
+        $this->I->click($amazonpayDiv);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    protected function _openAmazonPayPageByButtonNextCart()
+    {
+        $amazonpayDiv = "#AmazonPayButtonNextCart2";
+
+        $this->I->waitForElement($amazonpayDiv, 60);
+        $this->I->wait(5);
+        $this->I->click($amazonpayDiv);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    protected function _openAmazonPayPageByButtonProductMain()
+    {
+        $amazonpayDiv = "#AmazonPayButtonProductMain";
+
+        $this->I->waitForElement($amazonpayDiv, 60);
+        $this->I->wait(5);
+        $this->I->click($amazonpayDiv);
+    }
+
+    /**
+     * @return void
+     * @throws \Exception
+     */
+    protected function _openAmazonPayPageByButtonCheckoutUser()
+    {
+        $amazonpayDiv = "#AmazonPayButtonCheckoutUser";
+
+        $this->I->waitForElement($amazonpayDiv, 60);
+        $this->I->wait(5);
         $this->I->click($amazonpayDiv);
     }
 
@@ -269,7 +326,7 @@ abstract class BaseCest
      * @return string
      * @throws \Exception
      */
-    protected function _checkSuccessfulPayment()
+    protected function _checkSuccessfulPayment(): string
     {
         $this->I->wait(10);
         $thankYouPage = new ThankYou($this->I);
@@ -293,17 +350,17 @@ abstract class BaseCest
         $this->I->fillField($userAccountLoginName, $_ENV['OXID_ADMIN_USERNAME']);
         $this->I->fillField($userAccountLoginPassword, $_ENV['OXID_ADMIN_PASSWORD']);
         $this->I->click($userAccountLoginButton);
-        $this->I->wait(5);
+        $this->I->wait(30);
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
         $this->I->waitForText(Translator::translate('NAVIGATION_HOME'), 60);
     }
 
-    protected function _openOrder($orderNumber)
+    protected function _openOrder(string $orderNumber)
     {
         $this->_loginAdmin();
-        $this->I->wait(5);
+        $this->I->wait(30);
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("navigation");
         $this->I->switchToFrame("adminnav");
@@ -315,6 +372,7 @@ abstract class BaseCest
 
         $orders = new Orders($this->I);
         $orders->find($orders->orderNumberInput, $orderNumber);
+        $this->I->wait(30);
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");
@@ -335,6 +393,7 @@ abstract class BaseCest
         $this->I->see(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->click(Translator::translate("OSC_AMAZONPAY_CONFIG"));
         $this->I->waitForDocumentReadyState();
+        $this->I->wait(30);
 
         $this->I->switchToFrame(null);
         $this->I->switchToFrame("basefrm");

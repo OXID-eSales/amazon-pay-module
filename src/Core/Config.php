@@ -17,6 +17,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\Eshop\Application\Model\CountryList;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 
 /**
@@ -283,18 +284,7 @@ class Config
     }
 
     /**
-     * Shop's create checkout controller. Used in amazon buttons.
-     *
-     * @return string
-     */
-    public function getCreateCheckoutUrl()
-    {
-        return html_entity_decode(
-            Registry::getConfig()->getCurrentShopUrl(false) . 'index.php?cl=amazoncheckout&fnc=createCheckout'
-        );
-    }
 
-    /**
      * @return bool
      */
     public function useExclusion()
@@ -311,6 +301,19 @@ class Config
     }
 
     /**
+     * @return bool
+     */
+    public function automatedRefundActivated(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedRefundActivated');
+    }
+    /**
+     * @return bool
+     */
+    public function automatedCancelActivated(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedCancelActivated');
+    }
      * @param bool $bIsAdmin
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
@@ -418,7 +421,18 @@ class Config
             $payment = oxNew(Payment::class);
             /** TODO should be variable for any amazonpay ID */
             $payment->load(Constants::PAYMENT_ID_EXPRESS);
-            foreach ($payment->getCountries() as $countryOxId) {
+            $allowedCountries = $payment->getCountries();
+            // fallback if countries are not restricted by Paymentmethod ...
+            if (!$allowedCountries) {
+                $allowedCountries = [];
+                $countries = oxNew(CountryList::class);
+                $countries->loadActiveCountries();
+                /** @var Country $allowedCountry */
+                foreach ($countries as $allowedCountry) {
+                    $allowedCountries[] = $allowedCountry->getId();
+                }
+            }
+            foreach ($allowedCountries as $countryOxId) {
                 // check deliverysets
                 $deliverySetList = oxNew(DeliverySetList::class);
                 $deliverySetData = $deliverySetList->getDeliverySetList($activeUser, $countryOxId);

@@ -99,7 +99,6 @@ final class AmazonPayExcludeCest extends BaseCest
      * @param AcceptanceTester $I
      * @return void
      * @group AmazonPayExcludeTest
-     * @group b
      * @throws \Exception
      */
     public function checkAmazonPayExcludeCategoryWorks(AcceptanceTester $I)

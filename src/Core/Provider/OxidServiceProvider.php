@@ -10,8 +10,10 @@ namespace OxidSolutionCatalysts\AmazonPay\Core\Provider;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
+use OxidSolutionCatalysts\AmazonPay\Core\DeliveryAddressService;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\ServiceFactory;
+use OxidSolutionCatalysts\AmazonPay\Core\TermsAndConditionService;
 use Psr\Log\LoggerInterface;
 
 class OxidServiceProvider
@@ -37,6 +39,14 @@ class OxidServiceProvider
     private $amazonService;
 
     /**
+     * @var DeliveryAddressService
+     */
+    private $deliveryAddress;
+    /**
+     * @var TermsAndConditionService
+     */
+    private $termsAndCondition;
+    /**
      * @var User
      */
     private $oxidUser;
@@ -46,6 +56,8 @@ class OxidServiceProvider
         $this->logger = new Logger();
         $this->amazonClient = oxNew(ServiceFactory::class)->getClient();
         $this->amazonService = oxNew(ServiceFactory::class)->getService();
+        $this->deliveryAddress = oxNew(ServiceFactory::class)->getDeliveryAddress();
+        $this->termsAndCondition = oxNew(ServiceFactory::class)->getTermsAndCondition();
         $this->oxidUser = oxNew(User::class);
     }
 
@@ -91,5 +103,13 @@ class OxidServiceProvider
     public static function getLogger()
     {
         return self::getInstance()->logger;
+    }
+    public static function getDeliveryAddressService()
+    {
+        return self::getInstance()->deliveryAddress;
+    }
+    public static function getTermsAndConditionService()
+    {
+        return self::getInstance()->termsAndCondition;
     }
 }

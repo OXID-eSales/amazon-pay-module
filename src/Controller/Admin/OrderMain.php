@@ -43,7 +43,7 @@ class OrderMain extends OrderMain_parent
                 $currencyCode = isset($order->oxorder__oxcurrency->rawValue)
                     ? $order->oxorder__oxcurrency->rawValue : $amazonConfig->getPresentmentCurrency();
 
-                if ($order->getRawFieldData('oxtransstatus') !== 'OK') {
+                if ($order->getFieldData('oxtransstatus') !== 'OK') {
                     OxidServiceProvider::getAmazonService()
                         ->capturePaymentForOrder(
                             $chargeId,
@@ -53,9 +53,9 @@ class OrderMain extends OrderMain_parent
                 }
 
                 /** @var string $oxtrackcode */
-                $oxtrackcode = $order->getRawFieldData('oxtrackcode');
+                $oxtrackcode = $order->getFieldData('oxtrackcode');
                 /** @var string $oxdeltype */
-                $oxdeltype = $order->getRawFieldData('oxdeltype');
+                $oxdeltype = $order->getFieldData('oxdeltype');
                 OxidServiceProvider::getAmazonService()->sendAlexaNotification(
                     $this->getOrderChargePermissionId($order),
                     $oxtrackcode,

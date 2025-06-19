@@ -122,7 +122,7 @@ class UserComponent extends UserComponent_parent
     {
         // destroy Amazon Session
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        parent::logout();
+        return parent::logout();
     }
 
     /**

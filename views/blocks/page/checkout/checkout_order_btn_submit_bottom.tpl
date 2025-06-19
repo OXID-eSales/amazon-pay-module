@@ -7,11 +7,7 @@
         !$oViewConf->isAmazonExclude()
     )
 }]
-    [{if $oViewConf->isFlowCompatibleTheme()}]
-        [{include file="amazonpay/checkout_order_btn_submit_bottom_flow.tpl" paymentId=$paymentId}]
-    [{else}]
-        [{include file="amazonpay/checkout_order_btn_submit_bottom_wave.tpl"}]
-    [{/if}]
+    [{include file="amazonpay/checkout_order_btn_submit_bottom.tpl" paymentId=$paymentId}]
 [{else}]
     [{$smarty.block.parent}]
 [{/if}]

@@ -22,7 +22,7 @@ final class RefundCest extends BaseCest
         $this->_addProductToBasket();
         $this->_loginOxid();
         $this->_openBasketDisplay();
-        $this->_openAmazonPayPage();
+        $this->_openAmazonPayPageByButtonNextCart();
         $this->_loginAmazonPayment();
         $this->_submitPaymentMethod();
         $this->_submitOrder();

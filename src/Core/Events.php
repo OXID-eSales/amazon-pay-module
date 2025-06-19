@@ -41,13 +41,13 @@ class Events
     {
         self::createLogTable();
         self::updateOxpsToOsc();
+        self::updateAddUniqueIndexToOscLogTable();
         self::addPaymentMethods();
         self::addArticleColumn();
         self::addCategoryColumn();
         self::addDeliverySetColumn();
         self::addOrderColumn();
         self::addRequireSession();
-        self::executeModuleMigrations();
 
         $dbMetaDataHandler = oxNew(DbMetaDataHandler::class);
         $dbMetaDataHandler->updateViews();
@@ -343,25 +343,24 @@ class Events
         $config = Registry::getConfig();
         $cfg = $config->getConfigParam('aRequireSessionWithParams');
         $cfg = is_array($cfg) ? $cfg : [];
-        $cfg = array_merge_recursive($cfg, [
-            'cl' => [
-                'details' => true,
-                'amazondispatch' => true
-            ]
-        ]);
+        $cfg = array_merge_recursive($cfg, self::$requireSessionWithParams);
         $config->saveShopConfVar('arr', 'aRequireSessionWithParams', $cfg, (string)$config->getShopId());
     }
 
     protected static function updateOxpsToOscLogTable()
     {
-        $sql = 'show columns
-                from `' . LogRepository::TABLE_NAME . '`
-                like \'OXPS_AMAZON_PAYLOGID\'';
+        $sql = sprintf(
+            'SHOW COLUMNS
+                from %s
+                LIKE \'OXPS_AMAZON_PAYLOGID\'',
+            LogRepository::TABLE_NAME
+        );
 
         $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
 
         if (count($result)) {
-            $sql = 'ALTER TABLE `amazonpaylog`
+            $sql = sprintf(
+                'ALTER TABLE %s
                 CHANGE `OXPS_AMAZON_PAYLOGID` `OSC_AMAZON_PAYLOGID`
                     char(32) COLLATE \'latin1_general_ci\'
                     NOT NULL COMMENT \'Record id\',
@@ -397,12 +396,61 @@ class Events
                     NOT NULL COMMENT \'Amazon objectType\',
                 CHANGE `OXPS_AMAZON_OBJECT_ID` `OSC_AMAZON_OBJECT_ID`
                     char(32) COLLATE \'latin1_general_ci\'
-                    NOT NULL COMMENT \'Amazon objectId\'';
+                    NOT NULL COMMENT \'Amazon objectId\'',
+                LogRepository::TABLE_NAME
+            );
 
             DatabaseProvider::getDb()->execute($sql);
         }
     }
 
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
+    protected static function updateAddUniqueIndexToOscLogTable()
+    {
+        $sql = sprintf(
+            'SHOW INDEX
+                FROM %s
+                WHERE `key_name`
+                LIKE \'OSC_AMAZON_UNIQUE\'',
+            LogRepository::TABLE_NAME
+        );
+        $result = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql);
+        if (!count($result)) {
+            $sql = sprintf(
+                'DELETE FROM %s
+                WHERE
+                    `OSC_AMAZON_PAYLOGID` not in (
+                        SELECT * FROM (
+                            SELECT MIN(`OSC_AMAZON_PAYLOGID`) as uniqueid
+                            FROM %s
+                            GROUP BY `OSC_AMAZON_OXSHOPID`, `OSC_AMAZON_OXORDERID`, `OSC_AMAZON_RESPONSE_MSG`,
+                                     `OSC_AMAZON_IDENTIFIER`, `OSC_AMAZON_CHARGE_ID`, `OSC_AMAZON_OBJECT_TYPE`,
+                                     `OSC_AMAZON_OBJECT_ID`
+                            ) AS tmp)',
+                LogRepository::TABLE_NAME,
+                LogRepository::TABLE_NAME
+            );
+            DatabaseProvider::getDb()->execute($sql);
+            $sql = sprintf(
+                'ALTER TABLE %s
+                CHANGE `OSC_AMAZON_RESPONSE_MSG` `OSC_AMAZON_RESPONSE_MSG` varchar(255)',
+                LogRepository::TABLE_NAME
+            );
+            DatabaseProvider::getDb()->execute($sql);
+            $sql = sprintf(
+                'ALTER TABLE %s
+                ADD UNIQUE `OSC_AMAZON_UNIQUE` (`OSC_AMAZON_OXSHOPID`, `OSC_AMAZON_OXORDERID`, `OSC_AMAZON_RESPONSE_MSG`,
+                `OSC_AMAZON_IDENTIFIER`, `OSC_AMAZON_CHARGE_ID`, `OSC_AMAZON_OBJECT_TYPE`,
+                `OSC_AMAZON_OBJECT_ID`)',
+                LogRepository::TABLE_NAME
+            );
+            DatabaseProvider::getDb()->execute($sql);
+        }
+    }
     protected static function createLogTable()
     {
         $sql = sprintf(
@@ -432,7 +480,7 @@ class Events
                             NOT NULL
                             COMMENT \'Order id (oxorder)\',
                         `OSC_AMAZON_RESPONSE_MSG`
-                            TEXT
+                            VARCHAR(255)
                             NOT NULL
                             COMMENT \'Response from Amazon SDK\',
                         `OSC_AMAZON_STATUS_CODE`
@@ -443,12 +491,6 @@ class Events
                             VARCHAR(100)
                             NOT NULL
                             COMMENT \'Request type\',
-                        `OXTIMESTAMP`
-                            timestamp
-                            NOT NULL
-                            default CURRENT_TIMESTAMP
-                            on update CURRENT_TIMESTAMP
-                            COMMENT \'Timestamp\',
                         `OSC_AMAZON_IDENTIFIER`
                             char(32)
                             character set latin1
@@ -479,53 +521,20 @@ class Events
                             collate latin1_general_ci
                             NOT NULL
                             COMMENT \'Amazon objectId\',
-                        PRIMARY KEY (`OSC_AMAZON_PAYLOGID`))
+                        `OXTIMESTAMP`
+                            timestamp
+                            NOT NULL
+                            default CURRENT_TIMESTAMP
+                            on update CURRENT_TIMESTAMP
+                            COMMENT \'Timestamp\',
+                        PRIMARY KEY (`OSC_AMAZON_PAYLOGID`),
+                        UNIQUE KEY `OSC_AMAZON_UNIQUE` (`OSC_AMAZON_OXSHOPID`,`OSC_AMAZON_OXORDERID`,`OSC_AMAZON_RESPONSE_MSG`,`OSC_AMAZON_IDENTIFIER`,`OSC_AMAZON_CHARGE_ID`,`OSC_AMAZON_OBJECT_TYPE`,`OSC_AMAZON_OBJECT_ID`)
+                        )
                             ENGINE=InnoDB
                             COMMENT \'Amazon Payment transaction log\'',
             LogRepository::TABLE_NAME
         );
 
         DatabaseProvider::getDb()->execute($sql);
-    }
-
-    /**
-     * Configure module with sandbox data. Hardcoded values for sandbox because in Oxid 6.0.x yaml files were not yet introduced.
-     *
-     * @return void
-     */
-    private static function executeModuleMigrations()
-    {
-        /** @var \OxidEsales\Eshop\Core\Config $config */
-        $config = Registry::getConfig();
-        $shopId = (string)$config->getShopId();
-        $defaults = [
-            'blAmazonPaySandboxMode' => 1,
-            'sAmazonPayPubKeyId' => 'AFGBEOU2665WCRAGITRYZFXC',
-            'sAmazonPayPrivKey' => '-----BEGIN PRIVATE KEY----- MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDHxyKWTHrWr+gL 9EW9XzV7i9TYvDomvLWhyBNPsHY0WFlqI/HxM5fKt9rlLPv70PpKrv1UIJ7gV66u JtJpDFc5aHkCQESB46oqWAkwqDhTkjmOYS9nS0CHjOSW8j7NHS06DubQ9xxtkgyN LqRILEUEC2ekLdSct90I+crt6lst6en3Wk/BSZj+ttUtEYcAOdQp9Cc1wivDg2cV 2jeXayUPlIEia8PuEt0HEWOFBnoANUNnlmHG2gLFKuo+BbuF4tm059JdUXbIsdIr B7q/EVaGA4mtPcCLfQ1P0OaAjOFpdYBZ9hox3LRKrtviJwO03QObBqihuKiofpTv kPjYPZT/AgMBAAECggEAB0xLH7h4L22RbRZekdYaOUn1MSN+RavGeRGB7N6NER52 5qErFZXalAlaQ6TDmuW2rwOI0kK3QG2wBV3BeVWaaMjN6Rd5fooeeAuH7tvix1LH ZJjrKrtksRYV/QRTyzY1iYeIuCuF7DlyZ0SZQjWzzJ8/Xo+y7zR4usI2MM4gjz+J 0fWnq4gPo4vrG7WeK/nXrpp+9iX61Az3pdLo/NfcugJJong6KW8IsnBRqrozSj3e KauPKdKo08i9CEeHfnrWwUkSYmPk8D9qqiklq4Evqh2xZ9EOyY9J03Z3t96MU3ri whXfmJ5Pd197IcqRPx3dGniXV8NEJZ46qzjyb9nYQQKBgQD51pSxPkvnARnYNvhR GDzFu2hHlSctpfUm17HIVVLQF96+2JL86r8gFAgHMMNj0SrS07FnB8hExGlBpOLn OvIwR44JoUvPn1IH0HBbf+SZnC98X/G02v+6gW4x4gEuA43b5fE3Lw/6XBHV8jYC zwlGgHPelb4ZLE3lKPxOiw6bnwKBgQDMtHw13hyFKHfEJofuM0PYJbh2QdM3Tq6E MFcQXgH4Z5R7ky3igZnqxXigeT/73ho1ytmdgsrKZRo0HWsjNJR/4LvZfyZQeXk8 rrSFux7zJEGrdHRvlxRxuTGwXZNd7FDVyUTgUh2LML+pZxSkeTwdEQers1QwRXAc xXIRi5aKoQKBgBdbb1VOvKvhF3h2UyrJuEzII4ylrh7/Z/b0rWNMTsyznph7COrq S2oFVWbOsUWwtW82aVx3hsqfDjQb5Ta29RN8bRQLZ1oGzBV88DQttcKCrpHTKna9 DrFyDkpNlcymemm3iqCdHsJKP0SgO1px3q0frzV9DGOwF6w387aoG3qDAoGAcykS O6fBubOjdQkMLZhPkZje5kBv18x+50TepgmM6Dc1VDPfe27XrTj8fKLZuRMhAaQl urPq6+Pm0uy96idZZ3uBkoEyh9FewCG00wsLBVQfUZqJKoH+8V9zMbni/tLEQxEg m2X20uhQ2rdv6Ht/swZyn0iakzFtOfJmErLJtSECgYBMO6lsDG2IGyk88k31JlqK NzotYT0kvuKdzQCSqie4EugpUlBzi4T5LHeEwImHH5lZi1fPR8hW3i2Gp+c2NgYk r+nN3I/E1Exn7AUK3ITS2kOoZPl+zCXi+3/gdPmM4Zl3sQXar0dOG5utNJW5vGSL D4yi8F+QSYM7DCGub2XM6A== -----END PRIVATE KEY-----',
-            'sAmazonPayMerchantId' => 'A2779TIVPHEGIA',
-            'sAmazonPayStoreId' => 'amzn1.application-oa2-client.c6b7452ab1934a56b5d99c4cc31f3f13',
-            'blAmazonPayExpressPDP' => '1',
-            'blAmazonPayExpressMinicartAndModal' => '1',
-            'blAmazonPayUseExclusion' => '0',
-            'blAmazonSocialLoginDeactivated' => '1',
-            'amazonPayCapType' => '1',
-        ];
-        $sAmazonPayPubKeyId = $config->getConfigParam('sAmazonPayPubKeyId');
-
-        //saving sandbox configuration available only with fresh install
-        if (!empty($sAmazonPayPubKeyId)) {
-            return;
-        }
-
-        //Applying sandbox configuration
-        foreach ($defaults as $confName => $value) {
-            $config->saveShopConfVar(
-                strpos($confName, 'bl') ? 'bool' : 'str',
-                $confName,
-                $value,
-                $shopId,
-                'module:' . Constants::MODULE_ID
-            );
-        }
     }
 }

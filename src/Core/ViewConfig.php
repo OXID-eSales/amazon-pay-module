@@ -25,27 +25,10 @@ use OxidSolutionCatalysts\AmazonPay\Model\User;
 class ViewConfig extends ViewConfig_parent
 {
     /**
-     * is this a "Flow"-Theme Compatible Theme?
-     * @var null|boolean $isFlowCompatibleTheme
+     * @var string
      */
-    protected $isFlowCompatibleTheme = null;
-
-    /**
-     * is this a "Wave"-Theme Compatible Theme?
-     * @var null|boolean $isWaveCompatibleTheme
-     */
-    protected $isWaveCompatibleTheme = null;
-
-    /**
-     * articlesId for the checkout review url
-     */
-    protected $articlesId = '';
-
     public $signature = '';
 
-    /**
-     * @return Config
-     */
     public function getAmazonConfig()
     {
         return Registry::get(Config::class);
@@ -74,6 +57,13 @@ class ViewConfig extends ViewConfig_parent
         return $this->getAmazonConfig()->displayExpressInPDP();
     }
 
+    /**
+     * @return bool
+     */
+    public function useExclusion()
+    {
+        return $this->getAmazonConfig()->useExclusion();
+    }
     /**
      * @return bool
      */
@@ -155,10 +145,6 @@ class ViewConfig extends ViewConfig_parent
         return Constants::isAmazonPayment($paymentId);
     }
 
-    public function getMaximalRefundAmount($orderId)
-    {
-        return PhpHelper::getMoneyValue(OxidServiceProvider::getAmazonService()->getMaximalRefundAmount($orderId));
-    }
 
     /**
      * @param string $oxid
@@ -171,66 +157,9 @@ class ViewConfig extends ViewConfig_parent
         return $this->getAmazonConfig()->isAmazonExcluded($oxid);
     }
 
-    /**
-     * Template variable getter. Check if is a Flow Theme Compatible Theme
-     *
-     * @return boolean
-     */
-    public function isFlowCompatibleTheme()
-    {
-        if (is_null($this->isFlowCompatibleTheme)) {
-            $this->isFlowCompatibleTheme = $this->isThemeBasedOn('flow');
-        }
-        return $this->isFlowCompatibleTheme;
-    }
-
-    /**
-     * Template variable getter. Check if is a Wave Theme Compatible Theme
-     *
-     * @return boolean
-     */
-    public function isWaveCompatibleTheme()
-    {
-        if (is_null($this->isWaveCompatibleTheme)) {
-            $this->isWaveCompatibleTheme = $this->isThemeBasedOn('wave');
-        }
-        return $this->isWaveCompatibleTheme;
-    }
-
-    /**
-     * Template variable getter. Check if is a ??? Theme Compatible Theme
-     *
-     * @param string $themeId
-     *
-     * @psalm-param 'flow'|'wave' $themeId
-     * @return boolean
-     *
-     * @psalm-suppress InternalMethod
-     *
-     */
-    public function isThemeBasedOn($themeId)
-    {
-        $result = false;
-
-        $theme = oxNew(Theme::class);
-        $theme->load($theme->getActiveThemeId());
-        // check active theme or parent theme
-        if (
-            $theme->getActiveThemeId() == $themeId ||
-            $theme->getInfo('parentTheme') == $themeId
-        ) {
-            $result = true;
-        }
-
-        return $result;
-    }
-
-    public function setArticlesId($articlesId)
-    {
-        $this->articlesId = $articlesId;
-    }
 
     public function getPaymentDescriptor()
+
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
         return $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
@@ -249,7 +178,7 @@ class ViewConfig extends ViewConfig_parent
             ? Registry::getRequest()->getRequestParameter('anid') : '';
         $this->setArticlesId($anid);
         $payload = new Payload();
-        $payload->setCheckoutReviewReturnUrl($this->articlesId);
+        $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();
         $payload->setStoreId();
         $payload->addScopes([
@@ -292,8 +221,21 @@ class ViewConfig extends ViewConfig_parent
             "phoneNumber",
             "billingAddress"
         ]);
-        $payload->setPaymentIntent('AuthorizeWithCapture');
+        $paymentIntent = 'Authorize';
+        $canHandlePendingAuth = true;
+        if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+            $paymentIntent = 'AuthorizeWithCapture';
+            $canHandlePendingAuth = false;
+        }
+        $payload->setPaymentIntent($paymentIntent);
+        $payload->setCanHandlePendingAuthorization($canHandlePendingAuth);
+        $delAddress = OxidServiceProvider::getDeliveryAddressService();
+        $address = $delAddress->getTempDeliveryAddressAddress();
+        if ($address->getId()) {
+            $payload->setAddressDetailsFromDeliveryAddress($address);
+        } else {
         $payload->setAddressDetails($user);
+        }
 
         $payload->setPlatformId($amazonConfig->getPlatformId());
 
@@ -358,7 +300,12 @@ class ViewConfig extends ViewConfig_parent
      */
     public function getSignature($payload)
     {
-        $amazonClient = OxidServiceProvider::getAmazonClient();
-        return $amazonClient->generateButtonSignature($payload);
+        try {
+            return OxidServiceProvider::getAmazonClient()->generateButtonSignature($payload);
+        } catch (Exception $exception) {
+            $logger = new Logger();
+            $logger->log('ERROR', $exception->getMessage(), [$exception]);
+            return '';
+        }
     }
 }

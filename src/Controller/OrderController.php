@@ -62,6 +62,15 @@ class OrderController extends OrderController_parent
         parent::init();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function render()
+    {
+        $service = OxidServiceProvider::getTermsAndConditionService();
+        $service->resetConfirmOnGet();
+        return parent::render();
+    }
     protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
@@ -142,8 +151,19 @@ class OrderController extends OrderController_parent
                     $this->completeAmazonPaymentExpress();
                 } elseif ($paymentId === Constants::PAYMENT_ID) {
                     $logger = new Logger();
-                    OxidServiceProvider::getAmazonService()->processOneStepPayment($amazonSessionId, $basket, $logger);
-                    $this->completeAmazonPayment();
+                    if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
+                        OxidServiceProvider::getAmazonService()->processOneStepPayment(
+                            $amazonSessionId,
+                            $basket,
+                            $logger
+                        );
+                    } else {
+                        OxidServiceProvider::getAmazonService()->processTwoStepPayment(
+                            $amazonSessionId,
+                            $basket,
+                            $logger
+                        );
+                    }
                 }
             }
         }
@@ -156,61 +176,95 @@ class OrderController extends OrderController_parent
     }
 
     /**
-     * @return CoreAddress
+     * @return bool
+     */
+    protected function _validateTermsAndConditions()
+    {
+        $basket = $this->getBasket();
+        $paymentId = $basket->getPaymentId();
+        $isAmazonPayment = Constants::isAmazonPayment($paymentId);
+        $isAmazonExpress = Constants::isAmazonExpressPayment($paymentId);
+        // check T&C only for regular amazon (with express, some certain steps are skipped)
+        return ($isAmazonPayment && !$isAmazonExpress) ?
+            $this->validateTermsAndConditionsByAmazon() :
+            parent::_validateTermsAndConditions();
+    }
+    /**
+     * @return bool
+     */
+    protected function validateTermsAndConditionsByAmazon()
+    {
+        $valid = $this->confirmAGBbyAmazon();
+        if (
+            $valid &&
+            !$this->confirmIntangibleProdAgreementbyAmazon()
+        ) {
+            $valid = false;
+        }
+        return $valid;
+    }
+    /**
+     * @return bool
+     */
+    protected function confirmAGBbyAmazon()
+    {
+        $valid = true;
+        $confirmAGB = Registry::getConfig()->getConfigParam('blConfirmAGB');
+        $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
+        if (
+            $confirmAGB &&
+            !$termsAndConditionService->getAGBConfirmFromSession()
+        ) {
+            $valid = false;
+        }
+        return $valid;
+    }
+    /**
+     * @return bool
+     */
+    protected function confirmIntangibleProdAgreementbyAmazon()
+    {
+        $valid = true;
+        $basket = $this->getBasket();
+        $confirmIPA = Registry::getConfig()->getConfigParam('blEnableIntangibleProdAgreement');
+        if ($confirmIPA) {
+            $termsAndConditionService = OxidServiceProvider::getTermsAndConditionService();
+            if (
+                $basket->hasArticlesWithDownloadableAgreement() &&
+                !$termsAndConditionService->getDPAConfirmFromSession()
+            ) {
+                $valid = false;
+            }
+            if (
+                $valid &&
+                $basket->hasArticlesWithIntangibleAgreement() &&
+                !$termsAndConditionService->getSPAConfirmFromSession()
+            ) {
+                $valid = false;
+            }
+        }
+        return $valid;
+    }
+    /**
+     * @return CoreAddress|object
      */
     public function getDelAddress()
     {
-        $deliveryAddressService = new DeliveryAddressService();
-        if ($deliveryAddressService->isPaymentInSessionIsAmazonPay()) {
-            return $deliveryAddressService->getTempDeliveryAddressAddress();
+        $deliveryAddressService = OxidServiceProvider::getDeliveryAddressService();
+        if ($deliveryAddressService->isPaymentInSessionIsAmazonPayExpress()) {
+            $delAddress = $deliveryAddressService->getTempDeliveryAddressAddress();
+            if ($delAddress->getId()) {
+                return $delAddress;
+            }
         }
 
         return parent::getDelAddress();
     }
 
-    protected function completeAmazonPayment()
-    {
 
-        $payload = new Payload();
-        $payload->setCheckoutChargeAmount(PhpHelper::getMoneyValue(
-            $this->getBasket()->getPrice()->getBruttoPrice()
-        ));
-        $amazonConfig = oxNew(Config::class);
-        $payload->setCurrencyCode((string)$amazonConfig->getPresentmentCurrency());
-        $payload = $payload->removeMerchantMetadata($payload->getData());
-        $amazonSessionId = OxidServiceProvider::getAmazonService()->getCheckoutSessionId();
-        /** @var string $orderOxId */
-        $orderOxId = Registry::getSession()->getVariable('sess_challenge');
-        $oOrder = oxNew(Order::class);
 
-        $isOrderLoaded = $oOrder->load($orderOxId);
-        $result = OxidServiceProvider::getAmazonClient()->completeCheckoutSession(
-            $amazonSessionId,
-            $payload
-        );
 
-        if (
-            isset($result['response']) &&
-            isset($result['status']) &&
-            $result['status'] === 200 &&
-            $isOrderLoaded
-        ) {
-            $response = PhpHelper::jsonToArray($result['response']);
-            /** @var string $redirectUrl */
-            $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response);
-            if (!empty($redirectUrl)) {
-                Registry::getUtils()->redirect($redirectUrl, false, 301);
-            }
-            return;
-        }
 
-        Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
-        OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
-        if ($oOrder->isLoaded()) {
-            $oOrder->delete();
-        }
-        Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false);
-    }
 
     /**
      * @throws DatabaseErrorException
@@ -314,7 +368,7 @@ class OrderController extends OrderController_parent
         $session = Registry::getSession();
         $countryOxId = $user->getActiveCountry();
         $session->setVariable('amazonCountryOxId', $countryOxId);
-        $session->setVariable('paymentId', $paymentId);
+        $session->setVariable('paymentid', $paymentId);
         $session->setVariable('_selected_paymentid', $paymentId);
 
         $actShipSet = null;

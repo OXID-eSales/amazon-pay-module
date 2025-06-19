@@ -84,7 +84,7 @@ class Constants
         return !empty(self::PAYMENT_DESCRIPTIONS[$paymentId]);
     }
 
-    public static function isAmazonExpressPayment(string $paymentId)
+    public static function isAmazonExpressPayment($paymentId)
     {
         return ($paymentId === self::PAYMENT_ID_EXPRESS && self::isAmazonPayment($paymentId));
     }

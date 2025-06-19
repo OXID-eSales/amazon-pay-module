@@ -236,7 +236,7 @@ class DispatchController extends FrontendController
      * @param string $msg
      * @return void
      */
-    protected function showMessageAndExit(string $msg = '')
+    protected function showMessageAndExit($msg = '')
     {
         Registry::getUtils()->showMessageAndExit($msg);
     }

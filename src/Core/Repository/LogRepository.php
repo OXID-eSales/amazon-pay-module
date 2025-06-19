@@ -99,6 +99,8 @@ class LogRepository
             [$amazonObjectId]
         );
     }
+
+    /*
      * @param string $chargePermissionId
      * @param string $orderBy
      * @return array

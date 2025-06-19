@@ -8,7 +8,7 @@
 namespace OxidSolutionCatalysts\AmazonPay\Model;
 
 use OxidEsales\Eshop\Application\Model\Address;
-use OxidEsales\Eshop\Application\Model\Basket;
+use OxidEsales\Eshop\Application\Model\Basket as OxidBasket;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
@@ -31,7 +31,7 @@ class Order extends Order_parent
     /**
      * Security and Cleanup before finalize order
      *
-     * @param Basket $oBasket Basket object
+     * @param OxidBasket $oBasket Basket object
      * @return int
      *
      */
@@ -52,7 +52,7 @@ class Order extends Order_parent
     /**
      * Order checking, processing and saving method.
      *
-     * @param Basket $oBasket Basket object
+     * @param OxidBasket $oBasket Basket object
      * @param object $oUser Current User object
      * @param bool $blRecalculatingOrder Order recalculation
      *
@@ -296,7 +296,6 @@ class Order extends Order_parent
                 ]
             )
         ) {
-            /** @var string $deleteError */
             $deleteError = Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR');
             Registry::getUtilsView()->addErrorToDisplay($deleteError);
             return false;

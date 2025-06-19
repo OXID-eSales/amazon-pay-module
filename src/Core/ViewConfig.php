@@ -176,7 +176,6 @@ class ViewConfig extends ViewConfig_parent
         /** @var string $anid */
         $anid = Registry::getRequest()->getRequestParameter('anid') !== null
             ? Registry::getRequest()->getRequestParameter('anid') : '';
-        $this->setArticlesId($anid);
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();

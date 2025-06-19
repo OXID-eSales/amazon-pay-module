@@ -20,8 +20,11 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
 class OrderOverview extends OrderOverview_parent
 {
-    /** @var string $captureStatus */
-    protected $captureStatus = '';
+    /** @var null|string $captureStatus */
+    protected $captureStatus = null;
+
+    /** @var null|string $captureStatus */
+    protected $paymentStatus = null;
 
     /**
      * @inheritDoc
@@ -122,8 +125,28 @@ class OrderOverview extends OrderOverview_parent
 
         $this->addtplParam('isOneStepCapture', $isOneStepCapture);
         $this->addTplParam('isCaptured', $isCaptured);
+        $this->addTplParam('withLiveStatus', false);
+
 
         return parent::render();
+    }
+
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    public function isAuthorized(): bool
+    {
+        return $this->getPaymentStatus() === 'Authorized';
+    }
+
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    public function isCaptured(): bool
+    {
+        return $this->getPaymentStatus() === 'Captured';
     }
 
     /**
@@ -132,24 +155,30 @@ class OrderOverview extends OrderOverview_parent
      */
     public function getAmazonAPIOrderStatus(): string
     {
-        if (empty($this->captureStatus)) {
+        if (is_null($this->captureStatus)) {
             $this->captureStatus = '';
-            $orderId = $this->getEditObjectId();
-            if ($orderId !== '-1') {
+            $logMessage = $this->getLogMessageForOrder();
+            if ($logMessage) {
                 $lang = Registry::getLang();
-                $repository = oxNew(LogRepository::class);
-                $order = oxNew(Order::class);
-                $order->load($orderId);
-                $logMessage = $repository->findLogMessageForOrderId($orderId);
                 $chargePermissionId = $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'] ?? null;
                 $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
                     $captureStatusRaw = $amzData['response']['statusDetails']['state'] ?? '';
+                    $reasonCodes = [];
+                    $captureReasonRaw = $amzData['response']['statusDetails']['reasons'] ?? [];
+                    foreach ($captureReasonRaw as $captureReason) {
+                        if (isset($captureReason['reasonCode'])) {
+                            $reasonCodes[] = $captureReason['reasonCode'];
+                        }
+                    }
                     $captureStatus = $lang->translateString(
                         'OSC_AMAZONPAY_LIVESTATUS_' . strtoupper($captureStatusRaw)
                     );
                     $this->captureStatus = $lang->isTranslated() ? $captureStatus : $captureStatusRaw;
+                    if ($reasonCodes) {
+                        $this->captureStatus .= ' (' . implode(',', $reasonCodes) . ')';
+                    }
                 }
             }
         }
@@ -248,5 +277,41 @@ class OrderOverview extends OrderOverview_parent
 
             OxidServiceProvider::getAmazonService()->capturePaymentForOrder($chargeId, $captureAmount, $currencyCode);
         }
+    }
+
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    protected function getPaymentStatus(): string
+    {
+        if (is_null($this->paymentStatus)) {
+            $this->paymentStatus = '';
+            $logMessage = $this->getLogMessageForOrder();
+            if ($logMessage) {
+                $chargeId = $logMessage[0]['OSC_AMAZON_CHARGE_ID'] ?? null;
+                $amzData = OxidServiceProvider::getAmazonClient()->getCharge($chargeId);
+                $this->paymentStatus = $amzData['response']['statusDetails']['state'] ?? '';
+            }
+        }
+        return $this->paymentStatus;
+    }
+
+    /**
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
+     */
+    protected function getLogMessageForOrder(): array
+    {
+        $result = [];
+
+        $orderId = $this->getEditObjectId();
+        if ($orderId !== '-1') {
+            $repository = oxNew(LogRepository::class);
+            $order = oxNew(Order::class);
+            $order->load($orderId);
+            $result = $repository->findLogMessageForOrderId($orderId);
+        }
+        return $result;
     }
 }

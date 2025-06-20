@@ -1,3 +1,13 @@
+[{capture name="amazonpay_script"}]
+    $('#amznChangePayment').click(function (e) {
+        e.preventDefault();
+    });
+    amazon.Pay.bindChangeAction('#amznChangePayment', {
+        amazonCheckoutSessionId: '[{$oViewConf->getAmazonSessionId()}]',
+        changeAction: 'changeAddress'
+    });
+[{/capture}]
+[{oxscript add=$smarty.capture.amazonpay_script}]
 <div class="row">
     <div class="col-xs-12 col-md-6" id="orderShipping">
         <form action="[{$oViewConf->getSslSelfLink()}]" method="post">
@@ -35,7 +45,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">
                         [{oxmultilang ident="PAYMENT_METHOD"}]
-                        <button type="submit" class="btn btn-xs btn-warning pull-right submitButton largeButton" title="[{oxmultilang ident="EDIT"}]">
+                        <button type="submit" id="amznChangePayment" class="btn btn-xs btn-warning pull-right submitButton largeButton" title="[{oxmultilang ident="EDIT"}]">
                             <i class="fa fa-pencil"></i>
                         </button>
                     </h3>

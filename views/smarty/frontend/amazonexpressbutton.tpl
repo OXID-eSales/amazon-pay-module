@@ -1,12 +1,13 @@
 [{assign var="amazonConfig" value=$oViewConf->getAmazonConfig()}]
 [{assign var="sToken" value=$oViewConf->getSessionChallengeToken()}]
-[{if not $oxArticlesId}]
-    [{assign var="oxArticlesId" value=""}]
-[{/if}]
+[{assign var="oxArticlesId" value=$oxArticlesId|default:""}]
+[{if $disableAutomaticAddToCart}]
+    [{assign var="oxArticlesId" value=null}]
+    [{/if}]
 [{assign var="aPayload" value=$oViewConf->getPayloadExpress($oxArticlesId)}]
 <div class="amazonpay-button [{$buttonclass}] express" id="[{$buttonId}]"></div>
 
-[{capture name="amazonpayexpress_script"}]
+[{capture name="amazonpay_script"}]
     amazon.Pay.renderButton('#[{$buttonId}]', {
         merchantId: '[{$amazonConfig->getMerchantId()}]',
             sandbox: [{if $amazonConfig->isSandbox()}]true[{else}]false[{/if}],
@@ -21,4 +22,4 @@
         }
     });
 [{/capture}]
-[{oxscript add=$smarty.capture.amazonpayexpress_script}]
+[{oxscript add=$smarty.capture.amazonpay_script}]

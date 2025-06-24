@@ -23,9 +23,9 @@ class PhpHelper
     /**
      * @param string $needle
      * @param array $haystack
-     * @return string|array
+     * @return string|array|bool
      */
-    public static function getArrayValue(string $needle, array $haystack): string
+    public static function getArrayValue(string $needle, array $haystack)
     {
         foreach ($haystack as $key => $value) {
             if ($key === $needle) {
@@ -43,6 +43,10 @@ class PhpHelper
         return false;
     }
 
+    /**
+     * @param float $num
+     * @return string
+     */
     public static function getMoneyValue(float $num): string
     {
         return number_format($num, 2, '.', '');

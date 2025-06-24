@@ -63,6 +63,9 @@ class OrderController extends OrderController_parent
         parent::init();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function render()
     {
         $service = OxidServiceProvider::getTermsAndConditionService();
@@ -71,12 +74,16 @@ class OrderController extends OrderController_parent
         return parent::render();
     }
 
+    /**
+     * @return void
+     */
     protected function initAmazonPay()
     {
         $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID);
     }
 
     /**
+     * @return void
      * @throws Exception
      */
     protected function initAmazonPayExpress(AmazonService $amazonService, Session $session)
@@ -110,6 +117,11 @@ class OrderController extends OrderController_parent
         }
     }
 
+    /**
+     * @return mixed|string|null
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function execute()
     {
         $basket = Registry::getSession()->getBasket();
@@ -191,6 +203,9 @@ class OrderController extends OrderController_parent
             parent::validateTermsAndConditions();
     }
 
+    /**
+     * @return bool
+     */
     protected function validateTermsAndConditionsByAmazon(): bool
     {
         $valid = $this->confirmAGBbyAmazon();
@@ -204,6 +219,9 @@ class OrderController extends OrderController_parent
         return $valid;
     }
 
+    /**
+     * @return bool
+     */
     protected function confirmAGBbyAmazon(): bool
     {
         $valid = true;
@@ -220,6 +238,9 @@ class OrderController extends OrderController_parent
         return $valid;
     }
 
+    /**
+     * @return bool
+     */
     protected function confirmIntangibleProdAgreementbyAmazon(): bool
     {
         $valid = true;
@@ -247,7 +268,7 @@ class OrderController extends OrderController_parent
     }
 
     /**
-     * @return CoreAddress
+     * @return CoreAddress|object
      */
     public function getDelAddress()
     {
@@ -263,6 +284,7 @@ class OrderController extends OrderController_parent
     }
 
     /**
+     * @return void
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */

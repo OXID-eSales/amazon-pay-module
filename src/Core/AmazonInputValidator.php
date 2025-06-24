@@ -62,6 +62,7 @@ class AmazonInputValidator extends AmazonInputValidator_parent
      * @param User $user Active user.
      * @param array $billingAddress  Billing address.
      * @param array $deliveryAddress Delivery address.
+     * @return void
      * TODO: check if typehint can be used in Oxid 7
      */
     public function checkRequiredFields($user, $billingAddress, $deliveryAddress)

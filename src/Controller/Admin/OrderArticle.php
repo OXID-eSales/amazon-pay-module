@@ -9,20 +9,37 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Model\Order;
+use OxidEsales\Eshop\Application\Model\Order;
 
 class OrderArticle extends OrderArticle_parent
 {
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function deleteThisArticle()
     {
         $this->refundAmazon();
         parent::deleteThisArticle();
     }
 
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     *
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     */
     public function storno()
     {
         $this->refundAmazon();
@@ -33,7 +50,7 @@ class OrderArticle extends OrderArticle_parent
      * @throws DatabaseErrorException
      * @throws DatabaseConnectionException
      */
-    private function refundAmazon()
+    private function refundAmazon(): void
     {
         $config = new Config();
         if (!$config->automatedRefundActivated()) {
@@ -50,14 +67,13 @@ class OrderArticle extends OrderArticle_parent
         // order and order article exits?
         if ($oOrderArticle->load($sOrderArtId) && $oOrder->load($sOrderId)) {
             // deleting record
-            //if (Constants::isAmazonPayment($oOrderArticle->getOrder()->oxorder__oxpaymenttype->value)) {
             /** @var  string $paymentType */
             $paymentType = $oOrder->getFieldData('oxpaymenttype');
             if (Constants::isAmazonPayment($paymentType)) {
                 $logger = new Logger();
                 OxidServiceProvider::getAmazonService()->createRefund(
                     $oOrder->getId(),
-                    (float)$oOrderArticle->getFieldData('oxbrutprice'),
+                    floatval($oOrderArticle->getFieldData('oxbrutprice')),
                     $logger
                 );
             }

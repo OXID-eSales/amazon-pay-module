@@ -9,10 +9,11 @@ namespace OxidSolutionCatalysts\AmazonPay\Controller\Admin;
 
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
-use OxidSolutionCatalysts\AmazonPay\Model\Order;
+use OxidEsales\Eshop\Application\Model\Order;
 
 /**
  * Class OrderListController
@@ -21,7 +22,10 @@ use OxidSolutionCatalysts\AmazonPay\Model\Order;
 class OrderList extends OrderList_parent
 {
     /**
+     * @inheritDoc
+     *
      * @return void
+     *
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      */
@@ -32,6 +36,11 @@ class OrderList extends OrderList_parent
             return;
         }
 
+        $config = new Config();
+        if (!$config->automatedRefundActivated()) {
+            parent::cancelOrder();
+            return;
+        }
         $oOrder = oxNew(Order::class);
         if (!$oOrder->load($sOxId)) {
             return;

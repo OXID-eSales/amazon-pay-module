@@ -24,7 +24,7 @@ class AmazonCheckoutController extends FrontendController
      *
      * @throws Exception
      */
-    public function createCheckout()
+    public function createCheckout(): void
     {
         // if an article is given, we put it in the shopping cart
         /** @var string $sProductId */
@@ -63,7 +63,7 @@ class AmazonCheckoutController extends FrontendController
         Registry::getUtils()->showMessageAndExit($result['response']);
     }
 
-    public function cancelAmazonPayment()
+    public function cancelAmazonPayment(): void
     {
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=payment', false, 301);

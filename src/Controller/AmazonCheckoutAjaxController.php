@@ -15,19 +15,19 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class AmazonCheckoutAjaxController extends FrontendController
 {
-    public function confirmAGB()
+    public function confirmAGB(): void
     {
         $conditionsService = OxidServiceProvider::getTermsAndConditionService();
         $conditionsService->setAGBConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
-    public function confirmDPA()
+    public function confirmDPA(): void
     {
         $conditionsService = OxidServiceProvider::getTermsAndConditionService();
         $conditionsService->setDPAConfirmFromRequestToSession();
         $this->_aViewData['jsonResponse'] = json_encode(['success' => true]);
     }
-    public function confirmSPA()
+    public function confirmSPA(): void
     {
         $conditionsService = OxidServiceProvider::getTermsAndConditionService();
         $conditionsService->setSPAConfirmFromRequestToSession();

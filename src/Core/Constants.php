@@ -101,21 +101,21 @@ class Constants
         self::PAYMENT_ID => [
             'en' => [
                 'title' => 'AmazonPay',
-                'desc' => ''
+                'desc' => '<div>AmazonPay</div>'
             ],
             'de' => [
                 'title' => 'AmazonPay',
-                'desc' => ''
+                'desc' => '<div>AmazonPay</div>'
             ]
         ],
         self::PAYMENT_ID_EXPRESS => [
             'en' => [
                 'title' => 'AmazonPay Express',
-                'desc' => ''
+                'desc' => '<div>AmazonPay Express</div>'
             ],
             'de' => [
                 'title' => 'AmazonPay Express',
-                'desc' => ''
+                'desc' => '<div>AmazonPay Express</div>'
             ]
         ],
     ];

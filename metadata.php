@@ -136,42 +136,42 @@ $aModule = [
         [
             'template' => 'headitem.tpl',
             'block' => 'admin_headitem_inccss',
-            'file' => 'views/smarty/admin/blocks/admin_headitem_inccss.tpl'
+            'file' => 'views/smarty/extensions/themes/admin/admin_headitem_inccss.tpl'
         ],
         [
             'template' => 'deliveryset_main.tpl',
             'block'    => 'admin_deliveryset_main_form',
-            'file'     => 'views/smarty/admin/blocks/deliveryset_main.tpl',
+            'file'     => 'views/smarty/extensions/themes/admin/deliveryset_main.tpl',
             'position' => '5'
         ],
         [
             'template' => 'order_overview.tpl',
             'block' => 'admin_order_overview_checkout',
-            'file' => 'views/smarty/admin/blocks/admin_order_overview_reset_form.tpl',
+            'file' => 'views/smarty/extensions/themes/admin/admin_order_overview_reset_form.tpl',
             'position' => '5'
         ],
         [
             'template' => 'order_overview.tpl',
             'block' => 'admin_order_overview_send_form',
-            'file' => 'views/smarty/admin/blocks/admin_order_overview_send_form.tpl',
+            'file' => 'views/smarty/extensions/themes/admin/admin_order_overview_send_form.tpl',
             'position' => '5'
         ],
         [
             'template' => 'order_overview.tpl',
             'block' => 'admin_order_overview_checkout',
-            'file' => 'views/smarty/admin/blocks/admin_order_overview_checkout.tpl',
+            'file' => 'views/smarty/extensions/themes/admin/admin_order_overview_checkout.tpl',
             'position' => '5'
         ],
         [
             'template' => 'article_main.tpl',
             'block' => 'admin_article_main_extended',
-            'file' => 'views/smarty/admin/blocks/admin_article_main_extended.tpl',
+            'file' => 'views/smarty/extensions/themes/admin/admin_article_main_extended.tpl',
             'position' => '5'
         ],
         [
             'template' => 'include/category_main_form.tpl',
             'block' => 'admin_category_main_form',
-            'file' => 'views/smarty/admin/blocks/category_main_form.tpl',
+            'file' => 'views/smarty/extensions/themes/admin/category_main_form.tpl',
             'position' => '5'
         ],
         [
@@ -187,92 +187,92 @@ $aModule = [
         [
             'template' => 'form/user_checkout_change.tpl',
             'block' => 'user_checkout_shipping_form',
-            'file' => '/views/smarty/frontend/blocks/form/checkout_shipping_form.tpl',
+            'file' => 'views/smarty/extensions/themes/default/form/checkout_shipping_form.tpl',
             'position' => '5'
         ],
         [
             'template' => 'form/user_checkout_change.tpl',
             'block' => 'user_checkout_shipping_change',
-            'file' => '/views/smarty/frontend/blocks/form/checkout_shipping_change.tpl',
+            'file' => 'views/smarty/extensions/themes/default/form/checkout_shipping_change.tpl',
             'position' => '5'
         ],
         [
             'template' => 'form/user_checkout_change.tpl',
             'block' => 'user_checkout_shipping_head',
-            'file' => '/views/smarty/frontend/blocks/form/user_checkout_shipping_head.tpl',
+            'file' => 'views/smarty/extensions/themes/default/form/user_checkout_shipping_head.tpl',
             'position' => '5'
         ],
         [
             'template' => 'form/user_checkout_change.tpl',
             'block' => 'user_checkout_billing_feedback',
-            'file' => '/views/smarty/frontend/blocks/form/checkout_billing_feedback.tpl',
+            'file' => 'views/smarty/extensions/themes/default/form/checkout_billing_feedback.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/details/inc/productmain.tpl',
             'block' => 'details_productmain_tobasket',
-            'file' => '/views/smarty/frontend/blocks/page/details/inc/details_productmain_tobasket.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/details/inc/details_productmain_tobasket.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/basket.tpl',
             'block' => 'basket_btn_next_bottom',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/basket_btn_next_bottom.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/basket_btn_next_bottom.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/order.tpl',
             'block' => 'checkout_order_address',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/checkout_order_address.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/checkout_order_address.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/order.tpl',
             'block' => 'checkout_order_btn_submit_bottom',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/checkout_order_btn_submit_bottom.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/checkout_order_btn_submit_bottom.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/order.tpl',
             'block' => 'checkout_order_btn_confirm_bottom',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/checkout_order_btn_confirm_bottom.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/checkout_order_btn_confirm_bottom.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/order.tpl',
             'block' => 'shippingAndPayment',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/shippingandpayment.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/shippingandpayment.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/user.tpl',
             'block' => 'checkout_user_main',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/checkout_user_main.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/checkout_user_main.tpl',
             'position' => '5'
         ],
         [
             'template' => 'widget/minibasket/minibasket.tpl',
             'block' => 'dd_layout_page_header_icon_menu_minibasket_functions',
             'file' =>
-                '/views/smarty/frontend/blocks/widget/minibasket/dd_layout_page_header_icon_menu_minibasket_functions.tpl',
+                'views/smarty/extensions/themes/default/widget/minibasket/dd_layout_page_header_icon_menu_minibasket_functions.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/payment.tpl',
             'block' => 'select_payment',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/select_payment.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/select_payment.tpl',
             'position' => '5'
         ],
         [
             'template' => 'page/checkout/payment.tpl',
             'block' => 'change_payment',
-            'file' => '/views/smarty/frontend/blocks/page/checkout/change_payment.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/checkout/change_payment.tpl',
             'position' => '5'
         ],
         [
             'template' => 'widget/header/loginbox.tpl',
             'block' => 'thirdparty_login',
-            'file' => '/views/smarty/frontend/blocks/page/account/thirdparty_login.tpl',
+            'file' => 'views/smarty/extensions/themes/default/page/account/thirdparty_login.tpl',
             'position' => '1'
         ],
     ],

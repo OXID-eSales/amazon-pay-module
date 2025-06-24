@@ -18,6 +18,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
  */
 class User extends User_parent
 {
+    /** @var Address|null  */
     private $amazonAddress = null;
 
     /**
@@ -26,14 +27,14 @@ class User extends User_parent
      * @param array $aDelAddress address data array
      * TODO: check if typehint can be used in Oxid 7
      */
-    protected function _assignAddress($aDelAddress)
+    protected function assignAddress($aDelAddress)
     {
         $session = Registry::getSession();
         if (
             $session->getVariable('paymentid') !== Constants::PAYMENT_ID ||
             !$session->getVariable(Constants::SESSION_DELIVERY_ADDR)
         ) {
-            parent::_assignAddress($aDelAddress);
+            parent::assignAddress($aDelAddress);
         }
     }
 

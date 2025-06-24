@@ -16,7 +16,7 @@ use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger\LogMessage;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
-use OxidSolutionCatalysts\AmazonPay\Model\User;
+use OxidEsales\Eshop\Application\Model\User;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 
@@ -41,8 +41,9 @@ class Logger extends AbstractLogger
     /**
      * @param string $message
      * @param array $context
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseConnectionException
-     * @throws \OxidEsales\Eshop\Core\Exception\DatabaseErrorException
+     * @return void
+     * @throws DatabaseErrorException
+     * @throws DatabaseConnectionException
      */
     public function logMessage(?string $message, array $context = []): void
     {
@@ -83,11 +84,9 @@ class Logger extends AbstractLogger
 
         if (!empty($result['response'])) {
             // ensure it is a string
-            if (is_string($result['response'])) {
-                $response = PhpHelper::jsonToArray($result['response']);
-            } else {
-                $response = $result['response'];
-            }
+            $response = is_string($result['response']) ?
+                PhpHelper::jsonToArray($result['response']) :
+                $result['response'];
 
             if (!empty($response['statusDetails']['state'])) {
                 $context['message'] = $response['statusDetails']['state'];
@@ -185,8 +184,4 @@ class Logger extends AbstractLogger
         $this->logMessage($message, $context);
     }
 
-    public static function getLogfileName()
-    {
-        return 'amazon_pay_' . date("Y.m.d") . '.log';
-    }
 }

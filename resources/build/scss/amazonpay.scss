@@ -3,16 +3,11 @@
     display: block;
     &.small {
         width: 200px;
+        margin-right: 10px;
     }
 }
-.amazonpay-button-or {
-    padding: 10px;
-    &.large {
-        width: 250px;
-    }
-    &.small {
-        width: 200px;
-    }
+.amazonpay-button-note {
+    margin-right: 10px;
 }
 #confirm-agb-error-container {
     display:none

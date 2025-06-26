@@ -51,4 +51,4 @@
             return $('#confirm-agb-error-container').data('oxidSpaForceConfirm');
         }
     };
-})()
+})();

@@ -10,7 +10,8 @@
     [{if $confirmIPA && $oxcmp_basket->hasArticlesWithIntangibleAgreement()}]
         [{assign var="confirmSPA" value=true}]
     [{/if}]
-    [{oxscript include=$oViewConf->getModuleUrl('osc_amazonpay', 'out/src/js/amazonpay.min.js') priority=10}]
+    [{assign var="sFileMTime" value=$oViewConf->getModulePath('osc_amazonpay','out/src/js/amazonpay.min.js')|filemtime}]
+    <script src="[{$oViewConf->getModuleUrl('osc_amazonpay','out/src/js/amazonpay.min.js')|cat:"?"|cat:$sFileMTime}]"></script>
     <p class="alert alert-danger" id="confirm-agb-error-container"
        [{if $confirmAGB eq 1}] data-oxid-agb-force-confirm="1"[{/if}]
        [{if $confirmDPA eq 1}] data-oxid-dpa-force-confirm="1"[{/if}]
@@ -21,7 +22,7 @@
     <div class="pull-right">
         [{include file="amazonpay/amazonbutton.tpl" buttonId="AmazonPayButtonNextCart2" placement="Cart"}]
     </div>
-    <div class="pull-right amazonpay-button-or">
+    <div class="pull-right amazonpay-button-note">
         [{"AMAZON_PAY_SUBMIT_ORDER_WITH"|oxmultilangassign}]
     </div>
 [{/if}]

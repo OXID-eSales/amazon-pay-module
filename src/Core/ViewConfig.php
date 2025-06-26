@@ -169,13 +169,13 @@ class ViewConfig extends ViewConfig_parent
      * Template variable getter. Get payload in JSON Format
      *
      * @return string
+     * @param string|null $anid
      * @throws Exception
      */
-    public function getPayloadExpress()
+    public function getPayloadExpress($anid = null)
     {
         /** @var string $anid */
-        $anid = Registry::getRequest()->getRequestParameter('anid') !== null
-            ? Registry::getRequest()->getRequestParameter('anid') : '';
+        $anid = $anid ?: (string)Registry::getRequest()->getRequestParameter('anid');
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();

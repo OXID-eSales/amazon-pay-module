@@ -1,3 +1,4 @@
 [{if $oViewConf->isAmazonActive()}]
-    [{oxstyle include=$oViewConf->getModuleUrl('osc_amazonpay', 'css/amazonpay.min.css')}]
+    [{assign var="sFileMTime" value=$oViewConf->getModulePath('osc_amazonpay','out/src/css/amazonpay.min.css')|filemtime}]
+    [{oxstyle include=$oViewConf->getModuleUrl('osc_amazonpay', 'out/src/css/amazonpay.min.css')|cat:"?"|cat:$sFileMTime}]
 [{/if}]

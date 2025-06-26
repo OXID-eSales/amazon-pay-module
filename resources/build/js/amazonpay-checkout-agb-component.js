@@ -30,7 +30,7 @@
             }
         },
         isAgbConfirmed: function() {
-            return document.getElementById('checkAgbTop').checked
+            return document.getElementById('checkAgbTop').checked;
         },
         isDpaConfirmed: function () {
             return document.getElementById('oxdownloadableproductsagreement').checked;
@@ -49,7 +49,7 @@
                     // uncomment for testing
                     // alert(http.responseText);
                 }
-            }
+            };
             http.send(params);
         },
         saveDpaConfirmInSession() {
@@ -63,7 +63,7 @@
                     // uncomment for testing
                     // alert(http.responseText);
                 }
-            }
+            };
             http.send(params);
             document.querySelector.ajax({
                 type: "POST",
@@ -83,8 +83,8 @@
                     // uncomment for testing
                     // alert(http.responseText);
                 }
-            }
+            };
             http.send(params);
         }
     };
-})()
+})();

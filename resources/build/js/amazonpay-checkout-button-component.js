@@ -8,16 +8,16 @@
             // replace the "Zur Kasse" button by using javascript
             // until we get a block to replace it by template
             // for now identify the button by using css classes
-            buttonClassesApex = 'btn btn-highlight btn-lg w-100'
-            buttonClassesTwig = 'btn btn-lg btn-primary pull-right submitButton nextStep largeButton'
+            buttonClassesApex = 'btn btn-highlight btn-lg w-100';
+            buttonClassesTwig = 'btn btn-lg btn-primary pull-right submitButton nextStep largeButton';
             if (document.getElementsByClassName(buttonClassesApex)[0])
             {
-                document.getElementsByClassName(buttonClassesApex)[0].parentNode.append(document.getElementById('AmazonPayWrapper'))
-                document.getElementsByClassName(buttonClassesApex)[0].style.display = "none"
+                document.getElementsByClassName(buttonClassesApex)[0].parentNode.append(document.getElementById('AmazonPayWrapper'));
+                document.getElementsByClassName(buttonClassesApex)[0].style.display = "none";
             }
             if (document.getElementsByClassName(buttonClassesTwig)[0]) {
-                document.getElementsByClassName(buttonClassesTwig)[0].parentNode.prepend(document.getElementById('AmazonPayWrapper'))
-                document.getElementsByClassName(buttonClassesTwig)[0].style.display = "none"
+                document.getElementsByClassName(buttonClassesTwig)[0].parentNode.prepend(document.getElementById('AmazonPayWrapper'));
+                document.getElementsByClassName(buttonClassesTwig)[0].style.display = "none";
             }
             this.amazonPayButton = amazonPayButton;
             this.payloadJSON = payloadJSON;
@@ -67,4 +67,4 @@
             return document.getElementById('confirm-agb-error-container').dataset.oxidSpaForceConfirm;
         }
     };
-})()
+})();

@@ -1,6 +1,17 @@
 const sass = require('node-sass');
 
 module.exports = {
+    moduledevelopment: {
+        options: {
+            implementation: sass,
+            update: true,
+            style: 'nested'
+        },
+        files: {
+            "../out/src/css/amazonpay.css": "build/scss/amazonpay.scss",
+            "../out/src/css/amazonpay_backend.css": "build/scss/amazonpay_backend.scss",
+        }
+    },
     moduleproduction: {
         options: {
             implementation: sass,
@@ -8,8 +19,8 @@ module.exports = {
             style: 'compressed'
         },
         files: {
-            "../assets/css/amazonpay.css": "build/scss/amazonpay.scss",
-            "../assets/css/amazonpay_backend.css": "build/scss/amazonpay_backend.scss",
+            "../out/src/css/amazonpay.css": "build/scss/amazonpay.scss",
+            "../out/src/css/amazonpay_backend.css": "build/scss/amazonpay_backend.scss",
         }
     }
 };

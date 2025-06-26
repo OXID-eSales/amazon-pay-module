@@ -23,7 +23,7 @@ oscAmazonPayRegisterAmazonPayClickHandler = () => {
                 }
             });
         }
-    })
+    });
 };
 
 oscAmazonPaySetAmazonButtonState = () => {
@@ -52,7 +52,7 @@ oscAmazonPaySetAmazonButtonState = () => {
         document.getElementById('osc_amazonpay_wrapper').style.display = 'none';
     }
 
-}
+};
 
 oscAmazonPayRenderAmazonButton = () => {
     if (typeof oscAmazonPayButtonIsRendered === "undefined" || oscAmazonPayButtonIsRendered === false) {
@@ -72,7 +72,7 @@ oscAmazonPayRenderAmazonButton = () => {
             // due to "shadow-root" cannot be manipulated after first render
         }
     }
-}
+};
 
 // set render the button and set states initially
 oscAmazonPayToBasket = document.getElementById(oscAmazonPayBasketSelector);

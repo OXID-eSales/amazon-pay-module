@@ -391,7 +391,7 @@ class ViewConfig extends ViewConfig_parent
     /**
      * Note added because of missing method error in article templates
      */
-    public function getConfig()
+    public function getConfig(): \OxidEsales\Eshop\Core\Config
     {
         return Registry::getConfig();
     }

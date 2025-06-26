@@ -27,7 +27,7 @@ class User extends User_parent
      * @param array $aDelAddress address data array
      * TODO: check if typehint can be used in Oxid 7
      */
-    protected function _assignAddress($aDelAddress): void
+    protected function _assignAddress($aDelAddress)
     {
         $session = Registry::getSession();
         if (

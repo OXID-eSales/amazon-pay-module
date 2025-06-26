@@ -208,20 +208,20 @@ class ViewConfig extends ViewConfig_parent
      * @psalm-suppress InternalMethod
      *
      */
-    public function isThemeBasedOn(string $themeId): bool
+    protected function isThemeBasedOn(string $themeId): bool
     {
         $result = false;
-
+        if ($themeId) {
         $theme = oxNew(Theme::class);
         $theme->load($theme->getActiveThemeId());
         // check active theme or parent theme
         if (
-            $theme->getActiveThemeId() == $themeId ||
-            $theme->getInfo('parentTheme') == $themeId
+                $theme->getActiveThemeId() === $themeId ||
+                $theme->getInfo('parentTheme') === $themeId
         ) {
             $result = true;
         }
-
+        }
         return $result;
     }
 
@@ -238,12 +238,10 @@ class ViewConfig extends ViewConfig_parent
      * @return string
      * @throws Exception
      */
-    public function getPayloadExpress($anid): string
+    public function getPayloadExpress(?string $anid = null): string
     {
         /** @var string $anid */
-        $anid = (!is_null($anid) && $anid === '')
-            ? (string)Registry::getRequest()->getRequestParameter('anid')
-            : (string)$anid;
+        $anid = $anid ?: (string)Registry::getRequest()->getRequestParameter('anid');
         $payload = new Payload();
         $payload->setCheckoutReviewReturnUrl($anid);
         $payload->setCheckoutResultReturnUrlExpress();

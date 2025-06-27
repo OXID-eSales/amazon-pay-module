@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Prevent the shop from breaking on misconfiguration or if the amazon service is down. Thanks to https://github.com/GM-Alex
 - show AmazonPay-Express-Buttons only if Payment AmazonPayExpress is active and Show-Option for Button is enabled
 - Fixed with the two-step capture, the opportunity to see the money is again in the backend.
+- DeliveryCountries only restricted by merchant
 
 ## [2.1.6] - 2024-08-15
 

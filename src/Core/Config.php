@@ -264,6 +264,20 @@ class Config
     }
 
     /**
+     * @return array
+     */
+    public function getPossibleAddresses(): array
+    {
+        $result = [];
+        foreach ($this->getPossibleEUAddressesAbbr() as $isoCode) {
+            if (!empty($isoCode)) {
+                $result[$isoCode] = (object)null;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * @return string
      */
     public function getPaymentRegion(): string

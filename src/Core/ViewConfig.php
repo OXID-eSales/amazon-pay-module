@@ -188,7 +188,7 @@ class ViewConfig extends ViewConfig_parent
         ]);
 
         $amazonConfig = $this->getAmazonConfig();
-        $payload->setAddressRestrictions($amazonConfig->getPossibleEUAddresses());
+        $payload->setAddressRestrictions($amazonConfig->getPossibleAddresses());
         $payload->setPlatformId($amazonConfig->getPlatformId());
 
         $payloadData = $payload->getData();

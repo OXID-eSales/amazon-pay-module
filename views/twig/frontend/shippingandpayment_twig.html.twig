@@ -1,3 +1,15 @@
+{% capture assign = "amazonpay_script_checkout_order" %}
+    var amznChangePayment = document.getElementById('amznChangePayment');
+
+    amznChangePayment.addEventListener('click', function(e) {
+        e.preventDefault();
+    }, false);
+
+    amazon.Pay.bindChangeAction('#amznChangePayment', {
+        amazonCheckoutSessionId: '{{ oViewConf.getAmazonSessionId() }}',
+        changeAction: 'changeAddress'
+    });
+{% endcapture %}
 <div class="row">
     <div class="col-xs-12 col-md-6" id="orderShipping">
         <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post">
@@ -35,7 +47,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">
                         {{ translate({ ident: "PAYMENT_METHOD" }) }}
-                        <button type="submit" class="btn btn-xs btn-warning pull-right submitButton largeButton" title="{{ translate({ ident: "EDIT" }) }}">
+                        <button type="submit" id="amznChangePayment" class="btn btn-xs btn-warning pull-right submitButton largeButton" title="{{ translate({ ident: "EDIT" }) }}">
                             <i class="fa fa-pencil"></i>
                         </button>
                     </h3>

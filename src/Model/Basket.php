@@ -28,7 +28,7 @@ class Basket extends Basket_parent
             /** @var string $deliveryCountryId */
             $deliveryCountryId = Registry::getSession()->getVariable('amazonCountryOxId');
         }
-        if (is_null($deliveryCountryId)) {
+        if (!$deliveryCountryId) {
             $deliveryCountryId = parent::findDelivCountry();
         }
         return $deliveryCountryId;

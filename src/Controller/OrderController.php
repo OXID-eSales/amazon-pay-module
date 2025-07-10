@@ -115,9 +115,8 @@ class OrderController extends OrderController_parent
         $basket = Registry::getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
 
-        $paymentId = $basket->getPaymentId();
+        $paymentId = $basket->getPaymentId() ?: '';
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
-
 
         /** @var string $amazonSessionId */
         $amazonSessionId = Registry::getRequest()->getRequestParameter(Constants::CHECKOUT_REQUEST_PARAMETER_ID);
@@ -181,7 +180,7 @@ class OrderController extends OrderController_parent
     protected function _validateTermsAndConditions()
     {
         $basket = $this->getBasket();
-        $paymentId = $basket->getPaymentId();
+        $paymentId = $basket->getPaymentId() ?: '';
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
         $isAmazonExpress = Constants::isAmazonExpressPayment($paymentId);
         // check T&C only for regular amazon (with express, some certain steps are skipped)

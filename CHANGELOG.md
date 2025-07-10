@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - show AmazonPay-Express-Buttons only if Payment AmazonPayExpress is active and Show-Option for Button is enabled
 - [0007778](https://bugs.oxid-esales.com/view.php?id=7778): onOrderSend in Admin only for AmazonOrders
 - [0007791](https://bugs.oxid-esales.com/view.php?id=7791): Fix Call to a member function getActiveCountry() on bool
+- [0007790](https://bugs.oxid-esales.com/view.php?id=7790): TypeError Constants::isAmazonPayment(): Argument #1 ($paymentId) must be of type string, null given
 
 ## [3.1.5] - 2024-03-22
 

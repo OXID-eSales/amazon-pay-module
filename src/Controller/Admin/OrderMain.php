@@ -32,6 +32,9 @@ class OrderMain extends OrderMain_parent
         $order = oxNew(Order::class);
 
         if ($order->load($this->getEditObjectId())) {
+            if (!$order->isAmazonOrder()) {
+                return;
+            }
             $chargeId = $this->getOrderChargeId($order);
 
             if (!OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {

@@ -366,7 +366,7 @@ class OrderController extends OrderController_parent
         $basket = $this->getBasket();
         $user = $this->getUser();
         $session = Registry::getSession();
-        $countryOxId = $user->getActiveCountry();
+        $countryOxId = $user ? $user->getActiveCountry() : '';
         $session->setVariable('amazonCountryOxId', $countryOxId);
         $session->setVariable('paymentid', $paymentId);
         $session->setVariable('_selected_paymentid', $paymentId);

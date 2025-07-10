@@ -59,7 +59,7 @@ class AmazonClient extends Client
                 'deliverySpecifications' => [
                     'addressRestrictions' => [
                         'type' => 'Allowed',
-                        'restrictions' => $config->getPossibleEUAddresses()
+                        'restrictions' => $config->getPossibleAddresses()
                     ]
                 ],
                 'paymentDetails' => [

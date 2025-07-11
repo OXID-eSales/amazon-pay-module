@@ -50,7 +50,7 @@ class UserComponent extends UserComponent_parent
         // This option is only available for the billing address. That's why we double-check the country of the
         // billing address. If this does not fit, we will use the validated delivery address as the billing address
         if (
-            !array_key_exists($amazonBillingAddress['countryCode'], $config->getPossibleEUAddresses()) &&
+            !array_key_exists($amazonBillingAddress['countryCode'], $config->getPossibleAddresses()) &&
             $amazonShippingAddress
         ) {
             $amazonBillingAddress = $amazonShippingAddress;

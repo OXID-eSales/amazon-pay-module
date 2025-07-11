@@ -74,7 +74,7 @@
         <div class="form-group">
             <label for="payRegion">{{ translate({ ident: "OSC_AMAZONPAY_DELREGION" }) }}</label>
             <div class="controls">
-                {% set deliveryAbbr = config.getPossibleEUAddressesAbbr() %}
+                {% set deliveryAbbr = config.getCountryList() %}
                 <span id="delRegion">{{ deliveryAbbr|join(",") }}</span>
                 <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_DELREGION" }) }}</span>
             </div>

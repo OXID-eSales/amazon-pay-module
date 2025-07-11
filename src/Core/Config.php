@@ -22,6 +22,7 @@ use OxidEsales\Eshop\Application\Model\CountryList;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleSettingBridgeInterface;
+use stdClass;
 
 /**
  * Class Config
@@ -76,20 +77,6 @@ class Config
      * @var string
      */
     protected $amazonLedgerCurrency = 'EUR';
-
-    /**
-     * all allowed Amazonpay EU Addresses
-     * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
-     * @var array
-     */
-    protected $amazonEUAddresses = [
-        'AT', 'BE', 'BG', 'HR', 'CY',
-        'CZ', 'DK', 'EE', 'FI', 'FR',
-        'DE', 'GR', 'HU', 'IE', 'IT',
-        'LV', 'LT', 'LU', 'MT', 'NL',
-        'PL', 'PT', 'RO', 'SK', 'SI',
-        'ES', 'SE'
-    ];
 
     /**
      * returns Country.
@@ -264,25 +251,12 @@ class Config
         return $result;
     }
 
-    public function getPossibleEUAddressesAbbr(): array
-    {
-        // if there are no specific countries, then all countries are allowed.
-        // Then the Countrylist corresponds to the amazonEUAddresses
-        return count($this->getCountryList()) ? $this->getCountryList() : $this->amazonEUAddresses;
-    }
-
     /**
      * @return array
      */
-    public function getPossibleEUAddresses(): array
+    public function getPossibleAddresses(): array
     {
-        $result = [];
-        foreach ($this->getPossibleEUAddressesAbbr() as $isoCode) {
-            if (in_array($isoCode, $this->amazonEUAddresses, true)) {
-                $result[$isoCode] = (object)null;
-            }
-        }
-        return $result;
+        return array_fill_keys($this->getCountryList(), new stdClass());
     }
 
     /**

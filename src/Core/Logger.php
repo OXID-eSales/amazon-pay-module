@@ -183,5 +183,4 @@ class Logger extends AbstractLogger
         $context['log_level'] = $levelName;
         $this->logMessage($message, $context);
     }
-
 }

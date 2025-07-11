@@ -79,20 +79,6 @@ class Config
     protected $amazonLedgerCurrency = 'EUR';
 
     /**
-     * all allowed Amazonpay EU Addresses
-     * @link https://amazonpaycheckoutintegrationguide.s3.amazonaws.com/amazon-pay-checkout/address-restriction-samples.html#allow-eu-addresses-only
-     * @var array
-     */
-    protected $amazonEUAddresses = [
-        'AT', 'BE', 'BG', 'HR', 'CY',
-        'CZ', 'DK', 'EE', 'FI', 'FR',
-        'DE', 'GR', 'HU', 'IE', 'IT',
-        'LV', 'LT', 'LU', 'MT', 'NL',
-        'PL', 'PT', 'RO', 'SK', 'SI',
-        'ES', 'SE'
-    ];
-
-    /**
      * returns Country.
      *
      * @var array|null

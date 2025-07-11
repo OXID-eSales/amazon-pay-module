@@ -212,15 +212,15 @@ class ViewConfig extends ViewConfig_parent
     {
         $result = false;
         if ($themeId) {
-        $theme = oxNew(Theme::class);
-        $theme->load($theme->getActiveThemeId());
+            $theme = oxNew(Theme::class);
+            $theme->load($theme->getActiveThemeId());
         // check active theme or parent theme
-        if (
+            if (
                 $theme->getActiveThemeId() === $themeId ||
                 $theme->getInfo('parentTheme') === $themeId
-        ) {
-            $result = true;
-        }
+            ) {
+                $result = true;
+            }
         }
         return $result;
     }

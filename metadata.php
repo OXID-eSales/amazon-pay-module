@@ -177,12 +177,12 @@ $aModule = [
         [
             'template' => 'layout/base.tpl',
             'block' => 'base_js',
-            'file' => 'views/smarty/frontend/blocks/layout/base_js.tpl'
+            'file' => 'views/smarty/extensions/themes/default/layout/base_js.tpl'
         ],
         [
             'template' => 'layout/base.tpl',
             'block' => 'base_style',
-            'file' => 'views/smarty/frontend/blocks/layout/base_style.tpl'
+            'file' => 'views/smarty/extensions/themes/default/layout/base_style.tpl'
         ],
         [
             'template' => 'form/user_checkout_change.tpl',

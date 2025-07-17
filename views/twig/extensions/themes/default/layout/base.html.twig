@@ -10,6 +10,6 @@
 {% block base_style %}
     {{ parent() }}
     {% if oViewConf.isAmazonActive() %}
-        {{ style({ include: oViewConf.getModuleUrl('osc_amazonpay', 'css/amazonpay.css')}) }}
+        {{ style({ include: oViewConf.getModuleUrl('osc_amazonpay', 'css/amazonpay.min.css')}) }}
     {% endif %}
 {% endblock %}

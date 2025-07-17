@@ -1,8 +1,0 @@
-{% extends "page/checkout/user.html.twig" %}
-
-{% block checkout_user_main %}
-    {% if not oxcmp_user and not oView.getLoginOption() and oViewConf.isAmazonActive() and not oViewConf.isAmazonSessionActive() and not oViewConf.socialLoginDeactivated() %}
-        {% include "@osc_amazonpay/frontend/checkout_user_main_apex" %}
-    {% endif %}
-    {{ parent() }}
-{% endblock %}

@@ -4,6 +4,9 @@
     &.small {
         width: 200px;
     }
+    &.large {
+        width: 100% !important;
+    }
 }
 .amazonpay-button-note {
     margin-right: 10px;

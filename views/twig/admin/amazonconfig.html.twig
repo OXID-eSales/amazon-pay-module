@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group">
-            <label for="privkey">{{ translate({ ident: "OSC_AMAZONPAY_PRIVKEY", suffix: "*" }) }}</label>
+            <label for="privkey">{{ translate({ ident: "OSC_AMAZONPAY_PRIVKEY" }) }}</label>
             <div class="controls">
                 <textarea id="privkey" name="conf[sAmazonPayPrivKey]">{{ displayPrivateKey }}</textarea>
                 <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_PRIVKEY" }) }}</span>
@@ -39,7 +39,7 @@
         </div>
 
         <div class="form-group">
-            <label for="privkeyid">{{ translate({ ident: "OSC_AMAZONPAY_PUBKEYID", suffix: "*" }) }}</label>
+            <label for="privkeyid">{{ translate({ ident: "OSC_AMAZONPAY_PUBKEYID" }) }}</label>
             <div class="controls">
                 <input type="text" class="form-control" name="conf[sAmazonPayPubKeyId]" value="{{ config.getPublicKeyId() }}" id="privkeyid">
                 <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_PUBKEYID" }) }}</span>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="form-group">
-            <label for="merchantId">{{ translate({ ident: "OSC_AMAZONPAY_MERCHANTID", suffix: "*" }) }}</label>
+            <label for="merchantId">{{ translate({ ident: "OSC_AMAZONPAY_MERCHANTID" }) }}</label>
             <div class="controls">
                 <input type="text" class="form-control" name="conf[sAmazonPayMerchantId]" value="{{ config.getMerchantId() }}" id="merchantId">
                 <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_MERCHANTID" }) }}</span>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="form-group">
-            <label for="storeId">{{ translate({ ident: "OSC_AMAZONPAY_STOREID", suffix: "*" }) }}</label>
+            <label for="storeId">{{ translate({ ident: "OSC_AMAZONPAY_STOREID" }) }}</label>
             <div class="controls">
                 <input type="text" class="form-control" name="conf[sAmazonPayStoreId]" value="{{ config.getStoreId() }}" id="storeId">
                 <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_STOREID" }) }}</span>

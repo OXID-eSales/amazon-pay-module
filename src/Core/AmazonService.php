@@ -912,7 +912,7 @@ class AmazonService
         $orderId = $repository->findOrderIdByChargeId($chargeId);
         $repository->markOrderPaid(
             $orderId,
-            'AmazonPay: ' . $amount,
+            'AmazonPay Captured: ' . $amount,
             'OK',
             $response['chargeId']
         );

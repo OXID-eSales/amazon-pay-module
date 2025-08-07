@@ -237,8 +237,8 @@ class OrderOverview extends OrderOverview_parent
         /** @var string $captureAmount */
         $captureAmount = Registry::getRequest()->getRequestParameter("captureAmount");
         $amazonConfig = oxNew(Config::class);
-        $currencyCode = $oOrder->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
         $orderLoaded = $oOrder->load($this->getEditObjectId());
+        $currencyCode = $oOrder->oxorder__oxcurrency->rawValue ?? $amazonConfig->getPresentmentCurrency();
         /** @var string $paymentType */
         $paymentType = $oOrder->getFieldData('oxpaymenttype');
 

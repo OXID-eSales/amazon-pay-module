@@ -16,8 +16,6 @@
         </tr>
         {% endif %}
         {% set amazonCaptureAmount = oView.getAmazonMaximalCaptureAmount() %}
-        [{if $oViewConf->isAmazonActive() && $oView->isAuthorized()}]
-
         {% if oViewConf.isAmazonActive() and oView.isAuthorized() %}
         <tr>
             <td class="edittext">

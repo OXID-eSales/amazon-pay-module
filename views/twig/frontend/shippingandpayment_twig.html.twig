@@ -10,6 +10,7 @@
     changeAction: 'changeAddress'
     });
 {% endcapture %}
+{{ script({ add: amazonpay_script_checkout_order, dynamic: __oxid_include_dynamic }) }}
 <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post"
       id="orderShipping">
     {{ oViewConf.getHiddenSid()|raw }}
@@ -44,7 +45,6 @@
         </button>
     </h4>
     <div class="card-body">
-        {% set payment = oView.getPayment() %}
-        {{ payment.oxpayments__oxdesc.value }}
+        {{ oViewConf.getPaymentDescriptor() }}
     </div>
 </form>

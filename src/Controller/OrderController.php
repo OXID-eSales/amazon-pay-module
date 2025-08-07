@@ -419,10 +419,11 @@ class OrderController extends OrderController_parent
                 }
             }
 
+            if ($actShipSet && $actShipSet !== $lastShipSet) {
+                Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
+            }
+
             if (!$actShipSet) {
-                if ($lastShipSet) {
-                    Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
-                }
                 $actShipSet = (string)$fallbackShipSet;
             }
         }

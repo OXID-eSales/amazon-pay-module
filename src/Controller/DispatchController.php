@@ -201,23 +201,24 @@ class DispatchController extends FrontendController
         // add item to basket if an "anid" was provided in the url
         /** @var string $anid */
         $anid = Registry::getRequest()->getRequestParameter('anid') ?: '';
-        if ($anid !== '') {
-            $database = DatabaseProvider::getDb();
-            $database->startTransaction();
-            try {
-                $basket = Registry::getSession()->getBasket();
+        $database = DatabaseProvider::getDb();
+        $database->startTransaction();
+        try {
+            $basket = Registry::getSession()->getBasket();
+            $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
+
+            if ($anid !== '') {
                 $basket->addToBasket(
                     $anid,
                     1
                 );
-                $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
                 // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
                 $basket->isNewItemAdded();
-                $basket->calculateBasket(true);
-            } catch (Exception $exception) {
-                $database->rollbackTransaction();
-                throw $exception;
             }
+            $basket->calculateBasket(true);
+        } catch (Exception $exception) {
+            $database->rollbackTransaction();
+            throw $exception;
         }
 
         /** @var string $amazonSessionId */

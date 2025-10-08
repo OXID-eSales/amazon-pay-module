@@ -4,6 +4,7 @@
     {% set oxArticlesId = "" %}
 {% endif %}
 {% set aPayload = oViewConf.getPayloadExpress(oxArticlesId) %}
+{% set isUserLoggedIn = oViewConf.isUserLoggedIn() %}
 <div class="amazonpay-button {{ buttonclass }} express" id="{{ buttonId }}"></div>
 {% capture assign = "amazonpay_script_expressbutton" %}
     if (typeof {{ buttonId }}_is_rendered === "undefined" || {{ buttonId }}_is_rendered !== true) {
@@ -21,6 +22,13 @@
         }
     });
     {{ buttonId }}_is_rendered = true;
+    {# when user is already logged in add a redirect to start amazon-non-express flow instead of using AmazonExpress #}
+    {% if isUserLoggedIn %}
+        document.getElementById('{{ buttonId }}').addEventListener('click', function(event){
+            event.preventDefault();
+            window.location.href = '{{ oViewConf.getSelfActionLink() }}' + '&cl=order&useAmazonNonExpress=true';
+        });
+    {% endif %}
     }
 {% endcapture %}
 {{ script({ add: amazonpay_script_expressbutton, dynamic: __oxid_include_dynamic }) }}

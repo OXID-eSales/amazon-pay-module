@@ -396,4 +396,12 @@ class ViewConfig extends ViewConfig_parent
     {
         return Registry::getConfig();
     }
+
+    public function isUserLoggedIn(): bool {
+        $user = Registry::getSession()->getUser();
+        if (!$user) {
+            return false;
+        }
+        return true;
+    }
 }

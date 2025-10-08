@@ -1,5 +1,7 @@
 {% extends "page/details/inc/productmain.html.twig" %}
 
+{% set isUserLoggedIn = oViewConf.isUserLoggedIn() %}
+
 {% block details_productmain_tobasket %}
     {{ parent() }}
 
@@ -28,5 +30,16 @@
         </div>
         {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-button.min.js'), priority:20, dynamic: __oxid_include_dynamic }) }}
         {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-observer.min.js'), priority:30, dynamic: __oxid_include_dynamic }) }}
+
+        {# when user is already logged in add a redirect to start amazon-non-express flow instead of using AmazonExpress #}
+        {% capture assign = "amazonpay_script_use_non_express" %}
+            {% if isUserLoggedIn %}
+                document.getElementById('amazonpayexpressbutton').addEventListener('click', function(event){
+                event.preventDefault();
+                window.location.href = '{{ oViewConf.getSelfActionLink() }}' + '&cl=order&useAmazonNonExpress=true' + '&anid={{ oxArticlesId }}';
+                });
+            {% endif %}
+        {% endcapture %}
+        {{ script({ add: amazonpay_script_use_non_express, dynamic: __oxid_include_dynamic }) }}
     {% endif %}
 {% endblock %}

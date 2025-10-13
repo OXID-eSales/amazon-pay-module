@@ -118,4 +118,16 @@ class User extends User_parent
 
         return parent::getSelectedAddressId();
     }
+
+    public function changeUserData($sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress) {
+        parent::changeUserData($sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress);
+        $session = Registry::getSession();
+        if ($session->getVariable('paymentid') === Constants::PAYMENT_ID) {
+            Registry::getUtils()->redirect(
+                Registry::getConfig()->getShopHomeUrl() . 'cl=order',
+                false
+            );
+        }
+        return;
+    }
 }

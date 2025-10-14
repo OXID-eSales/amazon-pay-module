@@ -16,8 +16,11 @@ use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Core\DatabaseProvider;
+use OxidEsales\Eshop\Core\Exception\ArticleInputException;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\NoArticleException;
+use OxidEsales\Eshop\Core\Exception\OutOfStockException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Session;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
@@ -440,7 +443,16 @@ class OrderController extends OrderController_parent
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
     }
 
-    public function addProductToBasket()
+
+    /**
+     * @return void
+     * @throws DatabaseConnectionException
+     * @throws DatabaseErrorException
+     * @throws ArticleInputException
+     * @throws NoArticleException
+     * @throws OutOfStockException
+     */
+    public function addProductToBasket(): void
     {
         // add item to basket if an "anid" was provided in the url
         /** @var string $anid */

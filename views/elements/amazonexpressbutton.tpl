@@ -5,6 +5,7 @@
     [{assign var="oxArticlesId" value=null}]
     [{/if}]
 [{assign var="aPayload" value=$oViewConf->getPayloadExpress($oxArticlesId)}]
+[{assign var="isUserLoggedIn"  value=$oViewConf->isUserLoggedIn()}]
 <div class="amazonpay-button [{$buttonclass}] express" id="[{$buttonId}]"></div>
 
 [{capture name="amazonpay_script"}]
@@ -21,5 +22,12 @@
                 publicKeyId: '[{$amazonConfig->getPublicKeyId()}]'
         }
     });
+    [{* when user is already logged in add a redirect to start amazon-non-express flow instead of using AmazonExpress *}]
+    [{if $isUserLoggedIn}]
+        document.getElementById('[{$buttonId}]').addEventListener('click', function(event){
+            event.preventDefault();
+            window.location.href = '[{$oViewConf->getSelfActionLink()}]' + '&cl=order&useAmazonNonExpress=true' +'&anid=[{$oxArticlesId}]';
+        });
+    [{/if}]
 [{/capture}]
 [{oxscript add=$smarty.capture.amazonpay_script}]

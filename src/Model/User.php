@@ -117,4 +117,18 @@ class User extends User_parent
 
         return parent::getSelectedAddressId();
     }
+
+    public function changeUserData($sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress) {
+        $session = Registry::getSession();
+        // remove possible previous amazonpay address from session
+        $session->setVariable(Constants::SESSION_DELIVERY_ADDR, '');
+        parent::changeUserData($sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress);
+        if ($session->getVariable('paymentid') === Constants::PAYMENT_ID) {
+            Registry::getUtils()->redirect(
+                Registry::getConfig()->getShopHomeUrl() . 'cl=order',
+                false
+            );
+        }
+        return;
+    }
 }

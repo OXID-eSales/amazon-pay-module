@@ -14,6 +14,7 @@ use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Application\Model\User;
+use OxidEsales\Eshop\Core\DatabaseProvider;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Registry;
@@ -45,6 +46,10 @@ class OrderController extends OrderController_parent
     public function init()
     {
         $session = Registry::getSession();
+        if (Registry::getRequest()->getRequestParameter('useAmazonNonExpress') === "true"){
+            $session->setVariable('paymentid', Constants::PAYMENT_ID);
+            $this->addProductToBasket();
+        }
         $exclude = $this->getViewConfig()->isAmazonExclude();
         $oBasket = $this->getBasket();
         $paymentId = $oBasket->getPaymentId() ?: '';
@@ -416,5 +421,30 @@ class OrderController extends OrderController_parent
             return;
         }
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
+    }
+
+    public function addProductToBasket() {
+        // add item to basket if an "anid" was provided in the url
+        /** @var string $anid */
+        $anid = Registry::getRequest()->getRequestParameter('anid') ?: '';
+        $database = DatabaseProvider::getDb();
+        $database->startTransaction();
+        try {
+            $basket = Registry::getSession()->getBasket();
+            $basket->setPayment(Constants::PAYMENT_ID_EXPRESS);
+
+            if ($anid !== '') {
+                $basket->addToBasket(
+                    $anid,
+                    1
+                );
+                // Remove flag of "new item added" to not show "Item added" popup when returning to the checkout
+                $basket->isNewItemAdded();
+            }
+            $basket->calculateBasket(true);
+        } catch (Exception $exception) {
+            $database->rollbackTransaction();
+            throw $exception;
+        }
     }
 }

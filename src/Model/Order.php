@@ -65,12 +65,12 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder($oBasket, $oUser, $blRecalculatingOrder = false)
+    public function finalizeOrder(\OxidEsales\Eshop\Application\Model\Basket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
         if ($ret !== self::ORDER_STATE_PAYMENTERROR) {
-            $ret = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
+            $ret = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder = false);
         }
 
         // Authorize and Capture via Amazon Pay will be done after finalizeOrder in OXID

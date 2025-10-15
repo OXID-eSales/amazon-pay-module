@@ -112,7 +112,7 @@ class ViewConfig extends ViewConfig_parent
      * @param string $paymentId
      * @return boolean
      */
-    public function isAmazonPaymentPossible($paymentId)
+    public function isAmazonPaymentPossible($paymentId = "")
     {
         if (empty($paymentId)) {
             /** @var string $paymentId */
@@ -306,5 +306,13 @@ class ViewConfig extends ViewConfig_parent
             $logger->log('ERROR', $exception->getMessage(), [$exception]);
             return '';
         }
+    }
+
+    public function isUserLoggedIn(): bool {
+        $user = Registry::getSession()->getUser();
+        if (!$user) {
+            return false;
+        }
+        return true;
     }
 }

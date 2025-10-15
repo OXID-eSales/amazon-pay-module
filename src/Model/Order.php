@@ -70,7 +70,7 @@ class Order extends Order_parent
         $ret = $this->prepareFinalizeOrder($oBasket);
 
         if ($ret !== self::ORDER_STATE_PAYMENTERROR) {
-            $ret = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder = false);
+            $ret = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
         }
 
         // Authorize and Capture via Amazon Pay will be done after finalizeOrder in OXID

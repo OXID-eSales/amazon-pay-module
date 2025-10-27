@@ -144,7 +144,7 @@ jobs:
 
       - name: Upload configuration artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Configs-${{ inputs.php }}-${{ inputs.oxid }}
           path: |
@@ -195,7 +195,7 @@ jobs:
 
       - name: Upload log artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: StylesLog-${{ inputs.php }}-${{ inputs.oxid }}
           path: |
@@ -248,7 +248,7 @@ jobs:
 
       - name: Upload log artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: TestsLog-${{ inputs.php }}-${{ inputs.oxid }}
           path: |
@@ -303,7 +303,7 @@ jobs:
 
       - name: Upload log artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: CodeceptionTestsLog-${{ inputs.php }}-${{ inputs.oxid }}
           path: |

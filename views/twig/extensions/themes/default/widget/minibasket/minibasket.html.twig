@@ -6,6 +6,6 @@
         {% include "@osc_amazonpay/frontend/dd_layout_page_header_icon_menu_minibasket_functions" %}
     {% endif %}
     {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
-        {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: false} %}
+        {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: true} %}
     {% endif %}
 {% endblock %}

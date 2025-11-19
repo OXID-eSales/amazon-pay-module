@@ -1,0 +1,7 @@
+[{if $oViewConf->isAmazonSessionActive()}]
+    <div class="alert alert-info">
+        [{assign var="sSelfLink" value=$oViewConf->getSslSelfLink()|replace:"&amp;":"&"}]
+        [{oxmultilang ident="AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT"}][{if $withBreak}]<br />[{/if}]
+        <a href="[{$sSelfLink|cat:"cl=order"}]">[{oxmultilang ident="AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT_AFREF"}]</a>
+    </div>
+[{/if}]

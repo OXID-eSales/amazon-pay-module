@@ -29,5 +29,7 @@ $aLang = [
     'AMAZON_PAY_LASTSHIPSETNOTVALID'          => 'The shipping method you have selected is not possible when paying via Amazon Pay. The shipping method has been reset.',
     'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH'      => 'The country of the Amazon billing address does not match the allowed countries of the shop. Therefore, the Amazon delivery address is used as the billing address.',
     'AMAZON_PAY_REMARK'                       => 'Amazon Pay notice:',
-    'AMAZON_PAY_SUBMIT_ORDER_WITH'            => 'Order now with'
+    'AMAZON_PAY_SUBMIT_ORDER_WITH'            => 'Order now with',
+    'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT'           => 'You have started payment via Amazon Pay Payment.',
+    'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT_AFREF'     => 'Click here to complete your order.',
 ];

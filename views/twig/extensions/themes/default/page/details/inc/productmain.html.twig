@@ -42,4 +42,7 @@
         {% endcapture %}
         {{ script({ add: amazonpay_script_use_non_express, dynamic: __oxid_include_dynamic }) }}
     {% endif %}
+    {% if oViewConf.isAmazonActive() and oViewConf.displayExpressInPDP() and not oViewConf.isAmazonExclude(oDetailsProduct.oxarticles__oxid.value) and oViewConf.isAmazonSessionActive() %}
+        {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: true} %}
+    {% endif %}
 {% endblock %}

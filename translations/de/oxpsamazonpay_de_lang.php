@@ -28,6 +28,6 @@ $aLang = [
     'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH'                => 'Das Land der Amazon-Rechnungsadresse passt nicht zu den erlaubten Ländern des Shops. Daher wird die Amazon-Lieferadresse als Rechnungsadresse übernommen.',
     'AMAZON_PAY_REMARK'                                 => 'Amazon Pay Mitteilung:',
     'AMAZON_PAY_SUBMIT_ORDER_WITH'                      => 'Zahlungspflichtig bestellen mit',
-    'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT'           => 'Zahlung erfolgt mit Amazon Pay-Zahlart.',
+    'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT'           => 'Zahlung erfolgt mit Amazon Pay.',
     'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT_AFREF'     => 'Hier zum Bestellabschluss.',
 ];

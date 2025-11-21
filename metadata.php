@@ -125,7 +125,8 @@ $aModule = [
         '@osc_amazonpay/frontend/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl' =>
             'views/smarty/frontend/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl',
         '@osc_amazonpay/frontend/base_js.tpl' => 'views/smarty/frontend/base_js.tpl',
-        '@osc_amazonpay/frontend/base_style.tpl' => 'views/smarty/frontend/base_style.tpl'
+        '@osc_amazonpay/frontend/base_style.tpl' => 'views/smarty/frontend/base_style.tpl',
+        '@osc_amazonpay/frontend/amazonpayhint.tpl' => 'views/smarty/frontend/amazonpayhint.tpl'
     ],
     'events' => [
         'onActivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onActivate',

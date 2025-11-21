@@ -28,6 +28,6 @@ $aLang = [
     'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH'                => 'The country of the Amazon billing address does not match the allowed countries of the shop. Therefore, the Amazon delivery address is used as the billing address.',
     'AMAZON_PAY_REMARK'                                 => 'Amazon Pay notice:',
     'AMAZON_PAY_SUBMIT_ORDER_WITH'                      => 'Order now with',
-    'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT'           => 'You have started payment via PayPal Payment.',
+    'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT'           => 'You have started payment via Amazon Pay.',
     'AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT_AFREF'     => 'Click here to complete your order.',
 ];

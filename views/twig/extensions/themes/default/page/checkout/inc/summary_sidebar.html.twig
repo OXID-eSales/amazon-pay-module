@@ -5,4 +5,7 @@
     {% if oViewConf.getActiveClassName() == 'basket' and oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and not oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
         {% include "@osc_amazonpay/frontend/basket_btn_next_bottom_twig" %}
     {% endif %}
+    {% if oViewConf.getActiveClassName() == 'basket' and oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
+        {% include "@osc_amazonpay/frontend/amazonpayhint" %}
+    {% endif %}
 {% endblock %}

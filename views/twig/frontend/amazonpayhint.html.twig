@@ -1,0 +1,7 @@
+{% if oViewConf.isAmazonSessionActive() %}
+    <div class="alert alert-info">
+        {% set sSelfLink = oViewConf.getSslSelfLink()|replace({'&amp;': '&'}) %}
+        {{ translate({ ident: "AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT" }) }} {% if withBreak %}<br />{% endif %}
+        <a href="{{ sSelfLink ~ "cl=order" }}">{{ translate({ ident: "AMAZONPAY_RUNNING_CHECKOUT_SESSION_HINT_AFREF" }) }}</a>
+    </div>
+{% endif %}

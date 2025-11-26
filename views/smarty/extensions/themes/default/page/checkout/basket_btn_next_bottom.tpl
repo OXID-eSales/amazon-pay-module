@@ -15,6 +15,6 @@
     [{/if}]
     [{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && $oViewConf->isAmazonSessionActive() && $oViewConf->displayExpressInMiniCartAndModal()}]
         <div class="clearfix" style="margin-bottom: 15px;"></div>
-    [{include file='@osc_amazonpay/frontend/amazonpayhint.tpl' withBreak=true alignLeft=true }]
+    [{include file='@osc_amazonpay/frontend/amazonpayhint.tpl' withBreak=true alignRight=true }]
     [{/if}]
 [{/if}]

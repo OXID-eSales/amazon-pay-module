@@ -4,6 +4,7 @@
         [{include file="@osc_amazonpay/frontend/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl"}]
     [{/if}]
     [{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && $oViewConf->isAmazonSessionActive() && $oViewConf->displayExpressInMiniCartAndModal()}]
+        <div class="clearfix" style="margin-bottom: 15px;"></div>
         [{include file='@osc_amazonpay/frontend/amazonpayhint.tpl' withBreak=true}]
     [{/if}]
 [{else}]
@@ -11,6 +12,7 @@
         [{include file="@osc_amazonpay/frontend/dd_layout_page_header_icon_menu_minibasket_functions_wave.tpl"}]
     [{/if}]
     [{if $oViewConf->isAmazonActive() && !$oViewConf->isAmazonExclude() && $oViewConf->isAmazonSessionActive() && $oViewConf->displayExpressInMiniCartAndModal()}]
+        <div class="clearfix" style="margin-bottom: 15px;"></div>
         [{include file='@osc_amazonpay/frontend/amazonpayhint.tpl' withBreak=true}]
     [{/if}]
 [{/if}]

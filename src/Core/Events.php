@@ -365,6 +365,8 @@ class Events
      */
     public static function onDeactivate()
     {
+        // clear Cache before deactivating the module
+        Registry::getUtils()->oxResetFileCache();
     }
 
     /**

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.1.8] - 2025-??-??
 
 - [0007831](https://bugs.oxid-esales.com/view.php?id=7831): Fix if I'm logged in and then use the Express button, the delivery address from OXID must be used
+- If the customer does not wait until they reach the Thankyou page after clicking "Buy Now" in the PayPal pop-up, an order email will now also be sent in "healing mode".
+- clear Cache before deactivate the module, prevent possible maintenance mode in case of other installed modules
 
 ## [2.1.7] - 2025-08-18
 

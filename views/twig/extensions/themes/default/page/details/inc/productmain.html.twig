@@ -5,44 +5,45 @@
 {% block details_productmain_tobasket %}
     {{ parent() }}
 
-    {% if oViewConf.isAmazonActive() and oViewConf.displayExpressInPDP() and not oViewConf.isAmazonExclude(oDetailsProduct.oxarticles__oxid.value) and not oViewConf.isAmazonSessionActive() %}
-        {% set amazonConfig = oViewConf.getAmazonConfig() %}
-        {% set sToken = oViewConf.getSessionChallengeToken() %}
-        {% set oxArticlesId = oDetailsProduct.oxarticles__oxid.value %}
-        {% if not oxArticlesId %}
-            {% set oxArticlesId = "" %}
-        {% endif %}
-        {% set aPayload = oViewConf.getPayloadExpress(oxArticlesId) %}
-        <div id="osc_amazonpay_config" class="hidden">
-            <input type="hidden" id="osc_amazonpay_merchantId" value="{{ amazonConfig.getMerchantId() }}">
-            <input type="hidden" id="osc_amazonpay_isSandbox"
-                   value="{% if amazonConfig.isSandbox() %}true{% else %}false{% endif %}">
-            <input type="hidden" id="osc_amazonpay_ledgerCurrency" value="{{ amazonConfig.getLedgerCurrency() }}">
-            <input type="hidden" id="osc_amazonpay_checkoutLanguage" value="{{ amazonConfig.getCheckoutLanguage() }}">
-            <input type="hidden" id="osc_amazonpay_placement" value="Product">
-            <input type="hidden" id="osc_amazonpay_payloadJSON" value='{{ aPayload|raw }}'>
-            <input type="hidden" id="osc_amazonpay_signature" value='{{ oViewConf.signature|raw }}'>
-            <input type="hidden" id="osc_amazonpay_publicKeyId" value="{{ amazonConfig.getPublicKeyId()|raw }}">
-        </div>
-        <div id="osc_amazonpay_wrapper">
-            <div class="amazonpay-button large express text-center" id="amazonpayexpressbutton"></div>
-            <br>
-        </div>
-        {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-button.min.js'), priority:20, dynamic: __oxid_include_dynamic }) }}
-        {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-observer.min.js'), priority:30, dynamic: __oxid_include_dynamic }) }}
-
-        {# when user is already logged in add a redirect to start amazon-non-express flow instead of using AmazonExpress #}
-        {% capture assign = "amazonpay_script_use_non_express" %}
-            {% if isUserLoggedIn %}
-                document.getElementById('amazonpayexpressbutton').addEventListener('click', function(event){
-                event.preventDefault();
-                window.location.href = '{{ oViewConf.getSelfActionLink() }}' + '&cl=order&useAmazonNonExpress=true' + '&anid={{ oxArticlesId }}';
-                });
+    {% if oViewConf.isAmazonActive() and oViewConf.displayExpressInPDP() and not oViewConf.isAmazonExclude(oDetailsProduct.oxarticles__oxid.value) %}
+        {% if not oViewConf.isAmazonSessionActive() %}
+            {% set amazonConfig = oViewConf.getAmazonConfig() %}
+            {% set sToken = oViewConf.getSessionChallengeToken() %}
+            {% set oxArticlesId = oDetailsProduct.oxarticles__oxid.value %}
+            {% if not oxArticlesId %}
+                {% set oxArticlesId = "" %}
             {% endif %}
-        {% endcapture %}
-        {{ script({ add: amazonpay_script_use_non_express, dynamic: __oxid_include_dynamic }) }}
-    {% endif %}
-    {% if oViewConf.isAmazonActive() and oViewConf.displayExpressInPDP() and not oViewConf.isAmazonExclude(oDetailsProduct.oxarticles__oxid.value) and oViewConf.isAmazonSessionActive() %}
-        {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: true} %}
+            {% set aPayload = oViewConf.getPayloadExpress(oxArticlesId) %}
+            <div id="osc_amazonpay_config" class="hidden">
+                <input type="hidden" id="osc_amazonpay_merchantId" value="{{ amazonConfig.getMerchantId() }}">
+                <input type="hidden" id="osc_amazonpay_isSandbox"
+                       value="{% if amazonConfig.isSandbox() %}true{% else %}false{% endif %}">
+                <input type="hidden" id="osc_amazonpay_ledgerCurrency" value="{{ amazonConfig.getLedgerCurrency() }}">
+                <input type="hidden" id="osc_amazonpay_checkoutLanguage" value="{{ amazonConfig.getCheckoutLanguage() }}">
+                <input type="hidden" id="osc_amazonpay_placement" value="Product">
+                <input type="hidden" id="osc_amazonpay_payloadJSON" value='{{ aPayload|raw }}'>
+                <input type="hidden" id="osc_amazonpay_signature" value='{{ oViewConf.signature|raw }}'>
+                <input type="hidden" id="osc_amazonpay_publicKeyId" value="{{ amazonConfig.getPublicKeyId()|raw }}">
+            </div>
+            <div id="osc_amazonpay_wrapper">
+                <div class="amazonpay-button large express text-center" id="amazonpayexpressbutton"></div>
+                <br>
+            </div>
+            {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-button.min.js'), priority:20, dynamic: __oxid_include_dynamic }) }}
+            {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay-variant-observer.min.js'), priority:30, dynamic: __oxid_include_dynamic }) }}
+
+            {# when user is already logged in add a redirect to start amazon-non-express flow instead of using AmazonExpress #}
+            {% capture assign = "amazonpay_script_use_non_express" %}
+                {% if isUserLoggedIn %}
+                    document.getElementById('amazonpayexpressbutton').addEventListener('click', function(event){
+                    event.preventDefault();
+                    window.location.href = '{{ oViewConf.getSelfActionLink() }}' + '&cl=order&useAmazonNonExpress=true' + '&anid={{ oxArticlesId }}';
+                    });
+                {% endif %}
+            {% endcapture %}
+            {{ script({ add: amazonpay_script_use_non_express, dynamic: __oxid_include_dynamic }) }}
+        {% else %}
+            {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: true} %}
+        {% endif %}
     {% endif %}
 {% endblock %}

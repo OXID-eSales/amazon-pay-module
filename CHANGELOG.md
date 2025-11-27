@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.1.7] - 2025-??-??
 
 - [0007831](https://bugs.oxid-esales.com/view.php?id=7831): Fix if I'm logged in and then use the Express button, the delivery address from OXID must be used
+- Show a hint, if Amazon-Session is active, if you go back to detailspage or basket during the checkout
 
 ## [3.1.6] - 2025-08-18
 

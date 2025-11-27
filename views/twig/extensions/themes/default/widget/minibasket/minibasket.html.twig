@@ -2,10 +2,11 @@
 
 {% block dd_layout_page_header_icon_menu_minibasket_functions %}
     {{ parent() }}
-    {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and not oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
-        {% include "@osc_amazonpay/frontend/dd_layout_page_header_icon_menu_minibasket_functions" %}
-    {% endif %}
-    {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and oViewConf.isAmazonSessionActive() and oViewConf.displayExpressInMiniCartAndModal() %}
-        {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: true} %}
+    {% if oViewConf.isAmazonActive() and not oViewConf.isAmazonExclude() and oViewConf.displayExpressInMiniCartAndModal() %}
+        {% if not oViewConf.isAmazonSessionActive() %}
+            {% include "@osc_amazonpay/frontend/dd_layout_page_header_icon_menu_minibasket_functions" %}
+        {% else %}
+            {% include "@osc_amazonpay/frontend/amazonpayhint" with {withBreak: true} %}
+        {% endif %}
     {% endif %}
 {% endblock %}

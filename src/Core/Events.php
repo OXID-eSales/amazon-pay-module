@@ -15,7 +15,9 @@ use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Model\BaseModel as EshopBaseModel;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Application\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
+use Psr\Container\ContainerInterface;
 
 class Events
 {
@@ -332,6 +334,8 @@ class Events
      */
     public static function onDeactivate()
     {
+        // clear Cache before deactivating the module
+        Registry::getUtils()->oxResetFileCache();
     }
 
     /**
@@ -536,5 +540,10 @@ class Events
         );
 
         DatabaseProvider::getDb()->execute($sql);
+    }
+
+    private static function cleanCache()
+    {
+        Registry::getUtils()->oxResetFileCache();
     }
 }

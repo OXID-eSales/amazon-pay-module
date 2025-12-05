@@ -363,8 +363,10 @@ class Events
      *
      * @return void
      */
-    public static function onDeactivate()
+    public static function onDeactivate(): void
     {
+        // clear Cache before deactivating the module
+        self::cleanCache();
     }
 
     /**
@@ -584,5 +586,10 @@ class Events
         );
 
         DatabaseProvider::getDb()->execute($sql);
+    }
+
+    private static function cleanCache(): void
+    {
+        Registry::getUtils()->oxResetFileCache();
     }
 }

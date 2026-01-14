@@ -427,11 +427,27 @@ class Payload
         /** @var string $oxmobfon */
         $oxmobfon = $user->getFieldData('oxmobfon');
 
-        $addressLine1 = sprintf(
-            '%s %s',
-            $oxstreet,
-            $oxstreetnr
-        );
+        $oxcompany = $user->getFieldData('oxcompany');
+
+        $oxaddinfo = $user->getFieldData('oxaddinfo');
+
+        if (!empty($oxcompany)) {
+            $addressLine1 = sprintf(
+                '%s',
+                $oxcompany,
+            );
+            $addressLine2 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        } else {
+            $addressLine1 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        }
 
         /** @var string $oxcountryid */
         $oxcountryid = $user->getFieldData('oxcountryid');
@@ -445,6 +461,8 @@ class Payload
         $this->addressDetails = [
             'name' => $oxfname . ' ' . $oxlname,
             'addressLine1' => $addressLine1,
+            'addressLine2' => $addressLine2,
+            'addressLine3' => $oxaddinfo,
             'postalCode' => $oxzip,
             'city' => $oxcity,
             'countryCode' => $sCountryCode

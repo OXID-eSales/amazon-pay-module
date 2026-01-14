@@ -426,9 +426,9 @@ class Payload
         $oxprivfon = $user->getFieldData('oxprivfon');
         /** @var string $oxmobfon */
         $oxmobfon = $user->getFieldData('oxmobfon');
-
+        /** @var string $oxcompany */
         $oxcompany = $user->getFieldData('oxcompany');
-
+        /** @var string $oxaddinfo */
         $oxaddinfo = $user->getFieldData('oxaddinfo');
 
         if (!empty($oxcompany)) {
@@ -507,12 +507,28 @@ class Payload
         $oxprivfon = $address->getFieldData('oxprivfon');
         /** @var string $oxmobfon */
         $oxmobfon = $address->getFieldData('oxmobfon');
+        /** @var string $oxcompany */
+        $oxcompany = $address->getFieldData('oxcompany');
+        /** @var string $oxaddinfo */
+        $oxaddinfo = $address->getFieldData('oxaddinfo');
 
-        $addressLine1 = sprintf(
-            '%s %s',
-            $oxstreet,
-            $oxstreetnr
-        );
+        if (!empty($oxcompany)) {
+            $addressLine1 = sprintf(
+                '%s',
+                $oxcompany,
+            );
+            $addressLine2 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        } else {
+            $addressLine1 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        }
 
         /** @var string $oxcountryid */
         $oxcountryid = $address->getFieldData('oxcountryid');
@@ -526,6 +542,8 @@ class Payload
         $this->addressDetails = [
             'name' => $oxfname . ' ' . $oxlname,
             'addressLine1' => $addressLine1,
+            'addressLine2' => $addressLine2,
+            'addressLine3' => $oxaddinfo,
             'postalCode' => $oxzip,
             'city' => $oxcity,
             'countryCode' => $sCountryCode

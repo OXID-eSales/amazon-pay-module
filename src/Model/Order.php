@@ -108,6 +108,14 @@ class Order extends Order_parent
             return parent::getDelAddressInfo();
         }
 
+        // prevent updating delivery address from amazon for normal amazonpay payments after returning from amazonpay
+        $session = Registry::getSession();
+        if (
+            $session->getVariable('paymentid') === Constants::PAYMENT_ID
+        ) {
+            return parent::getDelAddressInfo();
+        }
+
         $address = oxNew(Address::class);
         $address->assign($amazonDelAddress);
 

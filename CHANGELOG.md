@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.1.9] - 2026-??-??
 
 - [0007878](https://bugs.oxid-esales.com/view.php?id=7878): Provide all address fields for payload
+- [0007870](https://bugs.oxid-esales.com/view.php?id=7870): Fix tpl-include-error
 
 ## [2.1.8] - 2025-12-05
 

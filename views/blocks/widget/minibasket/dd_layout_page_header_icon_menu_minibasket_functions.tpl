@@ -5,7 +5,7 @@
             [{include file="amazonpay/dd_layout_page_header_icon_menu_minibasket_functions_flow.tpl"}]
         [{else}]
             <div class="clearfix" style="margin-bottom: 15px;"></div>
-            [[{include file='amazonpay/amazonpayhint.tpl'}]
+            [{include file='amazonpay/amazonpayhint.tpl'}]
         [{/if}]
     [{else}]
         [{if !$oViewConf->isAmazonSessionActive()}]

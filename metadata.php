@@ -289,6 +289,6 @@ $aModule = [
         ['name' => 'blAmazonSocialLoginDeactivated', 'type' => 'bool', 'value' => false, 'group' => null],
         ['name' => 'blAmazonAutomatedRefundActivated', 'type' => 'bool', 'value' => true, 'group' => null],
         ['name' => 'blAmazonAutomatedCancelActivated', 'type' => 'bool', 'value' => true, 'group' => null],
-        ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '', 'group' => null],
+        ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '1', 'group' => null],
     ]
 ];

@@ -54,23 +54,23 @@ class ConfigControllerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\C
                 'getterMethod' => 'isSandbox'
             ],
             [
-                ['sAmazonPayPrivKey' => 'key'],
-                'key',
+                ['sAmazonPayPrivKey' => 'someKey1234'],
+                'someKey1234',
                 'getterMethod' => 'getPrivateKey'
             ],
             [
-                ['sAmazonPayPubKeyId' => 'key id '],
-                'key id',
+                ['sAmazonPayPubKeyId' => 'keyid'],
+                'keyid',
                 'getterMethod' => 'getPublicKeyId'
             ],
             [
-                ['sAmazonPayMerchantId' => 'merchant id'],
-                'merchant id',
+                ['sAmazonPayMerchantId' => 'merchid'],
+                'merchid',
                 'getterMethod' => 'getMerchantId'
             ],
             [
-                ['sAmazonPayStoreId' => 'store id'],
-                'store id',
+                ['sAmazonPayStoreId' => 'storeid'],
+                'storeid',
                 'getterMethod' => 'getStoreId'
             ],
             [

@@ -30,9 +30,9 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
     public function testIsSandbox()
     {
         $config = new Config();
-        $this->setConfigParam('blAmazonPaySandboxMode', true);
+        $config->setSandbox(true);
         $this->assertTrue($config->isSandbox());
-        $this->setConfigParam('blAmazonPaySandboxMode', false);
+        $config->setSandbox(false);
         $this->assertFalse($config->isSandbox());
     }
 
@@ -60,7 +60,7 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
     public function testGetStoreId()
     {
         $config = new Config();
-        $this->setConfigParam('sAmazonPayStoreId', 'storeid');
+        $config->setStoreId('storeid');
         $this->assertSame('storeid', $config->getStoreId());
     }
 
@@ -73,27 +73,27 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
     public function testDisplayExpressInPDP()
     {
         $config = new Config();
-        $this->setConfigParam('blAmazonPayExpressPDP', true);
+        $config->setDisplayExpressInPDP(true);
         $this->assertTrue($config->displayExpressInPDP());
-        $this->setConfigParam('blAmazonPayExpressPDP', false);
+        $config->setDisplayExpressInPDP(false);
         $this->assertFalse($config->displayExpressInPDP());
     }
 
     public function testUseExclusion()
     {
         $config = new Config();
-        $this->setConfigParam('blAmazonPayUseExclusion', true);
+        $config->setUseExclusion(true);
         $this->assertTrue($config->useExclusion());
-        $this->setConfigParam('blAmazonPayUseExclusion', false);
+        $config->setUseExclusion(false);
         $this->assertFalse($config->useExclusion());
     }
 
     public function testDisplayExpressInMinicartAndModal()
     {
         $config = new Config();
-        $this->setConfigParam('blAmazonPayExpressMinicartAndModal', true);
+        $config->setDisplayExpressInMiniCartAndModal(true);
         $this->assertTrue($config->displayExpressInMiniCartAndModal());
-        $this->setConfigParam('blAmazonPayExpressMinicartAndModal', false);
+        $config->setDisplayExpressInMiniCartAndModal(false);
         $this->assertFalse($config->displayExpressInMiniCartAndModal());
     }
 
@@ -102,11 +102,11 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
      */
     public function testCheckHealthMissingPrivKey()
     {
-        $this->setConfigParam('sAmazonPayPrivKey', '');
-        $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayMerchantId', 'set');
-        $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
+        $config->setPrivateKey('');
+        $config->setPublicKeyId('set');
+        $config->setMerchantId('set');
+        $config->setStoreId('set');
         $this->expectException(StandardException::class);
         $config->checkHealth();
         $this->expectExceptionMessageMatches('OSC_AMAZONPAY_ERR_CONF_INVALID');
@@ -117,11 +117,11 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
      */
     public function testCheckHealthMissingPrivKeyId()
     {
-        $this->setConfigParam('sAmazonPayPrivKey', 'set');
-        $this->setConfigParam('sAmazonPayPubKeyId', '');
-        $this->setConfigParam('sAmazonPayMerchantId', 'set');
-        $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
+        $config->setPrivateKey('set');
+        $config->setPublicKeyId('');
+        $config->setMerchantId('set');
+        $config->setStoreId('set');
         $this->expectException(StandardException::class);
         $config->checkHealth();
         $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
@@ -132,10 +132,11 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
      */
     public function testCheckHealthMissingMerchantId()
     {
-        $this->setConfigParam('sAmazonPayPrivKey', 'set');
-        $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayMerchantId', '');
-        $this->setConfigParam('sAmazonPayStoreId', 'set');
+        $config = new Config();
+        $config->setPrivateKey('set');
+        $config->setPublicKeyId('set');
+        $config->setMerchantId('');
+        $config->setStoreId('set');
         $config = new Config();
         $this->expectException(StandardException::class);
         $config->checkHealth();
@@ -147,11 +148,11 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
      */
     public function testCheckHealthMissingStoreId()
     {
-        $this->setConfigParam('sAmazonPayPrivKey', 'set');
-        $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayMerchantId', 'set');
-        $this->setConfigParam('sAmazonPayStoreId', '');
         $config = new Config();
+        $config->setPrivateKey('set');
+        $config->setPublicKeyId('set');
+        $config->setMerchantId('set');
+        $config->setStoreId('');
         $this->expectException(StandardException::class);
         $config->checkHealth();
         $this->assertLoggedException(StandardException::class, 'OSC_AMAZONPAY_ERR_CONF_INVALID');
@@ -162,11 +163,11 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\Amazon
      */
     public function testCheckHealthOK()
     {
-        $this->setConfigParam('sAmazonPayPrivKey', 'set');
-        $this->setConfigParam('sAmazonPayPubKeyId', 'set');
-        $this->setConfigParam('sAmazonPayMerchantId', 'set');
-        $this->setConfigParam('sAmazonPayStoreId', 'set');
         $config = new Config();
+        $config->setPrivateKey('set');
+        $config->setPublicKeyId('set');
+        $config->setMerchantId('set');
+        $config->setStoreId('set');
         $config->checkHealth();
         $this->assertTrue(true);
     }

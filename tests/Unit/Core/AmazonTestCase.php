@@ -12,15 +12,17 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core;
 use Dotenv\Dotenv;
 use Exception;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Framework\Module\Facade\ModuleSettingServiceInterface;
 use OxidEsales\TestingLibrary\UnitTestCase;
+use OxidProfessionalServices\Usercentrics\Core\Module;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class AmazonTestCase extends TestCase
+class AmazonTestCase extends UnitTestCase
 {
     protected AmazonService $amazonService;
     protected AmazonClient $amazonClient;
@@ -53,7 +55,8 @@ class AmazonTestCase extends TestCase
             ];
         }
 
-        $this->setConfigParam('sAmazonPayStoreId', self::$modulConfig['sAmazonPayStoreId']);
+        // getcheckoutSession Test will fail if storeid is not persisted
+        $this->moduleConfig->setStoreId(self::$modulConfig['sAmazonPayStoreId']);
         $this->setConfigParam('sAmazonPayMerchantId', self::$modulConfig['sAmazonPayMerchantId']);
         $this->setConfigParam('sAmazonPayPubKeyId', self::$modulConfig['sAmazonPayPubKeyId']);
         $this->setConfigParam('sAmazonPayPrivKey', self::$modulConfig['sAmazonPayPrivKey']);
@@ -118,12 +121,12 @@ class AmazonTestCase extends TestCase
         return $address;
     }
 
-    public function setConfigParam(string $name, mixed $value): void
+    public function setConfigParam($parameterName, $value = null): void
     {
-        Registry::getConfig()->setConfigParam($name, $value);
+        Registry::getConfig()->setConfigParam($parameterName, $value);
     }
 
-    public function setRequestParameter(string $paramName, mixed $paramValue): void
+    public function setRequestParameter($paramName, $paramValue) :void
     {
         $_POST[$paramName] = $paramValue;
     }

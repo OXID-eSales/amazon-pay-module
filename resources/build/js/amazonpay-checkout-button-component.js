@@ -10,10 +10,16 @@
             // for now identify the button by using css classes
             buttonClassesApex = 'btn btn-highlight btn-lg w-100';
             buttonClassesTwig = 'btn btn-lg btn-primary pull-right submitButton nextStep largeButton';
-            if (document.getElementsByClassName(buttonClassesApex)[0])
+            buttonIndex = 0;
+            // when iNewBasketItemMessage is set to "popup" in apex theme, there will be an additional button with the same classes
+            // in this case the mini-basket button will have index 0 and the "Zur Kasse Button" index 1
+            if (document.getElementsByClassName(buttonClassesApex).length > 1) {
+                buttonIndex = 1;
+            }
+            if (document.getElementsByClassName(buttonClassesApex)[buttonIndex])
             {
-                document.getElementsByClassName(buttonClassesApex)[0].parentNode.append(document.getElementById('AmazonPayWrapper'));
-                document.getElementsByClassName(buttonClassesApex)[0].style.display = "none";
+                document.getElementsByClassName(buttonClassesApex)[buttonIndex].parentNode.append(document.getElementById('AmazonPayWrapper'));
+                document.getElementsByClassName(buttonClassesApex)[buttonIndex].style.display = "none";
             }
             if (document.getElementsByClassName(buttonClassesTwig)[0]) {
                 document.getElementsByClassName(buttonClassesTwig)[0].parentNode.prepend(document.getElementById('AmazonPayWrapper'));

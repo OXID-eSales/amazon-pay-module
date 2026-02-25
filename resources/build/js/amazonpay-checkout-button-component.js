@@ -5,29 +5,6 @@
         signature: null,
 
         init: function (amazonPayButton, payloadJSON, signature) {
-            // replace the "Zur Kasse" button by using javascript
-            // until we get a block to replace it by template
-            // for now identify the button by using css classes
-            buttonClassesApex = 'btn btn-highlight btn-lg w-100';
-            buttonClassesTwig = 'btn btn-lg btn-primary pull-right submitButton nextStep largeButton';
-            buttonIndex = 0;
-            if (document.getElementsByClassName(buttonClassesApex).length > 1) {
-                if (document.getElementsByClassName(buttonClassesApex)[0].type === 'button') {
-                    buttonIndex = 0;
-                }
-                if (document.getElementsByClassName(buttonClassesApex)[1].type === 'button') {
-                    buttonIndex = 1;
-                }
-            }
-            if (document.getElementsByClassName(buttonClassesApex)[buttonIndex])
-            {
-                document.getElementsByClassName(buttonClassesApex)[buttonIndex].parentNode.append(document.getElementById('AmazonPayWrapper'));
-                document.getElementsByClassName(buttonClassesApex)[buttonIndex].style.display = "none";
-            }
-            if (document.getElementsByClassName(buttonClassesTwig)[0]) {
-                document.getElementsByClassName(buttonClassesTwig)[0].parentNode.prepend(document.getElementById('AmazonPayWrapper'));
-                document.getElementsByClassName(buttonClassesTwig)[0].style.display = "none";
-            }
             this.amazonPayButton = amazonPayButton;
             this.payloadJSON = payloadJSON;
             this.signature = signature;

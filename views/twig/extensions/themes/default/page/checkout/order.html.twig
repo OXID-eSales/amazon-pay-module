@@ -9,7 +9,7 @@
 {% endblock %}
 
 
-{% block checkout_order_btn_confirm_bottom %}
+{% block checkout_order_next_step_side %}
     {% set oPayment = oView.getPayment() %}
     {% set paymentId = oPayment.getId() %}
     {% if (
@@ -18,8 +18,7 @@
         not oViewConf.isAmazonExclude()
         )
     %}
-        {{ parent() }}
-        {% include "@osc_amazonpay/frontend/checkout_order_btn_submit_bottom" with {paymentId: paymentId} %}
+        {% include "@osc_amazonpay/frontend/checkout_order_next_step_side" with {paymentId: paymentId} %}
     {% else %}
         {{ parent() }}
     {% endif %}

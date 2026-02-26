@@ -119,7 +119,7 @@ class Config
      */
     public function isOneStepCapture()
     {
-        return Registry::getConfig()->getConfigParam('amazonPayCapType') === '1';
+        return Registry::getConfig()->getConfigParam('amazonPayCapType') !== '2';
     }
 
     /**

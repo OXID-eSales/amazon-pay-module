@@ -1,4 +1,4 @@
-  {% if paymentId == oViewConf.getAmazonPaymentId() %}
+{% if paymentId == oViewConf.getAmazonPaymentId() %}
     {% set oConfig = oViewConf.getConfig() %}
     {% set confirmAGB = oConfig.getConfigParam('blConfirmAGB') %}
     {% set confirmIPA = oConfig.getConfigParam('blEnableIntangibleProdAgreement') %}

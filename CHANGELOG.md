@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [3.1.8] - 2026-??-??
 
 - [0007878](https://bugs.oxid-esales.com/view.php?id=7878): Provide all address fields for payload
+- [0007893](https://bugs.oxid-esales.com/view.php?id=7893): Fix AmazonPay Default for paymentstrategy
 
 ## [3.1.7] - 2025-12-05
 

@@ -105,10 +105,15 @@ class Payload
      * @var array
      */
     private $addressDetails = [];
+
     /**
      * @var string
      */
     private $platformId = '';
+
+    /**
+     * @var array
+     */
     private $addressRestrictions = [];
 
     /**
@@ -172,8 +177,6 @@ class Payload
             unset($data['softDescriptor']);
         }
 
-
-
         if (!empty($this->checkoutChargeAmount)) {
             $data['chargeAmount'] = [];
             $data['chargeAmount']['amount'] = $this->checkoutChargeAmount;
@@ -197,6 +200,10 @@ class Payload
         return $data;
     }
 
+    /**
+     * @param array $allowedCountries
+     * @return void
+     */
     public function setAddressRestrictions(array $allowedCountries)
     {
         $this->addressRestrictions = $allowedCountries;
@@ -355,6 +362,10 @@ class Payload
         $this->scopes = array_merge($this->scopes, $scopes);
     }
 
+    /**
+     * @param array $scopes
+     * @return void
+     */
     public function addSignInScopes(array $scopes)
     {
         $this->signInScopes = array_merge($this->scopes, $scopes);
@@ -407,12 +418,28 @@ class Payload
         $oxprivfon = $user->getFieldData('oxprivfon');
         /** @var string $oxmobfon */
         $oxmobfon = $user->getFieldData('oxmobfon');
+        /** @var string $oxcompany */
+        $oxcompany = $user->getFieldData('oxcompany');
+        /** @var string $oxaddinfo */
+        $oxaddinfo = $user->getFieldData('oxaddinfo');
 
-        $addressLine1 = sprintf(
-            '%s %s',
-            $oxstreet,
-            $oxstreetnr
-        );
+        if (!empty($oxcompany)) {
+            $addressLine1 = sprintf(
+                '%s',
+                $oxcompany,
+            );
+            $addressLine2 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        } else {
+            $addressLine1 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        }
 
         /** @var string $oxcountryid */
         $oxcountryid = $user->getFieldData('oxcountryid');
@@ -426,6 +453,8 @@ class Payload
         $this->addressDetails = [
             'name' => $oxfname . ' ' . $oxlname,
             'addressLine1' => $addressLine1,
+            'addressLine2' => $addressLine2,
+            'addressLine3' => $oxaddinfo,
             'postalCode' => $oxzip,
             'city' => $oxcity,
             'countryCode' => $sCountryCode
@@ -470,25 +499,48 @@ class Payload
         $oxprivfon = $address->getFieldData('oxprivfon');
         /** @var string $oxmobfon */
         $oxmobfon = $address->getFieldData('oxmobfon');
-        $addressLine1 = sprintf(
-            '%s %s',
-            $oxstreet,
-            $oxstreetnr
-        );
+        /** @var string $oxcompany */
+        $oxcompany = $address->getFieldData('oxcompany');
+        /** @var string $oxaddinfo */
+        $oxaddinfo = $address->getFieldData('oxaddinfo');
+
+        if (!empty($oxcompany)) {
+            $addressLine1 = sprintf(
+                '%s',
+                $oxcompany,
+            );
+            $addressLine2 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        } else {
+            $addressLine1 = sprintf(
+                '%s %s',
+                $oxstreet,
+                $oxstreetnr
+            );
+        }
+
         /** @var string $oxcountryid */
         $oxcountryid = $address->getFieldData('oxcountryid');
         $oCountry = oxNew(Country::class);
         $oCountry->load($oxcountryid);
         $oxisoalpha2 = $oCountry->getFieldData('oxisoalpha2');
         $sCountryCode = $oxisoalpha2;
+
+
         // set mandatory standard fields
         $this->addressDetails = [
             'name' => $oxfname . ' ' . $oxlname,
             'addressLine1' => $addressLine1,
+            'addressLine2' => $addressLine2,
+            'addressLine3' => $oxaddinfo,
             'postalCode' => $oxzip,
             'city' => $oxcity,
             'countryCode' => $sCountryCode
         ];
+
         // check for additional fields
         // check for phone number
         $phoneNumber = null;

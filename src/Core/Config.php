@@ -128,7 +128,7 @@ class Config
     public function isOneStepCapture(): bool
     {
         $amazonPayCapType = $this->getStringConfigValue('amazonPayCapType');
-        return $amazonPayCapType === '1';
+        return $amazonPayCapType !== '2';
     }
 
     /**

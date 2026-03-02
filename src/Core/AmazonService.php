@@ -24,6 +24,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidSolutionCatalysts\AmazonPay\Model\Order as AmazonOrder;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use stdClass;
 
 /**
@@ -451,6 +452,8 @@ class AmazonService
         /** @var string $orderCurrencyName */
         $orderCurrencyName = $order->getOrderCurrency()->name;
 
+        $amazonConfig = oxNew(Config::class);
+
         // amounts needs to be cast with same precision level or
         // else even if numbers looks the same the compare will be wrong
         if (
@@ -463,10 +466,15 @@ class AmazonService
                 ) .
                 PhpHelper::getMoneyValue($this->getMaximalRefundAmount($orderId)) . " " . $orderCurrencyName
             );
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger = new Logger();
+                $logger->log(LogLevel::DEBUG,
+                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('OSC_AMAZONPAY_REFUND_ANNOTATION', 1) . PHP_EOL .
+                    'refundAmount: ' . $refundAmount . PHP_EOL
+                );
+            }
             return;
         }
-
-        $amazonConfig = oxNew(Config::class);
 
         $body = [
             'chargeId' => $repository->findLogMessageForOrderId($orderId)[0]['OSC_AMAZON_CHARGE_ID'],
@@ -785,6 +793,13 @@ class AmazonService
         if ($result['status'] !== 200) {
             $exception = oxNew(InputException::class, 'AmazonPay: ' . $response['message']);
             Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'order_overview');
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger = new Logger();
+                $logger->log(LogLevel::ERROR,
+                    'Error cancelling order: ' . $response['message'] . PHP_EOL .
+                    'chargeId: ' . $chargeId . PHP_EOL
+                );
+            }
 
             return;
         }
@@ -814,11 +829,6 @@ class AmazonService
     {
         $response = PhpHelper::jsonToArray($result['response']);
 
-        $logger->info(
-            $response['reasonCode'],
-            $result
-        );
-
         // Inform the ShopOwner about broken order
         $config = Registry::getConfig();
         $lang = Registry::getLang();
@@ -847,6 +857,14 @@ class AmazonService
         );
 
         $exception = oxNew(InputException::class, $response['message']);
+        $amazonConfig = oxNew(Config::class);
+        if ($amazonConfig->getAmazonPayLogging()) {
+            $logger->log(LogLevel::INFO,
+                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1) . PHP_EOL .
+                'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
+                'Result: ' . var_dump($result) . PHP_EOL
+            );
+        }
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');
         Registry::getUtils()->redirect($config->getShopHomeUrl() . 'cl=payment');
     }
@@ -890,10 +908,13 @@ class AmazonService
         $response = PhpHelper::jsonToArray($result['response']);
 
         if (!empty($response['reasonCode'])) {
-            $logger->info(
-                'Capture Error',
-                $result
-            );
+            $amazonConfig = oxNew(Config::class);
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger->log(LogLevel::INFO,
+                    'Capture Error:' . $response['message'] . PHP_EOL .
+                    'chargeId: ' . $chargeId . PHP_EOL
+                );
+            }
 
             $exception = oxNew(InputException::class, 'AmazonPay: ' . $response['message']);
             Registry::getUtilsView()->addErrorToDisplay(

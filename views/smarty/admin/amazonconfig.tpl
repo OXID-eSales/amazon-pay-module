@@ -31,6 +31,22 @@
         </div>
 
         <div class="form-group">
+            <label for="logging">[{oxmultilang ident="OSC_AMAZONPAY_LOGGING"}]</label>
+            <div class="controls">
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="hidden" name="conf[blAmazonPayLogging]" value="0" />
+                            <input id="placementDetailPage" type="checkbox" name="conf[blAmazonPayLogging]" [{if $config->geTAmazonPayLogging(true)}]checked[{/if}] value="1" />
+                            [{oxmultilang ident="OSC_AMAZONPAY_LOGGING"}]
+                        </label>
+                    </div>
+                </div>
+                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_LOGGING"}]</span>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label for="privkey">[{oxmultilang ident="OSC_AMAZONPAY_PRIVKEY" suffix="*"}]</label>
             <div class="controls">
                 <textarea id="privkey" name="conf[sAmazonPayPrivKey]">[{$displayPrivateKey}]</textarea>

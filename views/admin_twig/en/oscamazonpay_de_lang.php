@@ -18,6 +18,8 @@ $aLang = [
     'OSC_AMAZONPAY_OPMODE_SANDBOX'     => 'Sandbox',
     'HELP_OSC_AMAZONPAY_OPMODE'        => 'To configure and test Amazon Pay, use Sandbox (test). When you\'re ready
         to receive real transactions, switch to Production (live).',
+    'OSC_AMAZONPAY_LOGGING'            => 'Logging',
+    'HELP_OSC_AMAZONPAY_LOGGING'       => 'enable logging to file source/log/amazonpay.log',
     'OSC_AMAZONPAY_PRIVKEY'            => 'Private Key',
     'HELP_OSC_AMAZONPAY_PRIVKEY'       => 'Your private key for the integration. To generate it, sign in to Seller Central,
         and then go to Integration',

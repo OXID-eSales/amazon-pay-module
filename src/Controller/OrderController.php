@@ -28,6 +28,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use Psr\Log\LogLevel;
 use stdClass;
 
 /**
@@ -129,6 +130,7 @@ class OrderController extends OrderController_parent
      */
     public function execute()
     {
+        $logger = new Logger();
         $basket = Registry::getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
 
@@ -151,6 +153,15 @@ class OrderController extends OrderController_parent
             ) ||
             $exclude
         ) {
+            $amazonConfig = oxNew(Config::class);
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger->log(LogLevel::DEBUG,
+                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                    'isAmazonpayment: ' . $isAmazonPayment . PHP_EOL .
+                    'isAmazonSessionActive: ' . $isAmazonSessionActive . PHP_EOL .
+                    'exclude: ' . $exclude . PHP_EOL
+                );
+            }
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return null;
@@ -354,8 +365,13 @@ class OrderController extends OrderController_parent
         }
 
         Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
-        $logger = new Logger();
-        $logger->log('ERROR', $result['response']);
+        if ($amazonConfig->getAmazonPayLogging()) {
+            $logger = new Logger();
+            $logger->log(LogLevel::ERROR,
+                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                'Response: ' . var_dump($result['response']) . PHP_EOL
+            );
+        }
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         if ($oOrder->isLoaded()) {
             $oOrder->delete();
@@ -430,6 +446,15 @@ class OrderController extends OrderController_parent
 
             if ($actShipSet && $actShipSet !== $lastShipSet) {
                 Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
+                $amazonConfig = oxNew(Config::class);
+                if ($amazonConfig->getAmazonPayLogging()) {
+                    $logger = new Logger();
+                    $logger->log(LogLevel::DEBUG,
+                        \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_LASTSHIPSETNOTVALID', 1) . PHP_EOL .
+                        'actShipSet: ' . $actShipSet . PHP_EOL .
+                        'lastShipSet: ' . $lastShipSet . PHP_EOL
+                    );
+                }
             }
 
             if (!$actShipSet) {

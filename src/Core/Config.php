@@ -116,6 +116,11 @@ class Config
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPaySandboxMode');
     }
 
+    public function getAmazonPayLogging(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayLogging');
+    }
+
     /**
      * @return bool
      */
@@ -288,6 +293,11 @@ class Config
     public function automatedCancelActivated(): bool
     {
         return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedCancelActivated');
+    }
+
+    public function amazonpayLogging(): bool
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayLogging');
     }
 
     /**

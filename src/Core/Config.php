@@ -328,14 +328,6 @@ class Config
     }
 
     /**
-     * @return bool
-     */
-    public function amazonpayLogging(): bool
-    {
-        return $this->getBoolConfigValue('blAmazonPayLogging');
-    }
-
-    /**
      * @param bool $bIsAdmin
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)

@@ -16,9 +16,11 @@ use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 
+use Psr\Log\LogLevel;
 use function date;
 
 /**
@@ -306,6 +308,14 @@ class Order extends Order_parent
         ) {
             $deleteError = Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR');
             Registry::getUtilsView()->addErrorToDisplay($deleteError);
+            $amazonConfig = oxNew(Config::class);
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger = new Logger();
+                $logger->log(LogLevel::ERROR,
+                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR', 1) . PHP_EOL .
+                    'Response: ' . $logMessage[0]['OSC_AMAZON_RESPONSE_MSG'] . PHP_EOL
+                );
+            }
             return false;
         }
         return false;

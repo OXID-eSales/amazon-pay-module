@@ -28,6 +28,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Payload;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Service\DeliveryAddressService;
+use Psr\Log\LogLevel;
 use stdClass;
 use OxidEsales\Eshop\Application\Model\Address as CoreAddress;
 
@@ -119,6 +120,7 @@ class OrderController extends OrderController_parent
     {
         $basket = Registry::getSession()->getBasket();
         $exclude = $this->getViewConfig()->isAmazonExclude();
+        $logger = new Logger();
 
         $paymentId = $basket->getPaymentId() ?: '';
         $isAmazonPayment = Constants::isAmazonPayment($paymentId);
@@ -139,6 +141,15 @@ class OrderController extends OrderController_parent
             ) ||
             $exclude
         ) {
+            $amazonConfig = oxNew(Config::class);
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger->log(LogLevel::DEBUG,
+                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                    'isAmazonpayment: ' . $isAmazonPayment . PHP_EOL .
+                    'isAmazonSessionActive: ' . $isAmazonSessionActive . PHP_EOL .
+                    'exclude: ' . $exclude . PHP_EOL
+                );
+            }
             Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
             OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
             return null;
@@ -154,7 +165,6 @@ class OrderController extends OrderController_parent
                 if ($paymentId === Constants::PAYMENT_ID_EXPRESS) {
                     $this->completeAmazonPaymentExpress();
                 } elseif ($paymentId === Constants::PAYMENT_ID) {
-                    $logger = new Logger();
                     if (OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
                         OxidServiceProvider::getAmazonService()->processOneStepPayment(
                             $amazonSessionId,
@@ -280,6 +290,8 @@ class OrderController extends OrderController_parent
         /** @var string $orderOxId */
         $orderOxId = Registry::getSession()->getVariable('sess_challenge');
         $oOrder = oxNew(Order::class);
+        $logger = new Logger();
+
         if ($oOrder->load($orderOxId)) {
             /** @var string $oxOrderNr */
             $oxOrderNr = $oOrder->getFieldData('oxordernr');
@@ -331,8 +343,13 @@ class OrderController extends OrderController_parent
             return;
         }
 
+        if ($amazonConfig->getAmazonPayLogging()) {
+            $logger->log(LogLevel::ERROR,
+                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                'Response: ' . var_dump($result['response']) . PHP_EOL
+            );
+        }
         Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
-        $logger = new Logger();
         $logger->log('ERROR', $result['response']);
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
         if ($oOrder->isLoaded()) {
@@ -409,6 +426,15 @@ class OrderController extends OrderController_parent
             if (!$actShipSet) {
                 if ($lastShipSet) {
                     Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');
+                    $amazonConfig = oxNew(Config::class);
+                    if ($amazonConfig->getAmazonPayLogging()) {
+                        $logger = new Logger();
+                        $logger->log(LogLevel::DEBUG,
+                            \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_LASTSHIPSETNOTVALID', 1) . PHP_EOL .
+                            'actShipSet: ' . $actShipSet . PHP_EOL .
+                            'lastShipSet: ' . $lastShipSet . PHP_EOL
+                        );
+                    }
                 }
                 $actShipSet = (string)$fallbackShipSet;
             }

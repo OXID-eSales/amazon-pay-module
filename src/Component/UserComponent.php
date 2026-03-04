@@ -15,7 +15,9 @@ use OxidEsales\EshopCommunity\Application\Controller\RegisterController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
+use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use Psr\Log\LogLevel;
 
 /**
  * Handles Amazon checkout sessions
@@ -30,6 +32,7 @@ class UserComponent extends UserComponent_parent
     public function createGuestUser(array $amazonSession)
     {
         $session = Registry::getSession();
+        $logger = new Logger();
         $config = new Config();
 
         $this->setParent(oxNew(RegisterController::class));
@@ -55,6 +58,15 @@ class UserComponent extends UserComponent_parent
         ) {
             $amazonBillingAddress = $amazonShippingAddress;
             Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_BILLINGCOUNTRY_MISMATCH', false, true);
+            $amazonConfig = oxNew(Config::class);
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger->log(LogLevel::DEBUG,
+                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_BILLINGCOUNTRY_MISMATCH', 1) . PHP_EOL .
+                    'Billing address countryCode was: ' . $amazonBillingAddress['countryCode'] . PHP_EOL .
+                    'Shipping address countryCode was: ' . $amazonShippingAddress['countryCode'] . PHP_EOL .
+                    'Allowed countries: ' . implode(', ', $config->getCountryList()) . PHP_EOL
+                );
+            }
         }
 
         // handle billing address

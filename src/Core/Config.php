@@ -295,11 +295,6 @@ class Config
         return (bool)Registry::getConfig()->getConfigParam('blAmazonAutomatedCancelActivated');
     }
 
-    public function amazonpayLogging(): bool
-    {
-        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayLogging');
-    }
-
     /**
      * @param bool $bIsAdmin
      * @return bool

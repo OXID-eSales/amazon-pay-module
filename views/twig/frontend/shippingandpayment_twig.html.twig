@@ -1,50 +1,52 @@
-{% capture assign = "amazonpay_script_checkout_order" %}
-    var amznChangePayment = document.getElementById('amznChangePayment');
+{% block amazonpay_shippingandpayment_twig %}
+    {% capture assign = "amazonpay_script_checkout_order" %}
+        var amznChangePayment = document.getElementById('amznChangePayment');
 
-    amznChangePayment.addEventListener('click', function(e) {
-    e.preventDefault();
-    }, false);
+        amznChangePayment.addEventListener('click', function(e) {
+        e.preventDefault();
+        }, false);
 
-    amazon.Pay.bindChangeAction('#amznChangePayment', {
-    amazonCheckoutSessionId: '{{ oViewConf.getAmazonSessionId() }}',
-    changeAction: 'changeAddress'
-    });
-{% endcapture %}
-{{ script({ add: amazonpay_script_checkout_order, dynamic: __oxid_include_dynamic }) }}
-<form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post"
-      id="orderShipping">
-    {{ oViewConf.getHiddenSid()|raw }}
-    <input type="hidden" name="cl" value="payment">
-    <input type="hidden" name="fnc" value="">
-    <h4 class="card-header card-title card-header-edit d-flex justify-content-between align-items-center">
-        {{ translate({ ident: "SHIPPING_CARRIER" }) }}
-        <button type="submit" class="btn"
-                title="{{ translate({ ident: "EDIT" }) }}">
-            <svg aria-hidden="true">
-                <use xlink:href="#pencil"></use>
-            </svg>
-        </button>
-    </h4>
-    {% set oShipSet = oView.getShipSet() %}
-    <div class="card-body">
-        {{ oShipSet.oxdeliveryset__oxtitle.value }}
-    </div>
-</form>
-<form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post"
-      id="orderPayment">
-    {{ oViewConf.getHiddenSid()|raw }}
-    <input type="hidden" name="cl" value="payment">
-    <input type="hidden" name="fnc" value="">
-    <h4 class="card-header card-title card-header-edit d-flex justify-content-between align-items-center">
-        {{ translate({ ident: "PAYMENT_METHOD" }) }}
-        <button type="submit" class="btn" id="amznChangePayment"
-                title="{{ translate({ ident: "EDIT" }) }}">
-            <svg aria-hidden="true">
-                <use xlink:href="#pencil"></use>
-            </svg>
-        </button>
-    </h4>
-    <div class="card-body">
-        {{ oViewConf.getPaymentDescriptor() }}
-    </div>
-</form>
+        amazon.Pay.bindChangeAction('#amznChangePayment', {
+        amazonCheckoutSessionId: '{{ oViewConf.getAmazonSessionId() }}',
+        changeAction: 'changeAddress'
+        });
+    {% endcapture %}
+    {{ script({ add: amazonpay_script_checkout_order, dynamic: __oxid_include_dynamic }) }}
+    <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post"
+          id="orderShipping">
+        {{ oViewConf.getHiddenSid()|raw }}
+        <input type="hidden" name="cl" value="payment">
+        <input type="hidden" name="fnc" value="">
+        <h4 class="card-header card-title card-header-edit d-flex justify-content-between align-items-center">
+            {{ translate({ ident: "SHIPPING_CARRIER" }) }}
+            <button type="submit" class="btn"
+                    title="{{ translate({ ident: "EDIT" }) }}">
+                <svg aria-hidden="true">
+                    <use xlink:href="#pencil"></use>
+                </svg>
+            </button>
+        </h4>
+        {% set oShipSet = oView.getShipSet() %}
+        <div class="card-body">
+            {{ oShipSet.oxdeliveryset__oxtitle.value }}
+        </div>
+    </form>
+    <form action="{{ oViewConf.getSslSelfLink()|raw }}" method="post"
+          id="orderPayment">
+        {{ oViewConf.getHiddenSid()|raw }}
+        <input type="hidden" name="cl" value="payment">
+        <input type="hidden" name="fnc" value="">
+        <h4 class="card-header card-title card-header-edit d-flex justify-content-between align-items-center">
+            {{ translate({ ident: "PAYMENT_METHOD" }) }}
+            <button type="submit" class="btn" id="amznChangePayment"
+                    title="{{ translate({ ident: "EDIT" }) }}">
+                <svg aria-hidden="true">
+                    <use xlink:href="#pencil"></use>
+                </svg>
+            </button>
+        </h4>
+        <div class="card-body">
+            {{ oViewConf.getPaymentDescriptor() }}
+        </div>
+    </form>
+{% endblock %}

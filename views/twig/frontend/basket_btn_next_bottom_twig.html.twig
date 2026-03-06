@@ -1,1 +1,3 @@
-{% include "@osc_amazonpay/frontend/amazonexpressbutton" with {buttonId: "AmazonPayButtonNextCartbasket_bottom", buttonclass: "large", placement: "Cart"} %}
+{% block amazonpay_basket_btn_next_bottom_twig%}
+    {% include "@osc_amazonpay/frontend/amazonexpressbutton" with {buttonId: "AmazonPayButtonNextCartbasket_bottom", buttonclass: "large", placement: "Cart"} %}
+{% endblock %}

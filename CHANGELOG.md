@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [2.1.9] - 2026-??-??
+## [2.2.0] - 2026-??-??
 
 ### Security
 
@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007878](https://bugs.oxid-esales.com/view.php?id=7878): Provide all address fields for payload
 - [0007870](https://bugs.oxid-esales.com/view.php?id=7870): Fix tpl-include-error
 - [0007893](https://bugs.oxid-esales.com/view.php?id=7893): Fix AmazonPay Default for paymentstrategy 
+
+### NEW
+
+- add debug-logging
 
 ## [2.1.8] - 2025-12-05
 

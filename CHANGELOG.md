@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.1.8] - 2026-??-??
+## [3.2.0] - 2026-??-??
 
 ### Security
 
@@ -24,6 +24,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [0007893](https://bugs.oxid-esales.com/view.php?id=7893): Fix AmazonPay Default for paymentstrategy
 - [0007896](https://bugs.oxid-esales.com/view.php?id=7896): Two Buttons in Apex MiniBasket
 - [0007902](https://bugs.oxid-esales.com/view.php?id=7902): Fix wrong used tpl-Block
+- add blocks in templates for overloading
+- remove pull-right in amazonpay-button-template
+
+### NEW
+
+- add debug-logging
 
 ## [3.1.7] - 2025-12-05
 

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.7.0] - 2026-??-??
+## [1.6.2] - 2026-??-??
 
 ### Security
 
@@ -18,10 +18,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add depth limit to json_decode calls in PhpHelper to prevent DoS via deeply nested payloads
 - Add SECURITY.md documenting known security considerations and intentionally unfixed items
 
-## [1.6.2] - 2025-12-05
-
 - [0007878](https://bugs.oxid-esales.com/view.php?id=7878): Provide all address fields for payload
 - [0007893](https://bugs.oxid-esales.com/view.php?id=7893): Fix AmazonPay Default for paymentstrategy
+
+### NEW
+
+- add debug-logging
 
 ## [1.6.1] - 2025-12-05
 

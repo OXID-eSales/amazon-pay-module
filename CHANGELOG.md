@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.7.0] - 2026-??-??
+
+### Security
+
+- Fix SQL injection in LogRepository::deleteLogMessageByOrderId: use prepared statement
+- Require session token (stoken) for poll endpoint in DispatchController to prevent unauthenticated order state changes
+- Validate redirect URL against Amazon domains in OrderController to prevent open redirect
+- Add CSRF protection (stoken) to AmazonCheckoutController::createCheckout
+- Add CSRF protection (stoken) to AmazonCheckoutAjaxController (confirmAGB, confirmDPA, confirmSPA)
+- Remove weak cryptographic UUID fallback in Config (`md5`/`uniqid`/`mt_rand` dead code)
+- Add column whitelist for ORDER BY in LogRepository::findLogMessageForChargePermissionId
+- Add depth limit to json_decode calls in PhpHelper to prevent DoS via deeply nested payloads
+- Add SECURITY.md documenting known security considerations and intentionally unfixed items
+
 ## [1.6.2] - 2025-12-05
 
 - [0007878](https://bugs.oxid-esales.com/view.php?id=7878): Provide all address fields for payload

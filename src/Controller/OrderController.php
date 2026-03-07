@@ -325,8 +325,12 @@ class OrderController extends OrderController_parent
             $response = PhpHelper::jsonToArray($result['response']);
             /** @var string $redirectUrl */
             $redirectUrl = PhpHelper::getArrayValue('amazonPayRedirectUrl', $response) ?: '';
-            if ($redirectUrl !== '') {
-                Registry::getUtils()->redirect($redirectUrl, false, 301);
+            if (
+                $redirectUrl !== '' &&
+                (strpos($redirectUrl, 'https://pay.amazon') === 0 ||
+                 strpos($redirectUrl, 'https://payments.amazon') === 0)
+            ) {
+                Registry::getUtils()->redirect($redirectUrl, false, 302);
             }
             return;
         }

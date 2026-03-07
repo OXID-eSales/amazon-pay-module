@@ -111,6 +111,16 @@ class LogRepository
         $chargePermissionId,
         $orderBy = 'OXTIMESTAMP'
     ) {
+        $allowedColumns = [
+            'OXTIMESTAMP',
+            'OSC_AMAZON_PAYLOGID',
+            'OSC_AMAZON_STATUS_CODE',
+            'OSC_AMAZON_REQUEST_TYPE',
+        ];
+        if (!in_array($orderBy, $allowedColumns, true)) {
+            $orderBy = 'OXTIMESTAMP';
+        }
+
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
             'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_CHARGE_PERMISSION_ID = ? ORDER BY ' . $orderBy,
             [$chargePermissionId]
@@ -222,9 +232,10 @@ class LogRepository
      */
     public function deleteLogMessageByOrderId($orderId)
     {
-        $sql = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID =' . $orderId;
+        $sql = 'DELETE FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID = ?';
         DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute(
-            $sql
+            $sql,
+            [$orderId]
         );
     }
 }

@@ -118,6 +118,9 @@ class DispatchController extends FrontendController
                 break;
 
             case 'poll':
+                if (!Registry::getSession()->checkSessionChallenge()) {
+                    break;
+                }
                 /** @var string $orderId */
                 $orderId = Registry::getRequest()->getRequestParameter('orderId');
 

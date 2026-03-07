@@ -35,25 +35,28 @@
         isSpaConfirmed: function() {
             return $('#oxserviceproductsagreement').is(':checked');
         },
+        getStoken: function() {
+            return $('#confirm-agb-error-container').data('stoken') || '';
+        },
         saveAGBConfirmInSession() {
             $.ajax({
                 type: "POST",
                 url: "/index.php?cl=amazoncheckoutajax&fnc=confirmAGB",
-                data: {confirm: (this.isAgbConfirmed() ? 1 : 0)}
+                data: {confirm: (this.isAgbConfirmed() ? 1 : 0), stoken: this.getStoken()}
             });
         },
         saveDpaConfirmInSession() {
             $.ajax({
                 type: "POST",
                 url: "/index.php?cl=amazoncheckoutajax&fnc=confirmDPA",
-                data: {confirm: (this.isDpaConfirmed() ? 1 : 0)}
+                data: {confirm: (this.isDpaConfirmed() ? 1 : 0), stoken: this.getStoken()}
             });
         },
         saveSpaConfirmInSession() {
             $.ajax({
                 type: "POST",
                 url: "/index.php?cl=amazoncheckoutajax&fnc=confirmSPA",
-                data: {confirm: (this.isSpaConfirmed() ? 1 : 0)}
+                data: {confirm: (this.isSpaConfirmed() ? 1 : 0), stoken: this.getStoken()}
             });
         }
     };

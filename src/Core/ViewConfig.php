@@ -370,8 +370,11 @@ class ViewConfig extends ViewConfig_parent
         try {
             return OxidServiceProvider::getAmazonClient()->generateButtonSignature($payload);
         } catch (Exception $exception) {
-            $logger = new Logger();
-            $logger->log('ERROR', $exception->getMessage(), [$exception]);
+            $amazonConfig = oxNew(Config::class);
+            if ($amazonConfig->getAmazonPayLogging()) {
+                $logger = new Logger();
+                $logger->log('ERROR', $exception->getMessage(), [$exception]);
+            }
             return '';
         }
     }

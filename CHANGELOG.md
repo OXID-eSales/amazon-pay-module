@@ -6,9 +6,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.1.8] - 2026-??-??
 
+### Security
+
+- Fix SQL injection in LogRepository::deleteLogMessageByOrderId: use prepared statement
+- Require session token (stoken) for poll endpoint in DispatchController to prevent unauthenticated order state changes
+- Validate redirect URL against Amazon domains in OrderController to prevent open redirect
+- Add CSRF protection (stoken) to AmazonCheckoutController::createCheckout
+- Add CSRF protection (stoken) to AmazonCheckoutAjaxController (confirmAGB, confirmDPA, confirmSPA)
+- Remove weak cryptographic UUID fallback in Config (`md5`/`uniqid`/`mt_rand` dead code)
+- Add column whitelist for ORDER BY in LogRepository::findLogMessageForChargePermissionId
+- Add depth limit to json_decode calls in PhpHelper to prevent DoS via deeply nested payloads
+- Add SECURITY.md documenting known security considerations and intentionally unfixed items
+
+### FIX
+
 - [0007878](https://bugs.oxid-esales.com/view.php?id=7878): Provide all address fields for payload
 - [0007893](https://bugs.oxid-esales.com/view.php?id=7893): Fix AmazonPay Default for paymentstrategy
 - [0007896](https://bugs.oxid-esales.com/view.php?id=7896): Two Buttons in Apex MiniBasket
+- [0007902](https://bugs.oxid-esales.com/view.php?id=7902): Fix wrong used tpl-Block
 
 ## [3.1.7] - 2025-12-05
 

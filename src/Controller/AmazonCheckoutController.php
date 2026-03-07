@@ -26,6 +26,10 @@ class AmazonCheckoutController extends FrontendController
      */
     public function createCheckout(): void
     {
+        if (!Registry::getSession()->checkSessionChallenge()) {
+            return;
+        }
+
         // if an article is given, we put it in the shopping cart
         /** @var string $sProductId */
         $sProductId = Registry::getRequest()->getRequestParameter('anid');

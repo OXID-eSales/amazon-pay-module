@@ -12,6 +12,7 @@
     {% endif %}
     {{ script({ include: oViewConf.getModuleUrl('osc_amazonpay','js/amazonpay.min.js'), priority: 30, dynamic: __oxid_include_dynamic }) }}
     <p class="alert alert-danger" id="confirm-agb-error-container"
+       data-stoken="{{ oViewConf.getSessionChallengeToken() }}"
        {% if confirmAGB == 1 %} data-oxid-agb-force-confirm="1"{% endif %}
        {% if confirmDPA == 1 %} data-oxid-dpa-force-confirm="1"{% endif %}
        {% if confirmSPA == 1 %} data-oxid-spa-force-confirm="1"{% endif %}

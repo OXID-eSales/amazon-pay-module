@@ -114,6 +114,11 @@ class Config
         return (bool)Registry::getConfig()->getConfigParam('blAmazonPaySandboxMode');
     }
 
+    public function getAmazonPayLogging()
+    {
+        return (bool)Registry::getConfig()->getConfigParam('blAmazonPayLogging');
+    }
+
     /**
      * @return bool
      */

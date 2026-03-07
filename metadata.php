@@ -266,6 +266,7 @@ $aModule = [
     ],
     'settings' => [
         ['name' => 'blAmazonPaySandboxMode', 'type' => 'bool', 'value' => 'false', 'group' => null],
+        ['name' => 'blAmazonPayLogging', 'type' => 'bool', 'value' => false, 'group' => null],
         ['name' => 'sAmazonPayPrivKey', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayPubKeyId', 'type' => 'str', 'value' => '', 'group' => null],
         ['name' => 'sAmazonPayMerchantId', 'type' => 'str', 'value' => '', 'group' => null],

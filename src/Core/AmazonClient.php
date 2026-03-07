@@ -11,6 +11,7 @@ use Amazon\Pay\API\Client;
 use Exception;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 class AmazonClient extends Client
 {
@@ -112,6 +113,10 @@ class AmazonClient extends Client
      */
     private function decodeResponse(array $result)
     {
+        if ($this->moduleConfig->getAmazonPayLogging()) {
+            $logger = new Logger();
+            $logger->log(LogLevel::DEBUG, (string)$result['response']);
+        }
         $result['response'] = PhpHelper::jsonToArray($result['response']);
 
         return $result;

@@ -15,6 +15,8 @@ $aLang = [
     'OSC_AMAZONPAY_OPMODE'             => 'Operation Mode',
     'OSC_AMAZONPAY_OPMODE_PROD'        => 'Production',
     'OSC_AMAZONPAY_OPMODE_SANDBOX'     => 'Sandbox',
+    'OSC_AMAZONPAY_LOGGING'            => 'Logging',
+    'HELP_OSC_AMAZONPAY_LOGGING'       => 'enable logging to file source/log/amazonpay.log',
     'HELP_OSC_AMAZONPAY_OPMODE'        => 'To configure and test Amazon Pay, use Sandbox (test). When you\'re ready
         to receive real transactions, switch to Production (live).',
     'OSC_AMAZONPAY_PRIVKEY'            => 'Private Key',

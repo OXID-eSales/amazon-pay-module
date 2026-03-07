@@ -122,6 +122,16 @@ class Config
         $this->saveModuleSetting('blAmazonPaySandboxMode', $value);
     }
 
+    public function getAmazonPayLogging(): bool
+    {
+        return $this->getBoolConfigValue('blAmazonPayLogging');
+    }
+
+    public function setAmazonPayLogging($value): void
+    {
+        $this->saveModuleSetting('blAmazonPayLogging', $value);
+    }
+
     /**
      * @return bool
      */

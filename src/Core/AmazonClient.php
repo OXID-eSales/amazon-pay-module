@@ -109,7 +109,7 @@ class AmazonClient extends Client
      */
     private function decodeResponse(array $result): array
     {
-        if ($this->moduleConfig->isSandbox()) {
+        if ($this->moduleConfig->getAmazonPayLogging()) {
             $logger = new Logger();
             $logger->log(LogLevel::DEBUG, (string)$result['response']);
         }

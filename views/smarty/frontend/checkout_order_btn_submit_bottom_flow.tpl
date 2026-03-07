@@ -1,3 +1,4 @@
+[{block name="amazonpay_checkout_order_btn_submit_bottom_flow"}]
 [{if $paymentId == $oViewConf->getAmazonPaymentId()}]
     [{assign var="oConfig" value=$oViewConf->getConfig()}]
     [{assign var="confirmAGB" value=$oConfig->getConfigParam('blConfirmAGB')}]
@@ -27,5 +28,6 @@
         [{"AMAZON_PAY_SUBMIT_ORDER_WITH"|oxmultilangassign}]
     </div>
 [{/if}]
+[{/block}]
 
 

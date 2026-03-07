@@ -1,3 +1,4 @@
+{% block amazonpay_checkout_order_btn_submit_bottom %}
 {% if paymentId == oViewConf.getAmazonPaymentId() %}
     {% set oConfig = oViewConf.getConfig() %}
     {% set confirmAGB = oConfig.getConfigParam('blConfirmAGB') %}
@@ -20,8 +21,7 @@
         {{ "READ_AND_CONFIRM_TERMS"|translate }}
     </p>
       <div id="AmazonPayWrapper">
-          <div class="pull-right">
             {% include "@osc_amazonpay/frontend/amazonbutton" with {buttonId: "AmazonPayButtonNextCartLastStep", buttonclass: "large"} %}
           </div>
-      </div>
-{% endif %}
+    {% endif %}
+{% endblock %}

@@ -1,3 +1,4 @@
+[{block name="amazonpay_shippingandpayment_flow"}]
 [{capture name="amazonpay_script"}]
     $('#amznChangePayment').click(function (e) {
     e.preventDefault();
@@ -56,4 +57,4 @@
             </div>
         </form>
     </div>
-</div>
+</div>[{/block}]

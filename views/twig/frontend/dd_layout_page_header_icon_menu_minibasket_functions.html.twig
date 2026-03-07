@@ -1,3 +1,5 @@
-<div class="amazonpay-button large col-md-6 pull-right">
-    {% include "@osc_amazonpay/frontend/amazonexpressbutton" with {buttonId: "AmazonPayButtonMiniCart", buttonclass: "large", placement: "Cart"} %}
-</div>
+{% block amazonpay_dd_layout_page_header_icon_menu_minibasket_functions %}
+    <div class="amazonpay-button large col-md-6">
+        {% include "@osc_amazonpay/frontend/amazonexpressbutton" with {buttonId: "AmazonPayButtonMiniCart", buttonclass: "large", placement: "Cart"} %}
+    </div>
+{% endblock %}

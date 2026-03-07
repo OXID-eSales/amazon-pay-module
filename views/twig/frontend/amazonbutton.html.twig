@@ -1,21 +1,23 @@
 {% set amazonConfig = oViewConf.getAmazonConfig() %}
 {% set sToken = oViewConf.getSessionChallengeToken() %}
 {% set aPayload = oViewConf.getPayload() %}
-<div class="amazonpay-button {{ buttonclass }} nonexpress" id="{{ buttonId }}"></div>
-{% capture assign = "amazonpay_script_amazonbutton" %}
-    if (typeof {{ buttonId }}_is_rendered === "undefined" || {{ buttonId }}_is_rendered !== true) {
-        var amazonPayButton = amazon.Pay.renderButton('#{{ buttonId }}', {
-            merchantId: '{{ amazonConfig.getMerchantId() }}',
-            publicKeyId : '{{ amazonConfig.getPublicKeyId() }}',
-            sandbox: {% if amazonConfig.isSandbox() %}true{% else %}false{% endif %},
-            ledgerCurrency: '{{ amazonConfig.getLedgerCurrency() }}',
-            checkoutLanguage: '{{ amazonConfig.getCheckoutLanguage() }}',
-            productType: 'PayAndShip',
-            placement: 'Checkout'
-        });
-        OSCAmazonPayButtonComponent.init(amazonPayButton, '{{ aPayload|raw }}', '{{ oViewConf.signature|raw }}');
-        OSCAmazonPayCheckoutAGBComponent.init();
-    {{ buttonId }}_is_rendered = true;
-    }
-{% endcapture %}
-{{ script({ add: amazonpay_script_amazonbutton, dynamic: __oxid_include_dynamic }) }}
+{% block amazonpay_amazonbutton %}
+    <div class="amazonpay-button {{ buttonclass }} nonexpress" id="{{ buttonId }}"></div>
+    {% capture assign = "amazonpay_script_amazonbutton" %}
+        if (typeof {{ buttonId }}_is_rendered === "undefined" || {{ buttonId }}_is_rendered !== true) {
+            var amazonPayButton = amazon.Pay.renderButton('#{{ buttonId }}', {
+                merchantId: '{{ amazonConfig.getMerchantId() }}',
+                publicKeyId : '{{ amazonConfig.getPublicKeyId() }}',
+                sandbox: {% if amazonConfig.isSandbox() %}true{% else %}false{% endif %},
+                ledgerCurrency: '{{ amazonConfig.getLedgerCurrency() }}',
+                checkoutLanguage: '{{ amazonConfig.getCheckoutLanguage() }}',
+                productType: 'PayAndShip',
+                placement: 'Checkout'
+            });
+            OSCAmazonPayButtonComponent.init(amazonPayButton, '{{ aPayload|raw }}', '{{ oViewConf.signature|raw }}');
+            OSCAmazonPayCheckoutAGBComponent.init();
+        {{ buttonId }}_is_rendered = true;
+        }
+    {% endcapture %}
+    {{ script({ add: amazonpay_script_amazonbutton, dynamic: __oxid_include_dynamic }) }}
+{% endblock %}

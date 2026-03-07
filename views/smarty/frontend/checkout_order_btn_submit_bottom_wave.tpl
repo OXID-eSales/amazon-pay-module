@@ -1,3 +1,4 @@
+[{block name="amazonpay_checkout_order_btn_submit_bottom_wave"}]
 [{assign var="oPayment" value=$oView->getPayment()}]
 [{assign var="paymentId" value=$oPayment->getId()}]
 [{if $paymentId == $oViewConf->getAmazonPaymentId()}]
@@ -29,5 +30,6 @@
         [{"AMAZON_PAY_SUBMIT_ORDER_WITH"|oxmultilangassign}]
     </div>
 [{/if}]
+[{/block}]
 
 

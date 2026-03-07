@@ -51,7 +51,7 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    [{$oViewConf->getPaymentDescriptor()}]
+                    [{$oViewConf->getPaymentDescriptor()|escape:'html'}]
                 </div>
             </div>
         </form>

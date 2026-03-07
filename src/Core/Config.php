@@ -432,13 +432,7 @@ class Config
      */
     public function getUuid(): string
     {
-        try {
-            // throws Exception if it was not possible to gather sufficient entropy.
-            $uuid = bin2hex(random_bytes(16));
-        } catch (Exception $ex) {
-            $uuid = md5(uniqid('', true) . '|' . microtime()) . substr(md5((string)mt_rand()), 0, 24);
-        }
-        return $uuid;
+        return bin2hex(random_bytes(16));
     }
 
     /**

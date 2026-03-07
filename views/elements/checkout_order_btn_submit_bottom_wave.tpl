@@ -15,6 +15,7 @@
     [{assign var="sFileMTime" value=$oViewConf->getModulePath('osc_amazonpay','out/src/js/amazonpay.min.js')|filemtime}]
     <script src="[{$oViewConf->getModuleUrl('osc_amazonpay','out/src/js/amazonpay.min.js')|cat:"?"|cat:$sFileMTime}]"></script>
     <p class="alert alert-danger" id="confirm-agb-error-container"
+       data-stoken="[{$oViewConf->getSessionChallengeToken()}]"
        [{if $confirmAGB eq 1}] data-oxid-agb-force-confirm="1"[{/if}]
        [{if $confirmDPA eq 1}] data-oxid-dpa-force-confirm="1"[{/if}]
        [{if $confirmSPA eq 1}] data-oxid-spa-force-confirm="1"[{/if}]

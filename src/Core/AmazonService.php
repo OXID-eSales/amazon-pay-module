@@ -644,6 +644,7 @@ class AmazonService
      * @return void
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * TODO: refactor
      */
     public function checkOrderState(string $orderId)

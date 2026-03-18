@@ -35,6 +35,7 @@ class DispatchController extends FrontendController
     /**
      * @inheritDoc
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function render()
     {

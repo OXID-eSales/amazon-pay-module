@@ -298,7 +298,7 @@ jobs:
         id: phpmd
         if: always()
         working-directory: ${{ env.MODULE_PATH }}
-        run: composer phpmd source/test-module/tests/PhpMd/exclude-static-access-rule.xml
+        run: composer phpmd-report || composer phpmd
 
       - name: Upload log artifact
         if: always()

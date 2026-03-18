@@ -62,7 +62,7 @@ jobs:
           sleep 2
 
       - name: Checkout current module
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: source/test-module
 
@@ -272,7 +272,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: ${{ env.MODULE_PATH }}
 
@@ -314,7 +314,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 

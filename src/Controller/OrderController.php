@@ -174,7 +174,8 @@ class OrderController extends OrderController_parent
                             $basket,
                             $logger
                         );
-                    } else {
+                    }
+                    if (!OxidServiceProvider::getAmazonClient()->getModuleConfig()->isOneStepCapture()) {
                         OxidServiceProvider::getAmazonService()->processTwoStepPayment(
                             $amazonSessionId,
                             $basket,

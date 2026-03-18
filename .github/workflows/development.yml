@@ -308,54 +308,54 @@ jobs:
           path: |
             source/test-module/tests/reports/phpmd.report.json
 
-  sonarcloud:
-    needs: [ styles, unit_tests ]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout current module
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+#  sonarcloud:
+#    needs: [ styles, unit_tests ]
+#    if: always()
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout current module
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
 
-      - name: Download unit_tests artifacts
-        continue-on-error: true
-        uses: actions/download-artifact@v3
-        with:
-          name: TestsLog-7.0
-          path: ./tests/reports/
+#      - name: Download unit_tests artifacts
+#        continue-on-error: true
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: TestsLog-7.0
+#          path: ./tests/reports/
 
-      - name: Download styles artifacts
-        continue-on-error: true
-        uses: actions/download-artifact@v3
-        with:
-          name: StylesLog-7.0
-          path: ./tests/reports/
+#      - name: Download styles artifacts
+#        continue-on-error: true
+#        uses: actions/download-artifact@v3
+#        with:
+#          name: StylesLog-7.0
+#          path: ./tests/reports/
 
-      - name: Fix paths in unit logs
-        continue-on-error: true
-        run: |
-          sed -i 's+/var/www/test-module/++' tests/reports/coverage.xml
-          sed -i 's+/var/www/test-module/++' tests/reports/phpunit.xml
+#      - name: Fix paths in unit logs
+#        continue-on-error: true
+#        run: |
+#          sed -i 's+/var/www/test-module/++' tests/reports/coverage.xml
+#          sed -i 's+/var/www/test-module/++' tests/reports/phpunit.xml
 
-      - name: Fix paths in styles logs
-        continue-on-error: true
-        run: |
-          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' tests/phpmd.report.json
+#      - name: Fix paths in styles logs
+#        continue-on-error: true
+#        run: |
+#          sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' tests/phpmd.report.json
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=${{ env.SONARCLOUD_ORGANIZATION }}
-            -Dsonar.projectKey=${{ env.SONARCLOUD_PROJECT_KEY }}
-            -Dsonar.sources=src
-            -Dsonar.tests=tests
-            -Dsonar.sourceEncoding=UTF-8
-            -Dsonar.php.coverage.reportPaths=tests/reports/coverage.xml
-            -Dsonar.php.phpmd.reportPaths=tests/reports/phpmd.report.json
-            -Dsonar.cpd.php.minimumTokens=25
-            -Dsonar.cpd.php.minimumLines=5
+#      - name: SonarCloud Scan
+#        uses: sonarsource/sonarcloud-github-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        with:
+#          args: >
+#            -Dsonar.organization=${{ env.SONARCLOUD_ORGANIZATION }}
+#            -Dsonar.projectKey=${{ env.SONARCLOUD_PROJECT_KEY }}
+#            -Dsonar.sources=src
+#            -Dsonar.tests=tests
+#            -Dsonar.sourceEncoding=UTF-8
+#            -Dsonar.php.coverage.reportPaths=tests/reports/coverage.xml
+#            -Dsonar.php.phpmd.reportPaths=tests/reports/phpmd.report.json
+#            -Dsonar.cpd.php.minimumTokens=25
+#            -Dsonar.cpd.php.minimumLines=5

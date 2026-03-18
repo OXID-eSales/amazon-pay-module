@@ -10,7 +10,7 @@ jobs:
   install_shop_with_module:
     strategy:
       matrix:
-        php: [ '8.0' ]
+        php: [ '8.1' ]
     runs-on: ubuntu-latest
     steps:
       - name: Clone testing environment v3.0.0
@@ -65,31 +65,31 @@ jobs:
 
       - name: Install module
         run: |
-          docker-compose exec -T \
+          docker compose exec -T \
             php composer config repositories.${{ env.PACKAGE_NAME }} \
             --json '{"type":"path", "url":"./test-module", "options": {"symlink": true}}'
-          docker-compose exec -T \
+          docker compose exec -T \
             php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer update --no-interaction
-          docker-compose exec -T php php vendor/bin/reset-shop
+          docker compose exec -T php composer update --no-interaction
+          docker compose exec -T php php vendor/bin/reset-shop
       - name: Show docker log
         if: always()
         run: |
-          docker-compose logs
+          docker compose logs
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
       - name: Upload configuration artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Configs-${{ matrix.php }}
           path: |
-            docker-compose.yml
+            docker compose.yml
             source/composer.json
             source/composer.lock
             source/config.inc.php
@@ -97,7 +97,7 @@ jobs:
   unit_tests:
     strategy:
       matrix:
-        php: [ '7.4' ]
+        php: [ '8.1' ]
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:
@@ -115,7 +115,7 @@ jobs:
           sleep 2
       - name: Run tests
         run: |
-          docker-compose exec -T \
+          docker compose exec -T \
             -e PARTIAL_MODULE_PATHS=${{ env.MODULE_PATH }} \
             -e ACTIVATE_ALL_MODULES=1 \
             -e RUN_TESTS_FOR_SHOP=0 \
@@ -131,11 +131,11 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
       - name: Upload log artifact
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TestsLog-${{ matrix.php }}
           path: |

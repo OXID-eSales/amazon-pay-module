@@ -26,6 +26,8 @@ class UserComponent extends UserComponent_parent
     /**
      * @param array $amazonSession
      * @throws Exception
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.LongVariable)
      */
     public function createGuestUser(array $amazonSession): void
     {

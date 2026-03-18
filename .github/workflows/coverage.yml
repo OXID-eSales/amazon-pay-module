@@ -78,7 +78,7 @@ jobs:
 
       - name: Install Testing Library
         run: |
-          docker compose exec -T php composer require oxid-esales/testing/library:dev-b-7.0.x --no-interaction --dev
+          docker compose exec -T php composer require oxid-esales/testing-library:dev-b-7.0.x --no-interaction --dev
       - name: Show docker log
         if: always()
         run: |

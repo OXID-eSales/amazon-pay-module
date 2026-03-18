@@ -294,11 +294,20 @@ jobs:
         working-directory: ${{ env.MODULE_PATH }}
         run: composer phpcs
 
-      - name: Run phpmd
-        id: phpmd
+      - name: PHP Mess Detector
         if: always()
-        working-directory: ${{ env.MODULE_PATH }}
-        run: composer phpmd-report || composer phpmd
+        uses: php-actions/phpmd@v1
+        with:
+          php_version: ${{ matrix.php }}
+          path: ${{ env.MODULE_PATH }}
+          output: json
+          ruleset: tests/PhpMd/exclude-static-access-rule.xml
+
+#      - name: Run phpmd
+#        id: phpmd
+#        if: always()
+#        working-directory: ${{ env.MODULE_PATH }}
+#        run: composer phpmd-report || composer phpmd
 
       - name: Upload log artifact
         if: always()

@@ -8,7 +8,7 @@
                      http://pmd.sf.net/ruleset_xml_schema.xsd"
         rule="source/test-module/tests/PhpMd/standard.xml">
     <description>
-        Exclude Static Access Rule
+        Exclude Static Access Rule and Long Variable name
     </description>
 
     <rule ref="rulesets/codesize.xml/CyclomaticComplexity">
@@ -21,5 +21,6 @@
     <rule ref="rulesets/unusedcode.xml" />
     <rule ref="rulesets/cleancode.xml">
         <exclude name="StaticAccess" />
+        <exclude name="LongVariable" />
     </rule>
 </ruleset>

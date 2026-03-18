@@ -53,8 +53,8 @@
         "phpcs": "phpcs --standard=tests/phpcs.xml",
         "phpcbf": "phpcbf --standard=tests/phpcs.xml",
 
-        "phpmd": "phpmd src ansi tests/PhpMd/standard.xml",
-        "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json",
+        "phpmd": "phpmd src ansi tests/PhpMd/exclude-static-access-rule.xml",
+        "phpmd-report": "phpmd src json tests/PhpMd/exclude-static-access-rule.xml --reportfile tests/reports/phpmd.report.json",
 
         "static": [
             "@phpcs",

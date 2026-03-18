@@ -68,7 +68,7 @@ jobs:
 
       - name: Install module
         run: |
-          git clone https://github.com/fatchip-Stefan/amazon-pay-module --branch=${{ github.ref_name }} source/extensions/amazonpay
+          git clone https://github.com/fatchip-Stefan/amazon-pay-module.git --branch=${{ github.ref_name }} source/extensions/amazonpay
           docker compose exec -T \
             php composer config repositories.oxid-esales/amazon-pay-module \
             --json '{"type":"path", "url":"./extensions/amazonpay", "options": {"symlink": true}}'

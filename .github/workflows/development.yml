@@ -301,7 +301,7 @@ jobs:
           php_version: ${{ matrix.php }}
           path: ${{ env.MODULE_PATH }}
           output: json
-          ruleset: tests/PhpMd/exclude-static-access-rule.xml
+          ruleset: ${{ env.MODULE_PATH }}/tests/PhpMd/exclude-static-access-rule.xml
 
 #      - name: Run phpmd
 #        id: phpmd

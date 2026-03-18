@@ -33,6 +33,7 @@ use stdClass;
 /**
  * Class OrderController
  * @mixin \OxidEsales\Eshop\Application\Controller\OrderController
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderController extends OrderController_parent
 {

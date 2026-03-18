@@ -28,6 +28,7 @@ use OxidEsales\Eshop\Application\Model\User;
 
 /**
  * Class DispatchController
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  */
 class DispatchController extends FrontendController

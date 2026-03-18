@@ -28,6 +28,7 @@ use stdClass;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AmazonService
 {

@@ -21,6 +21,7 @@ use OxidSolutionCatalysts\AmazonPay\Model\User;
  * Amazon Pay getters for templates
  *
  * @mixin \OxidEsales\Eshop\Core\ViewConfig
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewConfig extends ViewConfig_parent
 {

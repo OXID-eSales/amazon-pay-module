@@ -127,7 +127,7 @@ class AmazonTestCase extends TestCase
         Registry::getConfig()->setConfigParam($parameterName, $value);
     }
 
-    public function setRequestParameter($paramName, $paramValue) :void
+    public function setRequestParameter($paramName, $paramValue): void
     {
         $_POST[$paramName] = $paramValue;
     }

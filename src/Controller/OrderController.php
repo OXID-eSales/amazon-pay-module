@@ -45,7 +45,7 @@ class OrderController extends OrderController_parent
     public function init()
     {
         $session = Registry::getSession();
-        if (Registry::getRequest()->getRequestParameter('useAmazonNonExpress') === "true"){
+        if (Registry::getRequest()->getRequestParameter('useAmazonNonExpress') === "true") {
             $session->setVariable('paymentid', Constants::PAYMENT_ID);
             $this->addProductToBasket();
         }
@@ -442,7 +442,8 @@ class OrderController extends OrderController_parent
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
     }
 
-    public function addProductToBasket() {
+    public function addProductToBasket()
+    {
         // add item to basket if an "anid" was provided in the url
         /** @var string $anid */
         $anid = Registry::getRequest()->getRequestParameter('anid') ?: '';

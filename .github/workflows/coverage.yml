@@ -74,8 +74,11 @@ jobs:
             php composer require ${{ env.PACKAGE_NAME }}:* --no-interaction --no-update
       - name: Install dependencies and reset shop
         run: |
-          docker compose exec -T php composer update --no-interaction
-          docker compose exec -T php php vendor/bin/reset-shop
+          docker compose exec -T php composer require vlucas/phpdotenv:^v5.6.0 --no-update --no-interaction --dev
+
+      - name: Install Testing Library
+        run: |
+          docker compose exec -T php composer require oxid-esales/tests-deprecated-ce:dev-b-7.0.x --with-all-dependencies --no-update
       - name: Show docker log
         if: always()
         run: |
@@ -91,7 +94,7 @@ jobs:
         with:
           name: Configs-${{ matrix.php }}
           path: |
-            docker compose.yml
+            docker-compose.yml
             source/composer.json
             source/composer.lock
             source/config.inc.php

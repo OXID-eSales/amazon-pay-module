@@ -20,9 +20,10 @@ use OxidSolutionCatalysts\AmazonPay\Core\AmazonClient;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class AmazonTestCase extends UnitTestCase
+class AmazonTestCase extends TestCase
 {
     protected AmazonService $amazonService;
     protected AmazonClient $amazonClient;

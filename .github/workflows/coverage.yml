@@ -89,7 +89,7 @@ jobs:
         with:
           name: Configs-${{ matrix.php }}
           path: |
-            docker compose.yml
+            docker-compose.yml
             source/composer.json
             source/composer.lock
             source/config.inc.php

@@ -204,7 +204,8 @@ class Order extends Order_parent
                 if (!empty($data['result']['response'])) {
                     if (is_string($data['result']['response'])) {
                         $response = PhpHelper::jsonToArray($data['result']['response']);
-                    } else {
+                    }
+                    if (!is_string($data['result']['response'])) {
                         $response = $data['result']['response'];
                     }
                     $remark .= ' (' . $response['reasonCode'] . ')';

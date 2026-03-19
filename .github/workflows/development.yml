@@ -139,7 +139,9 @@ jobs:
         run: |
           docker compose exec -T php bin/oe-console oe:module:activate osc_amazonpay
           docker compose exec -T php bin/oe-console oe:cache:clear
-
+      - name: Show all files and dirs
+        run: |
+          ls -R
       - name: Stop containers
         if: always()
         run: |

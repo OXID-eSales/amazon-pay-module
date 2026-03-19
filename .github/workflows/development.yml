@@ -83,10 +83,10 @@ jobs:
           echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/environment/1.yaml
       - name: create .env with amazonpay credentials from github secrets
         run: |
-          echo "${{ secrets.MODULE_AMAZON_PAY_STORE_ID }}" >> source/extensions/amazonpay/tests/.env
-          echo "${{ secrets.MODULE_AMAZON_PAY_MERCHANT_ID }}" >> source/extensions/amazonpay/tests/.env
-          echo "${{ secrets.MODULE_AMAZON_PAY_PUB_KEY_ID }}" >> source/extensions/amazonpay/tests/.env
-          echo "${{ secrets.MODULE_AMAZON_PAY_PRIV_KEY }}" >> source/extensions/amazonpay/tests/.env
+          echo "MODULE_AMAZON_PAY_STORE_ID=${{ secrets.MODULE_AMAZON_PAY_STORE_ID }}" >> source/extensions/amazonpay/tests/.env
+          echo "MODULE_AMAZON_PAY_MERCHANT_ID=${{ secrets.MODULE_AMAZON_PAY_MERCHANT_ID }}" >> source/extensions/amazonpay/tests/.env
+          echo "MODULE_AMAZON_PAY_PUB_KEY_ID=${{ secrets.MODULE_AMAZON_PAY_PUB_KEY_ID }}" >> source/extensions/amazonpay/tests/.env
+          echo "MODULE_AMAZON_PAY_PRIV_KEY=${{ secrets.MODULE_AMAZON_PAY_PRIV_KEY }}" >> source/extensions/amazonpay/tests/.env
 
       - name: Install dependencies and reset shop
         run: |

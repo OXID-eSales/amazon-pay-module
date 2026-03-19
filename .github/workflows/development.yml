@@ -139,9 +139,9 @@ jobs:
         run: |
           docker compose exec -T php bin/oe-console oe:module:activate osc_amazonpay
           docker compose exec -T php bin/oe-console oe:cache:clear
-      - name: Show all files and dirs
+      - name: Show AmazonPay Yaml Config
         run: |
-          ls -R
+          cat source/var/configuration/shops/1/modules/osc_amazonpay.yaml
       - name: Stop containers
         if: always()
         run: |

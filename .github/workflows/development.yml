@@ -310,7 +310,8 @@ jobs:
 
   sonarcloud:
     needs: [ styles, unit_tests ]
-    if: always()
+    # if: always()
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module

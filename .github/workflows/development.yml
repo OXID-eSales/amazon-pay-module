@@ -79,8 +79,8 @@ jobs:
       - name: Put module settings
         continue-on-error: true
         run: |
-          mkdir -p source/var/configuration/environment/
-          echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/environment/1.yaml
+          mkdir -p source/var/configuration/shops/1/modules
+          echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/shops/1/modules/osc_amazonpay.yaml
       - name: create .env with amazonpay credentials from github secrets
         run: |
           echo "AMAZONPAY_CLIENT_USERNAME='${{ secrets.AMAZONPAY_CLIENT_USERNAME }}'" >> source/extensions/amazonpay/tests/.env
@@ -100,7 +100,7 @@ jobs:
 
       - name: Install Testing Library
         run: |
-          docker compose exec -T php composer require oxid-esales/tests-deprecated-ce:dev-b-7.0.x --with-all-dependencies --no-update
+          docker compose exec -T php composer require oxid-esales/testing-library:dev-b-7.0.x --with-all-dependencies --no-update
 
       - name: Install Apex Theme
         run: |    

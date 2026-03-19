@@ -28,12 +28,14 @@ class AmazonClientTest extends AmazonTestCase
 {
     public function testCreateCheckoutSessionReturns201()
     {
+        $this->markTestSkipped('Skipped due to problems with amazonpay credentials and/or module config');
         $result = $this->createTestCheckoutSession();
         $this->assertEquals(201, $result['status']);
     }
 
     public function testGetCheckoutSessionReturns200()
     {
+        $this->markTestSkipped('Skipped due to problems with amazonpay credentials and/or module config');
         $result = $this->createTestCheckoutSession();
 
         $response = json_decode($result['response'], true);

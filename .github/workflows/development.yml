@@ -83,6 +83,12 @@ jobs:
           echo "${{ secrets.MODULE_SETTINGS }}" > source/var/configuration/environment/1.yaml
       - name: create .env with amazonpay credentials from github secrets
         run: |
+          echo "AMAZONPAY_CLIENT_USERNAME='${{ secrets.AMAZONPAY_CLIENT_USERNAME }}'" >> source/extensions/amazonpay/tests/.env
+          echo "AMAZONPAY_CLIENT_PASSWORD='${{ secrets.AMAZONPAY_CLIENT_PASSWORD }}'" >> source/extensions/amazonpay/tests/.env
+          echo "OXID_ADMIN_USERNAME='${{ secrets.OXID_ADMIN_USERNAME }}'" >> source/extensions/amazonpay/tests/.env
+          echo "OXID_ADMIN_PASSWORD='${{ secrets.OXID_ADMIN_PASSWORD }}'" >> source/extensions/amazonpay/tests/.env
+          echo "OXID_CLIENT_USERNAME='${{ secrets.OXID_CLIENT_USERNAME }}'" >> source/extensions/amazonpay/tests/.env
+          echo "OXID_CLIENT_PASSWORD='${{ secrets.OXID_CLIENT_PASSWORD }}'" >> source/extensions/amazonpay/tests/.env
           echo "MODULE_AMAZON_PAY_STORE_ID='${{ secrets.MODULE_AMAZON_PAY_STORE_ID }}'" >> source/extensions/amazonpay/tests/.env
           echo "MODULE_AMAZON_PAY_MERCHANT_ID='${{ secrets.MODULE_AMAZON_PAY_MERCHANT_ID }}'" >> source/extensions/amazonpay/tests/.env
           echo "MODULE_AMAZON_PAY_PUB_KEY_ID='${{ secrets.MODULE_AMAZON_PAY_PUB_KEY_ID }}'" >> source/extensions/amazonpay/tests/.env

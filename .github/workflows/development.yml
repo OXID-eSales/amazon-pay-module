@@ -77,6 +77,7 @@ jobs:
           docker compose exec -T php composer require oxid-esales/amazon-pay-module:dev-${{ github.ref_name }}  --no-update
 
       - name: Put module settings
+        if: false
         continue-on-error: true
         run: |
           mkdir -p source/var/configuration/environment/

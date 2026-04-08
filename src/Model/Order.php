@@ -329,6 +329,6 @@ class Order extends Order_parent
             }
             return false;
         }
-        return false;
+        return true;
     }
 }

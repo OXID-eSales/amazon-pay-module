@@ -313,6 +313,6 @@ class Order extends Order_parent
             Registry::getUtilsView()->addErrorToDisplay($deleteError);
             return false;
         }
-        return false;
+        return true;
     }
 }

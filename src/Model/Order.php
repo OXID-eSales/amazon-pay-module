@@ -273,8 +273,11 @@ class Order extends Order_parent
             if (!$this->canDeleteAmazonOrder($oxid)) {
                 return false;
             }
-
-            OxidServiceProvider::getAmazonService()->processCancel($oxid);
+            try {
+                OxidServiceProvider::getAmazonService()->processCancel($oxid);
+            } catch (InputException $e) {
+                return;
+            }
             $repository = oxNew(LogRepository::class);
             $repository->deleteLogMessageByOrderId($oxid);
         }
@@ -304,7 +307,9 @@ class Order extends Order_parent
                 [
                     'Captured',
                     'Completed & Captured',
-                    'Refunded'
+                    'Refunded',
+                    // leading to errors when 2 step capture is active
+                    'RefundInitiated',
                 ]
             )
         ) {

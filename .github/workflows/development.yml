@@ -1,31 +1,4 @@
-name: Development63
-
-on:
-  workflow_call:
-    inputs:
-      php:
-        required: true
-        type: string
-      oxid:
-        required: true
-        type: string
-
-  workflow_dispatch:
-    inputs:
-      php:
-        description: 'PHP version'
-        required: true
-        default: '7.3'
-        type: choice
-        options:
-          - '7.0'
-      oxid:
-        description: 'OXID eShop version'
-        required: true
-        default: '6.3'
-        type: choice
-        options:
-          - '6.1'
+name: CI
 
 env:
   PACKAGE_NAME: 'oxid-esales/amazon-pay-module'
@@ -34,6 +7,33 @@ env:
   SONARCLOUD_PROJECT_KEY: 'OXID-eSales_amazon-pay-module'
 
 jobs:
+  run:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      max-parallel: 15
+      fail-fast: false
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        oxid-versions: [ 'dev-b-7.0-ce', 'dev-b-7.1-ce', 'dev-b-7.2-ce', 'dev-b-7.3-ce' ]
+        php-versions: [ '8.0', '8.1', '8.2', '8.3' ]
+        exclude:
+          - oxid-versions: 'dev-b-7.0-ce'
+            php-versions: '8.2'
+          - oxid-versions: 'dev-b-7.0-ce'
+            php-versions: '8.3'
+          - oxid-versions: 'dev-b-7.1-ce'
+            php-versions: '8.0'
+          - oxid-versions: 'dev-b-7.1-ce'
+            php-versions: '8.3'
+          - oxid-versions: 'dev-b-7.2-ce'
+            php-versions: '8.0'
+          - oxid-versions: 'dev-b-7.2-ce'
+            php-versions: '8.1'
+          - oxid-versions: 'dev-b-7.3-ce'
+            php-versions: '8.0'
+          - oxid-versions: 'dev-b-7.3-ce'
+            php-versions: '8.1'
+    name: Oxid ${{ matrix.oxid-versions }} on PHP ${{ matrix.php-versions }}
   install_shop_with_module:
     runs-on: ubuntu-latest
     steps:
@@ -48,14 +48,14 @@ jobs:
         run: git clone https://github.com/OXID-eSales/docker-eshop-sdk.git .
 
       - name: Clone the shop
-        run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-${{ inputs.oxid }}.x --single-branch source
+        run: git clone --depth 1 https://github.com/OXID-eSales/oxideshop_ce.git --branch b-${{ matrix.oxid-versions }} --single-branch source
 
       - name: Cache current installation
         uses: actions/cache@v4
         with:
           path: |
             ./*
-          key: development-${{ inputs.php }}-${{ inputs.oxid }}-${{ github.run_number }}-${{ github.run_attempt }}
+          key: development-${{ matrix.php-versions }}-${{ matrix.oxid-versions }}-${{ github.run_number }}-${{ github.run_attempt }}
 
       - name: Prepare container configuration
         run: |
@@ -63,7 +63,7 @@ jobs:
           make addbasicservices
           make file=services/selenium-chrome.yml addservice
           perl -pi\
-            -e "s#PHP_VERSION=.*#PHP_VERSION=${{ inputs.php }}#g;"\
+            -e "s#PHP_VERSION=.*#PHP_VERSION=${{ matrix.php-versions }}#g;"\
             .env
           perl -pi\
             -e 's#display_errors =.*#display_errors = false#g;'\

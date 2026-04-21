@@ -465,7 +465,8 @@ class AmazonService
                 $logger->log(
                     LogLevel::DEBUG,
                     Registry::getLang()->translateString(
-                        'OSC_AMAZONPAY_REFUND_ANNOTATION', 1
+                        'OSC_AMAZONPAY_REFUND_ANNOTATION',
+                        1
                     ) . PHP_EOL .
                     'refundAmount: ' . $refundAmount . PHP_EOL
                 );
@@ -858,7 +859,8 @@ class AmazonService
             $logger->log(
                 LogLevel::INFO,
                 Registry::getLang()->translateString(
-                    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1
+                    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE',
+                    1
                 ) . PHP_EOL .
                 'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
                 'Result: ' . var_dump($result) . PHP_EOL

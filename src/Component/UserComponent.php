@@ -60,7 +60,8 @@ class UserComponent extends UserComponent_parent
                 $logger->log(
                     LogLevel::DEBUG,
                     Registry::getLang()->translateString(
-                        'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH', 1
+                        'AMAZON_PAY_BILLINGCOUNTRY_MISMATCH',
+                        1
                     ) . PHP_EOL .
                     'Billing address countryCode was: ' . $amazonBillingAddress['countryCode'] . PHP_EOL .
                     'Shipping address countryCode was: ' . $amazonShippingAddress['countryCode'] . PHP_EOL .

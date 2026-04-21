@@ -20,6 +20,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
 use Psr\Log\LogLevel;
+
 use function date;
 
 /**
@@ -324,7 +325,8 @@ class Order extends Order_parent
                 $logger->log(
                     LogLevel::ERROR,
                     Registry::getLang()->translateString(
-                        'OSC_AMAZONPAY_DELETE_ERROR', 1
+                        'OSC_AMAZONPAY_DELETE_ERROR',
+                        1
                     ) . PHP_EOL .
                     'Response: ' . $logMessage[0]['OSC_AMAZON_RESPONSE_MSG'] . PHP_EOL
                 );

@@ -160,7 +160,8 @@ class OrderController extends OrderController_parent
                 $logger->log(
                     LogLevel::DEBUG,
                     Registry::getLang()->translateString(
-                        'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1
+                        'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT',
+                        1
                     ) . PHP_EOL .
                     'isAmazonpayment: ' . $isAmazonPayment . PHP_EOL .
                     'isAmazonSessionActive: ' . $isAmazonSessionActive . PHP_EOL .
@@ -374,7 +375,8 @@ class OrderController extends OrderController_parent
             $logger->log(
                 LogLevel::ERROR,
                 Registry::getLang()->translateString(
-                    'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1
+                    'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT',
+                    1
                 ) . PHP_EOL .
                 'Response: ' . var_dump($result['response']) . PHP_EOL
             );
@@ -460,7 +462,8 @@ class OrderController extends OrderController_parent
                         $logger->log(
                             LogLevel::DEBUG,
                             Registry::getLang()->translateString(
-                                'AMAZON_PAY_LASTSHIPSETNOTVALID', 1
+                                'AMAZON_PAY_LASTSHIPSETNOTVALID',
+                                1
                             ) . PHP_EOL .
                             'actShipSet: ' . (string) $actShipSet . PHP_EOL .
                             'lastShipSet: ' . (string) $lastShipSet . PHP_EOL

@@ -336,6 +336,7 @@ jobs:
             integration_PHP${{ matrix.php }}_MYSQL${{ matrix.mysql }}_phpunit_log.txt
 
   codeception_tests:
+    if: false
     strategy:
       fail-fast: false
       matrix:

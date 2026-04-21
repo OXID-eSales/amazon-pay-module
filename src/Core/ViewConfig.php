@@ -159,7 +159,6 @@ class ViewConfig extends ViewConfig_parent
 
 
     public function getPaymentDescriptor()
-
     {
         $amazonSession = OxidServiceProvider::getAmazonService()->getCheckoutSession();
         return $amazonSession['response']['paymentPreferences'][0]['paymentDescriptor'];
@@ -233,7 +232,7 @@ class ViewConfig extends ViewConfig_parent
         if ($address->getId()) {
             $payload->setAddressDetailsFromDeliveryAddress($address);
         } else {
-        $payload->setAddressDetails($user);
+            $payload->setAddressDetails($user);
         }
 
         $payload->setPlatformId($amazonConfig->getPlatformId());
@@ -311,7 +310,8 @@ class ViewConfig extends ViewConfig_parent
         }
     }
 
-    public function isUserLoggedIn(): bool {
+    public function isUserLoggedIn(): bool
+    {
         $user = Registry::getSession()->getUser();
         if (!$user) {
             return false;

@@ -142,6 +142,9 @@ jobs:
                   "oxid-esales/oxideshop-composer-plugin": true,
                   "oxid-esales/oxideshop-unified-namespace-generator": true
                 }
+                "audit": {
+                  "block-insecure": false
+                }
               },
               "require-dev": {
                 "oxid-esales/testing-library": "^1"

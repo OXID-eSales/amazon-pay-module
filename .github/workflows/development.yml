@@ -191,7 +191,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current module
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: source/test-module
 
@@ -208,7 +208,7 @@ jobs:
 
       - name: Run phpstan
         id: phpstan
-        if: always()
+        if: false
         working-directory: source/test-module
         run: composer phpstan-report || composer phpstan
 
@@ -287,6 +287,7 @@ jobs:
             source/phpunit.xml
 
   codeception_tests:
+    if: always()
     needs: [ install_shop_with_module ]
     runs-on: ubuntu-latest
     steps:

@@ -462,8 +462,11 @@ class AmazonService
         ) {
             if ($amazonConfig->getAmazonPayLogging()) {
                 $logger = new Logger();
-                $logger->log(LogLevel::DEBUG,
-                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('OSC_AMAZONPAY_REFUND_ANNOTATION', 1) . PHP_EOL .
+                $logger->log(
+                    LogLevel::DEBUG,
+                    Registry::getLang()->translateString(
+                        'OSC_AMAZONPAY_REFUND_ANNOTATION', 1
+                    ) . PHP_EOL .
                     'refundAmount: ' . $refundAmount . PHP_EOL
                 );
             }
@@ -852,8 +855,11 @@ class AmazonService
         $exception = oxNew(InputException::class, $response['message']);
         $amazonConfig = oxNew(Config::class);
         if ($amazonConfig->getAmazonPayLogging()) {
-            $logger->log(LogLevel::INFO,
-                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1) . PHP_EOL .
+            $logger->log(
+                LogLevel::INFO,
+                Registry::getLang()->translateString(
+                    'AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1
+                ) . PHP_EOL .
                 'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
                 'Result: ' . var_dump($result) . PHP_EOL
             );
@@ -903,7 +909,8 @@ class AmazonService
         if (!empty($response['reasonCode'])) {
             $amazonConfig = oxNew(Config::class);
             if ($amazonConfig->getAmazonPayLogging()) {
-                $logger->log(LogLevel::INFO,
+                $logger->log(
+                    LogLevel::INFO,
                     'Capture Error:' . $response['message'] . PHP_EOL .
                     'chargeId: ' . $chargeId . PHP_EOL
                 );

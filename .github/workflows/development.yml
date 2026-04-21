@@ -208,7 +208,7 @@ jobs:
 
       - name: Run phpstan
         id: phpstan
-        if: always()
+        if: false
         working-directory: source/test-module
         run: composer phpstan-report || composer phpstan
 

@@ -70,7 +70,7 @@ jobs:
         run: |
           docker compose exec -T \
             php composer config repositories.oxid-esales/amazon-pay-module \
-            --json '{"type":"path", "url":"./source/extensions/amazonpay", "options": {"symlink": true}}'
+            --json '{"type":"path", "url":"./extensions/amazonpay", "options": {"symlink": true}}'
           docker compose exec -T \
             php composer config audit.block-insecure false
           docker compose exec -T php composer require oxid-esales/amazon-pay-module:dev-${{ github.ref_name }}  --no-update

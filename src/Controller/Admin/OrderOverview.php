@@ -156,8 +156,8 @@ class OrderOverview extends OrderOverview_parent
                 $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
-                    $captureStatusRaw = isset($amzData['response']['statusDetails']['state']) 
-                        ? $amzData['response']['statusDetails']['state'] : '';
+                    $captureStatusRaw = isset($amzData['response']['statusDetails']['state']) ?
+                        $amzData['response']['statusDetails']['state'] : '';
                     $reasonCodes = [];
                     $captureReasonRaw = isset($amzData['response']['statusDetails']['reasons']) ?
                         $amzData['response']['statusDetails']['reasons'] : [];

@@ -143,7 +143,8 @@ class OrderController extends OrderController_parent
         ) {
             $amazonConfig = oxNew(Config::class);
             if ($amazonConfig->getAmazonPayLogging()) {
-                $logger->log(LogLevel::DEBUG,
+                $logger->log(
+                    LogLevel::DEBUG,
                     Registry::getLang()->translateString(
                         'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT',
                         1

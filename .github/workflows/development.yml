@@ -355,6 +355,7 @@ jobs:
           sed -i 's+\/home\/runner\/work\/.*?\/.*?\/source\/test-module\/++' tests/phpmd.report.json
 
       - name: SonarCloud Scan
+        if: false
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

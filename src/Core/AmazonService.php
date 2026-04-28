@@ -785,7 +785,7 @@ class AmazonService
                     'chargeId: ' . $chargeId . PHP_EOL
                 );
             }
-            return;
+            throw $exception;
         }
 
         if ($response['statusDetails']['state'] === 'Canceled') {

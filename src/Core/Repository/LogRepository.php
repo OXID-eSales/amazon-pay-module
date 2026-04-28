@@ -136,7 +136,7 @@ class LogRepository
     public function findLogMessageForOrderId($orderId)
     {
         return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll(
-            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP',
+            'SELECT * FROM ' . self::TABLE_NAME . ' WHERE OSC_AMAZON_OXORDERID = ? ORDER BY OXTIMESTAMP DESC',
             [$orderId]
         );
     }

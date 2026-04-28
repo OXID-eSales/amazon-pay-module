@@ -64,17 +64,16 @@ jobs:
       - name: Checkout current module
         uses: actions/checkout@v5
         with:
-          path: source/test-module
+          path: source/extensions/amazonpay
 
       - name: Install module
         run: |
-          git clone https://github.com/OXID-eSales/amazon-pay-module.git --branch=${{ github.ref_name }} source/extensions/amazonpay
           docker compose exec -T \
             php composer config repositories.oxid-esales/amazon-pay-module \
             --json '{"type":"path", "url":"./extensions/amazonpay", "options": {"symlink": true}}'
           docker compose exec -T \
             php composer config audit.block-insecure false
-          docker compose exec -T php composer require oxid-esales/amazon-pay-module:dev-${{ github.ref_name }}  --no-update
+          docker compose exec -T php composer require oxid-esales/amazon-pay-module:*  --no-update
 
       - name: Put module settings
         continue-on-error: true

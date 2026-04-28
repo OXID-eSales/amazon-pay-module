@@ -157,8 +157,12 @@ class OrderController extends OrderController_parent
         ) {
             $amazonConfig = oxNew(Config::class);
             if ($amazonConfig->getAmazonPayLogging()) {
-                $logger->log(LogLevel::DEBUG,
-                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                $logger->log(
+                    LogLevel::DEBUG,
+                    Registry::getLang()->translateString(
+                        'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT',
+                        1
+                    ) . PHP_EOL .
                     'isAmazonpayment: ' . $isAmazonPayment . PHP_EOL .
                     'isAmazonSessionActive: ' . $isAmazonSessionActive . PHP_EOL .
                     'exclude: ' . $exclude . PHP_EOL
@@ -368,8 +372,12 @@ class OrderController extends OrderController_parent
 
         if ($amazonConfig->getAmazonPayLogging()) {
             $logger = new Logger();
-            $logger->log(LogLevel::ERROR,
-                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+            $logger->log(
+                LogLevel::ERROR,
+                Registry::getLang()->translateString(
+                    'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT',
+                    1
+                ) . PHP_EOL .
                 'Response: ' . var_dump($result['response']) . PHP_EOL
             );
         }
@@ -451,10 +459,14 @@ class OrderController extends OrderController_parent
                     $amazonConfig = oxNew(Config::class);
                     if ($amazonConfig->getAmazonPayLogging()) {
                         $logger = new Logger();
-                        $logger->log(LogLevel::DEBUG,
-                            \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_LASTSHIPSETNOTVALID', 1) . PHP_EOL .
-                            'actShipSet: ' . $actShipSet . PHP_EOL .
-                            'lastShipSet: ' . $lastShipSet . PHP_EOL
+                        $logger->log(
+                            LogLevel::DEBUG,
+                            Registry::getLang()->translateString(
+                                'AMAZON_PAY_LASTSHIPSETNOTVALID',
+                                1
+                            ) . PHP_EOL .
+                            'actShipSet: ' . (string) $actShipSet . PHP_EOL .
+                            'lastShipSet: ' . (string) $lastShipSet . PHP_EOL
                         );
                     }
                     Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_LASTSHIPSETNOTVALID');

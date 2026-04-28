@@ -552,7 +552,8 @@ class Payload
             $phoneNumber = $oxmobfon;
         }
         /** TODO Change default number to  0 */
-        $this->addressDetails['phoneNumber'] = isset($phoneNumber) ? $phoneNumber : '0'; // when no number was provided, Amazon accepts '0'
+        $this->addressDetails['phoneNumber'] = isset($phoneNumber) ?
+            $phoneNumber : '0'; // when no number was provided, Amazon accepts '0'
         return $this;
     }
 }

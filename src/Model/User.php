@@ -50,7 +50,8 @@ class User extends User_parent
         $paymentId = $session->getVariable('paymentid');
         if ($paymentId === Constants::PAYMENT_ID_EXPRESS) {
             $amazonAddr = $session->getVariable(Constants::SESSION_DELIVERY_ADDR);
-            $activeCountry = isset($amazonAddr['oxaddress__oxcountryid']) ? $amazonAddr['oxaddress__oxcountryid'] : $activeCountry;
+            $activeCountry = isset($amazonAddr['oxaddress__oxcountryid']) ?
+                $amazonAddr['oxaddress__oxcountryid'] : $activeCountry;
         }
         return $activeCountry;
     }
@@ -118,7 +119,8 @@ class User extends User_parent
         return parent::getSelectedAddressId();
     }
 
-    public function changeUserData($sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress) {
+    public function changeUserData($sUser, $sPassword, $sPassword2, $aInvAddress, $aDelAddress)
+    {
         $session = Registry::getSession();
         // remove possible previous amazonpay address from session
         $session->setVariable(Constants::SESSION_DELIVERY_ADDR, '');

@@ -151,13 +151,16 @@ class OrderOverview extends OrderOverview_parent
             $logMessage = $this->getLogMessageForOrder();
             if ($logMessage) {
                 $lang = Registry::getLang();
-                $chargePermissionId = isset($logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID']) ? $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID']: null;
+                $chargePermissionId = isset($logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID']) ?
+                    $logMessage[0]['OSC_AMAZON_CHARGE_PERMISSION_ID'] : null;
                 $this->captureStatus = $lang->translateString('OSC_AMAZONPAY_NOLIVESTATUS');
                 if ($chargePermissionId) {
                     $amzData = OxidServiceProvider::getAmazonClient()->getChargePermission($chargePermissionId);
-                    $captureStatusRaw = isset($amzData['response']['statusDetails']['state']) ? $amzData['response']['statusDetails']['state'] : '';
+                    $captureStatusRaw = isset($amzData['response']['statusDetails']['state']) ?
+                        $amzData['response']['statusDetails']['state'] : '';
                     $reasonCodes = [];
-                    $captureReasonRaw = isset($amzData['response']['statusDetails']['reasons']) ? $amzData['response']['statusDetails']['reasons'] : [];
+                    $captureReasonRaw = isset($amzData['response']['statusDetails']['reasons']) ?
+                        $amzData['response']['statusDetails']['reasons'] : [];
                     foreach ($captureReasonRaw as $captureReason) {
                         if (isset($captureReason['reasonCode'])) {
                             $reasonCodes[] = $captureReason['reasonCode'];
@@ -208,7 +211,7 @@ class OrderOverview extends OrderOverview_parent
             );
             if (is_string($errorMessage)) {
                 $this->addTplParam('amazonServiceErrorMessage', $errorMessage);
-        }
+            }
         }
     }
     /**
@@ -223,7 +226,8 @@ class OrderOverview extends OrderOverview_parent
         $captureAmount = Registry::getRequest()->getRequestParameter("captureAmount");
         $amazonConfig = oxNew(Config::class);
         $orderLoaded = $oOrder->load($this->getEditObjectId());
-        $currencyCode = isset($oOrder->oxorder__oxcurrency->rawValue) ? $oOrder->oxorder__oxcurrency->rawValue : $amazonConfig->getPresentmentCurrency();
+        $currencyCode = isset($oOrder->oxorder__oxcurrency->rawValue) ?
+            $oOrder->oxorder__oxcurrency->rawValue : $amazonConfig->getPresentmentCurrency();
         /** @var string $paymentType */
         $paymentType = $oOrder->getFieldData('oxpaymenttype');
         if (
@@ -265,9 +269,11 @@ class OrderOverview extends OrderOverview_parent
             $this->paymentStatus = '';
             $logMessage = $this->getLogMessageForOrder();
             if ($logMessage) {
-                $chargeId = isset($logMessage[0]['OSC_AMAZON_CHARGE_ID']) ? $logMessage[0]['OSC_AMAZON_CHARGE_ID'] : null;
+                $chargeId = isset($logMessage[0]['OSC_AMAZON_CHARGE_ID']) ?
+                    $logMessage[0]['OSC_AMAZON_CHARGE_ID'] : null;
                 $amzData = OxidServiceProvider::getAmazonClient()->getCharge($chargeId);
-                $this->paymentStatus = isset($amzData['response']['statusDetails']['state']) ? $amzData['response']['statusDetails']['state'] : '';
+                $this->paymentStatus = isset($amzData['response']['statusDetails']['state']) ?
+                    $amzData['response']['statusDetails']['state'] : '';
             }
         }
         return $this->paymentStatus;

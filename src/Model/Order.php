@@ -20,8 +20,8 @@ use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidSolutionCatalysts\AmazonPay\Core\Repository\LogRepository;
-
 use Psr\Log\LogLevel;
+
 use function date;
 
 /**
@@ -68,7 +68,7 @@ class Order extends Order_parent
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function finalizeOrder(\OxidEsales\Eshop\Application\Model\Basket $oBasket, $oUser, $blRecalculatingOrder = false)
+    public function finalizeOrder(OxidBasket $oBasket, $oUser, $blRecalculatingOrder = false)
     {
         $ret = $this->prepareFinalizeOrder($oBasket);
 
@@ -317,8 +317,12 @@ class Order extends Order_parent
             $amazonConfig = oxNew(Config::class);
             if ($amazonConfig->getAmazonPayLogging()) {
                 $logger = new Logger();
-                $logger->log(LogLevel::ERROR,
-                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('OSC_AMAZONPAY_DELETE_ERROR', 1) . PHP_EOL .
+                $logger->log(
+                    LogLevel::ERROR,
+                    Registry::getLang()->translateString(
+                        'OSC_AMAZONPAY_DELETE_ERROR',
+                        1
+                    ) . PHP_EOL .
                     'Response: ' . $logMessage[0]['OSC_AMAZON_RESPONSE_MSG'] . PHP_EOL
                 );
             }

@@ -11,6 +11,7 @@ use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Application\Model\Basket;
 use OxidEsales\Eshop\Core\Exception\DatabaseConnectionException;
 use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
+use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidSolutionCatalysts\AmazonPay\Core\AmazonService;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
@@ -281,8 +282,11 @@ class Order extends Order_parent
             if (!$this->canDeleteAmazonOrder($oxid)) {
                 return false;
             }
-
-            OxidServiceProvider::getAmazonService()->processCancel($oxid);
+            try {
+                OxidServiceProvider::getAmazonService()->processCancel($oxid);
+            } catch (InputException $e) {
+                return;
+            }
             $repository = oxNew(LogRepository::class);
             $repository->deleteLogMessageByOrderId($oxid);
         }
@@ -312,7 +316,9 @@ class Order extends Order_parent
                 [
                     'Captured',
                     'Completed & Captured',
-                    'Refunded'
+                    'Refunded',
+                    // leading to errors when 2 step capture is active
+                    'RefundInitiated',
                 ]
             )
         ) {
@@ -321,6 +327,6 @@ class Order extends Order_parent
             Registry::getUtilsView()->addErrorToDisplay($deleteError);
             return false;
         }
-        return false;
+        return true;
     }
 }

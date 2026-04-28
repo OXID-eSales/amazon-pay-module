@@ -785,8 +785,7 @@ class AmazonService
         if ($result['status'] !== 200) {
             $exception = oxNew(InputException::class, 'AmazonPay: ' . $response['message']);
             Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'order_overview');
-
-            return;
+            throw $exception;
         }
 
         if ($response['statusDetails']['state'] === 'Canceled') {

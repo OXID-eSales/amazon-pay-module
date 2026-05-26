@@ -82,7 +82,7 @@ jobs:
 
       - name: Install dependencies and reset shop
         run: |
-          docker-compose exec -T php composer require vlucas/phpdotenv:^v5.6.0 --no-update --no-interaction --dev
+          docker compose exec -T php composer require vlucas/phpdotenv:^v5.6.0 --no-update --no-interaction --dev
 
       - name: Install Testing Library
         run: |
@@ -90,9 +90,9 @@ jobs:
 
       - name: Install Apex Theme
         run: |    
-          docker-compose exec -T php composer require oxid-esales/apex-theme:dev-b-7.0.x --with-all-dependencies  --no-update
+          docker compose exec -T php composer require oxid-esales/apex-theme:dev-b-7.0.x --with-all-dependencies  --no-update
           docker compose exec -T php composer require oxid-esales/oxideshop-demodata-ce:dev-b-7.0.x --no-update
-          docker-compose exec -T php composer update --no-interaction
+          docker compose exec -T php composer update --no-interaction
 
       - name: Copy config file
         run: |
@@ -107,7 +107,7 @@ jobs:
 
       - name: Setup Shop and demodata
         run: |
-          docker-compose exec -T php bin/oe-console oe:setup:shop \
+          docker compose exec -T php bin/oe-console oe:setup:shop \
             --db-host mysql \
             --db-port 3306 \
             --db-name example \
@@ -119,7 +119,7 @@ jobs:
 
       - name: Install Apex Theme
         run: |
-          docker-compose exec -T php bin/oe-console oe:theme:activate apex
+          docker compose exec -T php bin/oe-console oe:theme:activate apex
 
       - name: Activate Amazon Pay Module
         run: |
@@ -129,7 +129,7 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
 
       - name: Upload configuration artifacts
@@ -170,7 +170,7 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose exec -T \
+          docker compose exec -T \
            -e XDEBUG_MODE=coverage \
            php vendor/bin/phpunit \
              -c /var/www/vendor/oxid-esales/amazon-pay-module/tests/phpunit.xml \
@@ -187,7 +187,7 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
 
       - name: Upload log artifact
@@ -228,7 +228,7 @@ jobs:
 
       - name: Run tests
         run: |
-          docker-compose exec -T \
+          docker compose exec -T \
             -e SELENIUM_SERVER_HOST=selenium \
             -e BROWSER_NAME=chrome \
             -e THEME_ID=apex \
@@ -247,7 +247,7 @@ jobs:
       - name: Stop containers
         if: always()
         run: |
-          docker-compose down
+          docker compose down
           sleep 2
 
       - name: Upload log artifact

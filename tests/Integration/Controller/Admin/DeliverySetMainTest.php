@@ -20,16 +20,43 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
+declare(strict_types=1);
+
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
-use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain;
-use OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase;
+use OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain;
+use OxidEsales\TestingLibrary\UnitTestCase;
+use PHPUnit\Framework\TestCase;
 
-class DeliverySetMainControllerTest extends AmazonTestCase
+class DeliverySetMainTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase
 {
+    /** @var DeliverySetMain */
+    private $deliverySetMain;
+
+    protected function setUp(): void
+    {
+        $this->deliverySetMain = oxNew(DeliverySetMain::class);
+    }
+
     public function testRender()
     {
-        $controller = new DeliverySetMain();
-        $this->assertSame('deliveryset_main', $controller->render());
+        $this->assertSame('deliveryset_main', $this->deliverySetMain->render());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testSave()
+    {
+        $editVal = [
+            'oxdeliveryset__oxid' => 'oxidstandard',
+            'oxid' => 'oxidstandard'
+        ];
+
+        $this->setRequestParameter('editVal', $editVal);
+        $this->setRequestParameter('editAmazonCarrier', 'DHL');
+
+        $this->deliverySetMain->save();
+        $this->assertNotEmpty($this->deliverySetMain->getEditObjectId());
     }
 }

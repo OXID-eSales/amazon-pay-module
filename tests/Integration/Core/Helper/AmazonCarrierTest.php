@@ -20,16 +20,17 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
+declare(strict_types=1);
 
-use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain;
-use OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\Helper;
 
-class DeliverySetMainControllerTest extends AmazonTestCase
+use OxidSolutionCatalysts\AmazonPay\Core\Helper\AmazonCarrier;
+use OxidEsales\TestingLibrary\UnitTestCase;
+
+class AmazonCarrierTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase
 {
-    public function testRender()
+    public function testGetAllCarriers()
     {
-        $controller = new DeliverySetMain();
-        $this->assertSame('deliveryset_main', $controller->render());
+        $this->assertCount(474, AmazonCarrier::getAllCarriers());
     }
 }

@@ -27,7 +27,7 @@ use OxidEsales\Eshop\Core\UtilsObject;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger as AmazonLogger;
 
-class LoggerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
+class LoggerTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase
 {
     const TEST_LOG_NAME = 'amazon_logger_test_log.log';
 

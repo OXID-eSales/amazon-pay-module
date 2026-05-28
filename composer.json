@@ -22,14 +22,16 @@
         "squizlabs/php_codesniffer": "3.*",
         "mockery/mockery": "^1.5",
         "phpmd/phpmd": "^2.11",
+        "phpstan/phpstan": "^1.10",
         "vlucas/phpdotenv": "*",
-        "codeception/module-rest": "^3.3.0",
-        "codeception/module-phpbrowser": "^3.0.0",
         "oxid-esales/oxideshop-ce": "^7.0",
         "oxid-esales/testing-library": "dev-b-7.0.x"
     },
     "conflicts": {
         "oxid-esales/oxideshop-ce": "< 7.0"
+    },
+    "replace": {
+        "smarty/smarty": "*"
     },
     "archive": {
         "exclude": ["/resources"]
@@ -56,9 +58,12 @@
         "phpmd": "phpmd src ansi tests/PhpMd/standard.xml",
         "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json",
 
+        "phpstan": "phpstan analyse -c tests/PhpStan/phpstan.neon",
+
         "static": [
             "@phpcs",
-            "@phpmd"
+            "@phpmd",
+            "@phpstan"
         ],
         "generate-reports": [
             "@phpmd-report"

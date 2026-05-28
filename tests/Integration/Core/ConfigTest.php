@@ -25,7 +25,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core;
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 
-class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Unit\Core\AmazonTestCase
+class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase
 {
     public function testIsSandbox()
     {

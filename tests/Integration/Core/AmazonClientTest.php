@@ -20,16 +20,31 @@
  * @copyright (C) OXID eSales AG 2003-2020
  */
 
-namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
+declare(strict_types=1);
 
-use OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain;
-use OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase;
+namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core;
 
-class DeliverySetMainControllerTest extends AmazonTestCase
+class AmazonClientTest extends AmazonTestCase
 {
-    public function testRender()
+    public function testCreateCheckoutSessionReturns201()
     {
-        $controller = new DeliverySetMain();
-        $this->assertSame('deliveryset_main', $controller->render());
+        $result = $this->createTestCheckoutSession();
+        $this->assertEquals(201, $result['status']);
+    }
+
+    public function testGetCheckoutSessionReturns200()
+    {
+        $result = $this->createTestCheckoutSession();
+
+        $response = json_decode($result['response'], true);
+        $isArray = is_array($response);
+        $this->assertTrue($isArray);
+
+        $checkoutSessionId = $response['checkoutSessionId'];
+        $this->assertNotNull($checkoutSessionId);
+
+        $checkoutSession = $this->amazonClient->getCheckoutSession($checkoutSessionId);
+
+        $this->assertEquals(200, $checkoutSession['status']);
     }
 }

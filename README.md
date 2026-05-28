@@ -30,40 +30,50 @@ List of Limitations could be found in
 
 ## Running tests
 
-Warning: Running tests will reset the shop.
+### Static analysis (CI and local)
 
-#### Requirements:
-* Ensure test_config.yml is configured:
-    * ```
-  partial_module_paths: osc/amazonpay
-    ```
-    * ```
-  activate_all_modules: true
-  run_tests_for_shop: false
-  run_tests_for_modules: true
-    ```
-* For codeception tests to be running, selenium server should be available, several options to solve this:
+These run without an OXID shop installation. Just check the module out and run:
 
-#### Run
-
-Running phpunit tests:
 ```
-vendor/bin/runtests
+composer install
+composer phpcs       # code style
+composer phpmd       # mess detection
+composer phpstan     # static analysis
+composer static      # all of the above
 ```
 
-Running phpunit tests with coverage reports (report is generated in ``.../amazonpay/Tests/reports/`` directory):
+The same checks run automatically on every push/pull request via `.github/workflows/development.yml`.
+
+### Integration tests (local only)
+
+The tests under `tests/Integration/` exercise the module against a running OXID eShop
+(they use `oxNew()`, the OXID registry, the database, and — for `AmazonClientTest` —
+the live Amazon Pay sandbox). They are **not** part of the CI; run them locally against
+an installed shop with the module active.
+
+Requirements:
+
+* A working OXID eShop 7.0 installation with this module enabled.
+* A `tests/.env` file with valid Amazon Pay sandbox credentials
+  (`MODULE_AMAZON_PAY_STORE_ID`, `MODULE_AMAZON_PAY_MERCHANT_ID`, …). See
+  `tests/.env.example` for the full list of variables.
+* `oxid-esales/testing-library` (already declared in `require-dev`).
+
+Run from the shop root:
+
 ```
-XDEBUG_MODE=coverage vendor/bin/runtests-coverage
+vendor/bin/phpunit -c vendor/oxid-esales/amazon-pay-module/tests/phpunit.xml \
+    --bootstrap=source/bootstrap.php \
+    --testsuite=Integration
 ```
 
-Running codeception tests default way (Host: selenium, browser: chrome):
-```
-vendor/bin/runtests-codeception
-```
+With coverage:
 
-Running codeception tests example with specific host/browser/testgroup:
 ```
-SELENIUM_SERVER_HOST=seleniumchrome BROWSER_NAME=chrome vendor/bin/runtests-codeception --group=examplegroup
+XDEBUG_MODE=coverage vendor/bin/phpunit -c vendor/oxid-esales/amazon-pay-module/tests/phpunit.xml \
+    --bootstrap=source/bootstrap.php \
+    --testsuite=Integration \
+    --coverage-html=vendor/oxid-esales/amazon-pay-module/tests/reports/coverage
 ```
 
 #### Develop javascript

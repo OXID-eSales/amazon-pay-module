@@ -864,7 +864,7 @@ class AmazonService
                 LogLevel::INFO,
                 Registry::getLang()->translateString('AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1) . PHP_EOL .
                 'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
-                'Result: ' . var_dump($result) . PHP_EOL
+                'Result: ' . print_r($result, true) . PHP_EOL
             );
         }
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');

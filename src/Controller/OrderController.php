@@ -371,7 +371,7 @@ class OrderController extends OrderController_parent
             $logger->log(
                 LogLevel::ERROR,
                 Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
-                'Response: ' . var_dump($result['response']) . PHP_EOL
+                'Response: ' . print_r($result['response'], true) . PHP_EOL
             );
         }
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();

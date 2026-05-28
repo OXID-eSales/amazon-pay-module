@@ -203,7 +203,7 @@ class OrderOverview extends OrderOverview_parent
     public function refundpayment()
     {
         $oOrder = oxNew(Order::class);
-        $refundAmount = Registry::getRequest()->getRequestParameter("refundAmount");
+        $refundAmount = (string)Registry::getRequest()->getRequestParameter("refundAmount");
         $refundAmount = str_replace(',', '.', $refundAmount);
         $orderLoaded = $oOrder->load($this->getEditObjectId());
         /** @var string $paymentType */

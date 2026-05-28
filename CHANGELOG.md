@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Use virtual `OxidEsales\Eshop` namespace instead of `OxidEsales\EshopCommunity` in `UserComponent`, `Controller\Admin\OrderList` (`@mixin`) and `Core\AmazonService` (`FieldAlias`), so that edition swaps and module overrides resolve correctly
 - Rename `composer.json` key `conflicts` to `conflict` so the constraint blocking OXID eShop `< 7.0` is actually enforced (Composer silently ignores the plural form)
 - Remove unused `use` statements in `Controller\Admin\ConfigController` and `Tests\Integration\Controller\Admin\ConfigControllerTest`
+- `Controller\OrderController` and `Core\AmazonService`: replace `var_dump()` with `print_r(..., true)` in log message concatenation; `var_dump` returns void, so the dumped payload was never actually included in the log line
+- `Core\Payload::setAddressDetails` and `setAddressDetailsFromDeliveryAddress`: default `$addressLine2` to `''` in the else branch where no company is set, so the variable is always defined when the address array is built
+- `Core\Config::getCountryList`: skip null entries when iterating the loaded country list so `getId()` is no longer called on null
+- `Controller\Admin\OrderOverview::refundpayment`: cast the request parameter to string before passing it to `str_replace`, which only accepts `array|string`
+
+### Changed
+
+- Add missing `src` analyse path to the `phpstan` composer script so `composer phpstan` actually runs instead of aborting with "At least one path must be specified"
+- Apply PHPCBF fixes (multi-line call style, brace placement, header blocks) and shorten log lines that exceeded 120 characters; `composer phpcs` now passes
+- Add `--baseline-file` to the `phpmd` and `phpmd-report` composer scripts and add the missing `phpmd-generate-baseline` script; generate an initial `tests/PhpMd/phpmd.baseline.xml` to freeze the existing 165 violations (static `Registry` access, long variable names, high cyclomatic complexity in `Logger` / `Payload` / `Order`) as accepted technical debt
+- Regenerate `tests/PhpStan/phpstan-baseline.neon` against the current sources; the previous baseline still ignored a stale `$merchantReferenceId never read` pattern that no longer reports and made phpstan fail
+- Replace the deprecated `checkMissingIterableValueType: false` option in `tests/PhpStan/phpstan.neon` with an `ignoreErrors` entry on the `missingType.iterableValue` identifier
 
 ## [3.2.0] - 2026-03-11
 

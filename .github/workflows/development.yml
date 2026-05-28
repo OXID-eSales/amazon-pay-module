@@ -43,7 +43,7 @@ jobs:
 
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: StylesLog-${{ matrix.php }}
           if-no-files-found: ignore

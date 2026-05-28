@@ -58,7 +58,7 @@
         "phpmd": "phpmd src ansi tests/PhpMd/standard.xml",
         "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json",
 
-        "phpstan": "phpstan analyse -c tests/PhpStan/phpstan.neon",
+        "phpstan": "phpstan analyse -c tests/PhpStan/phpstan.neon src",
 
         "static": [
             "@phpcs",

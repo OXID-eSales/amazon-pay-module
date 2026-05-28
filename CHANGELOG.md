@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Use virtual `OxidEsales\Eshop` namespace instead of `OxidEsales\EshopCommunity` in `UserComponent`, `Controller\Admin\OrderList` (`@mixin`) and `Core\AmazonService` (`FieldAlias`), so that edition swaps and module overrides resolve correctly
 - Rename `composer.json` key `conflicts` to `conflict` so the constraint blocking OXID eShop `<6.3 | ^7.0` is actually enforced (Composer silently ignores the plural form)
 - Remove unused `use` statements in `Controller\Admin\ConfigController` and `Tests\Integration\Controller\Admin\ConfigControllerTest`
+- `Controller\OrderController` and `Core\AmazonService`: replace `var_dump()` with `print_r(..., true)` in log message concatenation; `var_dump` returns void, so the dumped payload was never actually included in the log line
+- `Core\Payload::setAddressDetails` and `setAddressDetailsFromDeliveryAddress`: default `$addressLine2` to `''` in the else branch where no company is set, so the variable is always defined when the address array is built
+- `Model\Order::delete`: replace bare `return;` in the `InputException` catch branch with `return false;` so the method always honours its `bool` return type declaration
+
+### Changed
+
+- Pull `oxid-esales/testing-library` from `dev-b-6.5.x` instead of `dev-b-6.3.x` so phpmd can be upgraded to a PHP 8 compatible parser; phpmd 2.8.1 (pinned via pdepend 2.6.0 on the old testing-library branch) silently aborted on every source file under PHP 8.1
+- Bump `phpmd/phpmd` constraint to `^2.11` and add `minimum-stability: dev` / `prefer-stable: true` to satisfy the new testing-library transitive constraints (PHP 7.4 stays supported)
+- Regenerate `tests/PhpStan/phpstan-baseline.neon` against the current sources; the previous baseline still ignored patterns that no longer match after the namespace and import cleanups
+- Regenerate `tests/PhpMd/phpmd.baseline.xml` with the working phpmd parser; picks up the seven additional violations the broken parser had missed (NPath complexity in `OrderController`, class complexity / else expressions in `Payload`, coupling on `Order`)
+- Add `@phpstan` to the `static` composer script so a single `composer static` call covers phpcs, phpmd and phpstan
 
 ## [2.2.0] - 2026-03-10
 

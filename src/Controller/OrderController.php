@@ -46,7 +46,7 @@ class OrderController extends OrderController_parent
     public function init()
     {
         $session = Registry::getSession();
-        if (Registry::getRequest()->getRequestParameter('useAmazonNonExpress') === "true"){
+        if (Registry::getRequest()->getRequestParameter('useAmazonNonExpress') === "true") {
             $session->setVariable('paymentid', Constants::PAYMENT_ID);
             $this->addProductToBasket();
         }
@@ -155,8 +155,9 @@ class OrderController extends OrderController_parent
         ) {
             $amazonConfig = oxNew(Config::class);
             if ($amazonConfig->getAmazonPayLogging()) {
-                $logger->log(LogLevel::DEBUG,
-                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                $logger->log(
+                    LogLevel::DEBUG,
+                    Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
                     'isAmazonpayment: ' . $isAmazonPayment . PHP_EOL .
                     'isAmazonSessionActive: ' . $isAmazonSessionActive . PHP_EOL .
                     'exclude: ' . $exclude . PHP_EOL
@@ -367,9 +368,10 @@ class OrderController extends OrderController_parent
         Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');
         if ($amazonConfig->getAmazonPayLogging()) {
             $logger = new Logger();
-            $logger->log(LogLevel::ERROR,
-                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
-                'Response: ' . var_dump($result['response']) . PHP_EOL
+            $logger->log(
+                LogLevel::ERROR,
+                Registry::getLang()->translateString('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT', 1) . PHP_EOL .
+                'Response: ' . print_r($result['response'], true) . PHP_EOL
             );
         }
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
@@ -449,8 +451,9 @@ class OrderController extends OrderController_parent
                 $amazonConfig = oxNew(Config::class);
                 if ($amazonConfig->getAmazonPayLogging()) {
                     $logger = new Logger();
-                    $logger->log(LogLevel::DEBUG,
-                        \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_LASTSHIPSETNOTVALID', 1) . PHP_EOL .
+                    $logger->log(
+                        LogLevel::DEBUG,
+                        Registry::getLang()->translateString('AMAZON_PAY_LASTSHIPSETNOTVALID', 1) . PHP_EOL .
                         'actShipSet: ' . $actShipSet . PHP_EOL .
                         'lastShipSet: ' . $lastShipSet . PHP_EOL
                     );
@@ -471,7 +474,8 @@ class OrderController extends OrderController_parent
         OxidServiceProvider::getAmazonService()->unsetPaymentMethod();
     }
 
-    public function addProductToBasket() {
+    public function addProductToBasket()
+    {
         // add item to basket if an "anid" was provided in the url
         /** @var string $anid */
         $anid = Registry::getRequest()->getRequestParameter('anid') ?: '';

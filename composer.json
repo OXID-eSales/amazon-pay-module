@@ -55,10 +55,11 @@
         "phpcs": "phpcs --standard=tests/phpcs.xml",
         "phpcbf": "phpcbf --standard=tests/phpcs.xml",
 
-        "phpmd": "phpmd src ansi tests/PhpMd/standard.xml",
-        "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json",
+        "phpmd": "phpmd src ansi tests/PhpMd/standard.xml --baseline-file tests/PhpMd/phpmd.baseline.xml",
+        "phpmd-generate-baseline": "phpmd src ansi tests/PhpMd/standard.xml --generate-baseline",
+        "phpmd-report": "phpmd src json tests/PhpMd/standard.xml --reportfile tests/reports/phpmd.report.json --baseline-file tests/PhpMd/phpmd.baseline.xml",
 
-        "phpstan": "phpstan analyse -c tests/PhpStan/phpstan.neon",
+        "phpstan": "phpstan analyse -c tests/PhpStan/phpstan.neon src",
 
         "static": [
             "@phpcs",

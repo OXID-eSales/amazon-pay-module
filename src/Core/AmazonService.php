@@ -468,8 +468,9 @@ class AmazonService
             );
             if ($amazonConfig->getAmazonPayLogging()) {
                 $logger = new Logger();
-                $logger->log(LogLevel::DEBUG,
-                    \OxidEsales\Eshop\Core\Registry::getLang()->translateString('OSC_AMAZONPAY_REFUND_ANNOTATION', 1) . PHP_EOL .
+                $logger->log(
+                    LogLevel::DEBUG,
+                    Registry::getLang()->translateString('OSC_AMAZONPAY_REFUND_ANNOTATION', 1) . PHP_EOL .
                     'refundAmount: ' . $refundAmount . PHP_EOL
                 );
             }
@@ -795,7 +796,8 @@ class AmazonService
             Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'order_overview');
             if ($amazonConfig->getAmazonPayLogging()) {
                 $logger = new Logger();
-                $logger->log(LogLevel::ERROR,
+                $logger->log(
+                    LogLevel::ERROR,
                     'Error cancelling order: ' . $response['message'] . PHP_EOL .
                     'chargeId: ' . $chargeId . PHP_EOL
                 );
@@ -858,10 +860,11 @@ class AmazonService
         $exception = oxNew(InputException::class, $response['message']);
         $amazonConfig = oxNew(Config::class);
         if ($amazonConfig->getAmazonPayLogging()) {
-            $logger->log(LogLevel::INFO,
-                \OxidEsales\Eshop\Core\Registry::getLang()->translateString('AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1) . PHP_EOL .
+            $logger->log(
+                LogLevel::INFO,
+                Registry::getLang()->translateString('AMAZON_PAY_COMPLETECHECKOUTSESSION_ERROR_MESSAGE', 1) . PHP_EOL .
                 'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
-                'Result: ' . var_dump($result) . PHP_EOL
+                'Result: ' . print_r($result, true) . PHP_EOL
             );
         }
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');
@@ -909,7 +912,8 @@ class AmazonService
         if (!empty($response['reasonCode'])) {
             $amazonConfig = oxNew(Config::class);
             if ($amazonConfig->getAmazonPayLogging()) {
-                $logger->log(LogLevel::INFO,
+                $logger->log(
+                    LogLevel::INFO,
                     'Capture Error:' . $response['message'] . PHP_EOL .
                     'chargeId: ' . $chargeId . PHP_EOL
                 );

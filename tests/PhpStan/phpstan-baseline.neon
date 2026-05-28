@@ -1,6 +1,26 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Binary operation \"\\.\" between array\\|string and \"\\\\n\"\\|\"\\\\r\\\\n\" results in an error\\.$#"
+			count: 1
+			path: ../../src/Component/UserComponent.php
+
+		-
+			message: "#^Call to an undefined static method OxidEsales\\\\Eshop\\\\Application\\\\Component\\\\UserComponent\\:\\:_getDelAddressData\\(\\)\\.$#"
+			count: 1
+			path: ../../src/Component/UserComponent.php
+
+		-
+			message: "#^Cannot call method activate\\(\\) on mixed\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/ConfigController.php
+
+		-
+			message: "#^Cannot call method deactivate\\(\\) on mixed\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/ConfigController.php
+
+		-
 			message: "#^Cannot call method getModuleSetting\\(\\) on OxidEsales\\\\EshopCommunity\\\\Internal\\\\Framework\\\\Module\\\\Configuration\\\\DataObject\\\\ModuleConfiguration\\|null\\.$#"
 			count: 1
 			path: ../../src/Controller/Admin/ConfigController.php
@@ -11,18 +31,73 @@ parameters:
 			path: ../../src/Controller/Admin/ConfigController.php
 
 		-
+			message: "#^Parameter \\#4 \\$shopId of method OxidEsales\\\\EshopCommunity\\\\Core\\\\Config\\:\\:saveShopConfVar\\(\\) expects int\\|null, string given\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/ConfigController.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of function floatval expects array\\|bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/OrderArticle.php
+
+		-
+			message: "#^Call to an undefined method OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Order\\:\\:isAmazonOrder\\(\\)\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/OrderMain.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/OrderOverview.php
+
+		-
+			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Controller\\\\Admin\\\\OrderOverview\\:\\:\\$captureStatus \\(string\\|null\\) does not accept array\\|string\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/OrderOverview.php
+
+		-
+			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Controller\\\\Admin\\\\OrderOverview\\:\\:\\$paymentStatus has no type specified\\.$#"
+			count: 1
+			path: ../../src/Controller/Admin/OrderOverview.php
+
+		-
+			message: "#^Binary operation \"\\.\" between array\\|string and \"\\\\n\"\\|\"\\\\r\\\\n\" results in an error\\.$#"
+			count: 3
+			path: ../../src/Controller/OrderController.php
+
+		-
+			message: "#^Call to an undefined method OxidEsales\\\\Eshop\\\\Core\\\\ViewConfig\\:\\:isAmazonExclude\\(\\)\\.$#"
+			count: 2
+			path: ../../src/Controller/OrderController.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Controller\\\\OrderController\\:\\:addProductToBasket\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: ../../src/Controller/OrderController.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Controller\\\\OrderController\\:\\:getDelAddress\\(\\) should return object but returns OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Address\\|null\\.$#"
+			count: 1
+			path: ../../src/Controller/OrderController.php
+
+		-
+			message: "#^Ternary operator condition is always true\\.$#"
+			count: 1
+			path: ../../src/Controller/OrderController.php
+
+		-
 			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\AmazonClient\\:\\:\\$logger is never read, only written\\.$#"
 			count: 1
 			path: ../../src/Core/AmazonClient.php
 
 		-
-			message: "#^Access to property \\$name on an unknown class OxidEsales\\\\EshopCommunity\\\\Application\\\\Model\\\\stdClass\\.$#"
+			message: "#^Argument of an invalid type OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Address supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: ../../src/Core/AmazonService.php
 
 		-
-			message: "#^Argument of an invalid type OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Address supplied for foreach, only iterables are supported\\.$#"
-			count: 1
+			message: "#^Binary operation \"\\.\" between array\\|string and \"\\\\n\"\\|\"\\\\r\\\\n\" results in an error\\.$#"
+			count: 2
 			path: ../../src/Core/AmazonService.php
 
 		-
@@ -31,6 +106,131 @@ parameters:
 			path: ../../src/Core/AmazonService.php
 
 		-
-			message: "#^Property OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Payload\\:\\:\\$merchantReferenceId is never read, only written\\.$#"
+			message: "#^Parameter \\#1 \\$oxid of method OxidEsales\\\\EshopCommunity\\\\Core\\\\Model\\\\BaseModel\\:\\:load\\(\\) expects string, mixed given\\.$#"
 			count: 1
-			path: ../../src/Core/Payload.php
+			path: ../../src/Core/AmazonService.php
+
+		-
+			message: "#^Ternary operator condition is always true\\.$#"
+			count: 5
+			path: ../../src/Core/AmazonService.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:checkHealth\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:getModuleSettingsBridge\\(\\) should return OxidEsales\\\\EshopCommunity\\\\Internal\\\\Framework\\\\Module\\\\Configuration\\\\Bridge\\\\ModuleSettingBridgeInterface but returns mixed\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:saveModuleSetting\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setAmazonPayLogging\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setDisplayExpressInMiniCartAndModal\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setDisplayExpressInPDP\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setMerchantId\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setPrivateKey\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setPublicKeyId\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setSandbox\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setStoreId\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Core\\\\Config\\:\\:setUseExclusion\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Strict comparison using \\!\\=\\= between null and null will always evaluate to false\\.$#"
+			count: 1
+			path: ../../src/Core/Config.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 2
+			path: ../../src/Core/DeliveryAddressService.php
+
+		-
+			message: "#^Parameter \\#4 \\$shopId of method OxidEsales\\\\EshopCommunity\\\\Core\\\\Config\\:\\:saveShopConfVar\\(\\) expects int\\|null, string given\\.$#"
+			count: 1
+			path: ../../src/Core/Events.php
+
+		-
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
+			count: 1
+			path: ../../src/Core/Helper/PhpHelper.php
+
+		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: ../../src/Core/ViewConfig.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: ../../src/Core/ViewConfig.php
+
+		-
+			message: "#^Binary operation \"\\.\" between array\\|string and \"\\\\n\"\\|\"\\\\r\\\\n\" results in an error\\.$#"
+			count: 1
+			path: ../../src/Model/Order.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Model\\\\Order\\:\\:delete\\(\\) should return bool but empty return statement found\\.$#"
+			count: 1
+			path: ../../src/Model/Order.php
+
+		-
+			message: "#^Cannot access offset 'oxaddress_…' on mixed\\.$#"
+			count: 1
+			path: ../../src/Model/User.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Model\\\\User\\:\\:assignAddress\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: ../../src/Model/User.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Model\\\\User\\:\\:changeUserData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: ../../src/Model/User.php
+
+		-
+			message: "#^Method OxidSolutionCatalysts\\\\AmazonPay\\\\Model\\\\User\\:\\:getActiveCountry\\(\\) should return string but returns mixed\\.$#"
+			count: 1
+			path: ../../src/Model/User.php

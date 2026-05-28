@@ -22,7 +22,6 @@
 
 namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Controller\Admin;
 
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
 use OxidEsales\TestingLibrary\UnitTestCase;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;

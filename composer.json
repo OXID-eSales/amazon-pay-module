@@ -27,7 +27,7 @@
         "oxid-esales/oxideshop-ce": "^7.0",
         "oxid-esales/testing-library": "dev-b-7.0.x"
     },
-    "conflicts": {
+    "conflict": {
         "oxid-esales/oxideshop-ce": "< 7.0"
     },
     "replace": {

@@ -63,7 +63,8 @@
 
         "static": [
             "@phpcs",
-            "@phpmd"
+            "@phpmd",
+            "@phpstan"
         ],
         "generate-reports": [
             "@phpmd-report"

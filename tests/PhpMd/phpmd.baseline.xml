@@ -2,7 +2,6 @@
 <phpmd-baseline>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Component/UserComponent.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Component/UserComponent.php"/>
-  <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/Admin/ConfigController.php" method="saveConfig"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/Admin/ConfigController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/Admin/DeliverySetMain.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/Admin/DeliverySetMain.php"/>
@@ -25,9 +24,12 @@
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/OrderController.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/OrderController.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/OrderController.php" method="execute"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Controller/OrderController.php" method="execute"/>
   <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Controller/OrderController.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/OrderController.php" method="completeAmazonPaymentExpress"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Controller/OrderController.php" method="completeAmazonPaymentExpress"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Controller/OrderController.php" method="setAmazonPayAsPaymentMethod"/>
+  <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Controller/OrderController.php" method="setAmazonPayAsPaymentMethod"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/PaymentController.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/UserController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/AmazonClient.php"/>
@@ -56,15 +58,18 @@
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Core/Logger.php" method="resolveLogContent"/>
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Core/Logger.php" method="resolveLogContent"/>
   <violation rule="PHPMD\Rule\Design\TooManyFields" file="src/Core/Payload.php"/>
+  <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Core/Payload.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/Payload.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Core/Payload.php" method="getData"/>
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Core/Payload.php" method="getData"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/Payload.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Core/Payload.php"/>
   <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Core/Repository/LogRepository.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/ViewConfig.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/ViewConfig.php"/>
   <violation rule="PHPMD\Rule\CleanCode\ElseExpression" file="src/Core/ViewConfig.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Model/Basket.php"/>
+  <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Model/Order.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Model/Order.php"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Model/Order.php" method="updateAmazonPayOrderStatus"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Model/User.php"/>

@@ -285,7 +285,7 @@ class Order extends Order_parent
             try {
                 OxidServiceProvider::getAmazonService()->processCancel($oxid);
             } catch (InputException $e) {
-                return;
+                return false;
             }
             $repository = oxNew(LogRepository::class);
             $repository->deleteLogMessageByOrderId($oxid);

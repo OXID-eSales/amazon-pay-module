@@ -378,7 +378,7 @@ class OrderController extends OrderController_parent
                     'MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT',
                     1
                 ) . PHP_EOL .
-                'Response: ' . var_dump($result['response']) . PHP_EOL
+                'Response: ' . print_r($result['response'], true) . PHP_EOL
             );
         }
         Registry::getUtilsView()->addErrorToDisplay('MESSAGE_PAYMENT_UNAVAILABLE_PAYMENT');

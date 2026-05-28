@@ -862,7 +862,7 @@ class AmazonService
                     1
                 ) . PHP_EOL .
                 'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
-                'Result: ' . var_dump($result) . PHP_EOL
+                'Result: ' . print_r($result, true) . PHP_EOL
             );
         }
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');

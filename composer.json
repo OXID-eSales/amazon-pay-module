@@ -16,16 +16,18 @@
         "viison/address-splitter": "^0.3.4",
         "aws/aws-php-sns-message-validator": "^1.8"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
         "mockery/mockery": "^1.6",
-        "phpmd/phpmd": "^2",
+        "phpmd/phpmd": "^2.11",
         "phpstan/phpstan": "^1.10.",
         "symfony/dotenv": "^5.4",
         "codeception/module-rest": "2.*",
         "codeception/module-phpbrowser": "^1.0.2",
         "oxid-esales/oxideshop-ce": "^6.3",
-        "oxid-esales/testing-library": "dev-b-6.3.x"
+        "oxid-esales/testing-library": "dev-b-6.5.x"
     },
     "conflict": {
         "oxid-esales/oxideshop-ce": "<6.3 | ^7.0"
@@ -61,7 +63,8 @@
 
         "static": [
             "@phpcs",
-            "@phpmd"
+            "@phpmd",
+            "@phpstan"
         ],
         "generate-reports": [
             "@phpmd-report"

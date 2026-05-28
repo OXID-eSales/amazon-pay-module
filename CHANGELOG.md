@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### FIX
+
+- Use virtual `OxidEsales\Eshop` namespace instead of `OxidEsales\EshopCommunity` in `UserComponent`, `Controller\Admin\OrderList` (`@mixin`) and `Core\AmazonService` (`FieldAlias`), so that edition swaps and module overrides resolve correctly
+- Rename `composer.json` key `conflicts` to `conflict` so the constraint blocking OXID eShop `<6.3 | ^7.0` is actually enforced (Composer silently ignores the plural form)
+- Remove unused `use` statements in `Controller\Admin\ConfigController` and `Tests\Integration\Controller\Admin\ConfigControllerTest`
+
 ## [2.2.0] - 2026-03-10
 
 ### Security

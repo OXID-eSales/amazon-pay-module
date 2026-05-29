@@ -27,7 +27,7 @@
         "oxid-esales/oxideshop-ce": "6.0"
     },
     "conflict": {
-        "oxid-esales/oxideshop-ce": "<6.3 | ^7.0"
+        "oxid-esales/oxideshop-ce": ">=6.3"
     },
     "archive": {
         "exclude": ["/resources"]

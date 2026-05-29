@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### FIX
 
 - Use virtual `OxidEsales\Eshop` namespace instead of `OxidEsales\EshopCommunity` in `UserComponent`, `Controller\Admin\OrderList` (`@mixin`) and `Core\AmazonService` (`FieldAlias`), so that edition swaps and module overrides resolve correctly
-- Rename `composer.json` key `conflicts` to `conflict` so the constraint blocking OXID eShop `<6.3 | ^7.0` is actually enforced (Composer silently ignores the plural form)
+- Rename `composer.json` key `conflicts` to `conflict` so the version constraint is actually enforced (Composer silently ignores the plural form), and flip the constraint to `>=6.3`: the previous `<6.3 | ^7.0` value was copied verbatim from the 6.5 (`b-6.3.x`) branch and declared the module incompatible with the very shop versions this branch targets (6.0/6.1/6.2). The corrected mirror image now blocks installation only on 6.3+ / 7.x / 8.x
 - `Controller\OrderController` and `Core\AmazonService`: replace `var_dump()` with `print_r(..., true)` in log message concatenation; `var_dump` returns void, so the dumped payload was never actually included in the log line
 - `Core\Payload::setAddressDetails` and `setAddressDetailsFromDeliveryAddress`: default `$addressLine2` to `''` in the else branch where no company is set, so the variable is always defined when the address array is built
 - `Model\Order::delete`: replace bare `return;` in the `InputException` catch branch with `return false;` so the method always honours its `bool` return type declaration
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Slim down `.github/workflows/development.yml` from the full shop-install / unit / codeception / sonarcloud pipeline to a single `styles` job running `composer phpcs`. The removed jobs were already either disabled (`if: false` for phpstan, phpmd, codeception, sonarcloud) or carried a brittle PHP 7.0 / OXID 6.0 shop install that no longer reflects how this legacy version is maintained. Backported from the 7.0 `refactor test-strategy` change
+- Slim `.github/workflows/development.yml` down from the full shop-install / unit / codeception / sonarcloud pipeline to a single `styles` job running `composer phpcs` on PHP 7.0. The removed jobs were either already disabled (`if: false` for phpstan, phpmd, codeception, sonarcloud) or relied on a brittle OXID 6.0 shop install. The previous `dependabot.yml` (GitHub Actions update schedule) was dropped together with the heavyweight workflow and is not restored — re-add it on demand if the slim workflow stays around long enough to need automated action bumps
 
 ## [1.6.2] - 2026-03-11
 

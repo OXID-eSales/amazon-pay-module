@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### FIX
+
+- Use virtual `OxidEsales\Eshop` namespace instead of `OxidEsales\EshopCommunity` in `UserComponent`, `Controller\Admin\OrderList` (`@mixin`) and `Core\AmazonService` (`FieldAlias`), so that edition swaps and module overrides resolve correctly
+- Rename `composer.json` key `conflicts` to `conflict` so the constraint blocking OXID eShop `<6.3 | ^7.0` is actually enforced (Composer silently ignores the plural form)
+- `Controller\OrderController` and `Core\AmazonService`: replace `var_dump()` with `print_r(..., true)` in log message concatenation; `var_dump` returns void, so the dumped payload was never actually included in the log line
+- `Core\Payload::setAddressDetails` and `setAddressDetailsFromDeliveryAddress`: default `$addressLine2` to `''` in the else branch where no company is set, so the variable is always defined when the address array is built
+- `Model\Order::delete`: replace bare `return;` in the `InputException` catch branch with `return false;` so the method always honours its `bool` return type declaration
+- `Core\Config::getCountryList`: skip null entries when iterating the loaded country list so `getId()` is no longer called on null
+- `Controller\Admin\OrderOverview::refundpayment`: cast the request parameter to string before passing it to `str_replace`, which only accepts `array|string`
+- Remove unused `use` statements (`ModuleSettingNotFountException`, `ContainerExceptionInterface`, `NotFoundExceptionInterface`) and the matching `@throws` annotations from `Controller\Admin\ConfigController::save()`; the method body never raised any of them
+
+### Changed
+
+- Slim down `.github/workflows/development.yml` from the full shop-install / unit / codeception / sonarcloud pipeline to a single `styles` job running `composer phpcs`. The removed jobs were already either disabled (`if: false` for phpstan, phpmd, codeception, sonarcloud) or carried a brittle PHP 7.0 / OXID 6.0 shop install that no longer reflects how this legacy version is maintained. Backported from the 7.0 `refactor test-strategy` change
+
 ## [1.6.2] - 2026-03-11
 
 ### Security

@@ -410,7 +410,9 @@ class Config
                 $countries->loadActiveCountries();
                 /** @var Country $allowedCountry */
                 foreach ($countries as $allowedCountry) {
-                    $allowedCountries[] = $allowedCountry->getId();
+                    if ($allowedCountry !== null) {
+                        $allowedCountries[] = $allowedCountry->getId();
+                    }
                 }
             }
             foreach ($allowedCountries as $countryOxId) {

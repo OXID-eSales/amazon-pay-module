@@ -439,6 +439,7 @@ class Payload
                 $oxstreet,
                 $oxstreetnr
             );
+            $addressLine2 = '';
         }
 
         /** @var string $oxcountryid */
@@ -520,6 +521,7 @@ class Payload
                 $oxstreet,
                 $oxstreetnr
             );
+            $addressLine2 = '';
         }
 
         /** @var string $oxcountryid */

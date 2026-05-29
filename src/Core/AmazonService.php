@@ -16,7 +16,7 @@ use OxidEsales\Eshop\Core\Exception\DatabaseErrorException;
 use OxidEsales\Eshop\Core\Exception\InputException;
 use OxidEsales\Eshop\Core\Field;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Core\Field as FieldAlias;
+use OxidEsales\Eshop\Core\Field as FieldAlias;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\PhpHelper;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
@@ -854,7 +854,7 @@ class AmazonService
                     1
                 ) . PHP_EOL .
                 'reasonCode: ' . $response['reasonCode'] . PHP_EOL .
-                'Result: ' . var_dump($result) . PHP_EOL
+                'Result: ' . print_r($result, true) . PHP_EOL
             );
         }
         Registry::getUtilsView()->addErrorToDisplay($exception, false, false, '', 'payment');

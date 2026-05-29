@@ -11,7 +11,7 @@ use Exception;
 use OxidEsales\Eshop\Application\Model\DeliverySetList;
 use OxidEsales\Eshop\Application\Model\PaymentList;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Application\Controller\RegisterController;
+use OxidEsales\Eshop\Application\Controller\RegisterController;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Helper\Address;

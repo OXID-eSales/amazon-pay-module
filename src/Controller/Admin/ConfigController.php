@@ -12,11 +12,8 @@ use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Exception\ModuleSettingNotFountException;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * Controller for admin > Amazon Pay/Configuration page
@@ -62,9 +59,6 @@ class ConfigController extends AdminController
      * Saves configuration values
      *
      * @return void
-     * @throws ContainerExceptionInterface
-     * @throws ModuleSettingNotFountException
-     * @throws NotFoundExceptionInterface
      */
     public function save()
     {

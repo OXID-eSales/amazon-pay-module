@@ -26,7 +26,7 @@
         "codeception/module-phpbrowser": "1.0.2",
         "oxid-esales/oxideshop-ce": "6.0"
     },
-    "conflicts": {
+    "conflict": {
         "oxid-esales/oxideshop-ce": "<6.3 | ^7.0"
     },
     "archive": {

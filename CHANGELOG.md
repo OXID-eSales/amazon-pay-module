@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.2] - 2026-06-18
+
+### FIX
+
+- [0007849](https://bugs.oxid-esales.com/view.php?id=7849): Move the admin backend CSS includes (`bootstrap`, `amazonpay_backend.min.css`) from the global `admin_twig/headitem.html.twig` Twig chain extension directly into the module's own `admin/amazonconfig.html.twig` template, and remove the headitem extension (bug 7849 / OXDEV-9934). Extending the global admin `headitem.html.twig` bakes the module template path into the compiled parent Twig class; that compiled class survives every cache clear in PHP-FPM worker memory, so deactivating the module while a worker still holds it crashes the next admin render with `Twig\Error\LoaderError: Template "@osc_amazonpay/...headitem.html.twig" is not defined`. Loading the CSS from the module-local config template avoids touching any globally re-rendered admin template. The Smarty block extension is unaffected (runtime `blocks` mechanism, no compile-time path baking) and stays in place.
+
 ## [3.2.1] - 2026-06-11
 
 ### FIX

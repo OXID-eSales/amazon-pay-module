@@ -60,7 +60,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'img/amazon-pay-logo.png',
-    'version' => '3.2.1',
+    'version' => '3.2.2-rc.1',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',
     'email' => 'info@oxid-esales.com',
@@ -133,11 +133,6 @@ $aModule = [
         'onDeactivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onDeactivate'
     ],
     'blocks' => [
-        [
-            'template' => 'headitem.tpl',
-            'block' => 'admin_headitem_inccss',
-            'file' => 'views/smarty/extensions/themes/admin/admin_headitem_inccss.tpl'
-        ],
         [
             'template' => 'deliveryset_main.tpl',
             'block'    => 'admin_deliveryset_main_form',

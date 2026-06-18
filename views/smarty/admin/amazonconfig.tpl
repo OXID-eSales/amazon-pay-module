@@ -1,4 +1,6 @@
 [{include file="headitem.tpl" title="amazonpay"}]
+<link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+<link rel="stylesheet" href="[{$oViewConf->getModuleUrl('osc_amazonpay', 'css/amazonpay_backend.min.css')}]" />
 
 <div id="content" class="amazonpay-config">
     <h1>[{oxmultilang ident="amazonpay"}] [{oxmultilang ident="OSC_AMAZONPAY_CONFIG"}]</h1>

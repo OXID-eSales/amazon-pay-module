@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <phpmd-baseline>
-  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Component/UserComponent.php"/>
   <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Component/UserComponent.php"/>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Component/UserComponent.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Component/UserComponent.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Controller/Admin/ConfigController.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Controller/Admin/DeliverySetMain.php"/>
@@ -43,6 +43,7 @@
   <violation rule="PHPMD\Rule\Design\NpathComplexity" file="src/Core/AmazonService.php" method="checkOrderState"/>
   <violation rule="PHPMD\Rule\CyclomaticComplexity" file="src/Core/AmazonService.php" method="getOrderLogs"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Core/AmazonService.php"/>
+  <violation rule="PHPMD\Rule\ExcessivePublicCount" file="src/Core/Config.php"/>
   <violation rule="PHPMD\Rule\Design\TooManyPublicMethods" file="src/Core/Config.php"/>
   <violation rule="PHPMD\Rule\Design\WeightedMethodCount" file="src/Core/Config.php"/>
   <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Core/Config.php"/>

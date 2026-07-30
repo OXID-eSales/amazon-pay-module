@@ -60,6 +60,14 @@ $aLang = [
         <b>Nur Gastkonten ohne Passwort:</b> Der Kunde wird automatisch angemeldet, wenn das bestehende Konto ein Gastkonto ohne Passwort ist (z.&nbsp;B. aus einer früheren Express-Bestellung). Für diese Konten gibt es kein Passwort, mit dem sich der Kunde anmelden könnte — ohne diese Einstellung ist der Checkout dort eine Sackgasse.<br>
         <b>Alle Kundenkonten:</b> Der Kunde wird auch dann angemeldet, wenn das bestehende Konto durch ein Passwort geschützt ist.<br>
         <b>Sicherheitshinweis:</b> Mit "Alle Kundenkonten" hängt der Zugang zum Shop-Konto am Amazon-Konto: wer ein Amazon-Konto mit der gleichen E-Mail-Adresse kontrolliert, erhält Zugriff auf das Shop-Konto samt Adressen und Bestellhistorie — das Shop-Passwort schützt dann nicht mehr allein. Administrator-Konten sind in allen Modi ausgeschlossen.',
+    'OSC_AMAZONPAY_REFUND_MAIL'                     => 'Bestätigungsmail bei Rückerstattung',
+    'HELP_OSC_AMAZONPAY_REFUND_MAIL'                => 'Wer wird per E-Mail informiert, wenn im Backend eine Rückerstattung ausgelöst wurde und Amazon sie bestätigt hat? Das betrifft den Rückerstattungs-Button in der Bestellansicht und das Entfernen bzw. Stornieren einzelner Bestellpositionen. Die Mail nennt Bestellnummer und erstatteten Betrag.',
+    'OSC_AMAZONPAY_CANCEL_MAIL'                     => 'Bestätigungsmail bei Storno',
+    'HELP_OSC_AMAZONPAY_CANCEL_MAIL'                => 'Wer wird per E-Mail informiert, wenn eine Amazon-Bestellung im Backend storniert wurde? Wurde durch das Storno zusätzlich Geld erstattet ("Amazon automatische Geld-Rückerstattung"), enthält diese Mail auch den erstatteten Betrag — es wird dann nur diese eine Mail versendet, keine zusätzliche Rückerstattungs-Mail.',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_NONE'             => 'Keine Mail versenden',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_CUSTOMER'         => 'An den Kunden',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_OWNER'            => 'An den Shop-Betreiber',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_BOTH'             => 'An Kunden und Shop-Betreiber',
     'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatische Geld-Rückerstattung und Bestellrückabwicklung',
     'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Amazon automatische Geld Rückerstattung aktivieren (Bestellpostions- oder Bestell-Storno)',
     'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Amazon automatische Bestellrückabwicklung aktivieren (Bestelllöschung)',

@@ -1,6 +1,21 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Access to an undefined property OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Order\\:\\:\\$oxorder__oxbillfname\\.$#"
+			count: 1
+			path: ../../src/Core/Email.php
+
+		-
+			message: "#^Access to an undefined property OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Order\\:\\:\\$oxorder__oxbilllname\\.$#"
+			count: 1
+			path: ../../src/Core/Email.php
+
+		-
+			message: "#^Access to an undefined property OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\Shop\\:\\:\\$oxshops__oxname\\.$#"
+			count: 2
+			path: ../../src/Core/Email.php
+
+		-
 			message: "#^Binary operation \"\\.\" between array\\|string and \"\\\\n\"\\|\"\\\\r\\\\n\" results in an error\\.$#"
 			count: 1
 			path: ../../src/Component/UserComponent.php

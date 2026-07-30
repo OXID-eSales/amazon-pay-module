@@ -157,6 +157,14 @@ class ConfigController extends AdminController
             $conf['amazonPayLoginByEMail'] ?? null
         );
 
+        $conf['amazonPayRefundMailRecipient'] = $this->sanitizeMailRecipient(
+            $conf['amazonPayRefundMailRecipient'] ?? null
+        );
+
+        $conf['amazonPayCancelMailRecipient'] = $this->sanitizeMailRecipient(
+            $conf['amazonPayCancelMailRecipient'] ?? null
+        );
+
         if (!isset($conf['blAmazonPayExpressPDP'])) {
             $conf['blAmazonPayExpressPDP'] = false;
         }
@@ -187,6 +195,26 @@ class ConfigController extends AdminController
             [Constants::LOGIN_BY_EMAIL_GUEST_ONLY, Constants::LOGIN_BY_EMAIL_ALL],
             true
         ) ? (string)$value : Constants::LOGIN_BY_EMAIL_OFF;
+    }
+
+    /**
+     * Recipients of a confirmation mail as posted by the admin form. An absent or
+     * unknown value means "do not send a mail".
+     *
+     * @param mixed $value
+     * @return string one of the Constants::MAIL_RECIPIENT_* modes
+     */
+    protected function sanitizeMailRecipient($value): string
+    {
+        return in_array(
+            $value,
+            [
+                Constants::MAIL_RECIPIENT_CUSTOMER,
+                Constants::MAIL_RECIPIENT_OWNER,
+                Constants::MAIL_RECIPIENT_BOTH,
+            ],
+            true
+        ) ? (string)$value : Constants::MAIL_RECIPIENT_NONE;
     }
 
     /**

@@ -18,6 +18,11 @@ class_alias(
 );
 
 class_alias(
+    \OxidEsales\Eshop\Core\Email::class,
+    \OxidSolutionCatalysts\AmazonPay\Core\Email_parent::class
+);
+
+class_alias(
     \OxidEsales\Eshop\Application\Controller\Admin\DeliverySetMain::class,
     \OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain_parent::class
 );

@@ -87,6 +87,50 @@ class Constants
     const LOGIN_BY_EMAIL_ALL = '2';
 
     /**
+     * Recipients of the refund / cancellation confirmation mails
+     * (module settings amazonPayRefundMailRecipient and
+     * amazonPayCancelMailRecipient)
+     *
+     * @var string No mail at all (default)
+     */
+    const MAIL_RECIPIENT_NONE = '0';
+
+    /**
+     * @var string Mail to the customer (oxorder.oxbillemail)
+     */
+    const MAIL_RECIPIENT_CUSTOMER = '1';
+
+    /**
+     * @var string Mail to the shop owner (oxshops.oxowneremail)
+     */
+    const MAIL_RECIPIENT_OWNER = '2';
+
+    /**
+     * @var string Mail to customer and shop owner
+     */
+    const MAIL_RECIPIENT_BOTH = '3';
+
+    /**
+     * Backend action a refund was triggered by. Decides which confirmation mail
+     * is sent: the cancellation flow sends its own mail covering both the
+     * cancellation and the refunded amount, so it suppresses the refund mail and
+     * the customer receives one mail instead of two.
+     *
+     * @var string Refund button in the order overview
+     */
+    const REFUND_CONTEXT_REFUND = 'refund';
+
+    /**
+     * @var string Removing/cancelling a single order article
+     */
+    const REFUND_CONTEXT_ARTICLE = 'article';
+
+    /**
+     * @var string Cancelling the order in the order list
+     */
+    const REFUND_CONTEXT_CANCEL = 'cancel';
+
+    /**
      * @var array Error responses on CHARGE
      */
     const CHARGE_ERROR_CODES = [

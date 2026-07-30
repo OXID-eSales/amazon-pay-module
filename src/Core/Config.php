@@ -368,6 +368,80 @@ class Config
     }
 
     /**
+     * Recipients of the refund confirmation mail, see the
+     * Constants::MAIL_RECIPIENT_* modes. Unknown values are treated as "no mail".
+     *
+     * @return string
+     */
+    public function getRefundMailRecipient(): string
+    {
+        return $this->sanitizeMailRecipient($this->readMailRecipientSetting('amazonPayRefundMailRecipient'));
+    }
+
+    /**
+     * Recipients of the cancellation confirmation mail, see the
+     * Constants::MAIL_RECIPIENT_* modes. Unknown values are treated as "no mail".
+     *
+     * @return string
+     */
+    public function getCancelMailRecipient(): string
+    {
+        return $this->sanitizeMailRecipient($this->readMailRecipientSetting('amazonPayCancelMailRecipient'));
+    }
+
+    /**
+     * @param string $value one of the Constants::MAIL_RECIPIENT_* modes
+     * @return void
+     */
+    public function setRefundMailRecipient(string $value): void
+    {
+        $this->saveModuleSetting('amazonPayRefundMailRecipient', $this->sanitizeMailRecipient($value));
+    }
+
+    /**
+     * @param string $value one of the Constants::MAIL_RECIPIENT_* modes
+     * @return void
+     */
+    public function setCancelMailRecipient(string $value): void
+    {
+        $this->saveModuleSetting('amazonPayCancelMailRecipient', $this->sanitizeMailRecipient($value));
+    }
+
+    /**
+     * A module setting read that throws because the module configuration was not
+     * installed after an update must not send mail to anybody, so it counts as
+     * "no mail" here.
+     *
+     * @param string $key
+     * @return string
+     */
+    private function readMailRecipientSetting(string $key): string
+    {
+        try {
+            return $this->getStringConfigValue($key);
+        } catch (Throwable $throwable) {
+            return Constants::MAIL_RECIPIENT_NONE;
+        }
+    }
+
+    /**
+     * @param string $mode
+     * @return string one of the Constants::MAIL_RECIPIENT_* modes
+     */
+    private function sanitizeMailRecipient(string $mode): string
+    {
+        return in_array(
+            $mode,
+            [
+                Constants::MAIL_RECIPIENT_CUSTOMER,
+                Constants::MAIL_RECIPIENT_OWNER,
+                Constants::MAIL_RECIPIENT_BOTH,
+            ],
+            true
+        ) ? $mode : Constants::MAIL_RECIPIENT_NONE;
+    }
+
+    /**
      * @return bool
      */
     public function automatedRefundActivated(): bool

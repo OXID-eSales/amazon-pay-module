@@ -1,0 +1,32 @@
+{% set shop = oEmailView.getShop() %}
+{% set oViewConf = oEmailView.getViewConfig() %}
+{% block amazonpay_email_plain_cancel_intro %}
+{% if isAmazonOwnerMail %}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_INTRO_OWNER" }) }}
+{% else %}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_SALUTATION" }) }} {{ order.oxorder__oxbillfname.getRawValue() }} {{ order.oxorder__oxbilllname.getRawValue() }},
+
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_INTRO" }) }}
+{% endif %}
+{% endblock %}
+
+{% block amazonpay_email_plain_cancel_details %}
+{{ translate({ ident: "ORDER_NUMBER", suffix: "COLON" }) }} {{ order.oxorder__oxordernr.value }}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_ORDER_TOTAL", suffix: "COLON" }) }} {{ order.oxorder__oxtotalordersum.value|number_format(2, '.', '') }} {{ order.oxorder__oxcurrency.value }}
+{% if amazonRefundedAmount is not null %}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_REFUNDED", suffix: "COLON" }) }} {{ amazonRefundedAmount|number_format(2, '.', '') }} {{ amazonCurrencyCode }}
+{% endif %}
+{% endblock %}
+
+{% block amazonpay_email_plain_cancel_note %}
+{% if not isAmazonOwnerMail %}
+{% if amazonRefundedAmount is not null %}
+{{ translate({ ident: "AMAZON_PAY_REFUND_MAIL_NOTE" }) }}
+{% else %}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_NOTE_NO_REFUND" }) }}
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{{ shop.oxshops__oxname.getRawValue() }}
+{{ shop.oxshops__oxurl.value }}

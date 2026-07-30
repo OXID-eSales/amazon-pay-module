@@ -181,6 +181,48 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="refundmail">{{ translate({ ident: "OSC_AMAZONPAY_REFUND_MAIL" }) }}</label>
+            <div class="controls">
+                <select name="conf[amazonPayRefundMailRecipient]" id="refundmail" class="form-control" required>
+                    <option value="0" {% if config.getRefundMailRecipient() == '0' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_NONE" }) }}
+                    </option>
+                    <option value="1" {% if config.getRefundMailRecipient() == '1' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_CUSTOMER" }) }}
+                    </option>
+                    <option value="2" {% if config.getRefundMailRecipient() == '2' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_OWNER" }) }}
+                    </option>
+                    <option value="3" {% if config.getRefundMailRecipient() == '3' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_BOTH" }) }}
+                    </option>
+                </select>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_REFUND_MAIL" }) }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cancelmail">{{ translate({ ident: "OSC_AMAZONPAY_CANCEL_MAIL" }) }}</label>
+            <div class="controls">
+                <select name="conf[amazonPayCancelMailRecipient]" id="cancelmail" class="form-control" required>
+                    <option value="0" {% if config.getCancelMailRecipient() == '0' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_NONE" }) }}
+                    </option>
+                    <option value="1" {% if config.getCancelMailRecipient() == '1' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_CUSTOMER" }) }}
+                    </option>
+                    <option value="2" {% if config.getCancelMailRecipient() == '2' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_OWNER" }) }}
+                    </option>
+                    <option value="3" {% if config.getCancelMailRecipient() == '3' %}selected{% endif %}>
+                        {{ translate({ ident: "OSC_AMAZONPAY_MAIL_RECIPIENT_BOTH" }) }}
+                    </option>
+                </select>
+                <span class="help-block">{{ translate({ ident: "HELP_OSC_AMAZONPAY_CANCEL_MAIL" }) }}</span>
+            </div>
+        </div>
+
         <div class="form-group jsonform-error-captureType">
             <label for="captype">{{ translate({ ident: "OSC_AMAZONPAY_CAPTYPE" }) }}</label>
             <div class="controls">

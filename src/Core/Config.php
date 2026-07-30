@@ -23,6 +23,7 @@ use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleSettingBridgeInterface;
 use stdClass;
+use Throwable;
 
 /**
  * Class Config
@@ -309,6 +310,61 @@ class Config
     public function socialLoginDeactivated(): bool
     {
         return $this->getBoolConfigValue('blAmazonSocialLoginDeactivated');
+    }
+
+    /**
+     * Mode of the "sign in via the Amazon email address" feature, see the
+     * Constants::LOGIN_BY_EMAIL_* modes. Unknown values are treated as "off"
+     * so that a broken setting can never enable a sign-in.
+     *
+     * @return string
+     */
+    public function getLoginByEMailMode(): string
+    {
+        try {
+            $mode = $this->getStringConfigValue('amazonPayLoginByEMail');
+        } catch (Throwable $throwable) {
+            // module configuration not (yet) installed after an update: stay off
+            return Constants::LOGIN_BY_EMAIL_OFF;
+        }
+
+        return in_array(
+            $mode,
+            [Constants::LOGIN_BY_EMAIL_GUEST_ONLY, Constants::LOGIN_BY_EMAIL_ALL],
+            true
+        ) ? $mode : Constants::LOGIN_BY_EMAIL_OFF;
+    }
+
+    /**
+     * @param string $value one of the Constants::LOGIN_BY_EMAIL_* modes
+     * @return void
+     */
+    public function setLoginByEMailMode(string $value): void
+    {
+        $this->saveModuleSetting(
+            'amazonPayLoginByEMail',
+            in_array(
+                $value,
+                [Constants::LOGIN_BY_EMAIL_GUEST_ONLY, Constants::LOGIN_BY_EMAIL_ALL],
+                true
+            ) ? $value : Constants::LOGIN_BY_EMAIL_OFF
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoginByEMailGuestOnly(): bool
+    {
+        return $this->getLoginByEMailMode() === Constants::LOGIN_BY_EMAIL_GUEST_ONLY;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoginByEMailForAllAccounts(): bool
+    {
+        return $this->getLoginByEMailMode() === Constants::LOGIN_BY_EMAIL_ALL;
     }
 
     /**

@@ -96,14 +96,25 @@ class OrderController extends OrderController_parent
     {
         $user = $this->getUser();
         $amazonSession = $amazonService->getCheckoutSession();
-        // Create guest user if not logged in
+
         if (!$user instanceof User) {
             /** @var \OxidSolutionCatalysts\AmazonPay\Component\UserComponent $userComponent */
             $userComponent = oxNew(UserComponent::class);
-            $userComponent->createGuestUser($amazonSession);
 
-            $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID_EXPRESS);
-            Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false);
+            // If the merchant enabled it and the Amazon email address matches an existing
+            // shop account, sign that customer in; a guest user could not be created for
+            // that address anyway (AMAZON_PAY_USEREXISTS).
+            if ($userComponent->loginAmazonCustomer($amazonSession)) {
+                $user = $this->getUser();
+            }
+
+            // Create guest user if still not logged in
+            if (!$user instanceof User) {
+                $userComponent->createGuestUser($amazonSession);
+
+                $this->setAmazonPayAsPaymentMethod(Constants::PAYMENT_ID_EXPRESS);
+                Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=order', false);
+            }
         }
         if ($user instanceof User) {
             // if Amazon provides a shipping address use it

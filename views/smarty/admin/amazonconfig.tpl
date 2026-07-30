@@ -163,6 +163,24 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="loginbyemail">[{oxmultilang ident="OSC_AMAZONPAY_LOGIN_BY_EMAIL"}]</label>
+            <div class="controls">
+                <select name="conf[amazonPayLoginByEMail]" id="loginbyemail" class="form-control" required>
+                    <option value="0" [{if !$config->isLoginByEMailGuestOnly() && !$config->isLoginByEMailForAllAccounts()}]selected[{/if}]>
+                        [{oxmultilang ident="OSC_AMAZONPAY_LOGIN_BY_EMAIL_OFF"}]
+                    </option>
+                    <option value="1" [{if $config->isLoginByEMailGuestOnly()}]selected[{/if}]>
+                        [{oxmultilang ident="OSC_AMAZONPAY_LOGIN_BY_EMAIL_GUEST_ONLY"}]
+                    </option>
+                    <option value="2" [{if $config->isLoginByEMailForAllAccounts()}]selected[{/if}]>
+                        [{oxmultilang ident="OSC_AMAZONPAY_LOGIN_BY_EMAIL_ALL"}]
+                    </option>
+                </select>
+                <span class="help-block">[{oxmultilang ident="HELP_OSC_AMAZONPAY_LOGIN_BY_EMAIL"}]</span>
+            </div>
+        </div>
+
         <div class="form-group jsonform-error-captureType">
             <label for="captype">[{oxmultilang ident="OSC_AMAZONPAY_CAPTYPE"}]</label>
             <div class="controls">

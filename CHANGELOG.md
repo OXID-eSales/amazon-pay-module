@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased] - 3.3.0
+
+### Added
+
+- [0007853](https://bugs.oxid-esales.com/view.php?id=7853): New module setting "Sign in via the Amazon email address" (`amazonPayLoginByEMail`, admin > Amazon Pay > Configuration). Until now every Amazon flow ended in `AMAZON_PAY_USEREXISTS` when the email address Amazon returned already belonged to a shop account: the guest user could not be created, the customer was sent back to `cl=user` and asked to sign in with the shop password first. For guest accounts (no password, e.g. created by an earlier express order) that was a dead end, because there is no password those customers could sign in with. The setting decides what happens now and offers three modes — `0` disabled (default, previous behaviour), `1` sign in guest accounts without a password only, `2` sign in all customer accounts including password-protected ones. It applies to both entry points that create the user: the Amazon sign-in button (`Controller\DispatchController`, `action=signin`, buyer response of `getBuyer()`) and the express checkout (`Controller\OrderController::initAmazonPayExpress()`, checkout session response of `getCheckoutSession()`). The sign-in itself happens in the new `Component\UserComponent::loginAmazonCustomer()`, which is called before the guest creation and, if it signs a customer in, lets the flow continue on the "customer is already logged in" branch (Amazon delivery address, express payment method). Select added to both admin templates (`views/twig/admin/amazonconfig.html.twig` and `views/smarty/admin/amazonconfig.tpl`).
+- Security properties of the new sign-in path, which is why feature gate and sign-in effect live in the same method: the email address is only taken from a response fetched from the Amazon API in the same request, never from a request parameter; no session state (an active amazon payment) is used as an authentication criterion; the shop password path (`User::login()`/`User::onLogin()`) is not touched at all and no model is overridden for it; the account lookup is restricted to `oxrights = 'user'`, `oxactive = 1` and the current `oxshopid`, so administrator accounts and accounts of other subshops are never signed in; customers in `oxidblocked` are refused; the session challenge (stoken) is required, exactly like in the guest creation path (`UserComponent::createUser()`) this runs in front of; the session id is regenerated as the shop login does in `UserComponent::afterLogin()`; every sign-in without a password entry is logged with the account id and the active mode, independently of the module's debug logging setting.
+- `Core\Config::getLoginByEMailMode()` treats an unknown value as "off", and a `ModuleSettingBridge` read that throws (module configuration not installed after an update) as "off" as well, so a broken or missing setting can never enable the sign-in. `Core\Config::setLoginByEMailMode()` added for the admin/test path, validating the value before it is stored.
+
+### Changed
+
+- `Component\UserComponent`: new `getEMailFromAmazonResponse()` reads the buyer email address from both Amazon response shapes and returns an empty string instead of failing when the response carries none; `_getEMailFromAmazonResponse()` is kept as a deprecated delegate
+- Admin tooltip of "deactivate Amazon Social Login" no longer claims that a sign-in is only possible when no shop account uses the same email address; it now points to the new setting (all four admin language files)
+
 ## [3.2.2] - 2026-06-18
 
 ### FIX

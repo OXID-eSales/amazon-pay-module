@@ -60,7 +60,7 @@ $aModule = [
         'en' => 'Use of the online payment service from amazon.com'
     ],
     'thumbnail' => 'img/amazon-pay-logo.png',
-    'version' => '3.2.2-rc.1',
+    'version' => '3.3.0-rc.1',
     'author' => 'OXID eSales AG',
     'url' => 'https://www.oxid-esales.com',
     'email' => 'info@oxid-esales.com',
@@ -285,5 +285,6 @@ $aModule = [
         ['name' => 'blAmazonAutomatedRefundActivated', 'type' => 'bool', 'value' => true, 'group' => null],
         ['name' => 'blAmazonAutomatedCancelActivated', 'type' => 'bool', 'value' => true, 'group' => null],
         ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '1', 'group' => null],
+        ['name' => 'amazonPayLoginByEMail', 'type' => 'str', 'value' => '0', 'group' => null],
     ]
 ];

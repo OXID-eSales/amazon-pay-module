@@ -24,6 +24,7 @@ namespace OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core;
 
 use OxidEsales\Eshop\Core\Exception\StandardException;
 use OxidSolutionCatalysts\AmazonPay\Core\Config;
+use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 
 class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core\AmazonTestCase
 {
@@ -95,6 +96,36 @@ class ConfigTest extends \OxidSolutionCatalysts\AmazonPay\Tests\Integration\Core
         $this->assertTrue($config->displayExpressInMiniCartAndModal());
         $this->setConfigParam('blAmazonPayExpressMinicartAndModal', false);
         $this->assertFalse($config->displayExpressInMiniCartAndModal());
+    }
+
+    public function testGetLoginByEMailMode()
+    {
+        $config = new Config();
+        $config->setLoginByEMailMode(Constants::LOGIN_BY_EMAIL_GUEST_ONLY);
+        $this->assertSame(Constants::LOGIN_BY_EMAIL_GUEST_ONLY, $config->getLoginByEMailMode());
+        $this->assertTrue($config->isLoginByEMailGuestOnly());
+        $this->assertFalse($config->isLoginByEMailForAllAccounts());
+
+        $config->setLoginByEMailMode(Constants::LOGIN_BY_EMAIL_ALL);
+        $this->assertSame(Constants::LOGIN_BY_EMAIL_ALL, $config->getLoginByEMailMode());
+        $this->assertFalse($config->isLoginByEMailGuestOnly());
+        $this->assertTrue($config->isLoginByEMailForAllAccounts());
+
+        $config->setLoginByEMailMode(Constants::LOGIN_BY_EMAIL_OFF);
+    }
+
+    /**
+     * An unknown setting value must never enable the feature
+     */
+    public function testGetLoginByEMailModeFallsBackToOff()
+    {
+        $config = new Config();
+        foreach (['', '3', 'yes', Constants::LOGIN_BY_EMAIL_OFF] as $value) {
+            $config->setLoginByEMailMode($value);
+            $this->assertSame(Constants::LOGIN_BY_EMAIL_OFF, $config->getLoginByEMailMode());
+            $this->assertFalse($config->isLoginByEMailGuestOnly());
+            $this->assertFalse($config->isLoginByEMailForAllAccounts());
+        }
     }
 
     /**

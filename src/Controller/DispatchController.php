@@ -144,9 +144,20 @@ class DispatchController extends FrontendController
                 $session = Registry::getSession();
 
                 if (!$user instanceof User) {
-                    // Create guest user if not logged in
+                    /** @var UserComponent $userComponent */
                     $userComponent = oxNew(UserComponent::class);
-                    $userComponent->createGuestUser($response);
+
+                    // If the merchant enabled it and the Amazon email address matches an existing
+                    // shop account, sign that customer in; a guest user could not be created for
+                    // that address anyway (AMAZON_PAY_USEREXISTS).
+                    if ($userComponent->loginAmazonCustomer($response)) {
+                        $user = $this->getUser();
+                    }
+
+                    // Create guest user if still not logged in
+                    if (!$user instanceof User) {
+                        $userComponent->createGuestUser($response);
+                    }
                 }
 
                 if ($user instanceof User) {

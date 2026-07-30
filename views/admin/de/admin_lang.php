@@ -49,7 +49,16 @@ $aLang = [
     'HELP_OSC_AMAZONPAY_EXCLUSION'     => 'Es können Produkte und Kategorien von AmazonPay ausgeschlossen werden. Wenn Sie das nicht tun, können Sie das Feature aus Performancegründen generell deaktivieren',
     'OSC_AMAZONPAY_SOCIAL_LOGIN'       => 'Amazon Social Login',
     'OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'        => 'Amazon Social Login deaktivieren',
-    'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'Es besteht die Möglichkeit, sich im Shop mit einem Amazon-Kundenkonto anzumelden. Dabei werden die Adressdaten von Amazon übernommen. Die Anmeldung ist nur dann möglich, wenn noch kein Konto im Shop mit der gleichen Amazon-EMail-Adresse existiert.<br>Wenn Sie diese Funktion nicht Ihren Kunden anbieten wollen, können sie diese hier deaktivieren.',
+    'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'Es besteht die Möglichkeit, sich im Shop mit einem Amazon-Kundenkonto anzumelden. Dabei werden die Adressdaten von Amazon übernommen. Existiert im Shop bereits ein Konto mit der gleichen E-Mail-Adresse, entscheidet die Einstellung "Anmeldung über die Amazon-E-Mail-Adresse", was passiert.<br>Wenn Sie diese Funktion nicht Ihren Kunden anbieten wollen, können sie diese hier deaktivieren.',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL'                  => 'Anmeldung über die Amazon-E-Mail-Adresse',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL_OFF'              => 'Deaktiviert (empfohlen)',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL_GUEST_ONLY'       => 'Nur Gastkonten ohne Passwort anmelden',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL_ALL'              => 'Alle Kundenkonten anmelden',
+    'HELP_OSC_AMAZONPAY_LOGIN_BY_EMAIL'             => 'Steuert, was passiert, wenn die von Amazon gelieferte E-Mail-Adresse zu einem bereits im Shop bestehenden Kundenkonto gehört.<br>
+        <b>Deaktiviert:</b> Der Kunde wird aufgefordert, sich zunächst mit seinem Shop-Passwort anzumelden und den Amazon-Checkout danach erneut zu starten (bisheriges Verhalten).<br>
+        <b>Nur Gastkonten ohne Passwort:</b> Der Kunde wird automatisch angemeldet, wenn das bestehende Konto ein Gastkonto ohne Passwort ist (z.&nbsp;B. aus einer früheren Express-Bestellung). Für diese Konten gibt es kein Passwort, mit dem sich der Kunde anmelden könnte — ohne diese Einstellung ist der Checkout dort eine Sackgasse.<br>
+        <b>Alle Kundenkonten:</b> Der Kunde wird auch dann angemeldet, wenn das bestehende Konto durch ein Passwort geschützt ist.<br>
+        <b>Sicherheitshinweis:</b> Mit "Alle Kundenkonten" hängt der Zugang zum Shop-Konto am Amazon-Konto: wer ein Amazon-Konto mit der gleichen E-Mail-Adresse kontrolliert, erhält Zugriff auf das Shop-Konto samt Adressen und Bestellhistorie — das Shop-Passwort schützt dann nicht mehr allein. Administrator-Konten sind in allen Modi ausgeschlossen.',
     'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatische Geld-Rückerstattung und Bestellrückabwicklung',
     'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Amazon automatische Geld Rückerstattung aktivieren (Bestellpostions- oder Bestell-Storno)',
     'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Amazon automatische Bestellrückabwicklung aktivieren (Bestelllöschung)',

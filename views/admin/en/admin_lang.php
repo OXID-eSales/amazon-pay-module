@@ -48,7 +48,16 @@ $aLang = [
     'HELP_OSC_AMAZONPAY_EXCLUSION'     => 'Products and categories can be excluded from AmazonPay. If you do not do this, you can generally deactivate the feature for performance reasons',
     'OSC_AMAZONPAY_SOCIAL_LOGIN'        => 'Amazon Social Login',
     'OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'        => 'deactivate Amazon Social Login',
-    'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'It is possible to register in the shop with an Amazon customer account. The address data will be taken over from Amazon. Registration is only possible if there is no account in the shop with the same Amazon email address.<br>If you do not want to offer this function to your customers, you can deactivate it here.',
+    'HELP_OSC_AMAZONPAY_SOCIAL_LOGIN_DEACTIVATED'   => 'It is possible to register in the shop with an Amazon customer account. The address data will be taken over from Amazon. If an account with the same email address already exists in the shop, the setting "Sign in via the Amazon email address" decides what happens.<br>If you do not want to offer this function to your customers, you can deactivate it here.',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL'                  => 'Sign in via the Amazon email address',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL_OFF'              => 'Disabled (recommended)',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL_GUEST_ONLY'       => 'Sign in guest accounts without a password only',
+    'OSC_AMAZONPAY_LOGIN_BY_EMAIL_ALL'              => 'Sign in all customer accounts',
+    'HELP_OSC_AMAZONPAY_LOGIN_BY_EMAIL'             => 'Controls what happens when the email address supplied by Amazon belongs to a customer account that already exists in the shop.<br>
+        <b>Disabled:</b> the customer is asked to sign in with the shop password first and to restart the Amazon checkout afterwards (previous behaviour).<br>
+        <b>Guest accounts without a password only:</b> the customer is signed in automatically if the existing account is a guest account without a password (e.g. from an earlier express order). Such accounts have no password the customer could sign in with — without this setting the checkout is a dead end for them.<br>
+        <b>All customer accounts:</b> the customer is also signed in when the existing account is protected by a password.<br>
+        <b>Security note:</b> with "All customer accounts", access to the shop account depends on the Amazon account: anyone controlling an Amazon account with the same email address gains access to the shop account including addresses and order history — the shop password alone no longer protects it. Administrator accounts are excluded in every mode.',
     'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatic refund & cancel',
     'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Activate Amazon automatic refund (order and orderpostion storno)',
     'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Activate Amazon automatic cancel (order deletion)',

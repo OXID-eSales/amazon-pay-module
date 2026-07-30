@@ -38,6 +38,22 @@ There is no explicit database locking (SELECT FOR UPDATE) during order finalizat
 
 **Mitigation:** `json_encode()` provides XSS-safe output for HTML contexts. The risk would only materialize if the rendering pipeline were fundamentally changed.
 
+## Sign-in via the Amazon Email Address (`amazonPayLoginByEMail`)
+
+**Files:** `src/Component/UserComponent.php`, `src/Controller/DispatchController.php`, `src/Controller/OrderController.php`
+**Risk:** depends on the configured mode, disabled by default
+
+When the merchant enables this setting, a customer is signed into an existing shop account because the Amazon account uses the same email address — without entering the shop password. In mode `2` ("all customer accounts") this couples access to the shop account to the Amazon account: whoever controls an Amazon account with that email address reaches the shop account including addresses and order history, so the shop password alone no longer protects it. Mode `1` ("guest accounts without a password only") does not have that property, because such accounts have no password that could be bypassed. The setting is therefore opt-in and defaults to `0` (off).
+
+The implementation deliberately concentrates the decision in `UserComponent::loginAmazonCustomer()`:
+
+- The email address is only read from a response the module fetched from the Amazon API in the same request (`getBuyer()` / `getCheckoutSession()`), never from a request parameter.
+- No session state (for example "an amazon payment is active") is used as an authentication criterion, and no model overrides the shop password path (`User::login()` / `User::onLogin()`).
+- The account lookup is restricted to `oxrights = 'user'`, `oxactive = 1` and the current `oxshopid`; customers in `oxidblocked` are refused. Administrator accounts can never be signed in this way.
+- The session challenge (stoken) is required, the session id is regenerated, and every sign-in is logged with the account id and the active mode.
+
+**Mitigation:** off by default; the admin tooltip states the consequence of mode `2`; mode `1` covers the dead-end case (guest accounts from earlier express orders) without weakening any password.
+
 ---
 
-*Last updated: 2026-03-06*
+*Last updated: 2026-07-30*

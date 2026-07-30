@@ -146,6 +146,10 @@ class ConfigController extends AdminController
             $conf['amazonPayCapType'] = '1';
         }
 
+        $conf['amazonPayLoginByEMail'] = $this->sanitizeLoginByEMailMode(
+            $conf['amazonPayLoginByEMail'] ?? null
+        );
+
         if (!isset($conf['blAmazonPayExpressPDP'])) {
             $conf['blAmazonPayExpressPDP'] = false;
         }
@@ -159,6 +163,23 @@ class ConfigController extends AdminController
         }
 
         return $conf;
+    }
+
+    /**
+     * Mode of the "sign in via the Amazon email address" feature as posted by the
+     * admin form. Never falls back to an enabled state: an absent or unknown
+     * value means "off".
+     *
+     * @param mixed $value
+     * @return string one of the Constants::LOGIN_BY_EMAIL_* modes
+     */
+    protected function sanitizeLoginByEMailMode($value): string
+    {
+        return in_array(
+            $value,
+            [Constants::LOGIN_BY_EMAIL_GUEST_ONLY, Constants::LOGIN_BY_EMAIL_ALL],
+            true
+        ) ? (string)$value : Constants::LOGIN_BY_EMAIL_OFF;
     }
 
     /**

@@ -280,6 +280,40 @@ class Config
     }
 
     /**
+     * Mode of the "sign in via the Amazon email address" feature, see the
+     * Constants::LOGIN_BY_EMAIL_* modes. Unknown values are treated as "off"
+     * so that a broken setting can never enable a sign-in.
+     *
+     * @return string
+     */
+    public function getLoginByEMailMode(): string
+    {
+        $mode = (string)Registry::getConfig()->getConfigParam('amazonPayLoginByEMail');
+
+        return in_array(
+            $mode,
+            [Constants::LOGIN_BY_EMAIL_GUEST_ONLY, Constants::LOGIN_BY_EMAIL_ALL],
+            true
+        ) ? $mode : Constants::LOGIN_BY_EMAIL_OFF;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoginByEMailGuestOnly(): bool
+    {
+        return $this->getLoginByEMailMode() === Constants::LOGIN_BY_EMAIL_GUEST_ONLY;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLoginByEMailForAllAccounts(): bool
+    {
+        return $this->getLoginByEMailMode() === Constants::LOGIN_BY_EMAIL_ALL;
+    }
+
+    /**
      * @return bool
      */
     public function automatedRefundActivated(): bool

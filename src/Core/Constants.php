@@ -64,6 +64,29 @@ class Constants
     const CHECKOUT_OPEN = 'Open';
 
     /**
+     * Modes of the "sign in via the Amazon email address" feature
+     * (module setting amazonPayLoginByEMail). The feature signs a customer into
+     * an existing shop account when the Amazon account uses the same email
+     * address, so it is opt-in and disabled by default.
+     *
+     * @var string Feature disabled: an existing shop account always ends the
+     *             Amazon flow with AMAZON_PAY_USEREXISTS (default)
+     */
+    const LOGIN_BY_EMAIL_OFF = '0';
+
+    /**
+     * @var string Only accounts without a password (guest accounts) are signed
+     *             in. No existing password protection can be bypassed this way.
+     */
+    const LOGIN_BY_EMAIL_GUEST_ONLY = '1';
+
+    /**
+     * @var string Every customer account is signed in, including
+     *             password-protected ones
+     */
+    const LOGIN_BY_EMAIL_ALL = '2';
+
+    /**
      * @var array Error responses on CHARGE
      */
     const CHARGE_ERROR_CODES = [

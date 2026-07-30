@@ -74,7 +74,8 @@ class OrderArticle extends OrderArticle_parent
                 OxidServiceProvider::getAmazonService()->createRefund(
                     $oOrder->getId(),
                     floatval($oOrderArticle->getFieldData('oxbrutprice')),
-                    $logger
+                    $logger,
+                    Constants::REFUND_CONTEXT_ARTICLE
                 );
             }
         }

@@ -440,13 +440,31 @@ class AmazonService
     }
 
     /**
-     * @return void|string
+     * Refunds an amount for an order via Amazon and, on success, triggers the
+     * confirmation mail configured by the merchant.
+     *
+     * Return values are historically inconsistent: a string carries the error
+     * message of a failed API request, null means the refund did not happen (the
+     * amount was rejected locally or Amazon answered with something other than
+     * 201). Only `true` states that Amazon confirmed the refund - the cancel flow
+     * relies on that to decide whether its mail may name a refunded amount.
+     *
+     * @param string $orderId
+     * @param float $refundAmount
+     * @param LoggerInterface $logger
+     * @param string $context one of the Constants::REFUND_CONTEXT_* values, the
+     *                        backend action that triggered this refund
+     * @return true|string|null
      * @throws DatabaseConnectionException
      * @throws DatabaseErrorException
      * @psalm-suppress UndefinedDocblockClass
      */
-    public function createRefund(string $orderId, float $refundAmount, LoggerInterface $logger)
-    {
+    public function createRefund(
+        string $orderId,
+        float $refundAmount,
+        LoggerInterface $logger,
+        string $context = Constants::REFUND_CONTEXT_REFUND
+    ) {
         $repository = oxNew(LogRepository::class);
         $order = oxNew(Order::class);
         $order->load($orderId);
@@ -477,7 +495,8 @@ class AmazonService
                 ) .
                 PhpHelper::getMoneyValue($this->getMaximalRefundAmount($orderId)) . " " . $orderCurrencyName
             );
-            return;
+            // no refund happened, same as the other "not refunded" exits
+            return null;
         }
 
         $body = [
@@ -526,6 +545,15 @@ class AmazonService
         $result['identifier'] = $response['refundId'];
         $result['orderId'] = $orderId;
         $logger->info($response['statusDetails']['state'], $result);
+
+        // Amazon confirmed the refund, so this is the point where a confirmation
+        // mail may go out. The service decides whether one is sent at all and to
+        // whom; the cancel context suppresses it, because the cancellation flow
+        // sends a single mail covering cancellation and refunded amount.
+        $mailService = oxNew(RefundMailService::class);
+        $mailService->sendRefundMail($order, (float)$refundedAmount, (string)$currency, $context);
+
+        return true;
     }
 
     /**

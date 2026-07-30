@@ -20,7 +20,9 @@ use OxidEsales\Eshop\Application\Model\Category as CoreCategoryModel;
 use OxidEsales\Eshop\Application\Model\Order as CoreOrderModel;
 use OxidEsales\Eshop\Application\Model\User as CoreUserModel;
 use OxidEsales\Eshop\Core\ViewConfig as CoreViewConfig;
+use OxidEsales\Eshop\Core\Email as CoreEmail;
 use OxidEsales\Eshop\Core\InputValidator as CoreInputValidator;
+use OxidSolutionCatalysts\AmazonPay\Core\Email as ModuleEmail;
 use OxidSolutionCatalysts\AmazonPay\Component\UserComponent;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\ConfigController;
 use OxidSolutionCatalysts\AmazonPay\Controller\Admin\DeliverySetMain as AmazonDeliverySetMain;
@@ -82,6 +84,7 @@ $aModule = [
         OrderMainController::class => AmazonOrderMain::class,
         OrderListController::class => AmazonOrderList::class,
         CoreInputValidator::class => AmazonInputValidator::class,
+        CoreEmail::class => ModuleEmail::class,
     ],
     'controllers' => [
         'amazonconfig' => ConfigController::class,
@@ -127,7 +130,11 @@ $aModule = [
         'amazonpay/json.tpl' => 'osc/amazonpay/views/json.tpl',
         'amazonpay/base_js.tpl' => 'osc/amazonpay/views/elements/base_js.tpl',
         'amazonpay/base_style.tpl' => 'osc/amazonpay/views/elements/base_style.tpl',
-        'amazonpay/amazonpayhint.tpl' => 'osc/amazonpay/views/elements/amazonpayhint.tpl'
+        'amazonpay/amazonpayhint.tpl' => 'osc/amazonpay/views/elements/amazonpayhint.tpl',
+        'amazonpay/email/html/refund.tpl' => 'osc/amazonpay/views/email/html/refund.tpl',
+        'amazonpay/email/plain/refund.tpl' => 'osc/amazonpay/views/email/plain/refund.tpl',
+        'amazonpay/email/html/cancel.tpl' => 'osc/amazonpay/views/email/html/cancel.tpl',
+        'amazonpay/email/plain/cancel.tpl' => 'osc/amazonpay/views/email/plain/cancel.tpl'
     ],
     'events' => [
         'onActivate' => '\OxidSolutionCatalysts\AmazonPay\Core\Events::onActivate',
@@ -292,5 +299,7 @@ $aModule = [
         ['name' => 'blAmazonAutomatedCancelActivated', 'type' => 'bool', 'value' => true, 'group' => null],
         ['name' => 'amazonPayCapType', 'type' => 'str', 'value' => '1', 'group' => null],
         ['name' => 'amazonPayLoginByEMail', 'type' => 'str', 'value' => '0', 'group' => null],
+        ['name' => 'amazonPayRefundMailRecipient', 'type' => 'str', 'value' => '0', 'group' => null],
+        ['name' => 'amazonPayCancelMailRecipient', 'type' => 'str', 'value' => '0', 'group' => null],
     ]
 ];

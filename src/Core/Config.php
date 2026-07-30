@@ -314,6 +314,49 @@ class Config
     }
 
     /**
+     * Recipients of the refund confirmation mail, see the
+     * Constants::MAIL_RECIPIENT_* modes. Unknown values are treated as "no mail".
+     *
+     * @return string
+     */
+    public function getRefundMailRecipient(): string
+    {
+        return $this->sanitizeMailRecipient(
+            (string)Registry::getConfig()->getConfigParam('amazonPayRefundMailRecipient')
+        );
+    }
+
+    /**
+     * Recipients of the cancellation confirmation mail, see the
+     * Constants::MAIL_RECIPIENT_* modes. Unknown values are treated as "no mail".
+     *
+     * @return string
+     */
+    public function getCancelMailRecipient(): string
+    {
+        return $this->sanitizeMailRecipient(
+            (string)Registry::getConfig()->getConfigParam('amazonPayCancelMailRecipient')
+        );
+    }
+
+    /**
+     * @param string $mode
+     * @return string one of the Constants::MAIL_RECIPIENT_* modes
+     */
+    private function sanitizeMailRecipient(string $mode): string
+    {
+        return in_array(
+            $mode,
+            [
+                Constants::MAIL_RECIPIENT_CUSTOMER,
+                Constants::MAIL_RECIPIENT_OWNER,
+                Constants::MAIL_RECIPIENT_BOTH,
+            ],
+            true
+        ) ? $mode : Constants::MAIL_RECIPIENT_NONE;
+    }
+
+    /**
      * @return bool
      */
     public function automatedRefundActivated(): bool

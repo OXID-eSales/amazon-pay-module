@@ -58,6 +58,14 @@ $aLang = [
         <b>Guest accounts without a password only:</b> the customer is signed in automatically if the existing account is a guest account without a password (e.g. from an earlier express order). Such accounts have no password the customer could sign in with — without this setting the checkout is a dead end for them.<br>
         <b>All customer accounts:</b> the customer is also signed in when the existing account is protected by a password.<br>
         <b>Security note:</b> with "All customer accounts", access to the shop account depends on the Amazon account: anyone controlling an Amazon account with the same email address gains access to the shop account including addresses and order history — the shop password alone no longer protects it. Administrator accounts are excluded in every mode.',
+    'OSC_AMAZONPAY_REFUND_MAIL'                     => 'Confirmation mail on refund',
+    'HELP_OSC_AMAZONPAY_REFUND_MAIL'                => 'Who is notified by email once a refund was triggered in the backend and Amazon confirmed it? This covers the refund button in the order view and removing or cancelling single order positions. The mail states the order number and the refunded amount.',
+    'OSC_AMAZONPAY_CANCEL_MAIL'                     => 'Confirmation mail on cancellation',
+    'HELP_OSC_AMAZONPAY_CANCEL_MAIL'                => 'Who is notified by email once an Amazon order was cancelled in the backend? If the cancellation also refunded money ("Amazon automatic refund"), this mail states the refunded amount as well - only this single mail is sent then, no additional refund mail.',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_NONE'             => 'Do not send a mail',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_CUSTOMER'         => 'To the customer',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_OWNER'            => 'To the shop owner',
+    'OSC_AMAZONPAY_MAIL_RECIPIENT_BOTH'             => 'To customer and shop owner',
     'OSC_AMAZONPAY_AUTOMATED_REFUND'   => 'Amazon automatic refund & cancel',
     'OSC_AMAZONPAY_AUTOMATED_REFUND_ACTIVATED'      => 'Activate Amazon automatic refund (order and orderpostion storno)',
     'OSC_AMAZONPAY_AUTOMATED_CANCEL_ACTIVATED'      => 'Activate Amazon automatic cancel (order deletion)',

@@ -13,6 +13,7 @@ use OxidSolutionCatalysts\AmazonPay\Core\Config;
 use OxidSolutionCatalysts\AmazonPay\Core\Constants;
 use OxidSolutionCatalysts\AmazonPay\Core\Logger;
 use OxidSolutionCatalysts\AmazonPay\Core\Provider\OxidServiceProvider;
+use OxidSolutionCatalysts\AmazonPay\Core\RefundMailService;
 use OxidEsales\Eshop\Application\Model\Order;
 
 /**
@@ -36,28 +37,48 @@ class OrderList extends OrderList_parent
             return;
         }
 
-        $config = new Config();
-        if (!$config->automatedRefundActivated()) {
+        $oOrder = oxNew(Order::class);
+        if (!$oOrder->load($sOxId)) {
             parent::cancelOrder();
 
             return;
         }
 
-        $oOrder = oxNew(Order::class);
-        if (!$oOrder->load($sOxId)) {
-            return;
-        }
         /** @var  string $paymentType */
         $paymentType = $oOrder->getFieldData('oxpaymenttype');
-        if (Constants::isAmazonPayment($paymentType)) {
+        if (!Constants::isAmazonPayment($paymentType)) {
+            parent::cancelOrder();
+
+            return;
+        }
+
+        $config = new Config();
+        $refundedAmount = null;
+        $currency = (string)$oOrder->getFieldData('oxcurrency');
+
+        if ($config->automatedRefundActivated()) {
             $logger = new Logger();
-            OxidServiceProvider::getAmazonService()->createRefund(
+            $refundAmount = (float)$oOrder->getTotalOrderSum();
+            // the cancel context suppresses the refund mail, this method sends one
+            // mail covering the cancellation and the refunded amount instead
+            $refunded = OxidServiceProvider::getAmazonService()->createRefund(
                 $sOxId,
-                (float)$oOrder->getTotalOrderSum(),
-                $logger
+                $refundAmount,
+                $logger,
+                Constants::REFUND_CONTEXT_CANCEL
             );
+            // only `true` means Amazon confirmed the refund, a string is an error
+            // message and null means no money was moved
+            if ($refunded === true) {
+                $refundedAmount = $refundAmount;
+            }
         }
 
         parent::cancelOrder();
+
+        // after the order was actually cancelled, and regardless of whether a
+        // refund happened: a cancellation is worth a confirmation on its own
+        $mailService = oxNew(RefundMailService::class);
+        $mailService->sendCancelMail($oOrder, $refundedAmount, $currency);
     }
 }

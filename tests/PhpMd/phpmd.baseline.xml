@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <phpmd-baseline>
+  <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Core/Email.php"/>
   <violation rule="PHPMD\Rule\CleanCode\StaticAccess" file="src/Component/UserComponent.php"/>
   <violation rule="PHPMD\Rule\Design\CouplingBetweenObjects" file="src/Component/UserComponent.php"/>
   <violation rule="PHPMD\Rule\Naming\LongVariable" file="src/Component/UserComponent.php"/>

@@ -12,9 +12,9 @@
 
 {% block amazonpay_email_plain_cancel_details %}
 {{ translate({ ident: "ORDER_NUMBER", suffix: "COLON" }) }} {{ order.oxorder__oxordernr.value }}
-{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_ORDER_TOTAL", suffix: "COLON" }) }} {{ order.oxorder__oxtotalordersum.value|number_format(2, '.', '') }} {{ order.oxorder__oxcurrency.value }}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_ORDER_TOTAL", suffix: "COLON" }) }} {{ format_price(order.oxorder__oxtotalordersum.value, { currency: currency }) }}
 {% if amazonRefundedAmount is not null %}
-{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_REFUNDED", suffix: "COLON" }) }} {{ amazonRefundedAmount|number_format(2, '.', '') }} {{ amazonCurrencyCode }}
+{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_REFUNDED", suffix: "COLON" }) }} {{ format_price(amazonRefundedAmount, { currency: currency }) }}
 {% endif %}
 {% endblock %}
 

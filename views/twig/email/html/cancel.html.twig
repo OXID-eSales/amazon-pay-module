@@ -44,7 +44,7 @@
                 {% if amazonRefundedAmount is not null %}
                     <tr valign="top">
                         <th align="right" class="text-right">{{ translate({ ident: "AMAZON_PAY_CANCEL_MAIL_REFUNDED", suffix: "COLON" }) }}</th>
-                        <td>{{ amazonRefundedAmount|number_format(2, '.', '') }} {{ amazonCurrencyCode }}</td>
+                        <td>{{ format_price(amazonRefundedAmount, { currency: currency }) }}</td>
                     </tr>
                 {% endif %}
             </tbody>

@@ -12,8 +12,8 @@
 
 [{block name="amazonpay_email_plain_refund_details"}]
 [{oxmultilang ident="ORDER_NUMBER" suffix="COLON"}] [{$order->oxorder__oxordernr->value}]
-[{oxmultilang ident="AMAZON_PAY_REFUND_MAIL_AMOUNT" suffix="COLON"}] [{$amazonRefundedAmount|string_format:"%.2f"}] [{$amazonCurrencyCode}]
-[{oxmultilang ident="AMAZON_PAY_REFUND_MAIL_ORDER_TOTAL" suffix="COLON"}] [{$order->oxorder__oxtotalordersum->value|string_format:"%.2f"}] [{$order->oxorder__oxcurrency->value}]
+[{oxmultilang ident="AMAZON_PAY_REFUND_MAIL_AMOUNT" suffix="COLON"}] [{oxprice price=$amazonRefundedAmount currency=$currency}]
+[{oxmultilang ident="AMAZON_PAY_REFUND_MAIL_ORDER_TOTAL" suffix="COLON"}] [{oxprice price=$order->oxorder__oxtotalordersum->value currency=$currency}]
 [{/block}]
 
 [{block name="amazonpay_email_plain_refund_note"}]

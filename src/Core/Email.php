@@ -12,6 +12,9 @@ namespace OxidSolutionCatalysts\AmazonPay\Core;
 use OxidEsales\Eshop\Application\Model\Order;
 use OxidEsales\Eshop\Application\Model\Shop;
 use OxidEsales\Eshop\Core\Registry;
+use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
+use OxidEsales\EshopCommunity\Internal\Domain\Admin\Event\AdminModeChangedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Confirmation mails for refunds and order cancellations triggered in the
@@ -172,7 +175,15 @@ class Email extends Email_parent
         array $viewData
     ): bool {
         /** @var Shop $shop */
-        $shop = $this->getShop();
+        // The customer is written to in the language they ordered in. The shop owner
+        // keeps the language the backend is running in, because that copy is read
+        // next to the order there - so only the customer mail switches the language.
+        // Core\Email::sendSendedNowMail() handles its backend triggered mail the
+        // same way, including loading the shop in that language: the shop name and
+        // the sender texts are translatable too.
+        $mailLanguage = $toOwner ? null : $this->amazonPayOrderLanguage($order);
+
+        $shop = $mailLanguage === null ? $this->getShop() : $this->getShop($mailLanguage);
         $this->setMailParams($shop);
 
         $this->setViewData('order', $order);
@@ -187,27 +198,92 @@ class Email extends Email_parent
         // Process view data array through oxOutput processor
         $this->processViewArray();
 
+        $lang = Registry::getLang();
+        $previousTplLanguage = (int)$lang->getTplLanguage();
+        $previousBaseLanguage = (int)$lang->getBaseLanguage();
+        if ($mailLanguage !== null) {
+            $lang->setTplLanguage($mailLanguage);
+            $lang->setBaseLanguage($mailLanguage);
+        }
+
         // These mails are triggered from the backend, but they use frontend
         // templates and frontend language files. Rendering them in admin mode
         // leaves core idents unresolved ("ERROR: Translation for ORDER_NUMBER not
-        // found!"), so switch the admin mode off around the rendering and restore
-        // whatever it was before.
-        $config = Registry::getConfig();
-        $wasAdmin = $config->isAdmin();
-        $config->setAdminMode(false);
+        // found!") and looks the frontend templates up below the admin theme, so
+        // switch the admin mode off around the rendering and restore it after.
+        $wasAdmin = $this->switchAmazonPayAdminMode(false);
 
-        $this->setBody($renderer->renderTemplate($htmlTemplate, $this->getViewData()));
-        $this->setAltBody($renderer->renderTemplate($plainTemplate, $this->getViewData()));
+        try {
+            $this->setBody($renderer->renderTemplate($htmlTemplate, $this->getViewData()));
+            $this->setAltBody($renderer->renderTemplate($plainTemplate, $this->getViewData()));
 
-        $config->setAdminMode($wasAdmin);
-
-        /** @var string $subject */
-        $subject = Registry::getLang()->translateString($subjectIdent);
-        $this->setSubject(sprintf($subject, (string)$order->getFieldData('oxordernr')));
+            // the subject ident lives in the frontend language files too, so it has
+            // to be translated here and not after the mode was restored
+            /** @var string $subject */
+            $subject = $lang->translateString($subjectIdent);
+            $this->setSubject(sprintf($subject, (string)$order->getFieldData('oxordernr')));
+        } finally {
+            // A failing template must not leave the shop behind in frontend mode or
+            // in the order language: the admin page that triggered the mail is
+            // rendered after this and would lose its templates and translations.
+            $this->switchAmazonPayAdminMode($wasAdmin);
+            if ($mailLanguage !== null) {
+                $lang->setTplLanguage($previousTplLanguage);
+                $lang->setBaseLanguage($previousBaseLanguage);
+            }
+        }
 
         $this->setAmazonRecipient($order, $shop, $toOwner);
 
         return $this->send();
+    }
+
+    /**
+     * Language the order was placed in. getFieldData() is untyped, so anything
+     * that is not a number falls back to the shop default language.
+     *
+     * @param Order $order
+     * @return int
+     */
+    protected function amazonPayOrderLanguage(Order $order): int
+    {
+        $language = $order->getFieldData('oxlang');
+
+        return is_numeric($language) ? (int)$language : 0;
+    }
+
+    /**
+     * Switches the admin mode and returns the mode that was active before.
+     *
+     * Setting the config flag alone is not enough: the template engine resolves
+     * its namespaced template directories once and keeps them, so "@__main__"
+     * would still point at the admin theme and a frontend template including
+     * "email/html/header.html.twig" would not be found. The AdminModeChangedEvent
+     * makes the engine reload those directories. The core switches the mode the
+     * same way (Core\Email::switchToShopMode()), but its helpers are private,
+     * hence the copy here.
+     *
+     * @param bool $isAdmin mode to switch to
+     * @return bool mode that was active before
+     */
+    protected function switchAmazonPayAdminMode(bool $isAdmin): bool
+    {
+        $config = Registry::getConfig();
+        $wasAdmin = (bool)$config->isAdmin();
+
+        if ($wasAdmin === $isAdmin) {
+            return $wasAdmin;
+        }
+
+        $config->setAdminMode($isAdmin);
+
+        /** @var EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = ContainerFactory::getInstance()
+            ->getContainer()
+            ->get(EventDispatcherInterface::class);
+        $eventDispatcher->dispatch(new AdminModeChangedEvent());
+
+        return $wasAdmin;
     }
 
     /**

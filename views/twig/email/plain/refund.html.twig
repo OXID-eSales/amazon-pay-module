@@ -12,8 +12,8 @@
 
 {% block amazonpay_email_plain_refund_details %}
 {{ translate({ ident: "ORDER_NUMBER", suffix: "COLON" }) }} {{ order.oxorder__oxordernr.value }}
-{{ translate({ ident: "AMAZON_PAY_REFUND_MAIL_AMOUNT", suffix: "COLON" }) }} {{ amazonRefundedAmount|number_format(2, '.', '') }} {{ amazonCurrencyCode }}
-{{ translate({ ident: "AMAZON_PAY_REFUND_MAIL_ORDER_TOTAL", suffix: "COLON" }) }} {{ order.oxorder__oxtotalordersum.value|number_format(2, '.', '') }} {{ order.oxorder__oxcurrency.value }}
+{{ translate({ ident: "AMAZON_PAY_REFUND_MAIL_AMOUNT", suffix: "COLON" }) }} {{ format_price(amazonRefundedAmount, { currency: currency }) }}
+{{ translate({ ident: "AMAZON_PAY_REFUND_MAIL_ORDER_TOTAL", suffix: "COLON" }) }} {{ format_price(order.oxorder__oxtotalordersum.value, { currency: currency }) }}
 {% endblock %}
 
 {% block amazonpay_email_plain_refund_note %}

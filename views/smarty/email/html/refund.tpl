@@ -39,7 +39,7 @@
                 </tr>
                 <tr valign="top">
                     <th align="right" class="text-right">[{oxmultilang ident="AMAZON_PAY_REFUND_MAIL_AMOUNT" suffix="COLON"}]</th>
-                    <td>[{$amazonRefundedAmount|string_format:"%.2f"}] [{$amazonCurrencyCode}]</td>
+                    <td>[{oxprice price=$amazonRefundedAmount currency=$currency}]</td>
                 </tr>
                 <tr valign="top">
                     <th align="right" class="text-right">[{oxmultilang ident="AMAZON_PAY_REFUND_MAIL_ORDER_TOTAL" suffix="COLON"}]</th>

@@ -44,7 +44,7 @@
                 [{if $amazonRefundedAmount !== null}]
                     <tr valign="top">
                         <th align="right" class="text-right">[{oxmultilang ident="AMAZON_PAY_CANCEL_MAIL_REFUNDED" suffix="COLON"}]</th>
-                        <td>[{$amazonRefundedAmount|string_format:"%.2f"}] [{$amazonCurrencyCode}]</td>
+                        <td>[{oxprice price=$amazonRefundedAmount currency=$currency}]</td>
                     </tr>
                 [{/if}]
             </tbody>

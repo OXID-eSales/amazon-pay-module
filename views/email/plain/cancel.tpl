@@ -12,9 +12,9 @@
 
 [{block name="amazonpay_email_plain_cancel_details"}]
 [{oxmultilang ident="ORDER_NUMBER" suffix="COLON"}] [{$order->oxorder__oxordernr->value}]
-[{oxmultilang ident="AMAZON_PAY_CANCEL_MAIL_ORDER_TOTAL" suffix="COLON"}] [{$order->oxorder__oxtotalordersum->value|string_format:"%.2f"}] [{$order->oxorder__oxcurrency->value}]
+[{oxmultilang ident="AMAZON_PAY_CANCEL_MAIL_ORDER_TOTAL" suffix="COLON"}] [{oxprice price=$order->oxorder__oxtotalordersum->value currency=$currency}]
 [{if $amazonRefundedAmount !== null}]
-[{oxmultilang ident="AMAZON_PAY_CANCEL_MAIL_REFUNDED" suffix="COLON"}] [{$amazonRefundedAmount|string_format:"%.2f"}] [{$amazonCurrencyCode}]
+[{oxmultilang ident="AMAZON_PAY_CANCEL_MAIL_REFUNDED" suffix="COLON"}] [{oxprice price=$amazonRefundedAmount currency=$currency}]
 [{/if}]
 [{/block}]
 

@@ -12,6 +12,7 @@
     },
     "require": {
         "amzn/amazon-pay-api-sdk-php": "^2.5",
+        "phpseclib/phpseclib": "^3.0.34",
         "ext-json": "*",
         "viison/address-splitter": "^0.3.4",
         "aws/aws-php-sns-message-validator": "^1.8"

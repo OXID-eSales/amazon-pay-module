@@ -132,6 +132,8 @@ class RefundMailService
     protected function deliver(Order $order, string $recipient, string $type, callable $send): void
     {
         $recipientName = $recipient === Constants::MAIL_RECIPIENT_OWNER ? 'shop owner' : 'customer';
+        /** @var string|null $orderNr */
+        $orderNr = $order->getFieldData('oxordernr');
 
         try {
             /** @var Email $mailer */
@@ -144,7 +146,7 @@ class RefundMailService
                     'Amazon %s confirmation mail to %s for order %s: %s',
                     $type,
                     $recipientName,
-                    (string)$order->getFieldData('oxordernr'),
+                    (string)$orderNr,
                     $sent ? 'sent' : 'not sent'
                 ),
                 $order
@@ -156,7 +158,7 @@ class RefundMailService
                     'Amazon %s confirmation mail to %s for order %s failed: %s',
                     $type,
                     $recipientName,
-                    (string)$order->getFieldData('oxordernr'),
+                    (string)$orderNr,
                     $throwable->getMessage()
                 ),
                 $order

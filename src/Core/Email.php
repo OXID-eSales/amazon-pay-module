@@ -174,7 +174,6 @@ class Email extends Email_parent
         string $subjectIdent,
         array $viewData
     ): bool {
-        /** @var Shop $shop */
         // The customer is written to in the language they ordered in. The shop owner
         // keeps the language the backend is running in, because that copy is read
         // next to the order there - so only the customer mail switches the language.
@@ -183,6 +182,7 @@ class Email extends Email_parent
         // the sender texts are translatable too.
         $mailLanguage = $toOwner ? null : $this->amazonPayOrderLanguage($order);
 
+        /** @var Shop $shop */
         $shop = $mailLanguage === null ? $this->getShop() : $this->getShop($mailLanguage);
         $this->setMailParams($shop);
 
@@ -221,7 +221,9 @@ class Email extends Email_parent
             // to be translated here and not after the mode was restored
             /** @var string $subject */
             $subject = $lang->translateString($subjectIdent);
-            $this->setSubject(sprintf($subject, (string)$order->getFieldData('oxordernr')));
+            /** @var string|null $orderNr */
+            $orderNr = $order->getFieldData('oxordernr');
+            $this->setSubject(sprintf($subject, (string)$orderNr));
         } finally {
             // A failing template must not leave the shop behind in frontend mode or
             // in the order language: the admin page that triggered the mail is
@@ -295,8 +297,10 @@ class Email extends Email_parent
     protected function setAmazonRecipient(Order $order, Shop $shop, bool $toOwner): void
     {
         if ($toOwner) {
+            /** @var string|null $ownerEmail */
+            $ownerEmail = $shop->getFieldData('oxowneremail');
             $this->setRecipient(
-                (string)$shop->getFieldData('oxowneremail'),
+                (string)$ownerEmail,
                 $shop->oxshops__oxname->getRawValue()
             );
 
@@ -306,9 +310,14 @@ class Email extends Email_parent
         $fullName = $order->oxorder__oxbillfname->getRawValue()
             . ' ' . $order->oxorder__oxbilllname->getRawValue();
 
-        $this->setRecipient((string)$order->getFieldData('oxbillemail'), $fullName);
+        /** @var string|null $billEmail */
+        $billEmail = $order->getFieldData('oxbillemail');
+        /** @var string|null $orderEmail */
+        $orderEmail = $shop->getFieldData('oxorderemail');
+
+        $this->setRecipient((string)$billEmail, $fullName);
         $this->setReplyTo(
-            (string)$shop->getFieldData('oxorderemail'),
+            (string)$orderEmail,
             $shop->oxshops__oxname->getRawValue()
         );
     }

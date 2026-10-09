@@ -78,4 +78,32 @@ class OrderTest extends AmazonTestCase
         $this->order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_OK');
         $this->assertSame('OK', $this->order->getFieldData('oxtransstatus'));
     }
+
+    public function testHasAmazonPayCharge()
+    {
+        $this->order->updateAmazonPayOrderStatus('AMZ_PAYMENT_PENDING');
+        $this->assertFalse($this->order->hasAmazonPayCharge());
+
+        // a failed or declined payment may be repeated
+        $this->order->updateAmazonPayOrderStatus('AMZ_AUTH_AND_CAPT_FAILED', ['chargeId' => 'charge-1']);
+        $this->assertFalse($this->order->hasAmazonPayCharge());
+        $this->order->updateAmazonPayOrderStatus('AMZ_AUTH_OR_CAPT_DECLINED', ['chargeId' => 'charge-1']);
+        $this->assertFalse($this->order->hasAmazonPayCharge());
+
+        $this->order->updateAmazonPayOrderStatus(
+            'AMZ_AUTH_STILL_PENDING',
+            ['chargeId' => 'charge-2', 'chargeAmount' => '10.00']
+        );
+        $this->assertTrue($this->order->hasAmazonPayCharge());
+        $this->order->updateAmazonPayOrderStatus(
+            'AMZ_2STEP_AUTH_OK',
+            ['chargeId' => 'charge-2', 'chargeAmount' => '10.00']
+        );
+        $this->assertTrue($this->order->hasAmazonPayCharge());
+        $this->order->updateAmazonPayOrderStatus(
+            'AMZ_AUTH_AND_CAPT_OK',
+            ['chargeId' => 'charge-2', 'chargeAmount' => '10.00']
+        );
+        $this->assertTrue($this->order->hasAmazonPayCharge());
+    }
 }

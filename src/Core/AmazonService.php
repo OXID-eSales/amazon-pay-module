@@ -296,6 +296,8 @@ class AmazonService
         Basket $basket,
         LoggerInterface $logger
     ) {
+        $this->redirectIfOrderAlreadyCharged($logger);
+
         $amazonConfig = oxNew(Config::class);
 
         $payload = new Payload();
@@ -354,6 +356,35 @@ class AmazonService
             $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
         }
         $this->showErrorOnRedirect($logger, $result, $basket->getOrderId());
+    }
+
+    /**
+     * An order that Amazon Pay has already charged must not be charged a second time.
+     * This happens if the customer leaves the checkout before the thankyou page (e.g. with the browser back
+     * button), changes the basket and pays again: OXID then finds the order of the session again (reload
+     * blocker) instead of creating a new one, and a second payment would overwrite the first one in the order.
+     * The customer is sent to the thankyou page of the paid order instead, later basket changes are not applied.
+     *
+     * @param LoggerInterface $logger
+     * @return void
+     */
+    public function redirectIfOrderAlreadyCharged(LoggerInterface $logger)
+    {
+        /** @var string $orderId */
+        $orderId = Registry::getSession()->getVariable('sess_challenge');
+
+        /** @var AmazonOrder $order */
+        $order = oxNew(Order::class);
+        if (!$orderId || !$order->load($orderId) || !$order->hasAmazonPayCharge()) {
+            return;
+        }
+
+        $logger->info(
+            'Order ' . $order->getFieldData('oxordernr') . ' is already charged by Amazon Pay ('
+            . $order->getFieldData('oxtransid') . '), no second payment started'
+        );
+        Registry::getUtilsView()->addErrorToDisplay('AMAZON_PAY_ORDER_ALREADY_PAID');
+        Registry::getUtils()->redirect(Registry::getConfig()->getShopHomeUrl() . 'cl=thankyou', false);
     }
 
     /**

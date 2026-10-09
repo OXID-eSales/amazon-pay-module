@@ -30,6 +30,9 @@ use function date;
  */
 class Order extends Order_parent
 {
+    private const AMAZON_REMARK_ERROR = 'AmazonPay: ERROR';
+    private const AMAZON_REMARK_DECLINED = 'AmazonPay: Auth or Capture Declined';
+
     /** @var AmazonService */
     private $amazonService = null;
 
@@ -172,7 +175,7 @@ class Order extends Order_parent
                 break;
 
             case "AMZ_AUTH_AND_CAPT_FAILED":
-                $remark = 'AmazonPay: ERROR';
+                $remark = self::AMAZON_REMARK_ERROR;
                 if (!empty($data['result']['response'])) {
                     $response = is_string($data['result']['response']) ?
                         PhpHelper::jsonToArray($data['result']['response']) :
@@ -211,7 +214,7 @@ class Order extends Order_parent
                 break;
 
             case "AMZ_AUTH_OR_CAPT_DECLINED":
-                $remark = 'AmazonPay: Auth or Capture Declined';
+                $remark = self::AMAZON_REMARK_DECLINED;
                 if (!empty($data['result']['response'])) {
                     if (is_string($data['result']['response'])) {
                         $response = PhpHelper::jsonToArray($data['result']['response']);
@@ -226,6 +229,26 @@ class Order extends Order_parent
                 $this->save();
                 break;
         }
+    }
+
+    /**
+     * Whether Amazon Pay has already charged or authorized this order, or the authorization is still pending.
+     * A failed or declined payment does not count: the customer may pay the order again then.
+     *
+     * @return bool
+     */
+    public function hasAmazonPayCharge(): bool
+    {
+        /** @var string|null $chargeId */
+        $chargeId = $this->getFieldData('oxtransid');
+        $chargeId = (string)$chargeId;
+        /** @var string|null $remark */
+        $remark = $this->getFieldData('osc_amazon_remark');
+        $remark = (string)$remark;
+
+        return $chargeId !== '' &&
+            !str_starts_with($remark, self::AMAZON_REMARK_ERROR) &&
+            !str_starts_with($remark, self::AMAZON_REMARK_DECLINED);
     }
 
     /**

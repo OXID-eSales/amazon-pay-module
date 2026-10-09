@@ -54,7 +54,9 @@ class OrderList extends OrderList_parent
 
         $config = new Config();
         $refundedAmount = null;
-        $currency = (string)$oOrder->getFieldData('oxcurrency');
+        /** @var string|null $currency */
+        $currency = $oOrder->getFieldData('oxcurrency');
+        $currency = (string)$currency;
 
         if ($config->automatedRefundActivated()) {
             $logger = new Logger();

@@ -186,6 +186,9 @@ class OrderController extends OrderController_parent
 
         $ret = null;
         if ($isAmazonPayment) {
+            // the order of this session may already be paid (customer left the checkout before the thankyou page)
+            OxidServiceProvider::getAmazonService()->redirectIfOrderAlreadyCharged($logger);
+
             // if payment is 'oxidamazon' call parent::execute to validate and finalize order
             // then try to complete order at Amazon Pay
             $ret = parent::execute();

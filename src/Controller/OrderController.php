@@ -74,6 +74,16 @@ class OrderController extends OrderController_parent
      */
     public function render()
     {
+        // A customer coming back from Amazon Pay with the browser back button would see the
+        // order overview of an order that is already paid. Send them to the thankyou page
+        // right away instead of letting them change the basket first. This only runs when
+        // the page is shown, not on the return from Amazon Pay (fnc=execute), which must
+        // still complete the order; execute() keeps its own check against a second charge.
+        $paymentId = $this->getBasket()->getPaymentId() ?: '';
+        if (Constants::isAmazonPayment($paymentId)) {
+            OxidServiceProvider::getAmazonService()->redirectIfOrderAlreadyCharged(new Logger());
+        }
+
         $service = OxidServiceProvider::getTermsAndConditionService();
         $service->resetConfirmOnGet();
 

@@ -2,6 +2,14 @@
 
 Amazon Pay integration for OXID eShop 6.0 and above.
 
+## ⚠️ End of life
+
+This branch (`b-6.0.x`, module version 1.x for OXID eShop 6.0) is **no longer maintained**.
+Version **1.6.4 is the final release**. There will be no further bug fixes or security updates.
+
+Please update your shop. We strongly recommend OXID eShop 7 together with Amazon Pay 3.x.
+If that is not possible right away, update at least to OXID eShop 6.1 - 6.5 and use Amazon Pay 2.x (branch `b-6.3.x`).
+
 ## Documentation
 
 * Official [German Amazon Pay for OXID 6.0 documentation](https://docs.oxid-esales.com/modules/amazon-pay/de/1.6/)
@@ -15,7 +23,7 @@ Amazon Pay integration for OXID eShop 6.0 and above.
 
 * b-7.0.x module branch is compatible with OXID eShop compilation 7.0, 7.1, 7.2, 7.3, 7.4
 * b-6.3.x module branch is compatible with OXID eShop compilation 6.1, 6.2, 6.3, 6.4, 6.5
-* b-6.0.x module branch is compatible with OXID eShop compilation 6.0
+* b-6.0.x module branch is compatible with OXID eShop compilation 6.0 (end of life, final release 1.6.4)
 
 ## Install for OXID
 

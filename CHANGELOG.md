@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.6.4] - 2026-10-22
+
+### Deprecated
+
+- **End of life:** 1.6.4 is the final release of this module line (branch `b-6.0.x`, OXID eShop 6.0). There will be no further bug fixes or security updates. Please update your shop, preferably to OXID eShop 7 with Amazon Pay 3.x, or at least to OXID eShop 6.1 - 6.5 with Amazon Pay 2.x (branch `b-6.3.x`).
+
 ## [1.6.3] - 2026-06-11
 
 ### FIX

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.3.1-rc.1] - Unreleased
+
+### Fixed
+
+- Guard the order page templates against a missing payment: `checkout_order_btn_submit_bottom` read `$oPayment->getId()` without checking that `$oView->getPayment()` returned a payment at all. The core normally redirects to the payment step before the order page renders without a valid payment, so this is hardening, found while fixing a server error of the same kind in the PayPal and Adyen modules (reproduced with Amazon Pay's express checkout as a guest, where Amazon Pay replaces the order template's `shippingAndPayment` block - the block in which the core assigns `$payment` - entirely). Files touched: `views/smarty/extensions/themes/default/page/checkout/checkout_order_btn_submit_bottom.tpl`, `views/smarty/frontend/checkout_order_btn_submit_bottom_wave.tpl`, `views/twig/extensions/themes/default/page/checkout/order.html.twig`.
+- The same change was made in the OXID 6 module `osc/amazonpay` (2.3.1-rc.1).
+
 ## [3.3.0] - 2026-10-20
 
 ### Added

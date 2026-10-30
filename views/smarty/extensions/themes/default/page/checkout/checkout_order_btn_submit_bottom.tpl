@@ -1,5 +1,8 @@
 [{assign var="oPayment" value=$oView->getPayment()}]
-[{assign var="paymentId" value=$oPayment->getId()}]
+[{assign var="paymentId" value=""}]
+[{if $oPayment}]
+    [{assign var="paymentId" value=$oPayment->getId()}]
+[{/if}]
 [{if
     (
         $oViewConf->isAmazonActive() &&

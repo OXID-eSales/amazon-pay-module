@@ -11,7 +11,7 @@
 
 {% block checkout_order_next_step_side %}
     {% set oPayment = oView.getPayment() %}
-    {% set paymentId = oPayment.getId() %}
+    {% set paymentId = oPayment ? oPayment.getId() : '' %}
     {% if (
         oViewConf.isAmazonActive() and
         paymentId == oViewConf.getAmazonPaymentId() and

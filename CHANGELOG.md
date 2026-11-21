@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.3.2] - unreleased
+
+### Fixed
+
+- OXID eShop 7.6: an order with the normal Amazon Pay payment (`oxidamazon`) and a delivery address selected in the shop was saved without delivery address (`oxorder.OXDEL*` empty), without any error message, so the goods would have been shipped to the billing address. In the checkout steps `Model/User::getUserAddresses()` replaced the customer's addresses with the address of the Amazon checkout session (`amazonPaymentDeliveryAddress`), also for the normal Amazon Pay payment. Since OXID 7.6 (OXDEV-10461, "Address selection validation in account and checkout") `Order::getDelAddressInfo()` only accepts a `deladrid` that is part of `getUserAddresses()`, and `Model/Order::validateDeliveryAddress()` is disabled while an Amazon session is active. The Amazon address now replaces the customer's addresses only when the normal Amazon Pay payment is not selected (Amazon Pay Express keeps it). With the normal payment the shop hands its delivery address over to Amazon and gets the same address back, so on OXID 7.3 - 7.5 the address shown in the checkout does not change.
+
 ## [3.3.1] - 2026-11-03
 
 ### Fixed

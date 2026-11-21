@@ -59,6 +59,12 @@ class User extends User_parent
     /**
      * Return the amazon address if set.
      *
+     * Not for the normal Amazon Pay payment: there the customer selects the delivery address in
+     * the shop, the shop hands it over to Amazon, and Order::getDelAddressInfo() takes it from
+     * the shop as well. Replacing the user's addresses with the Amazon copy would hide that
+     * address from the shop - since OXID 7.6 the order is then stored without delivery address,
+     * because the core only accepts a "deladrid" that is part of getUserAddresses().
+     *
      * @return Address|null
      */
     private function getAmazonAddress()
@@ -68,6 +74,7 @@ class User extends User_parent
 
             if (
                 $service->isAmazonSessionActive()
+                && Registry::getSession()->getVariable('paymentid') !== Constants::PAYMENT_ID
                 && Registry::getConfig()->getTopActiveView()->getIsOrderStep()
                 && $service->getDeliveryAddress()
             ) {
